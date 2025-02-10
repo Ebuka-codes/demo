@@ -150,7 +150,7 @@
                     *ngFor="let option of employmentOption"
                     [value]="option"
                   >
-                    {{ option }}
+                    {{ option | titlecase }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>

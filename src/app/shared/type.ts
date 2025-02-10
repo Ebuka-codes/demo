@@ -1,4 +1,5 @@
 export interface jobType {
+  id: string;
   jobTitle: string;
   jobDescription: string;
   employmentType: string;

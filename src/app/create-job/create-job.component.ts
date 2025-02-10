@@ -24,13 +24,7 @@ export class CreateJobComponent {
     'Healthcare',
     ' IT Support',
   ];
-  employmentOption: string[] = [
-    'Full-time',
-    'Part-time',
-    'Contract',
-    'Freelance',
-    'Internship',
-  ];
+  employmentOption: string[] = ['PERMANENT', 'TEMPORARY'];
   selectedWorkmode: number | null = null;
   isSubmitted: boolean = false;
   form: FormGroup;
@@ -74,7 +68,7 @@ export class CreateJobComponent {
   ngOnInit(): void {
     if (this.froalaEditorInstance) {
       this.froalaEditorInstance.edit.off();
-      this.froalaEditorInstance.$el.attr('contenteditable', 'false'); // Disable Froala Editor
+      this.froalaEditorInstance.$el.attr('contenteditable', 'false');
     }
   }
   get jobTitle() {
@@ -134,7 +128,6 @@ export class CreateJobComponent {
       return valid ? null : { invalidAmount: { value: control.value } };
     };
   }
-
   formatAmount(amount: Event) {
     const salary = amount.target as HTMLInputElement;
     if (amount) {
@@ -147,7 +140,6 @@ export class CreateJobComponent {
       this.formatAmountValue = '';
     }
   }
-
   createNewJob(newJob: jobType) {
     this.loading = true;
     this.form.disable();

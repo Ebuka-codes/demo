@@ -15,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinn
     MatInputModule,
     HttpClientModule,
     MatSelectModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

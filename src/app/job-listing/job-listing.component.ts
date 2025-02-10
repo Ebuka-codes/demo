@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { JobRecruitService } from '../shared/job-recruit.service';
-import { jobType } from '../shared/type';
+import jobsData from 'src/assets/data.json';
 
 @Component({
   selector: 'app-job-listing',
@@ -8,14 +8,12 @@ import { jobType } from '../shared/type';
   styleUrls: ['./job-listing.component.scss'],
 })
 export class JobListingComponent {
-  data: Array<jobType> = [];
+  jobList = jobsData;
+  selectedJob: any;
+  isLoading: boolean = false;
   constructor(private _jobService: JobRecruitService) {}
-  getJobListing(): void {
-    this._jobService.getJobListing().subscribe({
-      next: (response) => {
-        this.data = response.data;
-      },
-      error: (error) => console.log(error.message),
-    });
+
+  selectJob(job: any) {
+    this._jobService.setSelectedJob(job);
   }
 }

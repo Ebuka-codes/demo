@@ -9,112 +9,89 @@
     <div class="modal-content">
       <div class="modal-header">
         <span>
-          <h5 class="modal-title" id="modalLabel">Frontend Developer</h5>
-          <span class="company-name"
-            >Procept Associates Professional Services Limited | Lagos</span
-          >
+          <h5 class="modal-title" id="modalLabel">
+            {{ selectedJob?.jobTitle }}
+          </h5>
+          <span class="company-name">{{ selectedJob?.companyName }} </span>
         </span>
         <span class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </span>
       </div>
       <div class="modal-body">
-        <div class="modal-body-text">
-          <div class="company-info">
-            <h3>Company description</h3>
-            <span>
-              The Specialist: Operational Excellence (OE) plays a critical role
-              in orchestrating cross functional initiatives and enabling
-              operational governance expectations within the Technology Fixed
-              Line Services (TFLS) domain. Working with both internal and
-              external stakeholders, this role will focus on embedding a
-              Continuous Improvement (CI) culture through role-modelling the
-              principles of Go See, Ask Why and Show Respect.
-            </span>
-          </div>
-          <div class="job-description">
-            <h3>Job description</h3>
-            <ul>
-              <li>
-                Develop and implement a CI/CD pipeline using tools like Jenkins,
-                GitLab CI/CD, or GitHub Actions
-              </li>
-              <li>
-                Collaborate with DevOps engineers and other team members to
-                design, implement, and maintain CI/CD pipelines
-              </li>
-              <li>
-                Monitor and troubleshoot CI/CD pipelines for issues and optimize
-                performance
-              </li>
-              <li>
-                Collaborate with other development teams to ensure that CI/CD
-                pipelines are aligned with the company's overall strategy
-              </li>
-              <li>
-                Document and maintain the CI/CD pipeline and its configuration
-                in version control systems
-              </li>
-            </ul>
-          </div>
-          <div class="job-responsibilty">
-            <h3>Responsibilities</h3>
-            <ul>
-              <li>
-                Ensure the successful implementation and ongoing operation of
-                the CI/CD pipeline
-              </li>
-              <li>
-                Help in troubleshooting and resolving issues related to the
-                CI/CD pipeline
-              </li>
-              <li>
-                Provide guidance and support to DevOps engineers and other team
-                members in implementing CI/CD pipelines
-              </li>
-              <li>
-                Collaborate with other development teams to ensure that the
-                CI/CD pipeline is aligned with the company's overall strategy
-              </li>
-              <li>
-                Document and maintain the CI/CD pipeline and its configuration
-                in version control systems
-              </li>
-            </ul>
-          </div>
-
-          <div class="job-qualification">
-            <h3>Qualifications</h3>
-            <ul>
-              <li>
-                Bachelor's degree in Computer Science, Software Engineering, or
-                a related field
-              </li>
-              <li>
-                Experience with CI/CD tools like Jenkins, GitLab CI/CD, or
-                GitHub Actions
-              </li>
-              <li>Familiarity with Git and version control systems</li>
-              <li>Experience with DevOps principles and best practices</li>
-              <li>Strong communication and collaboration skills</li>
-              <li>
-                Knowledge of software development methodologies and agile
-                practices
-              </li>
-            </ul>
+        <div class="job-salary">
+          <h3>Job Salary</h3>
+          <div class="salary">
+            ₦{{ selectedJob?.jobSalary.toLocaleString() }} a month
           </div>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button class="apply-btn" type="submit">Apply Now</button>
-        <button
-          type="button"
-          class="close-btn"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
-          Close
-        </button>
+        <div class="job-type">
+          <h3>Job Type</h3>
+          <div class="jobType">
+            {{ selectedJob?.jobType | titlecase }}
+          </div>
+        </div>
+
+        <div class="job-location">
+          <h3>Location</h3>
+          <span class="location">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="size-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span>{{ selectedJob?.jobLocation | titlecase }} </span>
+          </span>
+        </div>
+
+        <div
+          class="job-description mt-4"
+          [innerHTML]="selectedJob?.jobDescription"
+        ></div>
+        <div class="skill">
+          <h3>Required Skills</h3>
+          <ul>
+            <li *ngFor="let skill of selectedJob?.requiredSkills">
+              {{ skill.description }}
+            </li>
+          </ul>
+        </div>
+        <span>Answer Questions?</span>
+        <div *ngFor="let item of selectedJob?.options">
+          <mat-form-field>
+            <mat-label>{{ item.description }}</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [formControl]="availableStartDate"
+              [min]="minDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="modal-footer">
+          <button class="apply-btn" type="submit">Apply Now</button>
+          <button
+            type="button"
+            class="close-btn"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
