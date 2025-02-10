@@ -70,7 +70,7 @@
                   id="workMode"
                   formControlName="workMode"
                 >
-                  <mat-option *ngFor="let option of workmode" [value]="options">
+                  <mat-option *ngFor="let option of workmode" [value]="option">
                     {{ option }}
                   </mat-option>
                 </mat-select>
@@ -119,7 +119,7 @@
                 >
                   <mat-option
                     *ngFor="let option of jobTypeOption"
-                    [value]="options"
+                    [value]="option"
                   >
                     {{ option }}
                   </mat-option>
@@ -148,7 +148,7 @@
                 >
                   <mat-option
                     *ngFor="let option of employmentOption"
-                    [value]="options"
+                    [value]="option"
                   >
                     {{ option }}
                   </mat-option>
@@ -233,16 +233,16 @@
             </div>
 
             <div class="col">
-              <label for="skills"
-                >Required Skills <span class="required-icon">*</span></label
+              <label for="requiredskills"
+                >Required Skills<span class="required-icon">*</span></label
               >
               <mat-form-field appearance="fill">
                 <mat-select
                   panelClass="custom-dropdown"
                   multiple
                   disableRipple
-                  id="skills"
-                  formControlName="skills"
+                  id="requiredskills"
+                  formControlName="requiredskills"
                 >
                   <mat-option
                     *ngFor="let option of options"
@@ -252,8 +252,8 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <span *ngIf="skills?.invalid && isSubmitted">
-                <small *ngIf="skills?.errors?.['required']">
+              <span *ngIf="requiredskills?.invalid && isSubmitted">
+                <small *ngIf="requiredskills?.errors?.['required']">
                   Required skill field are required
                 </small>
               </span>

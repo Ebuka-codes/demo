@@ -13,12 +13,12 @@ export class JobRecruitService {
 
   createJob(newJob: jobType): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.post<jobType>(this.baseUrl + 'job-details', newJob, {
+    return this.httpClient.post<jobType>('/api/job-details', newJob, {
       headers,
     });
   }
   getJobListing(): Observable<any> {
-    return this.httpClient.get<jobType>(this.baseUrl + 'job-lists', {
+    return this.httpClient.get<jobType>(this.baseUrl + '/api/job-details', {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       withCredentials: true,
     });

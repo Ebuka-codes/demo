@@ -67,7 +67,7 @@ export class CreateJobComponent {
       companyName: ['', Validators.required],
       workMode: ['', Validators.required],
       questions: this.fb.array([]),
-      skills: ['', Validators.required],
+      requiredskills: ['', Validators.required],
     });
   }
 
@@ -95,20 +95,16 @@ export class CreateJobComponent {
   get jobType() {
     return this.form.get('jobType');
   }
-
   get companyName() {
     return this.form.get('companyName');
   }
   get workMode() {
     return this.form.get('workMode');
   }
-  get questionOptions() {
-    return this.form.get('questionOptions');
-  }
   get questions(): FormArray {
     return this.form.get('questions') as FormArray;
   }
-  get skills() {
+  get requiredskills() {
     return this.form.get('skills');
   }
 
@@ -171,7 +167,8 @@ export class CreateJobComponent {
   onSubmit(): void {
     this.isSubmitted = true;
     if (this.form.valid) {
-      this.createNewJob({ ...this.form.value, jobStatus: 'Pending' });
+      console.log({ ...this.form.value, jobStatus: 'Pending' });
+      // this.createNewJob({ ...this.form.value, jobStatus: 'Pending' });
     } else {
       this.form.markAllAsTouched();
     }
