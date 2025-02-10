@@ -60,7 +60,7 @@ export class CreateJobComponent {
       companyName: ['', Validators.required],
       workMode: ['', Validators.required],
       questions: this.fb.array([]),
-      requiredskills: ['', Validators.required],
+      requiredskills: [''],
     });
   }
 
