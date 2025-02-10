@@ -1,1 +1,115 @@
-/* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+@include mat.core();
+
+$demo-primary: mat.define-palette(mat.$indigo-palette);
+$demo-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+$demo-warn: mat.define-palette(mat.$red-palette);
+
+$demo-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $demo-primary,
+      accent: $demo-accent,
+      warn: $demo-warn,
+    ),
+  )
+);
+@include mat.all-component-themes($demo-theme);
+
+@import "bootstrap/scss/bootstrap";
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html body * {
+  font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+.modal {
+  z-index: 20000;
+}
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 1) !important;
+}
+
+.fr-toolbar {
+  border-top-right-radius: 10px !important;
+  border-top-left-radius: 10px !important;
+}
+
+.fr-box.fr-basic .fr-wrapper {
+  border-bottom-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-color: #6d6d6d !important;
+}
+.fr-second-toolbar {
+  display: none;
+}
+
+.cdk-overlay-container {
+  z-index: 1055 !important; // Ensure it's above Bootstrap modal (z-index 1050)
+  position: fixed !important;
+}
+
+.custom-dropdown .mat-select-panel {
+  z-index: 1055 !important; // Keeps dropdown inside the modal
+  position: absolute !important;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: white !important;
+  margin-top: 5px;
+  border: 1px solid #dddd !important;
+  border-radius: 5px !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled {
+  cursor: not-allowed;
+}
+.cdk-overlay-container {
+  z-index: 1055 !important;
+  position: fixed !important;
+}
+
+.custom-dropdown .mat-select-panel {
+  z-index: 1055 !important;
+  position: absolute !important;
+}
+.mat-mdc-form-field-underline {
+  background-color: transparent !important;
+  border: none;
+}
+.mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.mat-mdc-option {
+  font-size: 14px;
+}
+.cdk-overlay-backdrop-showing {
+  border: none;
+}
+.mat-mdc-select-value-text {
+  font-size: 14px;
+  color: #6d6d6d;
+}
+.mdc-line-ripple {
+  display: none;
+}
+
+.mat-mdc-select-arrow svg {
+  fill: black !important;
+}
+.mat-mdc-form-field-flex {
+  height: 50px;
+}
+.mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+.mat-mdc-text-field-wrapper .showme {
+  border: 1px solid red !important;
+}

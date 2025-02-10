@@ -1,0 +1,83 @@
+.job-detail {
+  .modal-header {
+    padding: 15px 40px;
+    .modal-title {
+      font-weight: 600;
+    }
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+  }
+  span {
+    font-size: 14px;
+  }
+  .company-name {
+    font-size: 14px;
+    padding: 5px 0px;
+  }
+  .btn-close {
+    font-size: 12px !important;
+    cursor: pointer;
+  }
+  .modal-body {
+    margin: 20px 0px;
+    padding: 10px 40px;
+    .modal-body-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      ul {
+        li {
+          font-size: 14px;
+          padding: 5px 0px;
+        }
+      }
+    }
+  }
+  .modal-footer {
+    justify-content: start !important;
+    .apply-btn {
+      background-color: #1c73e8;
+      border: 0.0625rem solid #0000;
+      border-radius: 0.5rem;
+      box-shadow: none;
+      color: #fff;
+      cursor: pointer;
+      display: block;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      word-break: keep-all;
+      margin-left: 50px;
+    }
+    .close-btn {
+      background-color: #eeee;
+      border: 0.0625rem solid #0000;
+      border-radius: 0.5rem;
+      box-shadow: none;
+      color: #333;
+      cursor: pointer;
+      display: block;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.43;
+      line-height: 1.125rem;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      word-break: keep-all;
+    }
+  }
+}

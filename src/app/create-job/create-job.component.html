@@ -1,0 +1,298 @@
+<div
+  class="modal fade create-job"
+  id="addJobModal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="resetForm()"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>
+          <h5 class="modal-title" id="modalLabel">Add Job</h5>
+        </span>
+        <span class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </span>
+      </div>
+      <div class="modal-body">
+        <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col">
+              <label for="jobTile"
+                >Job Title <span class="required-icon">*</span></label
+              >
+              <input type="text" id="jobTitle" formControlName="jobTitle" />
+              <div *ngIf="jobTitle?.invalid && isSubmitted">
+                <small *ngIf="jobTitle?.errors?.['required']">
+                  Job title field is required
+                </small>
+                <small
+                  *ngIf="jobTitle?.errors?.['invalidName'] && !jobTitle?.errors?.['required']"
+                >
+                  Job title field is invalid
+                </small>
+                <small
+                  *ngIf="jobTitle?.errors?.['minlength'] && !jobTitle?.errors?.['invalidName']"
+                >
+                  Job title must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+            <div class="col">
+              <label for="jobTile"
+                >Company Name <span class="required-icon">*</span></label
+              >
+              <input type="text" formControlName="companyName" />
+              <div *ngIf="companyName?.invalid && isSubmitted">
+                <small *ngIf="companyName?.errors?.['required']">
+                  Company name field is required
+                </small>
+
+                <small
+                  *ngIf="companyName?.errors?.['minlength'] && !companyName?.errors?.['invalidName']"
+                >
+                  Company name must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="workmode"
+                >Work Mode <span class="required-icon">*</span></label
+              >
+              <mat-form-field appearance="fill">
+                <mat-select
+                  panelClass="custom-dropdown"
+                  disableRipple
+                  id="workMode"
+                  formControlName="workMode"
+                >
+                  <mat-option *ngFor="let option of workmode" [value]="options">
+                    {{ option }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div *ngIf="workMode?.invalid && isSubmitted">
+                <small *ngIf="workMode?.errors?.['required']">
+                  Work mode field is required
+                </small>
+              </div>
+            </div>
+
+            <div class="col">
+              <label for="jobLocation"
+                >Job location <span class="required-icon">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="jobLocation"
+                [class.disabled-bg]="loading"
+              />
+
+              <div *ngIf="jobLocation?.invalid && isSubmitted">
+                <small *ngIf="jobLocation?.errors?.['required']">
+                  Job location field is required
+                </small>
+                <small *ngIf="jobLocation?.errors?.['minlength']">
+                  Job location must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="jobType"
+                >Job type <span class="required-icon">*</span></label
+              >
+
+              <mat-form-field appearance="fill">
+                <mat-select
+                  panelClass="custom-dropdown"
+                  disableRipple
+                  id="jobTitle"
+                  formControlName="jobType"
+                  [class.disabled-bg]="loading"
+                >
+                  <mat-option
+                    *ngFor="let option of jobTypeOption"
+                    [value]="options"
+                  >
+                    {{ option }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div *ngIf="jobType?.invalid && isSubmitted">
+                <small *ngIf="jobType?.errors?.['required']">
+                  Job type field is required
+                </small>
+              </div>
+            </div>
+
+            <div class="col">
+              <label for="employementType"
+                >Employement type <span class="required-icon">*</span></label
+              >
+
+              <mat-form-field appearance="fill">
+                <mat-select
+                  panelClass="custom-dropdown"
+                  disableRipple
+                  id="employmentType"
+                  [class.disabled-bg]="loading"
+                  formControlName="employmentType"
+                >
+                  <mat-option
+                    *ngFor="let option of employmentOption"
+                    [value]="options"
+                  >
+                    {{ option }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div *ngIf="employmentType?.invalid && isSubmitted">
+                <small *ngIf="employmentType?.errors?.['required']">
+                  employment Type field is required
+                </small>
+              </div>
+            </div>
+          </div>
+          <div formArrayName="questions">
+            <div class="row">
+              <div class="col">
+                <div
+                  class="question-content"
+                  *ngFor="let question of questions.controls; let i = index"
+                >
+                  <label for="question">Question {{ i + 1 }}</label>
+                  <div class="d-flex item-center gap-2">
+                    <input
+                      matInput
+                      [formControlName]="i"
+                      [class.disabled-bg]="loading"
+                    />
+                    <span (click)="removeQuestion(i)">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Question Button -->
+          <button
+            mat-button
+            class="question-btn"
+            (click)="addQuestion()"
+            type="button"
+          >
+            + Add Question
+          </button>
+
+          <div class="row">
+            <div class="col">
+              <label for="jobSalary"
+                >Job Salary <span class="required-icon">*</span></label
+              >
+              <input
+                type="text"
+                [value]="formatAmountValue"
+                formControlName="jobSalary"
+                (change)="formatAmount($event)"
+              />
+              <div *ngIf="jobSalary?.invalid && isSubmitted">
+                <small *ngIf="jobSalary?.errors?.['required']">
+                  Job salary field is required
+                </small>
+
+                <small
+                  *ngIf="!jobSalary?.errors?.['required'] && jobSalary?.errors?.['invalidAmount']"
+                >
+                  Job salary field is invalid
+                </small>
+              </div>
+            </div>
+
+            <div class="col">
+              <label for="skills"
+                >Required Skills <span class="required-icon">*</span></label
+              >
+              <mat-form-field appearance="fill">
+                <mat-select
+                  panelClass="custom-dropdown"
+                  multiple
+                  disableRipple
+                  id="skills"
+                  formControlName="skills"
+                >
+                  <mat-option
+                    *ngFor="let option of options"
+                    [value]="option.value"
+                  >
+                    {{ option.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <span *ngIf="skills?.invalid && isSubmitted">
+                <small *ngIf="skills?.errors?.['required']">
+                  Required skill field are required
+                </small>
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <label for="description" style="margin-bottom: 5px"
+              >Job Description <span class="required-icon">*</span></label
+            >
+            <div class="froala-container">
+              <div
+                [froalaEditor]="froalaOptions"
+                formControlName="jobDescription"
+              ></div>
+              <div class="froala-overlay" *ngIf="loading"></div>
+            </div>
+
+            <div *ngIf="jobDescription?.invalid && isSubmitted">
+              <small *ngIf="jobDescription?.errors?.['required']">
+                Description field are required
+              </small>
+            </div>
+          </div>
+
+          <div class="form-btn">
+            <button type="submit" class="apply-btn" type="submit" mat-button>
+              {{ loading ? "Loading..." : "Submit" }}
+            </button>
+            <button
+              type="button"
+              class="close-btn"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
