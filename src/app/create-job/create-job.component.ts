@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core'; // Import CKEditor build
+import { Component } from '@angular/core'; // Import CKEditor build
 import {
   AbstractControl,
   FormArray,
@@ -45,7 +45,6 @@ export class CreateJobComponent {
       },
     },
   };
-
   constructor(private fb: FormBuilder, private jobService: JobRecruitService) {
     this.form = this.fb.group({
       jobTitle: [
@@ -99,7 +98,7 @@ export class CreateJobComponent {
     return this.form.get('questions') as FormArray;
   }
   get requiredskills() {
-    return this.form.get('skills');
+    return this.form.get('requiredskills');
   }
 
   addQuestion() {
@@ -134,8 +133,6 @@ export class CreateJobComponent {
       this.formatAmountValue = salary.value
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-      console.log(this.formatAmountValue);
     } else {
       this.formatAmountValue = '';
     }
@@ -159,8 +156,11 @@ export class CreateJobComponent {
   onSubmit(): void {
     this.isSubmitted = true;
     if (this.form.valid) {
-      console.log({ ...this.form.value, jobStatus: 'Pending' });
-      // this.createNewJob({ ...this.form.value, jobStatus: 'Pending' });
+      this.createNewJob({
+        ...this.form.value,
+        jobSalary: Number(this.form.get('jobSalary')?.value),
+        jobStatus: 'Pending',
+      });
     } else {
       this.form.markAllAsTouched();
     }

@@ -9,7 +9,6 @@ import { enviroments } from 'src/environments/enviorments';
 })
 export class JobRecruitService {
   baseUrl = enviroments.API_URL;
-  private dataUrl = 'assets/data.json';
   constructor(private httpClient: HttpClient) {}
   createJob(newJob: jobType): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -20,11 +19,7 @@ export class JobRecruitService {
 
   private selectedJobSource = new BehaviorSubject<any>(null);
   selectedJob$ = this.selectedJobSource.asObservable();
-
   setSelectedJob(job: any) {
     this.selectedJobSource.next(job);
   }
-  // getJobListing(): Observable<any> {
-  //   return this.httpClient.get<jobType>(this.dataUrl);
-  // }
 }
