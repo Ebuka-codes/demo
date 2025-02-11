@@ -71,7 +71,7 @@
                   formControlName="workMode"
                 >
                   <mat-option *ngFor="let option of workmode" [value]="option">
-                    {{ option }}
+                    {{ option | titlecase }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -125,7 +125,6 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
               <div *ngIf="jobType?.invalid && isSubmitted">
                 <small *ngIf="jobType?.errors?.['required']">
                   Job type field is required
@@ -135,7 +134,7 @@
 
             <div class="col">
               <label for="employementType"
-                >Employement type <span class="required-icon">*</span></label
+                >Employment type <span class="required-icon">*</span></label
               >
 
               <mat-form-field appearance="fill">
@@ -279,8 +278,19 @@
           </div>
 
           <div class="form-btn">
-            <button type="submit" class="apply-btn" type="submit" mat-button>
-              {{ loading ? "Loading..." : "Submit" }}
+            <button
+              type="submit"
+              [disabled]="loading"
+              class="apply-btn"
+              type="submit"
+              mat-button
+            >
+              <ng-container *ngIf="loading; else showLoader">
+                <span class="mini-loader-spinner"></span>
+              </ng-container>
+              <ng-template #showLoader>
+                <span>Submit</span>
+              </ng-template>
             </button>
             <button
               type="button"

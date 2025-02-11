@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { JobRecruitService } from '../shared/job-recruit.service';
 import { jobType } from '../shared/type';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-create-job',
@@ -16,14 +17,8 @@ import { jobType } from '../shared/type';
   styleUrls: ['./create-job.component.scss'],
 })
 export class CreateJobComponent {
-  workmode: string[] = ['Remote', 'On-Site', 'Hybrid'];
-  jobTypeOption: string[] = [
-    'Engineering',
-    'Marketing',
-    'Sales',
-    'Healthcare',
-    ' IT Support',
-  ];
+  workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
+  jobTypeOption: string[] = ['Full-time', 'Part-time', 'Contract'];
   employmentOption: string[] = ['PERMANENT', 'TEMPORARY'];
   selectedWorkmode: number | null = null;
   isSubmitted: boolean = false;
@@ -59,8 +54,8 @@ export class CreateJobComponent {
       jobType: ['', Validators.required],
       companyName: ['', Validators.required],
       workMode: ['', Validators.required],
-      questions: this.fb.array([]),
-      requiredskills: [''],
+      questionOptions: this.fb.array([]),
+      requiredSkills: [''],
     });
   }
 
@@ -95,10 +90,10 @@ export class CreateJobComponent {
     return this.form.get('workMode');
   }
   get questions(): FormArray {
-    return this.form.get('questions') as FormArray;
+    return this.form.get('questionOptions') as FormArray;
   }
   get requiredskills() {
-    return this.form.get('requiredskills');
+    return this.form.get('requiredSkills');
   }
 
   addQuestion() {
@@ -141,10 +136,26 @@ export class CreateJobComponent {
     this.loading = true;
     this.form.disable();
     this.jobService.createJob(newJob).subscribe({
-      next: (response) => {
-        console.log('data received', response.data);
+      next: () => {
         this.loading = false;
         this.form.enable();
+        let modalElement = document.getElementById(
+          'addJobModal'
+        ) as HTMLElement;
+        if (modalElement) {
+          const modalInstance =
+            Modal?.getInstance(modalElement) || new Modal(modalElement);
+          modalInstance.hide();
+        }
+        setTimeout(() => {
+          const backdrop = document.querySelector('.modal-backdrop');
+          if (backdrop) {
+            backdrop.remove();
+          }
+          document.body.classList.remove('modal-open');
+        }, 300);
+        this.form.reset();
+        window.location.reload();
       },
       error: (error: any) => {
         console.log('error', error.message);
@@ -159,6 +170,10 @@ export class CreateJobComponent {
       this.createNewJob({
         ...this.form.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),
+        requiredSkills:
+          this.form.get('requiredSkills')?.value === ''
+            ? []
+            : this.form.get('requiredSkills')?.value,
         jobStatus: 'Pending',
       });
     } else {

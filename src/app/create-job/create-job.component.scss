@@ -98,6 +98,10 @@
           white-space: nowrap;
           word-break: keep-all;
           margin-left: 20px;
+
+          &:disabled {
+            cursor: not-allowed;
+          }
         }
         .close-btn {
           background-color: #eeee;
@@ -145,6 +149,25 @@
         cursor: pointer;
         &:hover {
           color: rgba(216, 5, 5, 0.89);
+        }
+      }
+
+      .mini-loader-spinner {
+        border: 2px solid white;
+        border-color: white transparent white white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin: 0px auto;
+        animation: spin 0.5s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
       }
     }

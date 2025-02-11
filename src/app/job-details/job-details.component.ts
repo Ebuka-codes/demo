@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
-import { JobListingComponent } from '../job-listing/job-listing.component';
+import { Component } from '@angular/core';
 import { JobRecruitService } from '../shared/job-recruit.service';
 import { FormControl } from '@angular/forms';
+import jobsData from 'src/assets/data.json';
 
 @Component({
   selector: 'app-job-details',
@@ -10,15 +10,15 @@ import { FormControl } from '@angular/forms';
 })
 export class JobDetailsComponent {
   selectedJob: any = null;
+  id: any;
   minDate: any;
   availableStartDate = new FormControl('');
   constructor(private _jobService: JobRecruitService) {}
 
   ngOnInit(): void {
-    this._jobService.selectedJob$.subscribe((job) => {
-      this.selectedJob = job;
+    this._jobService.selectedJob$.subscribe((jobDetails) => {
+      this.selectedJob = jobDetails;
+      console.log(this.selectedJob);
     });
-    this.minDate = new Date().toISOString().split('T')[0];
-    console.log(this.availableStartDate.value);
   }
 }

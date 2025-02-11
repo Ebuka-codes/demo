@@ -12,8 +12,18 @@ export class JobCategoryComponent {
   constructor(private _jobService: JobRecruitService) {}
 
   ngOnInit(): void {
-    this._jobService.selectedJob$.subscribe((job) => {
-      this.data = job;
+    this._jobService.getJobList().subscribe({
+      next: (response) => {
+        if (response.valid) {
+          const updatedJobList = Array.isArray(response.data)
+            ? [jobsData, ...response.data]
+            : [jobsData];
+          this.jobList = updatedJobList;
+        }
+      },
+      error: (error) => {
+        console.log(error.message);
+      },
     });
   }
   ngOnDestroy(): void {}

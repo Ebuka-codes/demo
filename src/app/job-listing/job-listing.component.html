@@ -30,22 +30,25 @@
     </div>
     <div class="job-listing-content">
       <div
+        *ngFor="let item of jobList"
         class="job-info"
-        (click)="selectJob(jobList)"
+        (click)="selectJob(item)"
         data-bs-toggle="modal"
         data-bs-target="#viewJobModal"
       >
-        <h2 class="job-title">{{ jobList.jobTitle | titlecase }}</h2>
-        <span class="company-name">{{ jobList.companyName }}</span>
-        <span class="company-location">{{ jobList.jobLocation }}</span>
+        <h2 class="job-title">{{ item.jobTitle | titlecase }}</h2>
+        <span class="company-name">{{ item.companyName }}</span>
+        <span class="company-location">{{ item.jobLocation }}</span>
         <div class="job-desc">
           <span class="salary"
-            >₦{{ jobList.jobSalary.toLocaleString() }} a month</span
+            >₦{{ item.jobSalary.toLocaleString() }} a month</span
           >
-          <span class="jobType">{{ jobList.jobType | titlecase }}</span>
+          <span class="jobType">{{ item.jobType | titlecase }}</span>
         </div>
       </div>
     </div>
-    <!-- <button type="submit">Show more Job</button> -->
+    <button type="submit" (click)="showMoreJob()" *ngIf="jobList.length > 5">
+      Show more Job
+    </button>
   </section>
 </ng-template>

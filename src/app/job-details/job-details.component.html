@@ -55,7 +55,7 @@
           class="job-description mt-4"
           [innerHTML]="selectedJob?.jobDescription"
         ></div>
-        <div class="skill">
+        <div class="skill" *ngIf="selectedJob?.requiredSkills.length">
           <h3>Required Skills</h3>
           <ul>
             <li *ngFor="let skill of selectedJob?.requiredSkills">
@@ -63,7 +63,7 @@
             </li>
           </ul>
         </div>
-        <span>Answer Questions?</span>
+        <span *ngIf="selectedJob?.options.length">Answer Questions?</span>
         <div *ngFor="let item of selectedJob?.options">
           <mat-form-field>
             <mat-label>{{ item.description }}</mat-label>
