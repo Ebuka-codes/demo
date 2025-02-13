@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
 import { jobType } from './type';
 import { enviroments } from 'src/environments/enviorments';
 
@@ -9,22 +9,58 @@ import { enviroments } from 'src/environments/enviorments';
 })
 export class JobRecruitService {
   baseUrl = enviroments.API_URL;
-  private selectedJobSource = new BehaviorSubject<any>(null);
-  selectedJob$ = this.selectedJobSource.asObservable();
+
+  private jobListSubject$ = new BehaviorSubject<jobType[] | null>(null);
+  job$ = this.jobListSubject$.asObservable();
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  isLoading$ = this.isLoadingSubject.asObservable();
+  private errorSubject = new BehaviorSubject<string | null>(null);
+  error$ = this.errorSubject.asObservable();
+
+  encodedValue = btoa('SHL');
   constructor(private httpClient: HttpClient) {}
   createJob(newJob: jobType): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
     return this.httpClient.post<jobType>(this.baseUrl + 'job-details', newJob, {
       headers,
     });
   }
-  setSelectedJob(jobDetails: any) {
-    this.selectedJobSource.next(jobDetails);
-  }
   getJobList(): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.get(this.baseUrl + 'job-details', {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+
+    if (!this.jobListSubject$.value) {
+      this.isLoadingSubject.next(true);
+      this.httpClient
+        .get<any>(this.baseUrl + 'job-details', {
+          headers,
+        })
+        .pipe(
+          tap((response) => {
+            if (response.valid && response.data) {
+              this.jobListSubject$.next(response.data);
+              this.isLoadingSubject.next(false);
+            }
+          }),
+
+          finalize(() => this.isLoadingSubject.next(false))
+        )
+        .subscribe();
+    }
+
+    return this.job$;
+  }
+  getJobDetailsById(id: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.get(this.baseUrl + `job-details/${id}`, {
       headers,
     });
   }

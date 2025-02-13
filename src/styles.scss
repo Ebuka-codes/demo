@@ -28,12 +28,10 @@ $demo-theme: mat.define-light-theme(
 
 html body * {
   font-family: "Inter", serif;
+  scroll-behavior: smooth;
 }
 .modal {
   z-index: 20000;
-}
-.modal-backdrop {
-  background-color: rgba(0, 0, 0, 1) !important;
 }
 
 .fr-toolbar {

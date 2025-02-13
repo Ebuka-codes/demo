@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { JobListingComponent } from './job-listing/job-listing.component';
-import { JobDetailsComponent } from './job-details/job-details.component';
-import { JobCategoryComponent } from './job-category/job-category.component';
-import { CreateJobComponent } from './create-job/create-job.component';
+import { HeaderComponent } from './components/header/header.component';
+import { JobListingComponent } from './components/job-listing/job-listing.component';
+import { JobDetailsComponent } from './components/job-details/job-details.component';
+import { JobCategoryComponent } from './components/job-category/job-category.component';
+import { CreateJobComponent } from './components/create-job/create-job.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +17,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { HomeComponent } from './pages/home/home.component';
+import { ViewJobDetailsComponent } from './pages/view-job-details/view-job-details.component';
+import { NotFoundErrorComponent } from './components/not-found-error/not-found-error.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     JobCategoryComponent,
     CreateJobComponent,
     LoaderSpinnerComponent,
+    HomeComponent,
+    ViewJobDetailsComponent,
+    NotFoundErrorComponent,
   ],
   imports: [
     BrowserModule,

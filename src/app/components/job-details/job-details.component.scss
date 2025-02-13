@@ -1,0 +1,286 @@
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-bottom: 4px solid #7856fffd;
+  animation: load 1.5s infinite ease-in-out;
+}
+
+@keyframes load {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+.job-detail-container {
+  margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 100px;
+  max-width: 60%;
+  width: 90%;
+  .job-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      cursor: pointer;
+      svg {
+        width: 18px;
+        height: 18px;
+        color: #1c73e8;
+      }
+      p {
+        color: #1c73e8;
+        font-size: 14px;
+      }
+    }
+  }
+  .job-details-header {
+    font-weight: 400;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    padding: 8px 0 32px;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      h2 {
+        font-size: 2rem;
+        line-height: 2.5rem;
+        font-weight: 400;
+        flex-grow: 2;
+      }
+      span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 16px;
+
+        svg {
+          height: 18px;
+        }
+      }
+    }
+    .apply-btn {
+      background: #1c73e8;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background 0.15s ease 0s, color 0.15s ease 0s,
+        box-shadow 0.15s ease 0s;
+      border: none;
+      max-width: 100%;
+      font-size: 1rem;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+
+      &:hover,
+      &:focus {
+        box-shadow: #0000004d 0 2px 6px;
+      }
+    }
+    .job-salary {
+      background-color: #eee;
+      border-radius: 0.25rem;
+      color: #595959;
+      font-size: 0.8rem !important;
+      font-weight: 600;
+      line-height: 1.3125rem;
+      margin-bottom: 0.25rem;
+      margin-right: 0.25rem;
+      padding: 0.2rem 0.5rem;
+      vertical-align: middle;
+      max-width: 80%;
+    }
+  }
+
+  ::ng-deep .job-details-desc {
+    margin-top: 10px;
+    h2 {
+      font-size: 22px !important;
+      font-weight: 600;
+      line-height: 2.5rem;
+    }
+    h3 {
+      font-size: 19px;
+      font-weight: 600;
+    }
+    ul li {
+      padding: 5px 0px;
+      font-size: 15px;
+    }
+    p {
+      padding: 5px 0px;
+      font-size: 15px;
+    }
+  }
+  .job-divider {
+    border: 0;
+    border-bottom: 1px solid #c9c8c8;
+    margin-top: 40px;
+  }
+  .apply-job-container {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    p {
+      font-size: 14px;
+    }
+    h4 {
+      font-weight: 400;
+      font-size: 20px;
+    }
+    span {
+      font-size: 14px;
+      line-height: 0.8rem;
+    }
+
+    form {
+      .input-group {
+        font-size: 1.25rem;
+        position: relative;
+        margin: 20px 0px;
+        display: flex;
+        flex-direction: column;
+        input {
+          color: #6d6d6d;
+          padding: 10px 10px;
+          height: 50px;
+          text-overflow: ellipsis;
+          font-size: 14px;
+          font-weight: 400;
+          outline: none;
+          border: 1px solid #dddd;
+          border-radius: 5px;
+          margin-top: 3px;
+
+          &:focus {
+            border: 1px solid #1c73e8;
+          }
+        }
+
+        label {
+          font-size: 14px;
+          color: #484747;
+          font-weight: 500;
+        }
+      }
+      .file-upload__wrapper {
+        display: flex;
+        align-items: center;
+        padding-top: 0.25rem;
+        gap: 10px;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 10px;
+        .button-container {
+          max-width: 300px;
+          width: 100%;
+          .secondary-button button {
+            color: #1c73e8;
+            border: 1px solid #1c73e8;
+            background-color: transparent;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 8px;
+            &:focus {
+              filter: brightness(60%);
+              background-color: transparent;
+            }
+            .visually-hidden {
+              position: absolute !important;
+              width: 1px !important;
+              height: 1px !important;
+              padding: 0 !important;
+              margin: -1px !important;
+              overflow: hidden !important;
+              clip: rect(0, 0, 0, 0) !important;
+              white-space: nowrap !important;
+              border: 0 !important;
+            }
+          }
+          .accept-message {
+            margin-top: 5px;
+            font-size: 13px;
+          }
+        }
+      }
+      .btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: background 0.15s ease 0s, color 0.15s ease 0s,
+          box-shadow 0.15s ease 0s;
+        box-sizing: border-box;
+        position: relative;
+        display: inline-block;
+        line-height: 1.5rem;
+        max-width: 100%;
+        font-size: 1rem;
+        text-align: center;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        background-color: #1c73e8;
+        color: #ffffff;
+        &:hover,
+        :focus {
+          box-shadow: #0000004d 0 2px 6px;
+          background-color: #2661bd;
+        }
+      }
+      .job-question {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        ::ng-deep .mat-mdc-form-field {
+          display: block;
+        }
+
+        .question-text-input input {
+          color: #6d6d6d;
+          padding: 10px 10px;
+          height: 50px;
+          text-overflow: ellipsis;
+          font-size: 14px;
+          font-weight: 400;
+          outline: none;
+          border: 1px solid #dddd;
+          border-radius: 5px;
+          margin-top: 3px;
+
+          &:focus {
+            border: 1px solid #1c73e8;
+          }
+        }
+        label {
+          font-size: 14px;
+          color: #484747;
+          margin: 5px 0px;
+          font-weight: 500;
+        }
+      }
+      small {
+        color: rgba(216, 5, 5, 0.89);
+        font-size: 14px;
+        margin: 5px 0px;
+      }
+    }
+  }
+}

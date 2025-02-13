@@ -161,12 +161,15 @@
               </div>
             </div>
           </div>
-          <div formArrayName="questions">
+          <div formArrayName="questionOptions">
             <div class="row">
               <div class="col">
                 <div
                   class="question-content"
-                  *ngFor="let question of questions.controls; let i = index"
+                  *ngFor="
+                    let question of questionOptions.controls;
+                    let i = index
+                  "
                 >
                   <label for="question">Question {{ i + 1 }}</label>
                   <div class="d-flex item-center gap-2">
@@ -240,8 +243,8 @@
                   panelClass="custom-dropdown"
                   multiple
                   disableRipple
-                  id="requiredskills"
-                  formControlName="requiredskills"
+                  id="requiredSkills"
+                  formControlName="requiredSkills"
                 >
                   <mat-option
                     *ngFor="let option of options"

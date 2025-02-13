@@ -19,6 +19,7 @@
   .modal-header {
     padding: 10px 29px;
   }
+
   .modal-body {
     form {
       .row {
@@ -172,4 +173,9 @@
       }
     }
   }
+}
+
+::ng-deep .modal-backdrop {
+  background: rgba(0, 0, 0, 0.2) !important;
+  z-index: 999 !important;
 }

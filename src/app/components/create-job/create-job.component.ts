@@ -7,8 +7,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { JobRecruitService } from '../shared/job-recruit.service';
-import { jobType } from '../shared/type';
+import { JobRecruitService } from '../../shared/job-recruit.service';
+import { jobType } from '../../shared/type';
 import { Modal } from 'bootstrap';
 
 @Component({
@@ -58,7 +58,6 @@ export class CreateJobComponent {
       requiredSkills: [''],
     });
   }
-
   ngOnInit(): void {
     if (this.froalaEditorInstance) {
       this.froalaEditorInstance.edit.off();
@@ -89,7 +88,7 @@ export class CreateJobComponent {
   get workMode() {
     return this.form.get('workMode');
   }
-  get questions(): FormArray {
+  get questionOptions(): FormArray {
     return this.form.get('questionOptions') as FormArray;
   }
   get requiredskills() {
@@ -97,10 +96,10 @@ export class CreateJobComponent {
   }
 
   addQuestion() {
-    this.questions.push(this.fb.control(''));
+    this.questionOptions.push(this.fb.control(''));
   }
   removeQuestion(index: number) {
-    this.questions.removeAt(index);
+    this.questionOptions.removeAt(index);
   }
 
   nameValidator(): ValidatorFn {
@@ -110,7 +109,6 @@ export class CreateJobComponent {
       return valid ? null : { invalidName: { value: control.value } };
     };
   }
-
   amountValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -178,6 +176,7 @@ export class CreateJobComponent {
       });
     } else {
       this.form.markAllAsTouched();
+      console.log('error check if the input is valid');
     }
   }
   resetForm() {

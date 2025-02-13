@@ -1,0 +1,8 @@
+<div *ngIf="isLoading$ | async" class="progress-bar"></div>
+<div *ngIf="!isLoading$ && error$">{{ error$ }}</div>
+<section class="container">
+  <app-header />
+  <app-job-category *ngIf="jobsList && jobsList.length" [jobsList]="jobsList" />
+  <app-job-listing *ngIf="jobsList && jobsList?.length" [jobsList]="jobsList" />
+  <app-create-job />
+</section>
