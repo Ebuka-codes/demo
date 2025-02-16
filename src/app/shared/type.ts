@@ -9,15 +9,18 @@ export interface jobType {
   jobType: string;
   companyName: string;
   workMode: string;
-  questionOptions: string[];
-  options: Array<optionType>;
+  questionOptions: Array<optionType>;
   requiredSkills: string[];
 }
-
 export interface optionType {
   id: string;
   code: string;
   description: string;
   questionType: string;
-  options: [];
+  options: [
+    {
+      id: string;
+      description: string;
+    }
+  ];
 }

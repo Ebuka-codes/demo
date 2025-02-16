@@ -26,11 +26,11 @@ export class CreateJobComponent {
   formatAmountValue: string = '';
   loading: boolean = false;
   froalaEditorInstance: any;
-  options = [
-    { value: 'option1', viewValue: 'Option 1' },
-    { value: 'option2', viewValue: 'Option 2' },
-    { value: 'option3', viewValue: 'Option 3' },
-    { value: 'option1', viewValue: 'Option 1' },
+  questions: any;
+  skillsOptions = [
+    { value: 'Angular', viewValue: 'Angular' },
+    { value: 'Java', viewValue: 'Java' },
+    { value: 'Databasse', viewValue: 'Database' },
   ];
   froalaOptions: any = {
     placeholderText: 'Enter content here...',
@@ -54,8 +54,8 @@ export class CreateJobComponent {
       jobType: ['', Validators.required],
       companyName: ['', Validators.required],
       workMode: ['', Validators.required],
-      questionOptions: this.fb.array([]),
-      requiredSkills: [''],
+      questionOptions: ['', Validators.required],
+      requiredSkills: ['', Validators.required],
     });
   }
   ngOnInit(): void {
@@ -63,6 +63,7 @@ export class CreateJobComponent {
       this.froalaEditorInstance.edit.off();
       this.froalaEditorInstance.$el.attr('contenteditable', 'false');
     }
+    this.getAllQuestion();
   }
   get jobTitle() {
     return this.form.get('jobTitle');
@@ -91,15 +92,8 @@ export class CreateJobComponent {
   get questionOptions(): FormArray {
     return this.form.get('questionOptions') as FormArray;
   }
-  get requiredskills() {
-    return this.form.get('requiredSkills');
-  }
-
-  addQuestion() {
-    this.questionOptions.push(this.fb.control(''));
-  }
-  removeQuestion(index: number) {
-    this.questionOptions.removeAt(index);
+  get requiredskills(): FormArray {
+    return this.form.get('requiredSkills') as FormArray;
   }
 
   nameValidator(): ValidatorFn {
@@ -130,11 +124,24 @@ export class CreateJobComponent {
       this.formatAmountValue = '';
     }
   }
+
+  getAllQuestion() {
+    this.jobService.getQuestionOption().subscribe({
+      next: (response: any) => {
+        if (response.valid && response?.data) {
+          this.questions = response.data;
+        }
+      },
+      error: (error: any) => {
+        console.log('error', error.message);
+      },
+    });
+  }
   createNewJob(newJob: jobType) {
     this.loading = true;
     this.form.disable();
     this.jobService.createJob(newJob).subscribe({
-      next: () => {
+      next: (response) => {
         this.loading = false;
         this.form.enable();
         let modalElement = document.getElementById(
@@ -151,7 +158,7 @@ export class CreateJobComponent {
             backdrop.remove();
           }
           document.body.classList.remove('modal-open');
-        }, 300);
+        }, 100);
         this.form.reset();
         window.location.reload();
       },

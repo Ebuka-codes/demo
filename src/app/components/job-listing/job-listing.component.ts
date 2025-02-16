@@ -12,7 +12,6 @@ export class JobListingComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['jobsList']) {
       this.jobsList = changes['jobsList'].currentValue;
-      console.log(this.jobsList);
     }
   }
 }

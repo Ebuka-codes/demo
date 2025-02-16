@@ -20,6 +20,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { HomeComponent } from './pages/home/home.component';
 import { ViewJobDetailsComponent } from './pages/view-job-details/view-job-details.component';
 import { NotFoundErrorComponent } from './components/not-found-error/not-found-error.component';
+import { ApplyComponent } from './components/apply/apply.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,8 @@ import { NotFoundErrorComponent } from './components/not-found-error/not-found-e
     HomeComponent,
     ViewJobDetailsComponent,
     NotFoundErrorComponent,
+    ApplyComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +53,7 @@ import { NotFoundErrorComponent } from './components/not-found-error/not-found-e
     MatSelectModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatStepperModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

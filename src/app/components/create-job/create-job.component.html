@@ -136,7 +136,6 @@
               <label for="employementType"
                 >Employment type <span class="required-icon">*</span></label
               >
-
               <mat-form-field appearance="fill">
                 <mat-select
                   panelClass="custom-dropdown"
@@ -161,54 +160,6 @@
               </div>
             </div>
           </div>
-          <div formArrayName="questionOptions">
-            <div class="row">
-              <div class="col">
-                <div
-                  class="question-content"
-                  *ngFor="
-                    let question of questionOptions.controls;
-                    let i = index
-                  "
-                >
-                  <label for="question">Question {{ i + 1 }}</label>
-                  <div class="d-flex item-center gap-2">
-                    <input
-                      matInput
-                      [formControlName]="i"
-                      [class.disabled-bg]="loading"
-                    />
-                    <span (click)="removeQuestion(i)">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Add Question Button -->
-          <button
-            mat-button
-            class="question-btn"
-            (click)="addQuestion()"
-            type="button"
-          >
-            + Add Question
-          </button>
 
           <div class="row">
             <div class="col">
@@ -233,7 +184,6 @@
                 </small>
               </div>
             </div>
-
             <div class="col">
               <label for="requiredskills"
                 >Required Skills<span class="required-icon">*</span></label
@@ -247,7 +197,7 @@
                   formControlName="requiredSkills"
                 >
                   <mat-option
-                    *ngFor="let option of options"
+                    *ngFor="let option of skillsOptions"
                     [value]="option.value"
                   >
                     {{ option.viewValue }}
@@ -261,6 +211,36 @@
               </span>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="question"
+                >Questions<span class="required-icon">*</span></label
+              >
+              <mat-form-field appearance="fill">
+                <mat-select
+                  panelClass="custom-dropdown"
+                  multiple
+                  disableRipple
+                  id="questionOptions"
+                  formControlName="questionOptions"
+                >
+                  <mat-option
+                    *ngFor="let option of questions"
+                    [value]="option.id"
+                  >
+                    {{ option.description }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <span *ngIf="questionOptions?.invalid && isSubmitted">
+                <small *ngIf="questionOptions?.errors?.['required']">
+                  Question field are required
+                </small>
+              </span>
+            </div>
+          </div>
+
           <div class="row">
             <label for="description" style="margin-bottom: 5px"
               >Job Description <span class="required-icon">*</span></label

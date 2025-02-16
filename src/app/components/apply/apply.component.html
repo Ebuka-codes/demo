@@ -1,0 +1,692 @@
+<div class="apply-container">
+  <form action="" (ngSubmit)="onSubmitApplication()">
+    <mat-horizontal-stepper>
+      <!-- personal-information -->
+      <mat-step [stepControl]="personalFormGroup">
+        <form action="" [formGroup]="personalFormGroup">
+          <div class="apply-flow-block__header">
+            <h2 class="apply-flow-block__title">Import your profile</h2>
+            <p>You can import your information.</p>
+            <div class="apply-flow-profile-import__awli-content">
+              <button class="linkedin-btn">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  data-supported-dps="24x24"
+                  fill="currentColor"
+                  width="24"
+                  height="24"
+                  focusable="false"
+                >
+                  <path
+                    d="M20.12 2H3.88A1.88 1.88 0 002 3.88v16.24A1.88 1.88 0 003.88 22h16.24A1.88 1.88 0 0022 20.12V3.88A1.88 1.88 0 0020.12 2zM8 19H5v-9h3zM6.5 8.31A1.81 1.81 0 118.31 6.5 1.82 1.82 0 016.5 8.31zM19 19h-3v-4.25c0-1.44-.64-1.87-1.45-1.87-1.07 0-1.55.73-1.55 2.12v4h-3v-9h2.75v1.12a3.4 3.4 0 012.76-1.24c2.26 0 3.45 1.26 3.45 3.87z"
+                  ></path>
+                </svg>
+                <span>Apply With LinkedIn</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="contact-info">
+            <div class="contact-info__header">
+              <h2 class="contact-info-header__title">Contact Information</h2>
+              <p>Please enter your contact information.</p>
+            </div>
+            <div class="input-group">
+              <label for="firstName">First Name * </label>
+              <input type="text" formControlName="firstName" required />
+              <div
+                *ngIf="
+                  (firstName?.invalid && firstName?.touched) || firstName?.dirty
+                "
+              >
+                <small *ngIf="firstName?.errors?.['required']">
+                  First Name field is required
+                </small>
+
+                <small *ngIf="firstName?.errors?.['minlength']">
+                  First Name must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="lastName">Last Name * </label>
+              <input type="text" formControlName="lastName" required />
+              <div
+                *ngIf="
+                  (lastName?.invalid && lastName?.touched) || lastName?.dirty
+                "
+              >
+                <small *ngIf="lastName?.errors?.['required']">
+                  Last Name field is required
+                </small>
+                <small *ngIf="firstName?.errors?.['minlength']">
+                  Last Name must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="email">Email * </label>
+              <input type="email" formControlName="email" required />
+              <div *ngIf="(email?.invalid && email?.touched) || email?.dirty">
+                <small *ngIf="email?.errors?.['required']"
+                  >Email field is required</small
+                >
+                <small
+                  *ngIf="!email?.errors?.['required'] && email?.errors?.['invalidEmail']"
+                  >Invalid email format</small
+                >
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="phone">Phone * </label>
+              <input type="text" formControlName="phone" required />
+              <div *ngIf="(phone?.invalid && phone?.touched) || phone?.dirty">
+                <small *ngIf="phone?.errors?.['required']"
+                  >Phone field is required</small
+                >
+                <small
+                  *ngIf="!phone?.errors?.['required'] && phone?.errors?.['invalidPhone']"
+                  >Invalid phone number format</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="address-info">
+            <div class="address-info-header">
+              <h2 class="address-info-header__title">Address</h2>
+              <p>Please enter your home address.</p>
+            </div>
+            <div class="input-group">
+              <label for="CountryName">Country Name * </label>
+              <mat-form-field appearance="fill">
+                <mat-select
+                  formControlName="countryName"
+                  panelClass="custom-dropdown"
+                  disableRipple
+                  required
+                >
+                  <mat-option value="Nigeria"> Nigeria </mat-option>
+                  <mat-option value="Ghana"> Ghana </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div
+                *ngIf="
+                  (countryName?.invalid && countryName?.touched) ||
+                  countryName?.dirty
+                "
+              >
+                <small *ngIf="countryName?.errors?.['required']">
+                  Country Name field is required
+                </small>
+                <small *ngIf="firstName?.errors?.['minlength']">
+                  Country Name must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="state">Province/State * </label>
+              <mat-form-field appearance="fill">
+                <mat-select
+                  formControlName="state"
+                  panelClass="custom-dropdown"
+                  disableRipple
+                  required
+                >
+                  <mat-option value="Nigeria"> Lagos </mat-option>
+                  <mat-option value="Ghana"> Abuja </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="(state?.invalid && state?.touched) || state?.dirty">
+                <small *ngIf="state?.errors?.['required']">
+                  Province/State field is required
+                </small>
+                <small *ngIf="firstName?.errors?.['minlength']">
+                  Country Name must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="homeAddress">Home Address * </label>
+              <input type="text" formControlName="homeAddress" />
+              <div
+                *ngIf="
+                  (homeAddress?.invalid && homeAddress?.touched) ||
+                  homeAddress?.dirty
+                "
+              >
+                <small *ngIf="homeAddress?.errors?.['required']">
+                  Home Address field is required
+                </small>
+                <small *ngIf="firstName?.errors?.['minlength']">
+                  Home Address must be at least 3 characters long
+                </small>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="page-btn">
+          <button
+            class="next"
+            mat-button
+            (click)="validateStep(personalFormGroup, stepper)"
+            matStepperNext
+            type="button"
+          >
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- application question -->
+      <mat-step [stepControl]="questionsFormGroup">
+        <div class="questions">
+          <div class="question-header">
+            <h2 class="question-header__title">Application Questions</h2>
+            <p>Please answer the following questions.</p>
+          </div>
+          <div class="question-content">
+            <form action="" [formGroup]="questionsFormGroup">
+              <div *ngFor="let item of data?.questionOptions" class="group">
+                <ng-container *ngIf="item?.questionType === 'DATE'">
+                  <label style="font-weight: 500"
+                    >{{ item?.description }}*</label
+                  >
+                  <mat-form-field>
+                    <input
+                      matInput
+                      [value]="item?.description"
+                      [matDatepicker]="picker1"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker1"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="item?.questionType === 'DROPDOWN'">
+                  <label style="font-weight: 500"
+                    >{{ item?.description }} *</label
+                  >
+                  <mat-form-field>
+                    <mat-select>
+                      <mat-option [value]="data?.id">
+                        <ng-container *ngFor="let option of item.options">
+                          {{ option }}
+                        </ng-container>
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ng-container>
+
+                <ng-container *ngIf="item?.questionType === 'TEXT'">
+                  <label style="font-weight: 500" for="text"
+                    >{{ item?.description }} *
+                  </label>
+                  <mat-form-field
+                    class="question-text-input"
+                    style="display: flex; flex-direction: column"
+                  >
+                    <input
+                      matInput
+                      [value]=""
+                      type="text"
+                      formControlName="email"
+                    />
+                  </mat-form-field>
+                </ng-container>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="page-btn">
+          <button class="prev" mat-button matStepperPrevious type="button">
+            Back
+          </button>
+          <button class="next" mat-button matStepperNext type="button">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- work and experience -->
+      <mat-step [stepControl]="experienceFormGroup">
+        <div class="work-info">
+          <div class="work-info__header">
+            <h2 class="work-info-header__title">Work and Education History</h2>
+            <p>
+              Please enter details about your work experience and education.
+            </p>
+          </div>
+          <div class="content">
+            <form action="" [formGroup]="experienceFormGroup">
+              <div class="work-history">
+                <h4 class="fs-5">Work history</h4>
+                <div class="job-divider"></div>
+                <div class="work-history-list" *ngIf="workHistories.length">
+                  <ul class="mb-4 mt-4">
+                    <li
+                      class="item"
+                      *ngFor="let work of workHistories; let i = index"
+                    >
+                      <strong>{{ work.jobTitle }}</strong> at
+                      {{ work.employerName }} ({{
+                        formatMonth(work.startDate)
+                      }}
+                      - {{ formatMonth(work.endDate) }})
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                        (click)="removeWorkHistory(i)"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </li>
+                  </ul>
+                </div>
+                <button
+                  class="work-history-btn mb-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addWorkHistory"
+                >
+                  + Add Work History
+                </button>
+
+                <div
+                  class="modal fade"
+                  id="addWorkHistory"
+                  tabindex="-1"
+                  aria-labelledby="modalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span>
+                          <h5 class="modal-title">Add Work History</h5>
+                        </span>
+                        <div
+                          class="btn-close"
+                          style="cursor: pointer"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          (click)="resetWorkHistoryForm()"
+                        ></div>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="group">
+                          <label for="JobTitle">Employer Name *</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="employerName"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
+                        <div class="group">
+                          <label for="JobTitle">JobTitle</label>
+                          <mat-form-field>
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="jobTitle"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
+                        <div class="group">
+                          <label for="startDate">Start Date</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              [matDatepicker]="picker1"
+                              type="text"
+                              formControlName="startDate"
+                              required
+                            />
+                            <mat-datepicker-toggle
+                              matSuffix
+                              [for]="picker1"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="group">
+                          <label for="endDate">End Date</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              [matDatepicker]="picker2"
+                              type="text"
+                              formControlName="endDate"
+                              required
+                            />
+                            <mat-datepicker-toggle
+                              matSuffix
+                              [for]="picker2"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="group">
+                          <label for="jobFunction">Job Function</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="jobFunction"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          (click)="addWorkHistory()"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="education-info">
+                <div class="education-info-content">
+                  <h4 class="fs-5">Education History</h4>
+                  <div class="job-divider"></div>
+                  <div class="group">
+                    <label for="degree">Degree*</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        matInput
+                        type="text"
+                        formControlName="Degree"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="group">
+                    <label for="Major">Major</label>
+                    <mat-form-field>
+                      <input
+                        matInput
+                        type="text"
+                        formControlName="Major"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="group">
+                    <label for="school">School</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        matInput
+                        type="text"
+                        formControlName="school"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="group">
+                    <label for="schoolStartDate">Start Date</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        matInput
+                        type="text"
+                        formControlName="schoolStartDate"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="group">
+                    <label for="schoolEndDate">End Date</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        matInput
+                        type="text"
+                        formControlName="schoolEndDate"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="group">
+                    <label for="educationLevel">Education Level</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        matInput
+                        type="text"
+                        formControlName="educationLevel"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="skills-info">
+                    <div class="skills-info-content">
+                      <h4 class="fs-5">Skills</h4>
+                      <div class="job-divider"></div>
+                      <div class="group-1">
+                        <div formArrayName="skills">
+                          <div class="row">
+                            <div class="col">
+                              <div
+                                class="skills-content"
+                                *ngFor="
+                                  let skill of skills.controls;
+                                  let i = index
+                                "
+                              >
+                                <div
+                                  class="d-flex item-center gap-2"
+                                  style="width: 100%"
+                                >
+                                  <input
+                                    matInput
+                                    [formControlName]="i"
+                                    style="width: 100%"
+                                  />
+                                  <span (click)="removeSkills(i)">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-6"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M6 18 18 6M6 6l12 12"
+                                      />
+                                    </svg>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <button class="skills-btn" (click)="addSkills()">
+                          + Add skills
+                        </button>
+                      </div>
+
+                      <div class="group">
+                        <label for="School">Years of Experience</label>
+                        <mat-form-field appearance="fill">
+                          <input
+                            matInput
+                            type="text"
+                            formControlName=""
+                            required
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="page-btn">
+          <button class="prev" mat-button matStepperPrevious type="button">
+            Back
+          </button>
+          <button class="next" mat-button matStepperNext type="button">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- supporting-doc -->
+      <mat-step [stepControl]="supportingFormGroup">
+        <form action="" [formGroup]="supportingFormGroup">
+          <div class="supporting-doc">
+            <div class="supporting-doc__header">
+              <h2 class="supporting-doc__title">Supporting Documents</h2>
+              <p>Please add any additional documents</p>
+            </div>
+            <div class="supporting-doc__content">
+              <div>
+                <ng-container *ngIf="!selectedResumeFile; else elseTemplate">
+                  <div>
+                    <button
+                      class="supporting-btn"
+                      type="button"
+                      (click)="triggerFileInput()"
+                    >
+                      <span> UPLOAD RESUME</span></button
+                    ><label class="visually-hidden" for="resume"
+                      >UPLOAD RESUME/CV</label
+                    ><input
+                      #resumeInput
+                      id="resumeInput"
+                      class="visually-hidden"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                      (change)="onFileChange($event)"
+                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                    />
+                  </div>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <div class="supporting-upload-file">
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <span style="color: black; margin: 10px 0px">{{
+                        selectedResumeFile
+                      }}</span>
+                      <button (click)="handleRemoveResumeFile()">Remove</button>
+                    </span>
+                  </div>
+                </ng-template>
+              </div>
+
+              <div>
+                <ng-container
+                  *ngIf="!selectedCoverLetterFile; else showCoverLetter"
+                >
+                  <div>
+                    <button
+                      class="supporting-btn"
+                      type="button"
+                      (click)="triggerCoverInput()"
+                    >
+                      <span>ADD COVER LETTER</span></button
+                    ><label class="visually-hidden" for="coverletter"
+                      >ADD COVER LETTER<</label
+                    ><input
+                      #coverInput
+                      id="coverLetter"
+                      class="visually-hidden"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                      (change)="onCoverLetterFileChange($event)"
+                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                    />
+                  </div>
+                </ng-container>
+                <ng-template #showCoverLetter>
+                  <div class="supporting-upload-file">
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <span style="color: black; margin: 10px 0px">{{
+                        selectedCoverLetterFile
+                      }}</span>
+                      <button (click)="handleRemoveCoverLetter()">
+                        Remove
+                      </button>
+                    </span>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="supporting-page-btn">
+          <button class="prev" mat-button matStepperPrevious type="button">
+            Back
+          </button>
+          <button class="submit-btn" mat-button matStepperNext type="button">
+            Submit
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </form>
+</div>

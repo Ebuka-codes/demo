@@ -1,14 +1,13 @@
 .create-job {
   .custom-dropdown {
     .mat-select-panel {
-      z-index: 1055 !important; // Bootstrap modal has z-index 1050, so this must be higher
+      z-index: 1055 !important;
       position: absolute !important;
     }
   }
   .modal {
-    z-index: 1060 !important;
+    z-index: 20000 !important;
   }
-
   .btn-close {
     font-size: 12px !important;
     cursor: pointer;
@@ -19,7 +18,6 @@
   .modal-header {
     padding: 10px 29px;
   }
-
   .modal-body {
     form {
       .row {
@@ -59,11 +57,10 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.6); /* Light transparent overlay */
+        background: rgba(255, 255, 255, 0.6);
         cursor: not-allowed;
         z-index: 20000;
       }
-
       small {
         color: rgba(216, 5, 5, 0.89);
         font-size: 13px;
@@ -99,7 +96,6 @@
           white-space: nowrap;
           word-break: keep-all;
           margin-left: 20px;
-
           &:disabled {
             cursor: not-allowed;
           }
@@ -173,9 +169,4 @@
       }
     }
   }
-}
-
-::ng-deep .modal-backdrop {
-  background: rgba(0, 0, 0, 0.2) !important;
-  z-index: 999 !important;
 }
