@@ -17,12 +17,12 @@ export class JobRecruitService {
   private errorSubject = new BehaviorSubject<string | null>(null);
   error$ = this.errorSubject.asObservable();
   private jobDetailsId: string | null = null;
-  encodedValue = btoa('shl');
+  encodedValue: any;
   lastPath!: string;
   private lastPathSubject = new BehaviorSubject<string>('');
   lastPath$ = this.lastPathSubject.asObservable();
   constructor(private httpClient: HttpClient, private router: Router) {
-    this.updateLastPath(); // Get last path on service load
+    this.updateLastPath();
 
     // Listen for route changes
     this.router.events.subscribe((event) => {
