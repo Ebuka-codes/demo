@@ -8,7 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { Modal } from 'bootstrap';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { jobType } from 'src/app/shared/type';
 
@@ -148,7 +147,6 @@ export class ApplyComponent {
     const file = this.personalFormGroup.get('resumeFile')?.value;
     const googleDriveLink =
       this.personalFormGroup.get('googleDriveLink')?.value;
-    console.log(file, googleDriveLink);
     return file || googleDriveLink ? null : { require: true };
   }
   validatePhone(): ValidatorFn {
@@ -206,14 +204,11 @@ export class ApplyComponent {
   }
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    console.log(event);
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedResumeFile = file.name;
       this.personalFormGroup.patchValue({ resumeFile: file.name });
       this.personalFormGroup.get('resumeFile')?.updateValueAndValidity();
-
-      console.log(this.selectedResumeFile);
     }
   }
   onCoverLetterFileChange(event: Event) {

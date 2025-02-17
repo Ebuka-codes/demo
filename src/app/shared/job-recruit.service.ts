@@ -17,23 +17,29 @@ export class JobRecruitService {
   private errorSubject = new BehaviorSubject<string | null>(null);
   error$ = this.errorSubject.asObservable();
   private jobDetailsId: string | null = null;
-  encodedValue = btoa('SHL');
+  encodedValue = btoa('shl');
   lastPath!: string;
+  private lastPathSubject = new BehaviorSubject<string>('');
+  lastPath$ = this.lastPathSubject.asObservable();
+  constructor(private httpClient: HttpClient, private router: Router) {
+    this.updateLastPath(); // Get last path on service load
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
-
-  ngOnInit(): void {
+    // Listen for route changes
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        const urlSegments = this.router.url
-          .split('/')
-          .filter((segment) => segment);
-        this.lastPath = urlSegments.length
-          ? `/${urlSegments[urlSegments.length - 1]}`
-          : '';
+        this.updateLastPath();
       }
     });
-    this.encodedValue = btoa(this.lastPath?.replace('/', ''));
+  }
+
+  ngOnInit(): void {}
+  private updateLastPath() {
+    const urlSegments = this.router.url.split('/').filter((segment) => segment);
+    const lastPath = urlSegments.length
+      ? `/${urlSegments[urlSegments.length - 1]}`
+      : '';
+    this.lastPathSubject.next(lastPath);
+    this.encodedValue = btoa(lastPath.replace(/^\/+|\/+$/g, '').toUpperCase());
   }
   createJob(newJob: jobType): Observable<any> {
     const headers = new HttpHeaders({
@@ -45,6 +51,7 @@ export class JobRecruitService {
     });
   }
   getJobList(): Observable<any> {
+    console.log(this.encodedValue);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
