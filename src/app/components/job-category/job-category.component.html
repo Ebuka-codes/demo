@@ -1,10 +1,8 @@
 <section class="job-category">
   <span>{{ jobsList.length }} job open</span>
   <div class="job-category-content">
-    <button>IT Support</button>
-    <button>Frontend Developer</button>
-    <button>Backend Developer</button>
-    <button>Data Analysis</button>
-    <button>Cyber Security</button>
+    <button *ngFor="let item of data">
+      {{ item }}
+    </button>
   </div>
 </section>

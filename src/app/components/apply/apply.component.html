@@ -182,74 +182,79 @@
 
       <!-- application question -->
       <mat-step [stepControl]="questionsFormGroup">
-        <div class="questions">
-          <div class="question-header">
-            <h2 class="question-header__title">Application Questions</h2>
-            <p>Please answer the following questions.</p>
-          </div>
-          <div class="question-content">
-            <form action="" [formGroup]="questionsFormGroup">
-              <div *ngFor="let item of data?.questionOptions" class="group">
-                <ng-container *ngIf="item?.questionType === 'DATE'">
-                  <label style="font-weight: 500"
-                    >{{ item?.description }}*</label
-                  >
-                  <mat-form-field>
-                    <input
-                      matInput
-                      [value]="item?.description"
-                      [matDatepicker]="picker1"
-                    />
-                    <mat-datepicker-toggle
-                      matSuffix
-                      [for]="picker1"
-                    ></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker>
-                  </mat-form-field>
-                </ng-container>
-                <ng-container *ngIf="item?.questionType === 'DROPDOWN'">
-                  <label style="font-weight: 500"
-                    >{{ item?.description }} *</label
-                  >
-                  <mat-form-field>
-                    <mat-select>
-                      <mat-option [value]="data?.id">
-                        <ng-container *ngFor="let option of item.options">
-                          {{ option }}
-                        </ng-container>
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </ng-container>
+        <ng-container *ngIf="data?.questionOptions?.length; else showQuestion">
+          <div class="questions">
+            <div class="question-header">
+              <h2 class="question-header__title">Application Questions</h2>
+              <p>Please answer the following questions.</p>
+            </div>
+            <div class="question-content">
+              <form action="" [formGroup]="questionsFormGroup">
+                <div *ngFor="let item of data?.questionOptions" class="group">
+                  <ng-container *ngIf="item?.questionType === 'DATE'">
+                    <label style="font-weight: 500"
+                      >{{ item?.description }}*</label
+                    >
+                    <mat-form-field>
+                      <input
+                        matInput
+                        [value]="item?.description"
+                        [matDatepicker]="picker1"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker1"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                  </ng-container>
+                  <ng-container *ngIf="item?.questionType === 'DROPDOWN'">
+                    <label style="font-weight: 500"
+                      >{{ item?.description }} *</label
+                    >
+                    <mat-form-field>
+                      <mat-select>
+                        <mat-option [value]="data?.id">
+                          <ng-container *ngFor="let option of item.options">
+                            {{ option }}
+                          </ng-container>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </ng-container>
 
-                <ng-container *ngIf="item?.questionType === 'TEXT'">
-                  <label style="font-weight: 500" for="text"
-                    >{{ item?.description }} *
-                  </label>
-                  <mat-form-field
-                    class="question-text-input"
-                    style="display: flex; flex-direction: column"
-                  >
-                    <input
-                      matInput
-                      [value]=""
-                      type="text"
-                      formControlName="email"
-                    />
-                  </mat-form-field>
-                </ng-container>
-              </div>
-            </form>
+                  <ng-container *ngIf="item?.questionType === 'TEXT'">
+                    <label style="font-weight: 500" for="text"
+                      >{{ item?.description }} *
+                    </label>
+                    <mat-form-field
+                      class="question-text-input"
+                      style="display: flex; flex-direction: column"
+                    >
+                      <input
+                        matInput
+                        [value]=""
+                        type="text"
+                        formControlName="email"
+                      />
+                    </mat-form-field>
+                  </ng-container>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="page-btn">
-          <button class="prev" mat-button matStepperPrevious type="button">
-            Back
-          </button>
-          <button class="next" mat-button matStepperNext type="button">
-            Next
-          </button>
-        </div>
+          <div class="page-btn">
+            <button class="prev" mat-button matStepperPrevious type="button">
+              Back
+            </button>
+            <button class="next" mat-button matStepperNext type="button">
+              Next
+            </button>
+          </div>
+        </ng-container>
+        <ng-template #showQuestion>
+          <span class="mt-4"> Application question is empty</span>
+        </ng-template>
       </mat-step>
 
       <!-- work and experience -->

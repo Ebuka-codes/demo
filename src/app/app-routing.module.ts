@@ -4,6 +4,8 @@ import { JobDetailsComponent } from './components/job-details/job-details.compon
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { ApplyComponent } from './components/apply/apply.component';
+import { CreateJobComponent } from './pages/create-job/create-job.component';
+import { NotFoundErrorComponent } from './components/not-found-error/not-found-error.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,7 +21,10 @@ const routes: Routes = [
     path: 'job/apply',
     component: ApplyComponent,
   },
-
+  {
+    path: 'create-job/:SHL',
+    component: CreateJobComponent,
+  },
   {
     path: '**',
     component: HomeComponent,

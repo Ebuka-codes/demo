@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'; // Import CKEditor build
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -9,14 +9,14 @@ import {
 } from '@angular/forms';
 import { JobRecruitService } from '../../shared/job-recruit.service';
 import { jobType } from '../../shared/type';
-import { Modal } from 'bootstrap';
-
+import { Notyf } from 'notyf';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-create-job',
   templateUrl: './create-job.component.html',
   styleUrls: ['./create-job.component.scss'],
 })
-export class CreateJobComponent {
+export class CreateJobComponent implements OnInit {
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   jobTypeOption: string[] = ['Full-time', 'Part-time', 'Contract'];
   employmentOption: string[] = ['PERMANENT', 'TEMPORARY'];
@@ -40,13 +40,13 @@ export class CreateJobComponent {
       },
     },
   };
+  private notyf = new Notyf();
   constructor(private fb: FormBuilder, private jobService: JobRecruitService) {
     this.form = this.fb.group({
       jobTitle: [
         '',
         [Validators.required, Validators.minLength(3), this.nameValidator()],
       ],
-      jobDescription: ['', Validators.required],
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
@@ -56,6 +56,7 @@ export class CreateJobComponent {
       workMode: ['', Validators.required],
       questionOptions: ['', Validators.required],
       requiredSkills: ['', Validators.required],
+      jobDescription: ['', Validators.required],
     });
   }
   ngOnInit(): void {
@@ -144,34 +145,27 @@ export class CreateJobComponent {
       next: (response) => {
         this.loading = false;
         this.form.enable();
-        let modalElement = document.getElementById(
-          'addJobModal'
-        ) as HTMLElement;
-        if (modalElement) {
-          const modalInstance =
-            Modal?.getInstance(modalElement) || new Modal(modalElement);
-          modalInstance.hide();
-        }
-        setTimeout(() => {
-          const backdrop = document.querySelector('.modal-backdrop');
-          if (backdrop) {
-            backdrop.remove();
-          }
-          document.body.classList.remove('modal-open');
-        }, 100);
-        this.form.reset();
-        window.location.reload();
+        this.notyf.success({
+          message: 'Job created successfully!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
       },
       error: (error: any) => {
-        console.log('error', error.message);
         this.loading = false;
         this.form.enable();
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
       },
     });
   }
   onSubmit(): void {
     this.isSubmitted = true;
     if (this.form.valid) {
+      console.log('working');
       this.createNewJob({
         ...this.form.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),

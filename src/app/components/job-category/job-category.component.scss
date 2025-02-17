@@ -6,7 +6,7 @@
   span {
     text-transform: capitalize;
     border-right: 1px solid #ddd;
-    padding-left: 3px;
+    padding-right: 5px;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
@@ -30,6 +30,7 @@
       font-size: 12px;
       max-width: 80%;
       white-space: nowrap;
+      text-transform: capitalize;
     }
   }
 }

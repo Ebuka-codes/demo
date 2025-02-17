@@ -24,6 +24,7 @@
     "angular-froala-wysiwyg": "^4.4.0",
     "bootstrap": "^5.3.3",
     "froala-editor": "^4.4.0",
+    "notyf": "^3.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

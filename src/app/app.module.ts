@@ -6,7 +6,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { JobListingComponent } from './components/job-listing/job-listing.component';
 import { JobDetailsComponent } from './components/job-details/job-details.component';
 import { JobCategoryComponent } from './components/job-category/job-category.component';
-import { CreateJobComponent } from './components/create-job/create-job.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,6 +22,8 @@ import { NotFoundErrorComponent } from './components/not-found-error/not-found-e
 import { ApplyComponent } from './components/apply/apply.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { CreateJobComponent } from './pages/create-job/create-job.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatNativeDateModule,
     MatDatepickerModule,
     MatStepperModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
