@@ -10,7 +10,6 @@ import {
 import { JobRecruitService } from '../../shared/job-recruit.service';
 import { jobType } from '../../shared/type';
 import { Notyf } from 'notyf';
-import { Location } from '@angular/common';
 @Component({
   selector: 'app-create-job',
   templateUrl: './create-job.component.html',
@@ -150,10 +149,13 @@ export class CreateJobComponent implements OnInit {
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
+        this.form.reset();
+        this.isSubmitted = false;
       },
       error: (error: any) => {
         this.loading = false;
         this.form.enable();
+        this.form.reset();
         this.notyf.error({
           message: 'Error occur!',
           duration: 4000,
@@ -165,7 +167,6 @@ export class CreateJobComponent implements OnInit {
   onSubmit(): void {
     this.isSubmitted = true;
     if (this.form.valid) {
-      console.log('working');
       this.createNewJob({
         ...this.form.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),
@@ -176,13 +177,7 @@ export class CreateJobComponent implements OnInit {
         jobStatus: 'Pending',
       });
     } else {
-      this.form.markAllAsTouched();
       console.log('error check if the input is valid');
     }
-  }
-  resetForm() {
-    this.form.reset();
-    this.isSubmitted = false;
-    this.form.enable();
   }
 }

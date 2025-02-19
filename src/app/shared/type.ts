@@ -24,3 +24,48 @@ export interface optionType {
     }
   ];
 }
+
+export interface JobApplication {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  countryName: string;
+  city: string;
+  state: string;
+  educationHistories: EducationHistory[];
+  workHistories: WorkHistory[];
+  skills: Skill[];
+  questionOptionAnswersDTO: QuestionOptionAnswer[];
+  resume: string;
+  coverLetter: string;
+  yearsOfExperience: number;
+}
+
+interface EducationHistory {
+  institutionName: string;
+  degree: string;
+  major: string;
+  educationLevel: string;
+  fieldOfStudy: string;
+  startDate: string;
+  endDate: string;
+}
+
+interface WorkHistory {
+  companyName: string;
+  jobTitle: string;
+  jobDescription: string;
+  startDate: string;
+  endDate: string;
+}
+interface Skill {
+  skillName: string;
+  proficiencyLevel: string;
+  noOfYears: number;
+}
+interface QuestionOptionAnswer {
+  questionOptionId: string;
+  answer: string;
+}

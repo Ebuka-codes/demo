@@ -111,3 +111,20 @@ html body * {
 .mat-mdc-text-field-wrapper .showme {
   border: 1px solid red !important;
 }
+.month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.month-picker .mat-calendar-arrow {
+  display: none;
+}
+
+.mat-step-header {
+  border-radius: 10px;
+}
+.mat-mdc-form-field {
+  display: block !important;
+}
+.mat-mdc-text-field-wrapper {
+  margin: 5px 0px;
+}

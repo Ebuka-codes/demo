@@ -1,22 +1,23 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidatorFn,
-  Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { jobType } from 'src/app/shared/type';
-
+import { Notyf } from 'notyf';
 @Component({
   selector: 'app-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
+
+  providers: [],
 })
-export class ApplyComponent {
+export class ApplyComponent implements OnInit {
   @ViewChild('resumeInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('coverInput') coverInput!: ElementRef<HTMLInputElement>;
   @ViewChild('stepper') stepper!: MatStepper;
@@ -28,127 +29,84 @@ export class ApplyComponent {
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
   isLoading: boolean = false;
-  data?: jobType;
+  isLoadingQuestion: boolean = false;
+  data!: jobType;
   id: string | null = '';
+  candidateEmail: string | null = '';
   workHistories: any[] = [];
-  months: string[] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+  educationHistories: any[] = [];
+  skillHisories: any[] = [];
+  selectedYear: number | null = null;
+  formControls: any = {};
+  //prettier-ignore
+  months: string[] = ['January','February','March','April','May','June','July','August','September','October','November','December',
   ];
-
+  //prettier-ignore
+  educationLevels: string[] = ["High School","Associate Degree","Bachelor's Degree","Master's Degree","Doctorate (PhD)","Diploma", "Certificate", "Postgraduate Diploma"
+  ];
+  //prettier-ignore
+  nigeriaStates: string[] = [
+    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
+    "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", "Imo", 
+    "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", 
+    "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
+    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
+  ];
+  private notyf = new Notyf();
   constructor(private fb: FormBuilder, private _jobService: JobRecruitService) {
-    this.personalFormGroup = this.fb.group(
-      {
-        firstName: ['', [Validators.required, Validators.minLength(3)]],
-        lastName: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, this.ValidateEmail()]],
-        phone: ['', [Validators.required, this.validatePhone()]],
-        countryName: ['', Validators.required],
-        state: ['', Validators.required],
-        homeAddress: ['', Validators.required],
-        postalCode: ['', Validators.required],
-        linkedinProfile: [''],
-      },
-      { Validators: this.requireOneFieldValidator }
-    );
-
-    this.questionsFormGroup = this.fb.group({
-      question1: ['', Validators.required],
+    this.personalFormGroup = this.fb.group({
+      firstName: [''],
+      lastName: [''],
+      email: [''],
+      phone: [''],
+      countryName: [''],
+      state: [''],
+      address: [''],
+      city: [''],
+      linkedinProfile: [''],
     });
+
     this.experienceFormGroup = this.fb.group({
-      employerName: ['', Validators.required],
-      jobTitle: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      jobFunction: [''],
-      Degree: ['', Validators.required],
-      Major: [''],
-      school: ['', Validators.required],
+      companyName: [''],
+      jobTitle: [''],
+      startDate: [''],
+      endDate: [''],
+      jobDescription: [''],
+      degree: [''],
+      major: [''],
+      institutionName: [''],
       schoolStartDate: [''],
       schoolEndDate: [''],
+      fieldOfStudy: [''],
       educationLevel: [''],
-      skills: this.fb.array([], [Validators.required]),
+      skillName: [''],
+      proficiencyLevel: [''],
+      yearsOfExperience: [''],
     });
     this.supportingFormGroup = this.fb.group({
-      resumeFile: [null],
+      resume: [''],
       coverLetter: [''],
     });
   }
+
   ngOnInit(): void {
     this.id = this._jobService.getJobDetailId();
+    this.isLoadingQuestion = true;
     this._jobService.getJobDetailsById(this.id).subscribe({
       next: (response) => {
         if (response.valid && response.data) {
           this.data = response.data;
-          console.log(this.data);
+          this.isLoadingQuestion = false;
+          this.getQuestions();
         }
       },
       error: (error) => {
         console.log(error.message);
       },
     });
+    this.getCandidateInfo();
   }
 
-  get firstName() {
-    return this.personalFormGroup.get('firstName');
-  }
-  get lastName() {
-    return this.personalFormGroup.get('lastName');
-  }
-  get email() {
-    return this.personalFormGroup.get('email');
-  }
-  get phone() {
-    return this.personalFormGroup.get('phone');
-  }
-  get countryName() {
-    return this.personalFormGroup.get('countryName');
-  }
-  get state() {
-    return this.personalFormGroup.get('state');
-  }
-  get homeAddress() {
-    return this.personalFormGroup.get('homeAddress');
-  }
-  get postalCode() {
-    return this.personalFormGroup.get('resume');
-  }
-  get skills() {
-    return this.experienceFormGroup.get('skills') as FormArray;
-  }
-
-  get resume() {
-    return this.personalFormGroup.get('resume');
-  }
-  get coverLetter() {
-    return this.personalFormGroup.get('coverLetter');
-  }
-
-  validateStep(formGroup: FormGroup, stepper: MatStepper) {
-    if (formGroup.valid) {
-      stepper.next();
-    } else {
-      Object.keys(formGroup.controls).forEach((field) => {
-        formGroup.get(field)?.markAsTouched();
-      });
-    }
-  }
-  requireOneFieldValidator() {
-    const file = this.personalFormGroup.get('resumeFile')?.value;
-    const googleDriveLink =
-      this.personalFormGroup.get('googleDriveLink')?.value;
-    return file || googleDriveLink ? null : { require: true };
-  }
   validatePhone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -165,13 +123,29 @@ export class ApplyComponent {
       return valid ? null : { invalidEmail: control.value };
     };
   }
+
+  getQuestions() {
+    let formControls: any = {};
+    this.data.questionOptions.forEach((question: any) => {
+      formControls[question.id] = new FormControl('');
+    });
+    this.questionsFormGroup = this.fb.group(formControls);
+  }
   addWorkHistory() {
+    const startDateValue = this.experienceFormGroup.get('startDate')?.value;
+    const endDateValue = this.experienceFormGroup.get('endDate')?.value;
+    const startDate = new Date(startDateValue);
+    const endDate = new Date(endDateValue);
     const data = {
-      employerName: this.experienceFormGroup.get('employerName')?.value,
+      companyName: this.experienceFormGroup.get('companyName')?.value,
       jobTitle: this.experienceFormGroup.get('jobTitle')?.value,
-      startDate: this.experienceFormGroup.get('startDate')?.value,
-      endDate: this.experienceFormGroup.get('endDate')?.value,
-      jobFunction: this.experienceFormGroup.get('jobFunction')?.value,
+      startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      endDate: `${startDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      jobDescription: this.experienceFormGroup.get('jobDescription')?.value,
     };
     this.workHistories.push(data);
     this.resetWorkHistoryForm();
@@ -180,21 +154,73 @@ export class ApplyComponent {
     this.workHistories.splice(index, 1);
   }
   resetWorkHistoryForm() {
-    this.experienceFormGroup.get('employerName')?.reset();
+    this.experienceFormGroup.get('companyName')?.reset();
     this.experienceFormGroup.get('jobTitle')?.reset();
     this.experienceFormGroup.get('startDate')?.reset();
     this.experienceFormGroup.get('endDate')?.reset();
-    this.experienceFormGroup.get('jobFunction')?.reset();
+    this.experienceFormGroup.get('jobDescription')?.reset();
   }
+
+  addEducationHistory() {
+    const startDateValue =
+      this.experienceFormGroup.get('schoolStartDate')?.value;
+    const endDateValue = this.experienceFormGroup.get('schoolEndDate')?.value;
+    const startDate = new Date(startDateValue);
+    const endDate = new Date(endDateValue);
+    const data = {
+      degree: this.experienceFormGroup.get('degree')?.value,
+      major: this.experienceFormGroup.get('major')?.value,
+      institutionName: this.experienceFormGroup.get('institutionName')?.value,
+      startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      endDate: `${startDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+
+      fieldOfStudy: this.experienceFormGroup.get('fieldOfStudy')?.value,
+      educationLevel: this.experienceFormGroup.get('educationLevel')?.value,
+    };
+    this.educationHistories.push(data);
+    this.resetEducationHistoryForm();
+  }
+  removeEducationHistory(index: number): void {
+    this.educationHistories.splice(index, 1);
+  }
+  resetEducationHistoryForm() {
+    this.experienceFormGroup.get('degree')?.reset(),
+      this.experienceFormGroup.get('major')?.reset(),
+      this.experienceFormGroup.get('institutionName')?.reset(),
+      this.experienceFormGroup.get('schoolStartDate')?.reset(),
+      this.experienceFormGroup.get('schoolEndDate')?.reset(),
+      this.experienceFormGroup.get('fieldOfStudy')?.reset(),
+      this.experienceFormGroup.get('educationLevel')?.reset();
+  }
+
+  removeSkills(index: number) {
+    this.skillHisories.splice(index, 1);
+  }
+
+  addSkillHistory() {
+    const data = {
+      skillName: this.experienceFormGroup.get('skillName')?.value,
+      proficiencyLevel: this.experienceFormGroup.get('proficiencyLevel')?.value,
+      noOfYears: Number(
+        this.experienceFormGroup.get('yearsOfExperience')?.value
+      ),
+    };
+    this.skillHisories.push(data);
+    this.resetSkillForm();
+  }
+  resetSkillForm() {
+    this.experienceFormGroup.get('skillName')?.reset(),
+      this.experienceFormGroup.get('proficiencyLevel')?.reset();
+    this.experienceFormGroup.get('yearsOfExperience')?.reset();
+  }
+
   formatMonth(value: string) {
     const date = new Date(value);
     return `${this.months[date.getMonth()]} ${date.getFullYear()}`;
-  }
-  addSkills() {
-    this.skills.push(this.fb.control(''));
-  }
-  removeSkills(index: number) {
-    this.skills.removeAt(index);
   }
   triggerFileInput() {
     this.fileInput.nativeElement.click();
@@ -207,8 +233,8 @@ export class ApplyComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedResumeFile = file.name;
-      this.personalFormGroup.patchValue({ resumeFile: file.name });
-      this.personalFormGroup.get('resumeFile')?.updateValueAndValidity();
+      this.supportingFormGroup.patchValue({ resume: file.name });
+      this.supportingFormGroup.get('resume')?.updateValueAndValidity();
     }
   }
   onCoverLetterFileChange(event: Event) {
@@ -216,11 +242,10 @@ export class ApplyComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedCoverLetterFile = file.name;
-      this.personalFormGroup.patchValue({ coverLetter: file.name });
-      this.personalFormGroup.get('coverLetter')?.updateValueAndValidity();
+      this.supportingFormGroup.patchValue({ coverLetter: file.name });
+      this.supportingFormGroup.get('coverLetter')?.updateValueAndValidity();
     }
   }
-
   handleRemoveResumeFile(): void {
     this.selectedResumeFile = null;
     this.personalFormGroup.patchValue({ resumeFile: null });
@@ -231,11 +256,85 @@ export class ApplyComponent {
     this.personalFormGroup.patchValue({ coverLetter: null });
     this.personalFormGroup.get('coverLetter')?.updateValueAndValidity();
   }
-  onSubmitApplication(): void {
-    if (this.personalFormGroup.valid) {
-      console.log('working');
-    } else {
-      this.isSubmitting = true;
+
+  //Post Job-Application
+  submitJobApplication(jobApplication: any) {
+    this.isLoading = true;
+    this._jobService.submitJobApplication(jobApplication).subscribe({
+      next: () => {
+        this.notyf.success({
+          message: 'Submitted successfully!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.isLoading = false;
+        this.personalFormGroup.reset();
+        this.experienceFormGroup.reset();
+        this.questionsFormGroup.reset();
+        this.supportingFormGroup.reset();
+        this.skillHisories = [];
+        this.workHistories = [];
+        this.educationHistories = [];
+        this.selectedResumeFile = null;
+        this.selectedCoverLetterFile = null;
+      },
+      error: (error) => {
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.isLoading = false;
+      },
+    });
+  }
+  getCandidateInfo() {
+    this.candidateEmail = this._jobService.getCandidateEmail();
+    this._jobService
+      .getCandidateInfo(this.candidateEmail)
+      .subscribe((candidateDate) => {
+        if (candidateDate.valid && candidateDate.data) {
+          const fullName = candidateDate.data?.name?.split(' ');
+          this.personalFormGroup.patchValue({
+            ...candidateDate.data,
+            firstName: fullName[0],
+            lastName: fullName[1],
+          });
+        } else {
+          this.notyf.error({
+            message: 'Error occur!',
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+          });
+        }
+      });
+  }
+  onSubmit(): void {
+    const formValues = this.questionsFormGroup?.value;
+    let questionOption;
+    if (formValues) {
+      questionOption = Object.keys(formValues).map((key) => ({
+        questionOptionId: key,
+        answer: formValues[key],
+      }));
     }
+    const data = {
+      name: `${this.personalFormGroup.get('firstName')?.value} ${
+        this.personalFormGroup.get('lastName')?.value
+      }`,
+      address: this.personalFormGroup.get('address')?.value,
+      phone: this.personalFormGroup.get('phone')?.value,
+      email: this.personalFormGroup.get('email')?.value,
+      countryName: this.personalFormGroup.get('countryName')?.value,
+      city: this.personalFormGroup.get('city')?.value,
+      state: this.personalFormGroup.get('state')?.value,
+      educationHistories: this.educationHistories,
+      workHistories: this.workHistories,
+      skills: this.skillHisories,
+      questionOptionAnswersDTO: questionOption,
+      resume: this.supportingFormGroup.get('resume')?.value,
+      coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
+    };
+    this.submitJobApplication(data);
   }
 }

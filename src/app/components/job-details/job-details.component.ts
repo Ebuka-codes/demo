@@ -40,7 +40,6 @@ export class JobDetailsComponent implements OnInit {
       },
       error: (error) => {
         this.errorMessage = error.message;
-        console.log(this.errorMessage);
         this.isLoading = false;
       },
     });

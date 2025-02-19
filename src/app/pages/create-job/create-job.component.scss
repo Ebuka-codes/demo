@@ -107,7 +107,7 @@
       }
 
       .mini-loader-spinner {
-        border: 2px solid white;
+        border: 3px solid white;
         border-color: white transparent white white;
         width: 20px;
         height: 20px;
@@ -118,6 +118,7 @@
         align-items: center;
         margin: 0px auto;
         animation: spin 0.5s linear infinite;
+        cursor: not-allowed;
       }
       @keyframes spin {
         to {

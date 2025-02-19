@@ -28,8 +28,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    JobListingComponent,
     JobDetailsComponent,
     JobCategoryComponent,
     CreateJobComponent,
@@ -39,6 +37,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     NotFoundErrorComponent,
     ApplyComponent,
     LoginComponent,
+    HeaderComponent,
+    JobListingComponent,
+    JobCategoryComponent,
   ],
   imports: [
     BrowserModule,

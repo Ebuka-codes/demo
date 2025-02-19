@@ -9,16 +9,19 @@ import { jobType } from 'src/app/shared/type';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  jobsList!: jobType[];
-  isLoading$!: Observable<boolean>;
-  text: string = 'ebuka';
+  jobList!: jobType[];
+  jobCategory!: string[];
+  isLoading!: Observable<boolean>;
   error$!: Observable<any>;
   constructor(private _jobService: JobRecruitService) {}
   ngOnInit(): void {
     this._jobService.getJobList().subscribe((data) => {
-      this.jobsList = data;
+      this.jobList = data;
     });
-    this.isLoading$ = this._jobService.isLoading$;
+    this._jobService.getJobType().subscribe((data) => {
+      this.jobCategory = data;
+    });
+    this.isLoading = this._jobService.isLoading$;
     this.error$ = this._jobService.error$;
   }
 }

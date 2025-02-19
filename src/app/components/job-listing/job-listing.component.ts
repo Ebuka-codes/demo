@@ -1,4 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Observable } from 'rxjs';
+import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 
 @Component({
   selector: 'app-job-listing',
@@ -6,12 +8,13 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
   styleUrls: ['./job-listing.component.scss'],
 })
 export class JobListingComponent implements OnChanges {
-  @Input() jobsList: any[] = [];
-  @Input() text: any;
-
+  @Input() jobList: any[] = [];
+  @Input() isLoading!: Observable<boolean>;
+  constructor(private _jobService: JobRecruitService) {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['jobsList']) {
-      this.jobsList = changes['jobsList'].currentValue;
+      this.jobList = changes['jobList'].currentValue;
     }
+    this.isLoading = this._jobService.isLoading$;
   }
 }

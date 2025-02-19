@@ -1,5 +1,5 @@
 <div class="apply-container">
-  <form action="" (ngSubmit)="onSubmitApplication()">
+  <form>
     <mat-horizontal-stepper>
       <!-- personal-information -->
       <mat-step [stepControl]="personalFormGroup">
@@ -35,61 +35,18 @@
             <div class="input-group">
               <label for="firstName">First Name * </label>
               <input type="text" formControlName="firstName" required />
-              <div
-                *ngIf="
-                  (firstName?.invalid && firstName?.touched) || firstName?.dirty
-                "
-              >
-                <small *ngIf="firstName?.errors?.['required']">
-                  First Name field is required
-                </small>
-
-                <small *ngIf="firstName?.errors?.['minlength']">
-                  First Name must be at least 3 characters long
-                </small>
-              </div>
             </div>
             <div class="input-group">
               <label for="lastName">Last Name * </label>
               <input type="text" formControlName="lastName" required />
-              <div
-                *ngIf="
-                  (lastName?.invalid && lastName?.touched) || lastName?.dirty
-                "
-              >
-                <small *ngIf="lastName?.errors?.['required']">
-                  Last Name field is required
-                </small>
-                <small *ngIf="firstName?.errors?.['minlength']">
-                  Last Name must be at least 3 characters long
-                </small>
-              </div>
             </div>
             <div class="input-group">
               <label for="email">Email * </label>
               <input type="email" formControlName="email" required />
-              <div *ngIf="(email?.invalid && email?.touched) || email?.dirty">
-                <small *ngIf="email?.errors?.['required']"
-                  >Email field is required</small
-                >
-                <small
-                  *ngIf="!email?.errors?.['required'] && email?.errors?.['invalidEmail']"
-                  >Invalid email format</small
-                >
-              </div>
             </div>
             <div class="input-group">
               <label for="phone">Phone * </label>
               <input type="text" formControlName="phone" required />
-              <div *ngIf="(phone?.invalid && phone?.touched) || phone?.dirty">
-                <small *ngIf="phone?.errors?.['required']"
-                  >Phone field is required</small
-                >
-                <small
-                  *ngIf="!phone?.errors?.['required'] && phone?.errors?.['invalidPhone']"
-                  >Invalid phone number format</small
-                >
-              </div>
             </div>
           </div>
 
@@ -99,7 +56,7 @@
               <p>Please enter your home address.</p>
             </div>
             <div class="input-group">
-              <label for="CountryName">Country Name * </label>
+              <label for="countryName">Country Name * </label>
               <mat-form-field appearance="fill">
                 <mat-select
                   formControlName="countryName"
@@ -108,25 +65,11 @@
                   required
                 >
                   <mat-option value="Nigeria"> Nigeria </mat-option>
-                  <mat-option value="Ghana"> Ghana </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div
-                *ngIf="
-                  (countryName?.invalid && countryName?.touched) ||
-                  countryName?.dirty
-                "
-              >
-                <small *ngIf="countryName?.errors?.['required']">
-                  Country Name field is required
-                </small>
-                <small *ngIf="firstName?.errors?.['minlength']">
-                  Country Name must be at least 3 characters long
-                </small>
-              </div>
             </div>
             <div class="input-group">
-              <label for="state">Province/State * </label>
+              <label for="state">State * </label>
               <mat-form-field appearance="fill">
                 <mat-select
                   formControlName="state"
@@ -134,47 +77,28 @@
                   disableRipple
                   required
                 >
-                  <mat-option value="Nigeria"> Lagos </mat-option>
-                  <mat-option value="Ghana"> Abuja </mat-option>
+                  <mat-option
+                    *ngFor="let state of nigeriaStates"
+                    [value]="state"
+                  >
+                    {{ state }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div *ngIf="(state?.invalid && state?.touched) || state?.dirty">
-                <small *ngIf="state?.errors?.['required']">
-                  Province/State field is required
-                </small>
-                <small *ngIf="firstName?.errors?.['minlength']">
-                  Country Name must be at least 3 characters long
-                </small>
-              </div>
+            </div>
+            <div class="input-group">
+              <label for="city">City* </label>
+              <input type="text" formControlName="city" />
             </div>
 
             <div class="input-group">
-              <label for="homeAddress">Home Address * </label>
-              <input type="text" formControlName="homeAddress" />
-              <div
-                *ngIf="
-                  (homeAddress?.invalid && homeAddress?.touched) ||
-                  homeAddress?.dirty
-                "
-              >
-                <small *ngIf="homeAddress?.errors?.['required']">
-                  Home Address field is required
-                </small>
-                <small *ngIf="firstName?.errors?.['minlength']">
-                  Home Address must be at least 3 characters long
-                </small>
-              </div>
+              <label for="address">Home Address * </label>
+              <input type="text" formControlName="address" />
             </div>
           </div>
         </form>
         <div class="page-btn">
-          <button
-            class="next"
-            mat-button
-            (click)="validateStep(personalFormGroup, stepper)"
-            matStepperNext
-            type="button"
-          >
+          <button class="next" mat-button matStepperNext type="button">
             Next
           </button>
         </div>
@@ -190,56 +114,47 @@
             </div>
             <div class="question-content">
               <form action="" [formGroup]="questionsFormGroup">
-                <div *ngFor="let item of data?.questionOptions" class="group">
-                  <ng-container *ngIf="item?.questionType === 'DATE'">
-                    <label style="font-weight: 500"
-                      >{{ item?.description }}*</label
-                    >
+                <ng-container *ngIf="!isLoadingQuestion; else showQuestion">
+                  <div *ngFor="let item of data?.questionOptions" class="group">
+                    <label for="question">{{ item.description }}</label>
                     <mat-form-field>
                       <input
+                        *ngIf="item.questionType === 'TEXT'"
                         matInput
-                        [value]="item?.description"
-                        [matDatepicker]="picker1"
+                        [formControlName]="item.id"
+                      />
+
+                      <input
+                        *ngIf="item.questionType === 'DATE'"
+                        matInput
+                        [formControlName]="item.id"
+                        [matDatepicker]="picker"
+                        readonly
                       />
                       <mat-datepicker-toggle
+                        *ngIf="item.questionType === 'DATE'"
                         matSuffix
-                        [for]="picker1"
+                        [for]="picker"
                       ></mat-datepicker-toggle>
-                      <mat-datepicker #picker1></mat-datepicker>
-                    </mat-form-field>
-                  </ng-container>
-                  <ng-container *ngIf="item?.questionType === 'DROPDOWN'">
-                    <label style="font-weight: 500"
-                      >{{ item?.description }} *</label
-                    >
-                    <mat-form-field>
-                      <mat-select>
-                        <mat-option [value]="data?.id">
-                          <ng-container *ngFor="let option of item.options">
-                            {{ option }}
-                          </ng-container>
+                      <mat-datepicker #picker></mat-datepicker>
+
+                      <mat-select
+                        *ngIf="item.questionType === 'DROPDOWN'"
+                        [formControlName]="item.id"
+                      >
+                        <mat-option
+                          *ngFor="let option of item.options"
+                          [value]="option"
+                        >
+                          {{ option }}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </ng-container>
-
-                  <ng-container *ngIf="item?.questionType === 'TEXT'">
-                    <label style="font-weight: 500" for="text"
-                      >{{ item?.description }} *
-                    </label>
-                    <mat-form-field
-                      class="question-text-input"
-                      style="display: flex; flex-direction: column"
-                    >
-                      <input
-                        matInput
-                        [value]=""
-                        type="text"
-                        formControlName="email"
-                      />
-                    </mat-form-field>
-                  </ng-container>
-                </div>
+                  </div>
+                </ng-container>
+                <ng-template #showQuestion>
+                  <p>Loading Question...</p>
+                </ng-template>
               </form>
             </div>
           </div>
@@ -278,7 +193,7 @@
                       *ngFor="let work of workHistories; let i = index"
                     >
                       <strong>{{ work.jobTitle }}</strong> at
-                      {{ work.employerName }} ({{
+                      {{ work.companyName }} ({{
                         formatMonth(work.startDate)
                       }}
                       - {{ formatMonth(work.endDate) }})
@@ -314,6 +229,7 @@
                   tabindex="-1"
                   aria-labelledby="modalLabel"
                   aria-hidden="true"
+                  (hidden.bs.modal)="resetWorkHistoryForm()"
                 >
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -321,23 +237,22 @@
                         <span>
                           <h5 class="modal-title">Add Work History</h5>
                         </span>
-                        <div
+                        <span
                           class="btn-close"
                           style="cursor: pointer"
                           data-bs-dismiss="modal"
                           aria-label="Close"
                           (click)="resetWorkHistoryForm()"
-                        ></div>
+                        ></span>
                       </div>
-
                       <div class="modal-body">
                         <div class="group">
-                          <label for="JobTitle">Employer Name *</label>
+                          <label for="companyName">Company Name*</label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
                               type="text"
-                              formControlName="employerName"
+                              formControlName="companyName"
                               required
                             />
                           </mat-form-field>
@@ -358,16 +273,19 @@
                           <mat-form-field appearance="fill">
                             <input
                               matInput
-                              [matDatepicker]="picker1"
+                              [matDatepicker]="workStartDatePicker"
                               type="text"
                               formControlName="startDate"
                               required
+                              readonly
                             />
                             <mat-datepicker-toggle
                               matSuffix
-                              [for]="picker1"
+                              [for]="workStartDatePicker"
                             ></mat-datepicker-toggle>
-                            <mat-datepicker #picker1></mat-datepicker>
+                            <mat-datepicker
+                              #workStartDatePicker
+                            ></mat-datepicker>
                           </mat-form-field>
                         </div>
 
@@ -376,26 +294,26 @@
                           <mat-form-field appearance="fill">
                             <input
                               matInput
-                              [matDatepicker]="picker2"
+                              [matDatepicker]="workEndDatePicker"
                               type="text"
                               formControlName="endDate"
                               required
                             />
                             <mat-datepicker-toggle
                               matSuffix
-                              [for]="picker2"
+                              [for]="workEndDatePicker"
                             ></mat-datepicker-toggle>
-                            <mat-datepicker #picker2></mat-datepicker>
+                            <mat-datepicker #workEndDatePicker></mat-datepicker>
                           </mat-form-field>
                         </div>
 
                         <div class="group">
-                          <label for="jobFunction">Job Function</label>
+                          <label for="jobDescription">Job Description</label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
                               type="text"
-                              formControlName="jobFunction"
+                              formControlName="jobDescription"
                               required
                             />
                           </mat-form-field>
@@ -418,144 +336,311 @@
                 </div>
               </div>
 
-              <div class="education-info">
-                <div class="education-info-content">
-                  <h4 class="fs-5">Education History</h4>
-                  <div class="job-divider"></div>
-                  <div class="group">
-                    <label for="degree">Degree*</label>
-                    <mat-form-field appearance="fill">
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="Degree"
-                        required
-                      />
-                    </mat-form-field>
-                  </div>
-                  <div class="group">
-                    <label for="Major">Major</label>
-                    <mat-form-field>
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="Major"
-                        required
-                      />
-                    </mat-form-field>
-                  </div>
-                  <div class="group">
-                    <label for="school">School</label>
-                    <mat-form-field appearance="fill">
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="school"
-                        required
-                      />
-                    </mat-form-field>
-                  </div>
+              <div class="education-history">
+                <h4 class="fs-5">Education history</h4>
+                <div class="job-divider"></div>
+                <div
+                  class="education-history-list"
+                  *ngIf="educationHistories.length"
+                >
+                  <ul class="mb-4 mt-4">
+                    <li
+                      class="item"
+                      *ngFor="
+                        let education of educationHistories;
+                        let i = index
+                      "
+                    >
+                      <strong>{{ education.educationLevel }}</strong> at
+                      {{ education.institutionName }} ({{
+                        formatMonth(education.startDate)
+                      }}
+                      - {{ formatMonth(education.endDate) }})
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                        (click)="removeEducationHistory(i)"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </li>
+                  </ul>
+                </div>
+                <button
+                  class="education-history-btn mb-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addEducationHistory"
+                >
+                  + Add Eduction
+                </button>
 
-                  <div class="group">
-                    <label for="schoolStartDate">Start Date</label>
-                    <mat-form-field appearance="fill">
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="schoolStartDate"
-                        required
-                      />
-                    </mat-form-field>
-                  </div>
+                <div
+                  class="modal fade"
+                  id="addEducationHistory"
+                  tabindex="-1"
+                  aria-labelledby="modalLabel"
+                  aria-hidden="true"
+                  (hidden.bs.modal)="resetEducationHistoryForm()"
+                >
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span>
+                          <h5 class="modal-title">Add Education</h5>
+                        </span>
+                        <span
+                          class="btn-close"
+                          style="cursor: pointer"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          (click)="resetEducationHistoryForm()"
+                        ></span>
+                      </div>
 
-                  <div class="group">
-                    <label for="schoolEndDate">End Date</label>
-                    <mat-form-field appearance="fill">
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="schoolEndDate"
-                        required
-                      />
-                    </mat-form-field>
-                  </div>
+                      <div class="modal-body">
+                        <div class="group">
+                          <label for="degree">Degree *</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="degree"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
+                        <div class="group">
+                          <label for="major">Major *</label>
+                          <mat-form-field>
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="major"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
 
-                  <div class="group">
-                    <label for="educationLevel">Education Level</label>
-                    <mat-form-field appearance="fill">
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="educationLevel"
-                        required
-                      />
-                    </mat-form-field>
-                  </div>
+                        <div class="group">
+                          <label for="institutionName">Institution Name</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="institutionName"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
 
-                  <div class="skills-info">
-                    <div class="skills-info-content">
-                      <h4 class="fs-5">Skills</h4>
-                      <div class="job-divider"></div>
-                      <div class="group-1">
-                        <div formArrayName="skills">
-                          <div class="row">
-                            <div class="col">
-                              <div
-                                class="skills-content"
-                                *ngFor="
-                                  let skill of skills.controls;
-                                  let i = index
-                                "
+                        <div class="group">
+                          <label for="schoolStartDate">Start Date</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              [matDatepicker]="educationStartDatePicker"
+                              type="text"
+                              formControlName="schoolStartDate"
+                              required
+                              readonly
+                            />
+                            <mat-datepicker-toggle
+                              matIconSuffix
+                              [for]="educationStartDatePicker"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker
+                              #educationStartDatePicker
+                            ></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="group">
+                          <label for="schoolEndDate">End Date</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              [matDatepicker]="educationEndDatePicker"
+                              type="text"
+                              formControlName="schoolEndDate"
+                              required
+                              readonly
+                            />
+                            <mat-datepicker-toggle
+                              matIconSuffix
+                              [for]="educationEndDatePicker"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker
+                              #educationEndDatePicker
+                            ></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="group">
+                          <label for="fieldOfStudy">Field of Study</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="fieldOfStudy"
+                              required
+                            />
+                          </mat-form-field>
+                        </div>
+
+                        <div class="group">
+                          <label for="educationLevel">Education Level</label>
+                          <mat-form-field appearance="fill">
+                            <mat-select
+                              formControlName="educationLevel"
+                              required
+                            >
+                              <mat-option
+                                *ngFor="let level of educationLevels"
+                                [value]="level"
                               >
-                                <div
-                                  class="d-flex item-center gap-2"
-                                  style="width: 100%"
-                                >
-                                  <input
-                                    matInput
-                                    [formControlName]="i"
-                                    style="width: 100%"
-                                  />
-                                  <span (click)="removeSkills(i)">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke-width="1.5"
-                                      stroke="currentColor"
-                                      class="size-6"
-                                    >
-                                      <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M6 18 18 6M6 6l12 12"
-                                      />
-                                    </svg>
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                                {{ level }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
                         </div>
                       </div>
-                      <div>
-                        <button class="skills-btn" (click)="addSkills()">
-                          + Add skills
+
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          (click)="addEducationHistory()"
+                        >
+                          Add
                         </button>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skills-info">
+                <div class="skills-info-content">
+                  <h4 class="fs-5">Skills</h4>
+                  <div class="job-divider"></div>
+                  <div class="skill-history-list" *ngIf="skillHisories.length">
+                    <ul class="mb-4 mt-4">
+                      <li
+                        class="item"
+                        *ngFor="let skill of skillHisories; let i = index"
+                      >
+                        <strong>{{ skill.skillName }}</strong>
 
-                      <div class="group">
-                        <label for="School">Years of Experience</label>
-                        <mat-form-field appearance="fill">
-                          <input
-                            matInput
-                            type="text"
-                            formControlName=""
-                            required
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                          (click)="removeSkills(i)"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
                           />
-                        </mat-form-field>
+                        </svg>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div
+                    class="modal fade"
+                    id="addSkill"
+                    tabindex="-1"
+                    aria-labelledby="modalLabel"
+                    aria-hidden="true"
+                    (hidden.bs.modal)="resetSkillForm()"
+                  >
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <span>
+                            <h5 class="modal-title">Add Skill</h5>
+                          </span>
+                          <span
+                            class="btn-close"
+                            style="cursor: pointer"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            (click)="resetSkillForm()"
+                          ></span>
+                        </div>
+                        <div class="modal-body">
+                          <div class="group">
+                            <label for="JobTitle">Skill Name*</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="skillName"
+                                required
+                              />
+                            </mat-form-field>
+                          </div>
+                          <div class="group">
+                            <label for="JobTitle">Proficiency Level</label>
+                            <mat-form-field>
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="proficiencyLevel"
+                                required
+                              />
+                            </mat-form-field>
+                          </div>
+
+                          <div class="group">
+                            <label for="yearsOfExperience"
+                              >Years Of Experience</label
+                            >
+                            <mat-form-field>
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="yearsOfExperience"
+                                required
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            (click)="addSkillHistory()"
+                          >
+                            Add
+                          </button>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                  <div>
+                    <button
+                      class="skills-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addSkill"
+                    >
+                      + Add skills
+                    </button>
                   </div>
                 </div>
               </div>
@@ -687,8 +772,19 @@
           <button class="prev" mat-button matStepperPrevious type="button">
             Back
           </button>
-          <button class="submit-btn" mat-button matStepperNext type="button">
-            Submit
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="submit-btn"
+            type="submit"
+            (click)="onSubmit()"
+          >
+            <ng-container *ngIf="isLoading; else showLoader">
+              <span class="loader">Processing...</span>
+            </ng-container>
+            <ng-template #showLoader>
+              <span>Submit</span>
+            </ng-template>
           </button>
         </div>
       </mat-step>

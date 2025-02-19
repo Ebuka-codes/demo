@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { JobRecruitService } from '../../shared/job-recruit.service';
-import { jobType } from 'src/app/shared/type';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  SimpleChanges,
+} from '@angular/core';
+
 @Component({
   selector: 'app-job-category',
   templateUrl: './job-category.component.html',
@@ -8,10 +12,11 @@ import { jobType } from 'src/app/shared/type';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class JobCategoryComponent {
-  data!: jobType[];
-  @Input() jobsList!: any[];
+  @Input() jobCategory: any[] = [];
   constructor() {}
-  ngOnInit(): void {
-    this.data = this.jobsList?.map((item) => item.jobType);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['jobCategory']) {
+      this.jobCategory = changes['jobCategory'].currentValue;
+    }
   }
 }

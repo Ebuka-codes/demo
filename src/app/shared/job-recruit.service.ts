@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
-import { jobType } from './type';
+import { JobApplication, jobType } from './type';
 import { enviroments } from 'src/environments/enviorments';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -11,6 +11,8 @@ import { NavigationEnd, Router } from '@angular/router';
 export class JobRecruitService {
   baseUrl = enviroments.API_URL;
   private jobListSubject$ = new BehaviorSubject<jobType[] | null>(null);
+  private jobCategorySubject$ = new BehaviorSubject<any | null>(null);
+  private category$ = this.jobCategorySubject$.asObservable();
   job$ = this.jobListSubject$.asObservable();
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
@@ -19,6 +21,7 @@ export class JobRecruitService {
   lastPath$ = this.lastpathSubject$.asObservable();
   error$ = this.errorSubject.asObservable();
   private jobDetailsId: string | null = null;
+  private candiateEmail: string | null = null;
   encodedValue: any;
 
   constructor(private httpClient: HttpClient, private router: Router) {
@@ -29,7 +32,6 @@ export class JobRecruitService {
       }
     });
   }
-
   ngOnInit(): void {}
   updateLastPath() {
     const urlSegments = this.router.url.split('/').filter((segment) => segment);
@@ -38,7 +40,6 @@ export class JobRecruitService {
       : '';
     this.lastpathSubject$.next(lastPath);
     this.encodedValue = btoa(lastPath?.replace(/^\/+|\/+$/g, '').toUpperCase());
-    console.log(this.encodedValue);
   }
 
   createJob(newJob: jobType): Observable<any> {
@@ -94,11 +95,58 @@ export class JobRecruitService {
       headers,
     });
   }
+  getJobType() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    this.httpClient
+      .get<any>(this.baseUrl + 'job-details/jobtype', {
+        headers,
+      })
+      .pipe(
+        tap((response) => {
+          if (response.valid && response.data) {
+            this.jobCategorySubject$.next(response.data);
+          }
+        })
+      )
+      .subscribe();
+    return this.category$;
+  }
+  getCandidateInfo(email: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.post<any>(
+      this.baseUrl + `candidates/exist/${email}`,
+      {
+        headers,
+      }
+    );
+  }
+  submitJobApplication(application: JobApplication) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.post<any>(this.baseUrl + `candidates`, {
+      headers,
+      body: JSON.stringify(application),
+    });
+  }
 
   setJobDetailId(id: string) {
     this.jobDetailsId = id;
   }
   getJobDetailId(): string | null {
     return this.jobDetailsId;
+  }
+  setCandidateEmail(email: string) {
+    this.candiateEmail = email;
+  }
+  getCandidateEmail(): string | null {
+    return this.candiateEmail;
   }
 }

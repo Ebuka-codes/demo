@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,11 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   form!: FormGroup;
   isNext: boolean = false;
-  constructor(private fb: FormBuilder, private route: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private route: Router,
+    private _jobService: JobRecruitService
+  ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, this.validateEmail()]],
       term: ['', Validators.required],
@@ -42,6 +47,7 @@ export class LoginComponent {
     if (this.form.valid) {
       this.isNext = true;
       this.route.navigateByUrl('/job/apply', { replaceUrl: true });
+      this._jobService.setCandidateEmail(this.form.get('email')?.value);
     } else {
       this.form.markAllAsTouched();
     }
