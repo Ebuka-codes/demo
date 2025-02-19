@@ -7,7 +7,6 @@ import { JobListingComponent } from './components/job-listing/job-listing.compon
 import { JobDetailsComponent } from './components/job-details/job-details.component';
 import { JobCategoryComponent } from './components/job-category/job-category.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,6 +23,7 @@ import { LoginComponent } from './authentication/login/login.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CreateJobComponent } from './pages/create-job/create-job.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -46,8 +46,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -57,6 +55,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDatepickerModule,
     MatStepperModule,
     MatSnackBarModule,
+    QuillModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

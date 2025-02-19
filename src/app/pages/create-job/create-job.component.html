@@ -210,35 +210,36 @@
         <label for="description" style="margin-bottom: 5px"
           >Job Description <span class="required-icon">*</span></label
         >
-        <div class="froala-container">
-          <div
-            [froalaEditor]="froalaOptions"
-            formControlName="jobDescription"
-          ></div>
-          <div class="froala-overlay" *ngIf="loading"></div>
+        <div style="margin-bottom: 20px">
+          <quill-editor formControlName="jobDescription"></quill-editor>
         </div>
 
-        <div *ngIf="jobDescription?.invalid && isSubmitted">
+        <div
+          style="position: relative; top: 50px"
+          *ngIf="jobDescription?.invalid && isSubmitted"
+        >
           <small *ngIf="jobDescription?.errors?.['required']">
             Description field are required
           </small>
         </div>
       </div>
 
-      <button
-        type="submit"
-        [disabled]="loading"
-        class="submit-btn"
-        type="submit"
-        mat-button
-      >
-        <ng-container *ngIf="loading; else showLoader">
-          <span class="mini-loader-spinner"></span>
-        </ng-container>
-        <ng-template #showLoader>
-          <span>Submit</span>
-        </ng-template>
-      </button>
+      <div style="margin-top: 70px">
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="submit-btn"
+          type="submit"
+          mat-button
+        >
+          <ng-container *ngIf="loading; else showLoader">
+            <span class="mini-loader-spinner"></span>
+          </ng-container>
+          <ng-template #showLoader>
+            <span>Submit</span>
+          </ng-template>
+        </button>
+      </div>
     </form>
   </div>
 </div>

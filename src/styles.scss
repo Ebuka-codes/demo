@@ -128,3 +128,17 @@ html body * {
 .mat-mdc-text-field-wrapper {
   margin: 5px 0px;
 }
+
+.ql-container {
+  min-height: 200px; /* Set appropriate height */
+  max-height: 400px; /* Optional: Limits expansion */
+  overflow-y: auto;
+}
+
+.ql-editor {
+  min-height: 180px; /* Ensures content area has space */
+}
+:host ::ng-deep .quill-editor + div {
+  position: relative;
+  z-index: 10;
+}
