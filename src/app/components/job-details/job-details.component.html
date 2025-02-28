@@ -3,12 +3,7 @@
   <div class="job-detail-container" *ngIf="!isLoading && !errorMessage">
     <div class="job-nav">
       <span>
-        <a
-          [routerLink]="['/']"
-          [replaceUrl]="true"
-          [queryParamsHandling]="'preserve'"
-          class="d-flex items-center"
-        >
+        <a (click)="handleBack()" class="d-flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

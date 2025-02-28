@@ -38,6 +38,10 @@
     }
   }
   .job-listing-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+
     margin: 20px 0px;
     .job-info {
       a {
@@ -48,7 +52,7 @@
       border: 1px solid #dddd;
       padding: 1rem;
       border-radius: 10px;
-      margin: 20px 0;
+      margin: 10px 0;
 
       cursor: pointer;
       gap: 2px;

@@ -6,19 +6,27 @@
     <div class="job-header">
       <h4>Jobs for you</h4>
     </div>
-    <div class="job-listing-content">
-      <div *ngFor="let item of this.jobList" class="job-info">
-        <a routerLink="/job-details/{{ item.id }}">
-          <h2 class="job-title">{{ item.jobTitle | titlecase }}</h2>
-          <span class="company-name">{{ item.companyName }}</span>
-          <span class="company-location">{{ item.jobLocation }}</span>
-          <div class="job-desc">
-            <span class="workMode">{{ item.workMode | titlecase }}</span>
-            <span class="jobType">{{ item.jobType | titlecase }}</span>
-          </div>
-        </a>
+    <ng-container *ngIf="!isLoadingSearch; else elseTemplate">
+      <div class="job-listing-content">
+        <div
+          *ngFor="let item of this.jobList.slice(start, end)"
+          class="job-info"
+        >
+          <a routerLink="/job-details/{{ item.id }}">
+            <h2 class="job-title">{{ item.jobTitle | titlecase }}</h2>
+            <span class="company-name">{{ item.companyName }}</span>
+            <span class="company-location">{{ item.jobLocation }}</span>
+            <div class="job-desc">
+              <span class="workMode">{{ item.workMode | titlecase }}</span>
+              <span class="jobType">{{ item.jobType | titlecase }}</span>
+            </div>
+          </a>
+        </div>
       </div>
-    </div>
-    <button type="submit" *ngIf="jobList.length > 5">Show more Job</button>
+      <button type="button" *ngIf="jobList.length > 6" (click)="showJobList()">
+        Show more Job
+      </button>
+    </ng-container>
+    <ng-template #elseTemplate> <app-loader-spinner /> </ng-template>
   </ng-template>
 </section>

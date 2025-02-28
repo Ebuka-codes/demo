@@ -16,7 +16,13 @@
         />
       </svg>
     </span>
-    <input type="text" placeholder=" Search Job title, or company" />
+    <input
+      #input
+      type="text"
+      placeholder=" Search Job title, or company name"
+      [(ngModel)]="inputValue"
+      (keydown.enter)="handleEnter(input.value)"
+    />
   </div>
-  <button type="submit">Find jobs</button>
+  <button type="submit" (click)="search()">Find jobs</button>
 </header>

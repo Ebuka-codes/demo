@@ -3,6 +3,7 @@ import { JobRecruitService } from '../../shared/job-recruit.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { jobType } from 'src/app/shared/type';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-job-details',
@@ -21,7 +22,8 @@ export class JobDetailsComponent implements OnInit {
   constructor(
     private _jobService: JobRecruitService,
     private routes: ActivatedRoute,
-    private navigateRoute: Router
+    private navigateRoute: Router,
+    private location: Location
   ) {}
   ngOnInit(): void {
     this.routes.params.subscribe((params) => {
@@ -49,5 +51,8 @@ export class JobDetailsComponent implements OnInit {
       this.data?.id !== undefined ? this.data?.id : ''
     );
     this.navigateRoute.navigateByUrl('/auth/login', { replaceUrl: true });
+  }
+  handleBack() {
+    this.location.back();
   }
 }

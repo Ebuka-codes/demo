@@ -1,7 +1,11 @@
 <section class="job-category">
   <span>{{ jobCategory.length }} job open</span>
   <div class="job-category-content">
-    <button *ngFor="let item of jobCategory">
+    <button
+      *ngFor="let item of jobCategory"
+      (click)="toggleJobType(item)"
+      [ngClass]="{ selected: selectedJobTypes.includes(item) }"
+    >
       {{ item }}
     </button>
   </div>

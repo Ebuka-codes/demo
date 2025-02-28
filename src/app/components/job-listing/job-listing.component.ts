@@ -10,11 +10,20 @@ import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 export class JobListingComponent implements OnChanges {
   @Input() jobList: any[] = [];
   @Input() isLoading!: Observable<boolean>;
-  constructor(private _jobService: JobRecruitService) {}
+  @Input() isLoadingSearch: any;
+  start: number = 0;
+  end: number = 6;
+  constructor(private jobService: JobRecruitService) {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['jobsList']) {
       this.jobList = changes['jobList'].currentValue;
     }
-    this.isLoading = this._jobService.isLoading$;
+    this.isLoading = this.jobService.isLoading$;
+  }
+
+  ngOnInit(): void {}
+
+  showJobList() {
+    this.end = this.end * 2;
   }
 }

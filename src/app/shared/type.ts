@@ -25,6 +25,30 @@ export interface optionType {
   ];
 }
 
+export interface Corporate {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  code: string;
+  hmCode: string;
+}
+export interface DetailsType {
+  id?: string;
+  description: string;
+  type: string;
+}
+
+export interface KeyValuePair {
+  key: string;
+  value: any;
+}
+export interface QuestionTypeOptions {
+  id?: string;
+  description: string;
+}
+
 export interface JobApplication {
   id: string;
   name: string;

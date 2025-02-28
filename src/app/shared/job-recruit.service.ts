@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
-import { JobApplication, jobType } from './type';
+import { Corporate, DetailsType, JobApplication, jobType } from './type';
 import { enviroments } from 'src/environments/enviorments';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -86,12 +86,35 @@ export class JobRecruitService {
       headers,
     });
   }
-  getQuestionOption() {
+
+  searchJobs(params: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.get<any>(
+      this.baseUrl + `job-details/search?keyword=${params}`,
+      {
+        headers,
+      }
+    );
+  }
+
+  getAllQuestions() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
     return this.httpClient.get(this.baseUrl + `question-options`, {
+      headers,
+    });
+  }
+
+  createQuestion(question: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.post(this.baseUrl + `question-options`, question, {
       headers,
     });
   }
@@ -131,10 +154,58 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
-    return this.httpClient.post<any>(this.baseUrl + `candidates`, {
+    return this.httpClient.post<any>(this.baseUrl + `candidates`, application, {
       headers,
-      body: JSON.stringify(application),
     });
+  }
+
+  createCorporate(corporate: Corporate) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.post<Corporate>(
+      this.baseUrl + `corporates`,
+      corporate,
+      {
+        headers,
+      }
+    );
+  }
+
+  getQueryDetailsByType() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.get<DetailsType>(this.baseUrl + `query-details`, {
+      headers,
+    });
+  }
+
+  createQueryDetails(data: DetailsType) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.post<DetailsType>(
+      this.baseUrl + `query-details`,
+      data,
+      {
+        headers,
+      }
+    );
+  }
+  searchJobByTitle(title: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.get<JobApplication>(
+      this.baseUrl + `job-lists/${title}`,
+      {
+        headers,
+      }
+    );
   }
 
   setJobDetailId(id: string) {

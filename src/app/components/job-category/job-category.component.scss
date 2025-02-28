@@ -33,4 +33,9 @@
       text-transform: capitalize;
     }
   }
+  button.selected {
+    background: #1c73e8 !important;
+    border: 1px solid #1c73e8;
+    color: white;
+  }
 }

@@ -1,13 +1,15 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
 <section class="container">
-  <app-header />
+  <app-header (onSearchInput)="onSearchInput($event)" />
   <app-job-category
     *ngIf="jobCategory && jobCategory.length"
     [jobCategory]="jobCategory"
+    (filterChanged)="onFilterChange($event)"
   />
   <app-job-listing
     *ngIf="jobList && jobList?.length"
     [jobList]="jobList"
     [isLoading]="isLoading"
+    [isLoadingSearch]="isLoadingSearch"
   />
 </section>

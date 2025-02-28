@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
@@ -24,6 +25,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { CreateJobComponent } from './pages/create-job/create-job.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { QuillModule } from 'ngx-quill';
+import { MatIconModule } from '@angular/material/icon';
+import { CorporateComponent } from './pages/corporate/corporate.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,7 @@ import { QuillModule } from 'ngx-quill';
     HeaderComponent,
     JobListingComponent,
     JobCategoryComponent,
+    CorporateComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,12 +53,14 @@ import { QuillModule } from 'ngx-quill';
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatAutocompleteModule,
     HttpClientModule,
     MatSelectModule,
     MatNativeDateModule,
     MatDatepickerModule,
     MatStepperModule,
     MatSnackBarModule,
+    MatIconModule,
     QuillModule.forRoot(),
   ],
   providers: [],
