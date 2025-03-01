@@ -113,6 +113,7 @@ export class JobRecruitService {
   createQuestion(question: any) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
     });
     return this.httpClient.post(this.baseUrl + `question-options`, question, {
       headers,

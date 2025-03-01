@@ -28,11 +28,14 @@ export class CreateJobComponent implements OnInit {
   @ViewChild('newJobTitle') newJobTitle!: ElementRef<HTMLInputElement>;
   @ViewChild('newJobLocation') newJobLocation!: ElementRef<HTMLInputElement>;
   @ViewChild('newJobSkill') newJobSkill!: ElementRef<HTMLInputElement>;
+  @ViewChild('myModal ') modalElement!: ElementRef;
+  modalInstance!: Modal;
 
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   selectedWorkmode: number | null = null;
   isSubmitted: boolean = false;
   isSubmittedQuestion: boolean = false;
+  isLoadingQuestion: boolean = false;
   form: FormGroup;
   questionForm!: FormGroup;
   formatAmountValue: string = '';
@@ -48,7 +51,7 @@ export class CreateJobComponent implements OnInit {
     },
   };
   data: Array<DetailsType> = [];
-
+  questionErrorMessage: string = '';
   jobTitleData: any[] = [];
   jobEmploymentData: any[] = [];
   jobLocationData: any[] = [];
@@ -80,12 +83,12 @@ export class CreateJobComponent implements OnInit {
       requiredSkills: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      questionOption: ['', Validators.required],
+      questionOptions: ['', Validators.required],
       jobDescription: ['', Validators.required],
     });
 
     this.questionForm = this.fb.group({
-      questionType: [''],
+      questionType: ['', Validators.required],
       description: ['', Validators.required],
       options: this.fb.array([]),
       optionsDescription: [''],
@@ -101,6 +104,14 @@ export class CreateJobComponent implements OnInit {
     this.getJobDetailByType();
     this.getAllQuestion();
   }
+
+  ngAfterViewInit(): void {
+    this.modalInstance = new Modal(this.modalElement.nativeElement);
+    this.modalElement.nativeElement.addEventListener('hidden.bs.modal', () => {
+      document.body.style.overflow = 'auto';
+    });
+  }
+
   get jobTitle() {
     return this.form.get('jobTitle');
   }
@@ -335,27 +346,34 @@ export class CreateJobComponent implements OnInit {
   }
   resetQuestionForm() {
     this.questionForm.reset();
-    this.isSubmittedQuestion = false;
+    this.questionTypeOptions = [];
   }
   onSubmitQuestion() {
-    this.isSubmittedQuestion = true;
     if (this.questionForm.valid) {
-      console.log(this.questionForm.value);
+      this.isLoadingQuestion = true;
       const questionData = {
         description: this.questionForm.get('description')?.value,
         questionType: this.questionForm.get('questionType')?.value,
         Options: this.questionTypeOptions,
       };
+
       this.jobService.createQuestion(questionData).subscribe({
         next: (response: any) => {
-          if (response.valid) {
+          if (response.valid && response.data) {
             this.notyf.success({
               message: 'New question created successfully!',
               duration: 4000,
               position: { x: 'right', y: 'top' },
             });
+            this.isLoadingQuestion = false;
+            this.modalInstance.hide();
             this.resetQuestionForm();
-            this.isSubmittedQuestion = false;
+            this.questionTypeOptions = [];
+            this.getAllQuestion();
+            const backdrops = document.getElementsByClassName('modal-backdrop');
+            while (backdrops.length > 0) {
+              backdrops[0].parentNode?.removeChild(backdrops[0]);
+            }
           }
         },
         error: (error: any) => {
@@ -364,10 +382,19 @@ export class CreateJobComponent implements OnInit {
             duration: 4000,
             position: { x: 'right', y: 'top' },
           });
-          this.isSubmittedQuestion = false;
+          this.isLoadingQuestion = false;
+          this.questionTypeOptions = [];
+          this.modalInstance.hide();
+          this.isLoadingQuestion = false;
+          this.questionTypeOptions = [];
+          const backdrops = document.getElementsByClassName('modal-backdrop');
+          while (backdrops.length > 0) {
+            backdrops[0].parentNode?.removeChild(backdrops[0]);
+          }
+          this.resetQuestionForm();
+          document.body.style.overflow = 'auto';
         },
       });
-      console.log(questionData);
     }
   }
   onSubmit(): void {
@@ -376,7 +403,7 @@ export class CreateJobComponent implements OnInit {
     const endDateValue = this.form.get('endDate')?.value;
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
-    if (this.form.valid) {
+    if (this.form.valid && this.questionTypeOptions) {
       this.createNewJob({
         ...this.form.value,
         startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
@@ -397,6 +424,7 @@ export class CreateJobComponent implements OnInit {
       });
     } else {
       console.log('error check if the input is valid');
+      this.questionErrorMessage = 'Please fill the required question';
     }
   }
 }

@@ -116,6 +116,32 @@
       margin: 10px 0px;
     }
 
+    .ai-btn {
+      background-color: #eeeeee59;
+      border: 0.0625rem solid #0000;
+      border-radius: 0.5rem;
+      box-shadow: none;
+      color: #000000ad;
+      cursor: pointer;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      margin-left: 15px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+      
+    }
     .submit-btn {
       background-color: #1c73e8;
       border: 0.0625rem solid #0000;
