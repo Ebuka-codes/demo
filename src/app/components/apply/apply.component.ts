@@ -38,6 +38,8 @@ export class ApplyComponent implements OnInit {
   skillHisories: any[] = [];
   selectedYear: number | null = null;
   formControls: any = {};
+  resumeValue: string = '';
+  coverLetterValue: string = '';
   //prettier-ignore
   months: string[] = ['January','February','March','April','May','June','July','August','September','October','November','December',
   ];
@@ -233,8 +235,8 @@ export class ApplyComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedResumeFile = file.name;
-      this.supportingFormGroup.patchValue({ resume: file.name });
-      this.supportingFormGroup.get('resume')?.updateValueAndValidity();
+      this.convertFillToBase64(file, file.name);
+      input.value = '';
     }
   }
   onCoverLetterFileChange(event: Event) {
@@ -242,8 +244,6 @@ export class ApplyComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedCoverLetterFile = file.name;
-      this.supportingFormGroup.patchValue({ coverLetter: file.name });
-      this.supportingFormGroup.get('coverLetter')?.updateValueAndValidity();
     }
   }
   handleRemoveResumeFile(): void {
@@ -257,7 +257,27 @@ export class ApplyComponent implements OnInit {
     this.personalFormGroup.get('coverLetter')?.updateValueAndValidity();
   }
 
+  convertFillToBase64(file: File, name: string): void {
+    console.log(file, file.name);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const data = {
+        base64String: reader.result as string,
+        fileName: name,
+      };
+      this._jobService.convertFileToBase64(data).subscribe(
+        (response: any) => {
+          if (response.valid && response.data) {
+          }
+        },
+        (err) => {}
+      );
+    };
+  }
+
   //Post Job-Application
+
   submitJobApplication(jobApplication: any) {
     this.isLoading = true;
     this._jobService.submitJobApplication(jobApplication).subscribe({

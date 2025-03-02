@@ -1,0 +1,55 @@
+.modal-header {
+  h2 {
+    font-size: 16px !important;
+  }
+  .btn-close {
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #f9f9f9;
+    border-radius: 100%;
+  }
+}
+
+.modal-body {
+  .closeModal-icon {
+    cursor: pointer;
+    float: right;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  img {
+    width: 40px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    margin-top: 5px;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    border: none;
+    font-weight: 500;
+    .cancel {
+      color: rgba(255, 0, 0, 0.863);
+      background: transparent;
+      border: 1px solid rgba(255, 0, 0, 0.863);
+
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+    .delete {
+      color: white;
+      background: rgba(255, 0, 0, 0.863);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+  }
+}
