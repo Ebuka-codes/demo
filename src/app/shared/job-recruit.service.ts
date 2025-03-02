@@ -100,6 +100,19 @@ export class JobRecruitService {
     );
   }
 
+  filterJobs(params: string[]): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.get<any>(
+      this.baseUrl + `job-details/search-job-type?types=${params.join(',')}`,
+      {
+        headers,
+      }
+    );
+  }
+
   getAllQuestions() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

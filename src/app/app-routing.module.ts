@@ -6,6 +6,7 @@ import { LoginComponent } from './authentication/login/login.component';
 import { ApplyComponent } from './components/apply/apply.component';
 import { CreateJobComponent } from './pages/create-job/create-job.component';
 import { CorporateComponent } from './pages/corporate/corporate.component';
+import { CandidateComponent } from './pages/candidate/candidate.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'create/corporate',
     component: CorporateComponent,
+  },
+  {
+    path: 'candidate',
+    component: CandidateComponent,
   },
   {
     path: '**',

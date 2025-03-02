@@ -27,6 +27,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { QuillModule } from 'ngx-quill';
 import { MatIconModule } from '@angular/material/icon';
 import { CorporateComponent } from './pages/corporate/corporate.component';
+import { CandidateComponent } from './pages/candidate/candidate.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { CorporateComponent } from './pages/corporate/corporate.component';
     JobListingComponent,
     JobCategoryComponent,
     CorporateComponent,
+    CandidateComponent,
   ],
   imports: [
     BrowserModule,

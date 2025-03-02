@@ -3,9 +3,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
+
+import { jobType } from 'src/app/shared/type';
 
 @Component({
   selector: 'app-job-category',
@@ -13,18 +15,13 @@ import {
   styleUrls: ['./job-category.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class JobCategoryComponent {
-  @Input() jobCategory: any[] = [];
+export class JobCategoryComponent implements OnInit {
+  @Input() jobCategory!: any[];
+  @Input() jobList: jobType[] = [];
   @Output() filterChanged = new EventEmitter<string[]>();
   constructor() {}
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['jobCategory']) {
-      this.jobCategory = changes['jobCategory'].currentValue;
-    }
-  }
 
   selectedJobTypes: string[] = [];
-
   toggleJobType(type: string) {
     const index = this.selectedJobTypes.indexOf(type);
 
@@ -33,14 +30,12 @@ export class JobCategoryComponent {
     } else {
       this.selectedJobTypes.push(type);
     }
-    console.log('Updated selectedJobTypes:', this.selectedJobTypes);
     this.filterChanged.emit([...this.selectedJobTypes]);
-
-    // if (this.selectedJobTypes.includes(type)) {
-    //   this.selectedJobTypes = this.selectedJobTypes.filter((t) => t !== type);
-    // } else {
-    //   this.selectedJobTypes.push(type);
-    // }
-    // this.filterChanged.emit(this.selectedJobTypes);
+  }
+  ngOnInit() {
+    this.jobCategory = [
+      ...new Set(this.jobCategory?.map((job) => job.jobType).sort()),
+    ];
+    console.log(this.jobCategory);
   }
 }

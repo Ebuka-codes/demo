@@ -1,5 +1,5 @@
-<section class="job-category">
-  <span>{{ jobCategory.length }} job open</span>
+<section class="job-category" *ngIf="jobCategory.length">
+  <span>{{ jobList.length }} job open</span>
   <div class="job-category-content">
     <button
       *ngFor="let item of jobCategory"

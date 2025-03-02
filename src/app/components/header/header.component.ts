@@ -12,13 +12,11 @@ export class HeaderComponent {
   search() {
     if (this.inputValue) {
       this.onSearchInput.emit(this.inputValue);
-      this.inputValue = '';
     }
   }
   handleEnter(value: any) {
     if (this.inputValue) {
       this.onSearchInput.emit(value);
-      this.inputValue = '';
     }
   }
 }
