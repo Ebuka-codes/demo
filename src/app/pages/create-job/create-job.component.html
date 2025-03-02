@@ -400,7 +400,12 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="staticBackdropLabel">Add Question</h5>
-              
+              <span
+                class="btn-close"
+                style="cursor: pointer"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></span>
             </div>
             <div class="modal-body">
               <form [formGroup]="questionForm" (ngSubmit)="onSubmitQuestion()">
