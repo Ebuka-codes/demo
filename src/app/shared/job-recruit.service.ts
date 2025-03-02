@@ -221,6 +221,16 @@ export class JobRecruitService {
       }
     );
   }
+  convertFileToBase64(file: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.post<DetailsType>(
+      this.baseUrl + `query-details`,
+      file,
+      { headers }
+    );
+  }
 
   setJobDetailId(id: string) {
     this.jobDetailsId = id;

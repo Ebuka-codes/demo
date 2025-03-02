@@ -28,6 +28,10 @@ import { QuillModule } from 'ngx-quill';
 import { MatIconModule } from '@angular/material/icon';
 import { CorporateComponent } from './pages/corporate/corporate.component';
 import { CandidateComponent } from './pages/candidate/candidate.component';
+import { CandidateTableComponent } from './components/candidate-table/candidate-table.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ComfirmDeleteModalComponent } from './components/comfirm-delete-modal/comfirm-delete-modal.component';
+import { ViewCandidateModalComponent } from './components/view-candidate-modal/view-candidate-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +50,9 @@ import { CandidateComponent } from './pages/candidate/candidate.component';
     JobCategoryComponent,
     CorporateComponent,
     CandidateComponent,
+    CandidateTableComponent,
+    ComfirmDeleteModalComponent,
+    ViewCandidateModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +71,7 @@ import { CandidateComponent } from './pages/candidate/candidate.component';
     MatSnackBarModule,
     MatIconModule,
     QuillModule.forRoot(),
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

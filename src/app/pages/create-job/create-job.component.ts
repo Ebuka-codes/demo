@@ -372,7 +372,7 @@ export class CreateJobComponent implements OnInit {
       const questionData = {
         description: this.questionForm.get('description')?.value,
         questionType: this.questionForm.get('questionType')?.value,
-        Options: this.questionTypeOptions,
+        options: this.questionTypeOptions,
       };
 
       this.jobService.createQuestion(questionData).subscribe({

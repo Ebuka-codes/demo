@@ -246,37 +246,7 @@
           <label for="requiredSkills"
             >Required Skills<span class="required-icon">*</span></label
           >
-          <!-- <mat-form-field>
-            <input type="text" matInput [matAutocomplete]="skill" />
-            <mat-autocomplete #skill="matAutocomplete">
-              <mat-select multiple formControlName="requiredSkills">
-                <mat-option
-                  *ngFor="let skills of jobSkillData"
-                  [value]="skills.description"
-                >
-                  {{ skills.description }}
-                </mat-option>
-              </mat-select>
-              <mat-option>
-                <input
-                  style="
-                    border: 1px solid #dddd;
-                    border-radius: 5px;
-                    padding: 5px 10px;
-                    outline: none;
-                    font-size: 14px;
-                    width: 300px;
-                  "
-                  placeholder="Type new skill click enter"
-                  #newJobSkill
-                  (click)="$event.stopPropagation()"
-                  (keydown.enter)="addNewData(newJobSkill.value, 'jobSkill')"
-                  (keydown)="handleKeydown($event)"
-                  autofocus
-                />
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field> -->
+
           <mat-form-field class="full-width">
             <input
               matInput
@@ -430,12 +400,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="staticBackdropLabel">Add Question</h5>
-              <span
-                class="btn-close"
-                style="cursor: pointer"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></span>
+              
             </div>
             <div class="modal-body">
               <form [formGroup]="questionForm" (ngSubmit)="onSubmitQuestion()">
