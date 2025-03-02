@@ -1,15 +1,21 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
 <section class="container">
   <app-header (onSearchInput)="onSearchInput($event)" />
-  <app-job-category
-    *ngIf="jobCategory && jobCategory.length"
-    [jobCategory]="jobCategory"
-    (filterChanged)="onFilterChange($event)"
-  />
-  <app-job-listing
-    *ngIf="jobList && jobList?.length"
-    [jobList]="jobList"
-    [isLoading]="isLoading"
-    [isLoadingSearch]="isLoadingSearch"
-  />
+  <ng-container *ngIf="jobList.length === 0; else showError">
+    <app-not-found-error />
+  </ng-container>
+  <ng-template #showError>
+    <app-job-category
+      *ngIf="jobCategory && jobCategory.length"
+      [jobCategory]="jobCategory"
+      (filterChanged)="onFilterChange($event)"
+      [jobList]="jobList"
+    />
+    <app-job-listing
+      *ngIf="jobList && jobList?.length"
+      [jobList]="jobList"
+      [isLoading]="isLoading"
+      [isLoadingSearch]="isLoadingSearch"
+    />
+  </ng-template>
 </section>

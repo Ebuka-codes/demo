@@ -11,7 +11,7 @@ import { jobType } from 'src/app/shared/type';
 })
 export class HomeComponent implements OnInit {
   jobList!: jobType[];
-  jobCategory!: string[];
+  jobCategory!: jobType[];
   isLoading!: Observable<boolean>;
   isLoadingSearch: boolean = false;
   error$!: Observable<any>;
@@ -21,9 +21,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this._jobService.getJobList().subscribe((data) => {
       this.jobList = data;
-    });
-    this._jobService.getJobType().subscribe((data) => {
-      this.jobCategory = data;
+      this.jobCategory = this.jobList?.filter((job: any) => job.jobType);
     });
     this.isLoading = this._jobService.isLoading$;
   }
@@ -36,6 +34,7 @@ export class HomeComponent implements OnInit {
       .subscribe((response) => {
         if (response.valid && response.data) {
           this.jobList = response.data;
+          this.jobCategory = this.jobList?.filter((job: any) => job.jobType);
           this.isLoadingSearch = false;
         } else {
           this.notyf.error('No Jobs Found');
@@ -43,17 +42,24 @@ export class HomeComponent implements OnInit {
         }
       });
   }
-
   onFilterChange(selectedJobTypes: string[]) {
-    console.log(this.jobList);
+    this.isLoadingSearch = true;
     if (selectedJobTypes.length === 0) {
-      this.jobList = [...this.jobList];
+      this._jobService.getJobList().subscribe((data) => {
+        this.jobList = data;
+        this.isLoadingSearch = false;
+      });
       return;
     }
-    this.jobList = this.jobList.filter((job) =>
-      selectedJobTypes.includes(job.jobType)
-    );
-
-    console.log('Filtered Jobs:', this.jobList);
+    this._jobService.filterJobs(selectedJobTypes).subscribe((response) => {
+      if (response.valid && response.data) {
+        this.jobList = response.data;
+        this.isLoadingSearch = false;
+      } else {
+        this.notyf.error('No Jobs Found');
+        this.jobList = [];
+        this.isLoadingSearch = false;
+      }
+    });
   }
 }

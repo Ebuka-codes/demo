@@ -16,6 +16,8 @@ import {
 import { Notyf } from 'notyf';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Modal } from 'bootstrap';
+import { map, Observable, startWith } from 'rxjs';
+import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
   selector: 'app-create-job',
@@ -29,6 +31,7 @@ export class CreateJobComponent implements OnInit {
   @ViewChild('newJobLocation') newJobLocation!: ElementRef<HTMLInputElement>;
   @ViewChild('newJobSkill') newJobSkill!: ElementRef<HTMLInputElement>;
   @ViewChild('myModal ') modalElement!: ElementRef;
+  @ViewChild(QuillEditorComponent) quillEditor!: QuillEditorComponent;
   modalInstance!: Modal;
 
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
@@ -50,8 +53,8 @@ export class CreateJobComponent implements OnInit {
       },
     },
   };
+  filteredOptions: any;
   data: Array<DetailsType> = [];
-  questionErrorMessage: string = '';
   jobTitleData: any[] = [];
   jobEmploymentData: any[] = [];
   jobLocationData: any[] = [];
@@ -103,6 +106,18 @@ export class CreateJobComponent implements OnInit {
 
     this.getJobDetailByType();
     this.getAllQuestion();
+
+    this.filteredOptions = this.form.get('jobTitle')?.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || ''))
+    );
+  }
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    console.log(this.jobTitleData);
+    return this.jobTitleData.filter((option) =>
+      option?.toLowerCase().includes(filterValue)
+    );
   }
 
   ngAfterViewInit(): void {
@@ -203,6 +218,9 @@ export class CreateJobComponent implements OnInit {
     });
   }
 
+  showQuestionModal() {
+    this.modalInstance.show();
+  }
   addQuestionOption() {
     this.questionTypeOptions.push({
       id: '',
@@ -297,13 +315,11 @@ export class CreateJobComponent implements OnInit {
       }
     }, 100);
   }
-
   handleKeydown(event: KeyboardEvent) {
     if (event.key === ' ') {
       event.stopPropagation();
     }
   }
-
   addNewData(value: string, type: string) {
     if (value) {
       this.createNewQueryDetails({
@@ -319,9 +335,8 @@ export class CreateJobComponent implements OnInit {
   }
   createNewJob(newJob: jobType) {
     this.loading = true;
-    this.form.disable();
     this.jobService.createJob(newJob).subscribe({
-      next: (response) => {
+      next: () => {
         this.loading = false;
         this.form.enable();
         this.notyf.success({
@@ -330,12 +345,15 @@ export class CreateJobComponent implements OnInit {
           position: { x: 'right', y: 'top' },
         });
         this.form.reset();
+        this.isLoading = false;
         this.isSubmitted = false;
       },
       error: (error: any) => {
         this.loading = false;
+        this.isSubmitted = false;
         this.form.enable();
         this.form.reset();
+        this.form.get('jobDescription')?.setValue(' ');
         this.notyf.error({
           message: 'Error occur!',
           duration: 4000,
@@ -398,12 +416,11 @@ export class CreateJobComponent implements OnInit {
     }
   }
   onSubmit(): void {
-    this.isSubmitted = true;
     const startDateValue = this.form.get('startDate')?.value;
     const endDateValue = this.form.get('endDate')?.value;
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
-    if (this.form.valid && this.questionTypeOptions) {
+    if (this.form.valid) {
       this.createNewJob({
         ...this.form.value,
         startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
@@ -422,9 +439,10 @@ export class CreateJobComponent implements OnInit {
         employmentType: this.form.get('employmentType')?.value.toUpperCase(),
         jobSalary: Number(this.form.get('jobSalary')?.value),
       });
+      this.form.get('jobDescription')?.setValue('');
     } else {
-      console.log('error check if the input is valid');
-      this.questionErrorMessage = 'Please fill the required question';
+      console.log('please check your form!');
+      this.isSubmitted = true;
     }
   }
 }
