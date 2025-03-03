@@ -1,7 +1,7 @@
 <div
   class="modal fade"
-  #myModal
-  id="deleteModal"
+  #myDeleteModal
+  id="myDeleteModal"
   tabindex="-1"
   aria-labelledby="modalLabel"
   aria-hidden="true"
@@ -26,7 +26,21 @@
           >
             Cancel
           </button>
-          <button type="submit" class="delete">Yes, Delete it!</button>
+
+          <button
+            type="submit"
+            [disabled]="isDeleting"
+            class="delete"
+            type="submit"
+            (click)="handleDelete()"
+          >
+            <ng-container *ngIf="isDeleting; else showLoader">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #showLoader>
+              <span>Delete</span>
+            </ng-template>
+          </button>
         </div>
       </div>
     </div>

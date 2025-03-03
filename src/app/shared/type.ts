@@ -51,13 +51,7 @@ export interface QuestionTypeOptions {
 
 export interface JobApplication {
   id: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  countryName: string;
-  city: string;
-  state: string;
+  personalInfo: PersonalInfo[];
   educationHistories: EducationHistory[];
   workHistories: WorkHistory[];
   skills: Skill[];
@@ -65,6 +59,19 @@ export interface JobApplication {
   resume: string;
   coverLetter: string;
   yearsOfExperience: number;
+  jobDetailId: string;
+  jobDetail: [];
+}
+
+export interface PersonalInfo {
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  countryName: string;
+  city: string;
+  state: string;
+  workMode: string;
 }
 
 interface EducationHistory {
@@ -92,4 +99,26 @@ interface Skill {
 interface QuestionOptionAnswer {
   questionOptionId: string;
   answer: string;
+}
+export interface file {
+  base64String: 'string';
+  fileName: 'string';
+}
+export interface CandidateInfo {
+  id: string;
+  name: string;
+  createdAt: string;
+  address: string;
+  phone: string;
+  email: string;
+  countryName: string;
+  city: string;
+  state: string;
+  resume: string;
+  coverLetter: string;
+  jobDetail: {
+    jobTitle: string;
+    workMode: string;
+    jobType: string;
+  };
 }

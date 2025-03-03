@@ -16,7 +16,7 @@ import {
 import { Notyf } from 'notyf';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Modal } from 'bootstrap';
-import { map, Observable, startWith } from 'rxjs';
+import { map, startWith } from 'rxjs';
 import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
@@ -57,6 +57,7 @@ export class CreateJobComponent implements OnInit {
   data: Array<DetailsType> = [];
   jobTitleData: any[] = [];
   jobEmploymentData: any[] = [];
+  jobTypeData: any[] = [];
   jobLocationData: any[] = [];
   jobSkillData: any[] = [];
   typeValue: string = '';
@@ -118,13 +119,6 @@ export class CreateJobComponent implements OnInit {
     return this.jobTitleData.filter((option) =>
       option?.toLowerCase().includes(filterValue)
     );
-  }
-
-  ngAfterViewInit(): void {
-    this.modalInstance = new Modal(this.modalElement.nativeElement);
-    this.modalElement.nativeElement.addEventListener('hidden.bs.modal', () => {
-      document.body.style.overflow = 'auto';
-    });
   }
 
   get jobTitle() {
@@ -246,6 +240,10 @@ export class CreateJobComponent implements OnInit {
           this.jobEmploymentData = this.data?.filter(
             (item) => item.type.trim() === 'employmentType'
           );
+
+          this.jobTypeData = this.data?.filter(
+            (item) => item.type.trim() === 'jobType'
+          );
           this.jobSkillData = this.data?.filter(
             (item) => item.type.trim() === 'jobSkill'
           );
@@ -365,10 +363,12 @@ export class CreateJobComponent implements OnInit {
   resetQuestionForm() {
     this.questionForm.reset();
     this.questionTypeOptions = [];
+    this.isSubmittedQuestion = false;
   }
   onSubmitQuestion() {
     if (this.questionForm.valid) {
       this.isLoadingQuestion = true;
+      this.isLoading = true;
       const questionData = {
         description: this.questionForm.get('description')?.value,
         questionType: this.questionForm.get('questionType')?.value,
@@ -384,6 +384,7 @@ export class CreateJobComponent implements OnInit {
               position: { x: 'right', y: 'top' },
             });
             this.isLoadingQuestion = false;
+            this.isLoading = false;
             this.modalInstance.hide();
             this.resetQuestionForm();
             this.questionTypeOptions = [];
@@ -401,18 +402,18 @@ export class CreateJobComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.isLoadingQuestion = false;
+          this.isLoading = false;
           this.questionTypeOptions = [];
           this.modalInstance.hide();
-          this.isLoadingQuestion = false;
-          this.questionTypeOptions = [];
           const backdrops = document.getElementsByClassName('modal-backdrop');
           while (backdrops.length > 0) {
             backdrops[0].parentNode?.removeChild(backdrops[0]);
           }
           this.resetQuestionForm();
-          document.body.style.overflow = 'auto';
         },
       });
+    } else {
+      this.isSubmittedQuestion = true;
     }
   }
   onSubmit(): void {

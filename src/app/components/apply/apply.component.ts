@@ -10,6 +10,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { jobType } from 'src/app/shared/type';
 import { Notyf } from 'notyf';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-apply',
   templateUrl: './apply.component.html',
@@ -38,8 +39,8 @@ export class ApplyComponent implements OnInit {
   skillHisories: any[] = [];
   selectedYear: number | null = null;
   formControls: any = {};
-  resumeValue: string = '';
-  coverLetterValue: string = '';
+  resumeValue: any;
+  coverLetterValue: any;
   //prettier-ignore
   months: string[] = ['January','February','March','April','May','June','July','August','September','October','November','December',
   ];
@@ -55,7 +56,11 @@ export class ApplyComponent implements OnInit {
     "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
   ];
   private notyf = new Notyf();
-  constructor(private fb: FormBuilder, private _jobService: JobRecruitService) {
+  constructor(
+    private fb: FormBuilder,
+    private _jobService: JobRecruitService,
+    private route: ActivatedRoute
+  ) {
     this.personalFormGroup = this.fb.group({
       firstName: [''],
       lastName: [''],
@@ -92,20 +97,21 @@ export class ApplyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this._jobService.getJobDetailId();
     this.isLoadingQuestion = true;
-    this._jobService.getJobDetailsById(this.id).subscribe({
-      next: (response) => {
-        if (response.valid && response.data) {
-          this.data = response.data;
-          this.isLoadingQuestion = false;
-          this.getQuestions();
-        }
-      },
-      error: (error) => {
-        console.log(error.message);
-      },
-    });
+    this._jobService
+      .getJobDetailsById(this.route.snapshot.paramMap.get('id'))
+      .subscribe({
+        next: (response) => {
+          if (response.valid && response.data) {
+            this.data = response.data;
+            this.isLoadingQuestion = false;
+            this.getQuestions();
+          }
+        },
+        error: (error) => {
+          console.log(error.message);
+        },
+      });
     this.getCandidateInfo();
   }
 
@@ -235,7 +241,7 @@ export class ApplyComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedResumeFile = file.name;
-      this.convertFillToBase64(file, file.name);
+      this.convertResumeToBase64(file, file.name);
       input.value = '';
     }
   }
@@ -244,21 +250,11 @@ export class ApplyComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedCoverLetterFile = file.name;
+      this.convertCoverLetterFileToBase64(file, file.name);
+      input.value = '';
     }
   }
-  handleRemoveResumeFile(): void {
-    this.selectedResumeFile = null;
-    this.personalFormGroup.patchValue({ resumeFile: null });
-    this.personalFormGroup.get('resumeFile')?.updateValueAndValidity();
-  }
-  handleRemoveCoverLetter(): void {
-    this.selectedCoverLetterFile = null;
-    this.personalFormGroup.patchValue({ coverLetter: null });
-    this.personalFormGroup.get('coverLetter')?.updateValueAndValidity();
-  }
-
-  convertFillToBase64(file: File, name: string): void {
-    console.log(file, file.name);
+  convertResumeToBase64(file: File, name: string): void {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -269,15 +265,57 @@ export class ApplyComponent implements OnInit {
       this._jobService.convertFileToBase64(data).subscribe(
         (response: any) => {
           if (response.valid && response.data) {
+            this.resumeValue = response.data;
           }
         },
-        (err) => {}
+        (err) => {
+          this.notyf.error({
+            message: err.error.message,
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+          });
+          this.selectedResumeFile = '';
+        }
       );
     };
   }
 
-  //Post Job-Application
+  convertCoverLetterFileToBase64(file: File, name: string): void {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const data = {
+        base64String: reader.result as string,
+        fileName: name,
+      };
+      this._jobService.convertFileToBase64(data).subscribe(
+        (response: any) => {
+          if (response.valid && response.data) {
+            this.coverLetterValue = response.data;
+          }
+        },
+        (err) => {
+          this.notyf.error({
+            message: err.error.message,
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+          });
+          this.selectedCoverLetterFile = '';
+        }
+      );
+    };
+  }
 
+  handleRemoveResumeFile(): void {
+    this.selectedResumeFile = null;
+    this.resumeValue = '';
+  }
+  handleRemoveCoverLetter(): void {
+    this.selectedCoverLetterFile = null;
+    this.coverLetterValue = '';
+  }
+
+  //Post Job-Application
   submitJobApplication(jobApplication: any) {
     this.isLoading = true;
     this._jobService.submitJobApplication(jobApplication).subscribe({
@@ -352,8 +390,9 @@ export class ApplyComponent implements OnInit {
       workHistories: this.workHistories,
       skills: this.skillHisories,
       questionOptionAnswersDTO: questionOption,
-      resume: this.supportingFormGroup.get('resume')?.value,
-      coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
+      resume: this.resumeValue ? this.resumeValue.path : '',
+      coverLetter: this.coverLetterValue ? this.coverLetterValue.path : '',
+      jobDetailId: this.route.snapshot.paramMap.get('id'),
     };
     this.submitJobApplication(data);
   }

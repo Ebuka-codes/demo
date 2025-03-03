@@ -1,3 +1,4 @@
+<div *ngIf="isLoading" class="progress-bar"></div>
 <div class="apply-container">
   <form>
     <mat-horizontal-stepper>
@@ -682,7 +683,7 @@
                       id="resumeInput"
                       class="visually-hidden"
                       type="file"
-                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                      accept=".pdf,.doc,.docx"
                       (change)="onFileChange($event)"
                     />
                   </div>
@@ -733,7 +734,7 @@
                       type="file"
                       accept=".pdf,.doc,.docx,.txt,.rtf"
                       (change)="onCoverLetterFileChange($event)"
-                      accept=".pdf,.doc,.docx,.txt,.rtf"
+                      accept=".pdf,.doc,.docx"
                     />
                   </div>
                 </ng-container>

@@ -27,18 +27,17 @@
         I agree with the <strong>TERM AND CONDITIONS</strong></span
       >
 
-      <div *ngIf="term?.invalid && email?.touched">
-        <small *ngIf="email?.errors?.['required']"
+      <div *ngIf="term?.invalid && term?.touched">
+        <small *ngIf="term?.errors?.['required']"
           >Email Address field is required</small
         >
-        <small
-          *ngIf="!email?.errors?.['required'] && email?.errors?.['invalidEmail']"
-          >Invalid email format</small
-        >
+        <small *ngIf="!term?.errors?.['required']">Invalid email format</small>
       </div>
     </div>
     <div class="btn-content">
-      <button class="btn-cancel" type="button">Cancel</button>
+      <button class="btn-cancel" type="button" (click)="handleBack()">
+        Back
+      </button>
       <button type="submit" class="btn-next" (click)="onSubmit()">Next</button>
     </div>
   </form>

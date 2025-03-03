@@ -27,7 +27,7 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  button {
+  a {
     border: none;
     background-color: transparent;
     display: flex;
@@ -100,4 +100,28 @@
 
 ::ng-deep .modal-lg {
   width: 600px;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-bottom: 4px solid #7856fffd;
+  animation: load 1.5s infinite ease-in-out;
+  z-index: 50000;
+}
+
+@keyframes load {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
 }

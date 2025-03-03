@@ -19,11 +19,11 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'job/apply',
+    path: 'job/apply/:id',
     component: ApplyComponent,
   },
   {
-    path: 'create-job/:SHL',
+    path: 'create-job/:corpId',
     component: CreateJobComponent,
   },
   {
@@ -31,7 +31,7 @@ const routes: Routes = [
     component: CorporateComponent,
   },
   {
-    path: 'candidate',
+    path: 'candidate/:corpId',
     component: CandidateComponent,
   },
   {

@@ -115,7 +115,9 @@
       padding: 3px 4px;
       margin: 10px 0px;
     }
-
+    &:disabled {
+      cursor: pointer;
+    }
     .ai-btn {
       background-color: #eeeeee59;
       border: 0.0625rem solid #0000;
@@ -140,7 +142,6 @@
         width: 20px;
         height: 20px;
       }
-      
     }
     .submit-btn {
       background-color: #1c73e8;
@@ -207,6 +208,11 @@
   }
 }
 
+.modal-header {
+  h5 {
+    font-size: 18px;
+  }
+}
 .progress-bar {
   position: fixed;
   top: 0;

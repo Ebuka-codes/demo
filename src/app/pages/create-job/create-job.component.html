@@ -159,7 +159,45 @@
           <label for="jobType"
             >Job type <span class="required-icon">*</span></label
           >
-          <input formControlName="jobType" type="text" />
+
+          <mat-form-field>
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="me"
+              formControlName="jobType"
+            />
+            <mat-autocomplete #me="matAutocomplete">
+              <mat-option
+                *ngFor="let jobType of jobTypeData"
+                [value]="jobType.description | titlecase"
+              >
+                {{ jobType.description | titlecase }}
+              </mat-option>
+
+              <mat-option>
+                <input
+                  #newJobType
+                  style="
+                    border: 1px solid #dddd;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                    outline: none;
+                    font-size: 14px;
+                    width: 300px;
+                  "
+                  placeholder="Type job type press enter"
+                  formControlName="jobType"
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="
+                    addNewData(newJobType.value.toUpperCase(), 'jobType')
+                  "
+                  (keydown)="handleKeydown($event)"
+                  autofocus
+                />
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
 
           <div *ngIf="jobType?.invalid && isSubmitted">
             <small *ngIf="jobType?.errors?.['required']">
@@ -402,10 +440,16 @@
               <h5 class="modal-title" id="staticBackdropLabel">Add Question</h5>
               <span
                 class="btn-close"
-                style="cursor: pointer"
+                style="
+                  cursor: pointer;
+                  font-size: 12px;
+                  background-color: #f9f9f9;
+                  border-radius: 100%;
+                "
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              ></span>
+              >
+              </span>
             </div>
             <div class="modal-body">
               <form [formGroup]="questionForm" (ngSubmit)="onSubmitQuestion()">
@@ -413,10 +457,9 @@
                   <label for="desc">Description *</label>
                   <input
                     type="text"
-                    matInput
                     formControlName="description"
                     style="height: 100px"
-                    [ngClass]="isLoadingQuestion ? 'loader-input-bg' : ''"
+                    [disabled]="!isLoadingQuestion"
                   />
                   <div *ngIf="description?.invalid && isSubmittedQuestion">
                     <small *ngIf="description?.errors?.['required']">
@@ -426,10 +469,11 @@
                 </div>
                 <div class="form-group">
                   <label for="questionType">Question Type *</label>
-                  <mat-form-field
-                    [ngClass]="isLoadingQuestion ? 'loader-input-bg' : ''"
-                  >
-                    <mat-select formControlName="questionType">
+                  <mat-form-field>
+                    <mat-select
+                      formControlName="questionType"
+                      [disabled]="isLoadingQuestion"
+                    >
                       <mat-option
                         *ngFor="let type of questionType"
                         [value]="type.key"

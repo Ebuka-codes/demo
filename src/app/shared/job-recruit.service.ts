@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
-import { Corporate, DetailsType, JobApplication, jobType } from './type';
+import { Corporate, DetailsType, file, JobApplication, jobType } from './type';
 import { enviroments } from 'src/environments/enviorments';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -23,6 +23,7 @@ export class JobRecruitService {
   private jobDetailsId: string | null = null;
   private candiateEmail: string | null = null;
   encodedValue: any;
+  isLoading: boolean = false;
 
   constructor(private httpClient: HttpClient, private router: Router) {
     this.updateLastPath();
@@ -168,7 +169,32 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
-    return this.httpClient.post<any>(this.baseUrl + `candidates`, application, {
+    return this.httpClient.post<JobApplication>(
+      this.baseUrl + `candidates`,
+      application,
+      {
+        headers,
+      }
+    );
+  }
+
+  getCandidate() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    console.log(this.encodedValue);
+    return this.httpClient.get<any>(this.baseUrl + `candidates`, {
+      headers,
+    });
+  }
+
+  deleteCandidateById(id: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.delete<any>(this.baseUrl + `candidates/${id}`, {
       headers,
     });
   }
@@ -225,10 +251,12 @@ export class JobRecruitService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.httpClient.post<DetailsType>(
-      this.baseUrl + `query-details`,
+    return this.httpClient.post<file>(
+      'http://localhost:8088/document/upload-base64',
       file,
-      { headers }
+      {
+        headers,
+      }
     );
   }
 
@@ -243,5 +271,12 @@ export class JobRecruitService {
   }
   getCandidateEmail(): string | null {
     return this.candiateEmail;
+  }
+
+  setLoading(loading: boolean) {
+    this.isLoadingSubject.next(loading);
+  }
+  getLoading() {
+    return this.isLoading$;
   }
 }

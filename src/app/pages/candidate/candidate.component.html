@@ -1,3 +1,5 @@
-<app-candidate-table />
-<app-comfirm-delete-modal />
-<app-view-candidate-modal />
+<div *ngIf="isLoading | async" class="progress-bar"></div>
+<app-loader-spinner *ngIf="isLoading | async" />
+<ng-container *ngIf="!dataLoading">
+  <app-candidate-table [candidateData]="candidateData" />
+</ng-container>

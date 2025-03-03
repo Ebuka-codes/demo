@@ -43,10 +43,21 @@ export class LoginComponent {
   get term() {
     return this.form.get('term');
   }
+  handleBack() {
+    this.route.navigateByUrl(
+      `/job-details/${this._jobService.getJobDetailId()}`,
+      {
+        replaceUrl: true,
+      }
+    );
+  }
   onSubmit() {
     if (this.form.valid) {
       this.isNext = true;
-      this.route.navigateByUrl('/job/apply', { replaceUrl: true });
+      this.route.navigateByUrl(
+        `/job/apply/${this._jobService.getJobDetailId()}`,
+        { replaceUrl: true }
+      );
       this._jobService.setCandidateEmail(this.form.get('email')?.value);
     } else {
       this.form.markAllAsTouched();

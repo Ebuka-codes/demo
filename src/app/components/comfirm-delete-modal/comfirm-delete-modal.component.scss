@@ -38,10 +38,10 @@
       color: rgba(255, 0, 0, 0.863);
       background: transparent;
       border: 1px solid rgba(255, 0, 0, 0.863);
-
       border-radius: 10px;
       padding: 10px 20px;
       font-size: 14px;
+      width: 100px;
     }
     .delete {
       color: white;
@@ -50,6 +50,26 @@
       border-radius: 10px;
       padding: 10px 15px;
       font-size: 14px;
+      width: 100px;
+    }
+    .mini-loader-spinner {
+      border: 3px solid white;
+      border-color: white transparent white white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px auto;
+      animation: spin 0.5s linear infinite;
+      cursor: not-allowed;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
   }
 }

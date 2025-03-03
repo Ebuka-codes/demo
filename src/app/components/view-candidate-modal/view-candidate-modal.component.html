@@ -38,7 +38,8 @@
             <path d="m6 6 12 12" /></svg
         ></span>
       </div>
-      <div class="modal-body">
+
+      <div class="modal-body" *ngIf="candidateViewData">
         <div class="form-group">
           <div class="col-sm-6 control-label form-control-static p-2">
             <label><strong>Name</strong></label>
@@ -47,12 +48,7 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>Ebuka Nwuba</span>
-            <ng-template #controlBody>
-              <span>
-                <ng-content></ng-content>
-              </span>
-            </ng-template>
+            <span>{{ candidateViewData?.name | titlecase }}</span>
           </div>
         </div>
 
@@ -64,7 +60,46 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>Product Designer</span>
+            <span>{{
+              candidateViewData?.jobDetail?.jobTitle | titlecase
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Job Type</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ candidateViewData?.jobDetail?.jobType }}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Work Mode</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ candidateViewData.jobDetail?.workMode | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Employment Type</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{
+              candidateViewData.jobDetail?.employmentType | titlecase
+            }}</span>
           </div>
         </div>
 
@@ -76,7 +111,7 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>ebukagamil.com</span>
+            <span>{{ candidateViewData?.email || "N/A" }}</span>
           </div>
         </div>
 
@@ -88,19 +123,35 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>091265768604</span>
+            <span>{{ candidateViewData?.phone || "N/A" }}</span>
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-sm-6 control-label form-control-static p-2">
-            <label><strong>Gender</strong></label>
+            <label><strong>State</strong></label>
           </div>
           <div
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>Male</span>
+            <span>{{ candidateViewData?.state }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>City/Province</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{
+              candidateViewData?.city
+                ? (candidateViewData?.city | titlecase)
+                : "N/A"
+            }}</span>
           </div>
         </div>
 
@@ -112,13 +163,20 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>Awaiting Feedback</span>
+            <span>{{
+              candidateViewData?.jobDetail?.jobStatus | titlecase
+            }}</span>
           </div>
         </div>
       </div>
 
       <div class="btn-download">
-        <button>
+        <a
+          *ngIf="candidateViewData?.resume"
+          [href]="candidateViewData?.resume"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -134,8 +192,13 @@
             />
           </svg>
           Download CV
-        </button>
-        <button>
+        </a>
+        <a
+          *ngIf="candidateViewData?.coverLetter"
+          [href]="candidateViewData?.coverLetter"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -150,7 +213,7 @@
               d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
             /></svg
           >Download Cover letter
-        </button>
+        </a>
       </div>
 
       <div class="interview-btn">
@@ -166,7 +229,7 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+              d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
             />
           </svg>
           Invite for interview
