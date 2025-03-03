@@ -92,10 +92,11 @@
 
     .input-group {
       font-size: 1.25rem;
-      margin: 20px 0px;
+      margin: 10px 0px;
       display: flex;
       flex-direction: column;
-      input {
+      input,
+      textarea {
         color: #6d6d6d;
         padding: 10px 10px;
         height: 55px;
@@ -111,6 +112,7 @@
         font-size: 14px;
         color: #484747b5;
         font-weight: 500;
+        margin-bottom: 4px;
       }
     }
     .questions {
@@ -157,7 +159,7 @@
       .content {
         margin: 10px 0px;
         .group {
-          margin: 20px 0px;
+          margin: 10px 0px;
           display: flex !important;
           flex-direction: column;
           label {
@@ -546,7 +548,7 @@
       }
     }
     .btn {
-      padding: 0.5rem 1.5rem;
+      padding: 0.7rem 2.5rem;
       border-radius: 50px;
       text-decoration: none;
       transition: background 0.15s ease 0s, color 0.15s ease 0s,
@@ -559,15 +561,23 @@
       font-size: 1rem;
       text-align: center;
       cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-      background-color: #1c73e8;
-      color: #ffffff;
+      color: black;
+      font-weight: 500;
+    }
+    .btn-cancel {
+      background-color: #eeee;
       &:hover,
       :focus {
         box-shadow: #0000004d 0 2px 6px;
-        background-color: #2661bd;
+        background-color: #f1f1f1;
+      }
+    }
+    .btn-submit {
+      background-color: #1c73e8;
+      &:hover,
+      :focus {
+        box-shadow: #0000004d 0 2px 6px;
+        background-color: #1d6dd4;
       }
     }
     .job-question {
@@ -606,6 +616,19 @@
       color: rgba(216, 5, 5, 0.89);
       font-size: 14px;
       margin: 5px 0px;
+    }
+  }
+  .modal-footer {
+    justify-content: flex-start !important;
+  }
+  .modal-header {
+    justify-content: flex-start !important;
+    .btn-close {
+      cursor: pointer;
+      font-size: 12px;
+      margin-right: 10px;
+      background-color: #eee;
+      border-radius: 100%;
     }
   }
 }

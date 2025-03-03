@@ -30,9 +30,6 @@ html body * {
   font-family: "Inter", serif;
   scroll-behavior: smooth;
 }
-.modal {
-  z-index: 20000;
-}
 
 .fr-toolbar {
   border-top-right-radius: 10px !important;
@@ -48,13 +45,8 @@ html body * {
   display: none;
 }
 
-.cdk-overlay-container {
-  z-index: 1055 !important; // Ensure it's above Bootstrap modal (z-index 1050)
-  position: fixed !important;
-}
-
 .custom-dropdown .mat-select-panel {
-  z-index: 1055 !important; // Keeps dropdown inside the modal
+  z-index: 1055 !important;
   position: absolute !important;
 }
 
@@ -67,10 +59,6 @@ html body * {
 
 .mdc-text-field--filled.mdc-text-field--disabled {
   cursor: not-allowed;
-}
-.cdk-overlay-container {
-  z-index: 1055 !important;
-  position: fixed !important;
 }
 
 .custom-dropdown .mat-select-panel {
@@ -130,15 +118,28 @@ html body * {
 }
 
 .ql-container {
-  min-height: 200px; /* Set appropriate height */
-  max-height: 400px; /* Optional: Limits expansion */
+  min-height: 200px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
 .ql-editor {
-  min-height: 180px; /* Ensures content area has space */
+  min-height: 180px;
 }
 :host ::ng-deep .quill-editor + div {
   position: relative;
   z-index: 10;
+}
+
+.cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+.cdk-overlay-pane {
+  z-index: 1051 !important;
+  position: absolute !important;
+}
+
+.mat-mdc-input-element {
+  caret-color: black !important;
 }

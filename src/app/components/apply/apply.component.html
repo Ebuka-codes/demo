@@ -269,62 +269,72 @@
                             />
                           </mat-form-field>
                         </div>
-                        <div class="group">
-                          <label for="startDate">Start Date</label>
-                          <mat-form-field appearance="fill">
-                            <input
-                              matInput
-                              [matDatepicker]="workStartDatePicker"
-                              type="text"
-                              formControlName="startDate"
-                              required
-                              readonly
-                            />
-                            <mat-datepicker-toggle
-                              matSuffix
-                              [for]="workStartDatePicker"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker
-                              #workStartDatePicker
-                            ></mat-datepicker>
-                          </mat-form-field>
-                        </div>
+                        <div class="row">
+                          <div class="group col">
+                            <label for="startDate">Start Date</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                [matDatepicker]="workStartDatePicker"
+                                formControlName="startDate"
+                                readonly
+                                (ngModelChange)="onStartDateChange()"
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="workStartDatePicker"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                #workStartDatePicker
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
 
-                        <div class="group">
-                          <label for="endDate">End Date</label>
-                          <mat-form-field appearance="fill">
-                            <input
-                              matInput
-                              [matDatepicker]="workEndDatePicker"
-                              type="text"
-                              formControlName="endDate"
-                              required
-                            />
-                            <mat-datepicker-toggle
-                              matSuffix
-                              [for]="workEndDatePicker"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker #workEndDatePicker></mat-datepicker>
-                          </mat-form-field>
+                          <div class="group col">
+                            <label for="endDate">End Date</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                [matDatepicker]="workEndDatePicker"
+                                formControlName="endDate"
+                                required
+                                readonly
+                                [disabled]="isEndDate"
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="workEndDatePicker"
+                                [disabled]="isEndDate"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                #workEndDatePicker
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
                         </div>
-
-                        <div class="group">
+                        <div class="input-group">
                           <label for="jobDescription">Job Description</label>
-                          <mat-form-field appearance="fill">
-                            <input
-                              matInput
-                              type="text"
-                              formControlName="jobDescription"
-                              required
-                            />
-                          </mat-form-field>
+                          <textarea
+                            type="text"
+                            formControlName="jobDescription"
+                            required
+                            style="height: 150px"
+                          ></textarea>
                         </div>
                       </div>
 
                       <div class="modal-footer">
                         <button
                           type="button"
-                          class="btn btn-primary"
+                          class="btn btn-cancel"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-submit"
                           data-bs-dismiss="modal"
                           aria-label="Close"
                           (click)="addWorkHistory()"
@@ -442,47 +452,49 @@
                           </mat-form-field>
                         </div>
 
-                        <div class="group">
-                          <label for="schoolStartDate">Start Date</label>
-                          <mat-form-field appearance="fill">
-                            <input
-                              matInput
-                              [matDatepicker]="educationStartDatePicker"
-                              type="text"
-                              formControlName="schoolStartDate"
-                              required
-                              readonly
-                            />
-                            <mat-datepicker-toggle
-                              matIconSuffix
-                              [for]="educationStartDatePicker"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker
-                              #educationStartDatePicker
-                            ></mat-datepicker>
-                          </mat-form-field>
-                        </div>
-                        <div class="group">
-                          <label for="schoolEndDate">End Date</label>
-                          <mat-form-field appearance="fill">
-                            <input
-                              matInput
-                              [matDatepicker]="educationEndDatePicker"
-                              type="text"
-                              formControlName="schoolEndDate"
-                              required
-                              readonly
-                            />
-                            <mat-datepicker-toggle
-                              matIconSuffix
-                              [for]="educationEndDatePicker"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker
-                              #educationEndDatePicker
-                            ></mat-datepicker>
-                          </mat-form-field>
-                        </div>
+                        <div class="row">
+                          <div class="group col">
+                            <label for="startDate">Start Date</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                [matDatepicker]="educationStartDatePicker"
+                                formControlName="startDate"
+                                readonly
+                                (ngModelChange)="onStartDateChange()"
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="educationStartDatePicker"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                #educationStartDatePicker
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
 
+                          <div class="group col">
+                            <label for="endDate">End Date</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                [matDatepicker]="eductionEndDatePicker"
+                                formControlName="endDate"
+                                required
+                                readonly
+                                [disabled]="isEndDate"
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="eductionEndDatePicker"
+                                [disabled]="isEndDate"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                #eductionEndDatePicker
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
                         <div class="group">
                           <label for="fieldOfStudy">Field of Study</label>
                           <mat-form-field appearance="fill">
@@ -516,7 +528,15 @@
                       <div class="modal-footer">
                         <button
                           type="button"
-                          class="btn btn-primary"
+                          class="btn btn-cancel"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-submit"
                           data-bs-dismiss="modal"
                           aria-label="Close"
                           (click)="addEducationHistory()"
@@ -623,7 +643,15 @@
                         <div class="modal-footer">
                           <button
                             type="button"
-                            class="btn btn-primary"
+                            class="btn btn-cancel"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            Close
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-submit"
                             data-bs-dismiss="modal"
                             aria-label="Close"
                             (click)="addSkillHistory()"

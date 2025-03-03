@@ -56,6 +56,7 @@ export class ApplyComponent implements OnInit {
     "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
   ];
   private notyf = new Notyf();
+  isEndDate: boolean = true;
   constructor(
     private fb: FormBuilder,
     private _jobService: JobRecruitService,
@@ -255,6 +256,7 @@ export class ApplyComponent implements OnInit {
     }
   }
   convertResumeToBase64(file: File, name: string): void {
+    this.isLoading = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -266,6 +268,7 @@ export class ApplyComponent implements OnInit {
         (response: any) => {
           if (response.valid && response.data) {
             this.resumeValue = response.data;
+            this.isLoading = false;
           }
         },
         (err) => {
@@ -275,12 +278,13 @@ export class ApplyComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.selectedResumeFile = '';
+          this.isLoading = false;
         }
       );
     };
   }
-
   convertCoverLetterFileToBase64(file: File, name: string): void {
+    this.isLoading = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -292,6 +296,7 @@ export class ApplyComponent implements OnInit {
         (response: any) => {
           if (response.valid && response.data) {
             this.coverLetterValue = response.data;
+            this.isLoading = false;
           }
         },
         (err) => {
@@ -301,6 +306,7 @@ export class ApplyComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.selectedCoverLetterFile = '';
+          this.isLoading = false;
         }
       );
     };
@@ -395,5 +401,18 @@ export class ApplyComponent implements OnInit {
       jobDetailId: this.route.snapshot.paramMap.get('id'),
     };
     this.submitJobApplication(data);
+  }
+
+  onStartDateChange() {
+    if (!this.experienceFormGroup.get('startDate')?.value) {
+      this.isEndDate = true;
+    } else {
+      this.isEndDate = false;
+    }
+  }
+  endDateFilter(date: Date | null): boolean {
+    return this.experienceFormGroup.get('startDate')?.value
+      ? date! >= this.experienceFormGroup.get('startDate')?.value
+      : false;
   }
 }
