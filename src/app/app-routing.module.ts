@@ -1,42 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { JobDetailsComponent } from './components/job-details/job-details.component';
 import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './authentication/login/login.component';
-import { ApplyComponent } from './components/apply/apply.component';
-import { CreateJobComponent } from './pages/create-job/create-job.component';
-import { CorporateComponent } from './pages/corporate/corporate.component';
-import { CandidateComponent } from './pages/candidate/candidate.component';
-
+import { JobDetailsComponent } from './pages/job-details/job-details.component';
+import { LoginComponent } from './pages/authentication/login/login.component';
+import { ApplyComponent } from './pages/apply/apply.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {
-    path: 'job-details/:id',
-    component: JobDetailsComponent,
-  },
-  {
     path: 'auth/login',
     component: LoginComponent,
+  },
+  {
+    path: 'job-details/:id',
+    component: JobDetailsComponent,
   },
   {
     path: 'job/apply/:id',
     component: ApplyComponent,
   },
   {
-    path: 'create-job/:corpId',
-    component: CreateJobComponent,
-  },
-  {
-    path: 'create/corporate',
-    component: CorporateComponent,
-  },
-  {
-    path: 'candidate/:corpId',
-    component: CandidateComponent,
-  },
-  {
-    path: '**',
+    path: 'apply/:id',
     component: HomeComponent,
+  },
+
+  {
+    path: '',
+    loadChildren: () =>
+      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
 ];
 @NgModule({

@@ -1,21 +1,78 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
 <section class="container">
-  <app-header (onSearchInput)="onSearchInput($event)" />
-  <ng-container *ngIf="jobList.length === 0; else showError">
-    <app-not-found-error />
-  </ng-container>
-  <ng-template #showError>
-    <app-job-category
-      *ngIf="jobCategory && jobCategory.length"
-      [jobCategory]="jobCategory"
-      (filterChanged)="onFilterChange($event)"
-      [jobList]="jobList"
-    />
-    <app-job-listing
-      *ngIf="jobList && jobList?.length"
-      [jobList]="jobList"
-      [isLoading]="isLoading"
-      [isLoadingSearch]="isLoadingSearch"
-    />
-  </ng-template>
+  <header>
+    <div class="search">
+      <span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </span>
+      <input
+        #input
+        type="text"
+        placeholder=" Search Job title, or company name"
+        [(ngModel)]="searchInput"
+        (keydown.enter)="handleEnter(input.value)"
+      />
+    </div>
+    <button type="submit" (click)="searchJob()">Find jobs</button>
+  </header>
+
+  <section class="job-category" *ngIf="jobCategory?.length">
+    <span>{{ jobList.length }} job open</span>
+    <div class="job-category-content">
+      <button
+        *ngFor="let item of jobCategory"
+        (click)="toggleJobType(item)"
+        [ngClass]="{ selected: selectedJobTypes.includes(item) }"
+      >
+        {{ item.jobType }}
+      </button>
+    </div>
+  </section>
+
+  <section class="job-listing">
+    <ng-container *ngIf="isLoading | async; else showJobListing">
+      <app-loader-spinner />
+    </ng-container>
+    <ng-template #showJobListing>
+      <div class="job-header" *ngIf="jobList?.length">
+        <h4>Jobs for you</h4>
+      </div>
+      <ng-container *ngIf="!isLoadingSearch; else elseTemplate">
+        <div class="job-listing-content">
+          <div *ngFor="let item of jobList.slice(start, end)" class="job-info">
+            <a routerLink="/job-details/{{ item.id }}">
+              <h2 class="job-title">{{ item.jobTitle | titlecase }}</h2>
+              <span class="company-name">{{ item.companyName }}</span>
+              <span class="company-location">{{ item.jobLocation }}</span>
+              <div class="job-desc">
+                <span class="workMode">{{ item.workMode | titlecase }}</span>
+                <span class="jobType">{{ item.jobType | titlecase }}</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <button
+          type="button"
+          *ngIf="jobList.length > 6"
+          (click)="showJobList()"
+        >
+          Show more Job
+        </button>
+      </ng-container>
+      <ng-template #elseTemplate> <app-loader-spinner /> </ng-template>
+    </ng-template>
+  </section>
 </section>

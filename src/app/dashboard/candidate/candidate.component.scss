@@ -1,0 +1,275 @@
+.candidate-container {
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .candidate-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin: 10px 0px;
+    .candidate-search {
+      position: relative;
+      width: 90%;
+      input {
+        color: #6d6d6d;
+        padding: 10px 40px;
+        font-size: 14px;
+        width: 100%;
+        font-weight: 400;
+        outline: none;
+        border: 1px solid #dddd;
+        border-radius: 25px;
+        ::placeholder {
+          font-size: 16px;
+        }
+      }
+      svg {
+        position: absolute;
+        top: 12px;
+        color: #b2b2b3;
+        left: 15px;
+      }
+    }
+
+    button {
+      padding: 11px;
+      width: 100px;
+      background-color: transparent;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      border: 1px solid #28a745;
+      color: #28a745;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #28a745;
+        color: white;
+      }
+    }
+  }
+  .candidate-table {
+    margin-top: 20px;
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      padding: 15px 12px;
+      font-size: 15px;
+      text-align: left;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    table th {
+      background-color: #fafafa;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      color: rgb(40, 40, 41);
+      padding-left: 10px;
+    }
+
+    tbody tr input:checked {
+      border: 1px solid blue;
+      ::after {
+        content: "";
+        opacity: 1;
+      }
+    }
+    tbody td {
+      font-size: 14px;
+      color: #585858;
+      padding: 15px;
+    }
+    .action {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+      .humburger-icon svg {
+        color: #dfdede;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+      }
+      .humburger-icon[ngbDropdownToggle]::after {
+        display: none !important;
+      }
+    }
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f8f9fd;
+  }
+  tbody tr:nth-child(odd) {
+    background-color: white !important;
+  }
+}
+
+.modal-header {
+  h5 {
+    font-size: 18px !important;
+  }
+  .closeModal-icon {
+    cursor: pointer;
+    float: right;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+.mocal-body {
+  tbody tr {
+    text-align: center;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f8f9fd;
+  }
+  tbody tr:nth-child(odd) {
+    background-color: white !important;
+  }
+}
+
+.work-history {
+  padding: 10px 20px;
+  margin-top: 20px 0px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+.education-history {
+  padding: 10px 20px;
+  margin-top: 20px 0px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+.skill-history {
+  padding: 10px 20px;
+  margin-top: 20px 0px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+.question {
+  padding: 10px 20px;
+  margin-top: 20px 0px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+.action-btn {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0px;
+  button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    background-color: transparent;
+  }
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  svg {
+    width: 20px !important;
+    height: 20px;
+  }
+}
+.interview-btn {
+  background-color: #28a745;
+  border-radius: 25px;
+  border: none;
+}
+.resume-btn,
+.coverLetter-btn {
+  background-color: #007bff;
+  border-radius: 25px;
+  border: none;
+}
+
+.form-group {
+  padding: 0px 10px;
+  font-size: 14px;
+  margin: 0px auto;
+  display: flex;
+  place-items: center;
+
+  width: 100%;
+  label {
+    font-weight: 500;
+    text-align: center;
+  }
+}
+
+.form-group div {
+  background: transparent;
+}
+
+.form-group div.form-control-static {
+  height: 100%;
+}
+
+.form-group div.control-label {
+  border-right: 2px solid #ffffff;
+}
+.form-group:nth-child(odd),
+.form-group.odd {
+  background: #f4f4f4;
+}
+
+.form-group:nth-child(even),
+.form-group.even {
+  background: #f9f9f9;
+}
+
+::ng-deep .modal-lg {
+  width: 600px;
+}
+
+input[type="checkbox"] {
+  accent-color: #28a745;
+}
+
+.ngb-dropdown-menu {
+  z-index: 1050 !important;
+  position: absolute !important;
+}

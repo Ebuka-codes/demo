@@ -1,0 +1,174 @@
+.sideBar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  overflow-y: auto;
+  position: fixed;
+  width: 252px;
+  background-color: white;
+}
+.side_one {
+  height: 100vh;
+}
+.logo {
+  width: 158px;
+  height: 32px;
+
+  opacity: 0px;
+}
+ul {
+  padding: 2px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 24.2px;
+}
+hr {
+  margin: 1.5rem 0;
+}
+li {
+  width: inherit;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.3rem;
+  a {
+    text-decoration: none;
+  }
+}
+.side-link {
+  padding: 0.85rem 1.3rem;
+  display: flex;
+  gap: 0.3rem;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 25px;
+  position: relative;
+}
+
+.side-link.active,
+.side.active:hover {
+  background-color: #28a745;
+  color: #ffffff;
+  transition: all 0.5s ease-in-out;
+}
+.active {
+  color: white !important;
+}
+
+.side-sink {
+  position: absolute;
+  width: auto;
+  height: 110px;
+  top: 38px;
+  left: 13px;
+  z-index: -1;
+}
+a {
+  color: #000000 !important;
+  font-size: 14px;
+}
+
+.side-inner a.active {
+  background-color: #f3f3f3;
+}
+
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sidebar-icon svg {
+  font-size: 30px;
+  color: #899bb1;
+  width: 17.19px;
+  height: 17.19px;
+}
+
+.side-link:hover,
+.side-link.active svg {
+  color: white;
+}
+.side-link svg {
+  color: #899bb1;
+}
+.dropdown {
+  justify-self: flex-end;
+  margin-right: 4px;
+}
+.dropdown svg {
+  width: 17.19px;
+  height: 17.19px;
+}
+.action {
+  margin-top: 100px;
+}
+.action ul {
+  cursor: pointer;
+}
+.action ul .message {
+  background-color: #f91212;
+  color: white;
+  width: 23px;
+  height: 23px;
+  text-align: center;
+  border-radius: 100%;
+  font-weight: 400;
+  font-size: 14px;
+}
+.action ul li {
+  padding: 10px 0px;
+  font-weight: 600;
+}
+.action svg {
+  width: 17.19px;
+  height: 17.19px;
+  color: #899bb1;
+}
+
+.logo-container {
+  display: inline;
+}
+
+.logo-container button {
+  display: none;
+  /* visibility: hidden; */
+}
+
+@media (max-width: 900px) {
+  .sideBar {
+    position: absolute;
+    background: #ffffff;
+    z-index: 10;
+    /* display: none; */
+  }
+
+  .showSidebar {
+    display: none;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-container img {
+    width: 104px;
+    height: 21px;
+  }
+
+  .logo-container button {
+    cursor: pointer;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: transparent;
+  }
+}

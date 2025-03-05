@@ -1,5 +1,0 @@
-<div *ngIf="isLoading | async" class="progress-bar"></div>
-<app-loader-spinner *ngIf="isLoading | async" />
-<ng-container *ngIf="!dataLoading">
-  <app-candidate-table [candidateData]="candidateData" />
-</ng-container>

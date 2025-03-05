@@ -1,0 +1,143 @@
+.corporate-container {
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  button {
+    padding: 11px;
+    width: 100px;
+    background-color: #28a745;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    border: none;
+  }
+  .corporate-table {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    h2 {
+      font-size: 22px;
+      background-color: white;
+      border-radius: 5px;
+    }
+    .corporate-table-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      margin: 10px 0px;
+      .corporate-table-search {
+        position: relative;
+        width: 90%;
+        input {
+          color: #6d6d6d;
+          padding: 10px 40px;
+          font-size: 14px;
+          width: 100%;
+          font-weight: 400;
+          outline: none;
+          border: 1px solid #dddd;
+          border-radius: 10px;
+          ::placeholder {
+            font-size: 16px;
+          }
+        }
+        svg {
+          position: absolute;
+          top: 12px;
+          color: #b2b2b3;
+          left: 15px;
+        }
+      }
+
+      button {
+        padding: 11px;
+        width: 100px;
+        background-color: #28a745;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        border: none;
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      padding: 15px 12px;
+      font-size: 15px;
+      text-align: left;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    table th {
+      background-color: #fafafa;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      color: rgb(40, 40, 41);
+      padding-left: 10px;
+    }
+
+    tbody tr input:checked {
+      border: 1px solid blue;
+      ::after {
+        content: "";
+        opacity: 1;
+      }
+    }
+    tbody td {
+      font-size: 14px;
+      color: #585858;
+      padding: 15px;
+    }
+    .action {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+      .humburger-icon svg {
+        color: #dfdede;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+      }
+      .humburger-icon[ngbDropdownToggle]::after {
+        display: none !important;
+      }
+    }
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f8f9fd;
+  }
+  tbody tr:nth-child(odd) {
+    background-color: white !important;
+  }
+}
+
+.ngb-dropdown-menu {
+  z-index: 1050 !important;
+  position: absolute !important;
+}

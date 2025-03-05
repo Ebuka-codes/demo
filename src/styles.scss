@@ -143,3 +143,79 @@ html body * {
 .mat-mdc-input-element {
   caret-color: black !important;
 }
+
+.dropdown-menu {
+  border: 1px solid #dfdede;
+  button,
+  a {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  a {
+    text-decoration: none;
+    color: rgb(14 13 13 / 59%);
+  }
+  .dropdown-item {
+    color: rgb(14 13 13 / 59%);
+
+    :focus,
+    :hover svg {
+      color: white;
+    }
+  }
+  :focus,
+  :hover {
+    color: white;
+    background-color: #28a745;
+  }
+}
+
+.accordion-button:focus,
+.accordion-button:active {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.accordion-button {
+  border: none !important;
+  background: #f9f9f9 !important;
+}
+.accordion-body {
+  ul {
+    border-bottom: 1px solid #eeee;
+    li {
+      padding: 5px 0px;
+    }
+
+    :nth-last-child(odd) {
+      border-bottom: none;
+    }
+  }
+}
+
+.ngb-dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+  color: #333; /* Default text color */
+  background-color: transparent; /* Default background */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover & Focus Effects */
+.ngb-dropdown-menu .dropdown-item:hover,
+.ngb-dropdown-menu .dropdown-item:focus {
+  background-color: #7856fffd; /* Background color on hover */
+  color: white; /* Text color on hover */
+}
+
+/* Change SVG color on hover */
+.ngb-dropdown-menu .dropdown-item:hover .svg,
+.ngb-dropdown-menu .dropdown-item:focus .svg {
+  fill: white; /* Change icon color on hover */
+}

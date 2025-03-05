@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
 import { Corporate, DetailsType, file, JobApplication, jobType } from './type';
 import { enviroments } from 'src/environments/enviorments';

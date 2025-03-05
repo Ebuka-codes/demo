@@ -116,9 +116,11 @@ export interface CandidateInfo {
   state: string;
   resume: string;
   coverLetter: string;
+
   jobDetail: {
     jobTitle: string;
     workMode: string;
     jobType: string;
+    employmentType: string;
   };
 }

@@ -1,0 +1,622 @@
+<div class="candidate-container">
+  <h2>Job Applicants</h2>
+  <div class="candidate-table">
+    <div class="candidate-header">
+      <div class="candidate-search">
+        <input
+          type="text"
+          placeholder="Search by job title.."
+          [(ngModel)]="searchText"
+          (ngModelChange)="handleSearch()"
+        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="#eeeeee"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          className="lucide lucide-search"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+      </div>
+      <div>
+        <button type="button">Filter</button>
+      </div>
+      <div>
+        <button type="button">Export</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th
+            style="
+              display: flex;
+              gap: 20px;
+              padding-left: 10px;
+              align-items: center;
+            "
+          >
+            <input
+              type="checkbox"
+              style="
+                border: 1px solid #eee;
+                width: 15px;
+                height: 15px;
+                border-radius: 5px;
+                margin-left: 6px;
+              "
+            />
+            Name
+          </th>
+          <th>Job Title</th>
+          <th>Job Type</th>
+          <th>Work Mode</th>
+          <th>Employment Type</th>
+          <th>Application Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of filteredData">
+          <td style="display: flex; gap: 20px; align-items: center">
+            <input
+              type="checkbox"
+              style="
+                border: 1px solid #eee;
+                width: 15px;
+                height: 15px;
+                border-radius: 5px;
+              "
+            />
+
+            {{ item?.name ? (item?.name | titlecase) : "N/A" }}
+          </td>
+
+          <td>
+            {{
+              item?.jobDetail?.jobTitle
+                ? (item?.jobDetail?.jobTitle | titlecase)
+                : "N/A"
+            }}
+          </td>
+          <td>
+            {{
+              item?.jobDetail?.jobType
+                ? (item?.jobDetail?.jobType | titlecase)
+                : "N/A"
+            }}
+          </td>
+          <td>
+            {{
+              item?.jobDetail?.workMode
+                ? (item?.jobDetail?.workMode | titlecase)
+                : "N/A"
+            }}
+          </td>
+          <td>
+            {{
+              item?.jobDetail?.employmentType
+                ? (item?.jobDetail?.employmentType | titlecase)
+                : "N/A"
+            }}
+          </td>
+
+          <td>{{ item?.createdAt }}</td>
+
+          <td>
+            <div class="action">
+              <div ngbDropdown class="d-inline-block" container="body">
+                <span
+                  class="humburger-icon"
+                  id="dropdownBasic1"
+                  ngbDropdownToggle
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                    />
+                  </svg>
+                </span>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button
+                    style="font-size: 14px"
+                    data-bs-toggle="modal"
+                    data-bs-target="#viewCandidateModal"
+                    ngbDropdownItem
+                    (click)="handleViewCandidate(item.id)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
+                    </svg>
+                    View
+                  </button>
+
+                  <button
+                    style="font-size: 14px"
+                    ngbDropdownItem
+                    *ngIf="item?.resume"
+                  >
+                    <a
+                      [href]="item?.resume"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                        /></svg
+                      >Resume
+                    </a>
+                  </button>
+                  <button
+                    style="font-size: 14px"
+                    *ngIf="item.coverLetter"
+                    ngbDropdownItem
+                  >
+                    <a
+                      [href]="item?.coverLetter"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                        />
+                      </svg>
+                      Cover letter
+                    </a>
+                  </button>
+                  <button style="font-size: 14px" ngbDropdownItem>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="4" y1="4" x2="20" y2="20"></line>
+                    </svg>
+
+                    Reject
+                  </button>
+                  <button style="font-size: 14px" ngbDropdownItem>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                      />
+                    </svg>
+                    Interview
+                  </button>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!filteredData?.length">
+          <td>No record found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  #myModal
+  id="viewCandidateModal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">View Candidate</h5>
+        <span
+          style="
+            cursor: pointer;
+            font-size: 12px;
+            background-color: #28a745;
+            border-radius: 100%;
+            color: white;
+            visibility: none;
+            width: 23px;
+            height: 23px;
+            margin-left: 400px;
+          "
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+
+      <div class="modal-body" *ngIf="viewData">
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Name</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.name | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Job Title</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.jobDetail?.jobTitle | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Job Type</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.jobDetail?.jobType | titlecase }}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Work Mode</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.jobDetail?.workMode | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Employment Type</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.jobDetail?.employmentType | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Email Address</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.email || "N/A" }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Phone Number</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.phone || "N/A" }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>State</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.state | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>City/Province</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{
+              viewData?.city ? (viewData?.city | titlecase) : "N/A"
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Address</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{
+              viewData?.address ? (viewData?.address | titlecase) : "N/A"
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Current Status</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ viewData?.jobDetail?.jobStatus | titlecase }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-history">
+        <div ngbAccordion>
+          <div ngbAccordionItem>
+            <h2 ngbAccordionHeader>
+              <button ngbAccordionButton>Work History</button>
+            </h2>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ul *ngFor="let item of viewData?.workHistories">
+                  <li><strong>Job Type</strong>: {{ item?.jobTitle }}</li>
+                  <li>
+                    <strong>Company Name</strong>: {{ item?.companyName }}
+                  </li>
+                  <li><strong>Start Date</strong>: {{ item?.startDate }}</li>
+
+                  <li><strong>End Date</strong>: {{ item?.endDate }}</li>
+                  <li>
+                    <strong>Job Description</strong> : {{ item.jobDescription }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="education-history">
+        <div ngbAccordion>
+          <div ngbAccordionItem>
+            <h2 ngbAccordionHeader>
+              <button ngbAccordionButton>Education</button>
+            </h2>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ul *ngFor="let item of viewData?.educationHistories">
+                  <li><strong>Degree </strong>: {{ item.degree }}</li>
+                  <li>
+                    <strong>institutionName</strong>: {{ item.institutionName }}
+                  </li>
+                  <li>
+                    <strong>Field of study</strong>: {{ item.fieldOfStudy }}
+                  </li>
+
+                  <li><strong>major</strong>: {{ item.major }}</li>
+                  <li>
+                    <strong>educationLevel</strong> : {{ item.educationLevel }}
+                  </li>
+
+                  <li><strong>Start Date</strong> : {{ item.startDate }}</li>
+
+                  <li><strong>End Date</strong> : {{ item.endDate }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-history">
+        <div ngbAccordion>
+          <div ngbAccordionItem>
+            <h2 ngbAccordionHeader>
+              <button ngbAccordionButton>Skill</button>
+            </h2>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ul *ngFor="let item of viewData?.skills">
+                  <li><strong>Skill Name</strong> : {{ item.skillName }}</li>
+                  <li>
+                    <strong>proficiency Level</strong> :
+                    {{ item.proficiencyLevel }}
+                  </li>
+                  <li>
+                    <strong>Year of Experience</strong> : {{ item.noOfYears }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="question">
+        <div ngbAccordion>
+          <div ngbAccordionItem>
+            <h2 ngbAccordionHeader>
+              <button ngbAccordionButton>Questions</button>
+            </h2>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ul *ngFor="let item of viewData?.questionAnswers">
+                  <li>
+                    <strong>Descriptions</strong> : {{ item.description }}
+                  </li>
+                  <li *ngFor="let item of viewData?.questionAnswers.options">
+                    <strong>Answer</strong> : {{ item.description }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-btn">
+        <div class="resume-btn">
+          <button *ngIf="viewData?.resume">
+            <a
+              [href]="viewData?.resume"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                />
+              </svg>
+              Resume
+            </a>
+          </button>
+        </div>
+        <div class="coverLetter-btn">
+          <button *ngIf="viewData?.coverLetter">
+            <a
+              [href]="viewData?.coverLetter"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                />
+              </svg>
+              Cover letter
+            </a>
+          </button>
+        </div>
+
+        <div class="interview-btn">
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+            Call for interwiew
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

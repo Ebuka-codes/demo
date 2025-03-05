@@ -11,21 +11,40 @@ import { jobType } from 'src/app/shared/type';
 })
 export class HomeComponent implements OnInit {
   jobList!: jobType[];
-  jobCategory!: jobType[];
+  jobCategory!: any[];
   isLoading!: Observable<boolean>;
   isLoadingSearch: boolean = false;
   error$!: Observable<any>;
   searchInput: string = '';
   private notyf = new Notyf();
+  selectedJobTypes: string[] = [];
+  start: number = 0;
+  end: number = 6;
+
   constructor(private _jobService: JobRecruitService) {}
   ngOnInit(): void {
     this._jobService.getJobList().subscribe((data) => {
       this.jobList = data;
+      console.log(this.jobList);
       this.jobCategory = this.jobList?.filter((job: any) => job.jobType);
+      console.log(this.jobCategory);
     });
     this.isLoading = this._jobService.isLoading$;
   }
 
+  searchJob() {
+    console.log('working');
+    if (this.searchInput) {
+      this.onSearchInput(this.searchInput);
+    }
+  }
+
+  handleEnter(value: any) {
+    if (this.searchInput) {
+      this.searchInput = value;
+      this.onSearchInput(this.searchInput);
+    }
+  }
   onSearchInput(value: any) {
     this.searchInput = value;
     this.isLoadingSearch = true;
@@ -61,5 +80,18 @@ export class HomeComponent implements OnInit {
         this.isLoadingSearch = false;
       }
     });
+  }
+
+  toggleJobType(type: string) {
+    const index = this.selectedJobTypes.indexOf(type);
+    if (index !== -1) {
+      this.selectedJobTypes.splice(index, 1);
+    } else {
+      this.selectedJobTypes.push(type);
+    }
+    this.onFilterChange([...this.selectedJobTypes]);
+  }
+  showJobList() {
+    this.end = this.end * 2;
   }
 }

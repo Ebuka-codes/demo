@@ -1,0 +1,15 @@
+<div *ngIf="isLoading | async" class="progress-bar"></div>
+<div class="layout">
+  <app-sidebar></app-sidebar>
+  <div>
+    <app-header></app-header>
+    <main class="outlet">
+      <div class="spinner">
+        <div class="loader"></div>
+      </div>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  <!-- <app-header></app-header>
+  <router-outlet></router-outlet> -->
+</div>
