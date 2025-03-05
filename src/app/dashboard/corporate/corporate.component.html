@@ -311,12 +311,12 @@
               </div>
             </div>
 
-            <button type="submit" class="submit-btn" [disabled]="isLoadingLogo">
+            <button type="submit" class="submit-btn">
               <ng-container *ngIf="isSubmitted; else showLoader">
                 <span class="mini-loader-spinner"></span>
               </ng-container>
               <ng-template #showLoader>
-                <span>{{ isLoading ? "Please wait.." : "Submit" }}</span>
+                <span>Submit</span>
               </ng-template>
             </button>
           </form>
