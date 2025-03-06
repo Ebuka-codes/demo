@@ -11,6 +11,7 @@ import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { jobType } from 'src/app/shared/type';
 import { Notyf } from 'notyf';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-apply',
   templateUrl: './apply.component.html',
@@ -29,7 +30,7 @@ export class ApplyComponent implements OnInit {
   isSubmitting: boolean = false;
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
-  isLoading: boolean = false;
+  isLoading!: Observable<any>;
   isLoadingQuestion: boolean = false;
   data!: jobType;
   id: string | null = '';
@@ -260,7 +261,8 @@ export class ApplyComponent implements OnInit {
     }
   }
   convertResumeToBase64(file: File, name: string): void {
-    this.isLoading = true;
+    this._jobService.setLoading(true);
+    this.isLoading = this._jobService.isLoading$;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -272,7 +274,7 @@ export class ApplyComponent implements OnInit {
         (response: any) => {
           if (response.valid && response.data) {
             this.resumeValue = response.data;
-            this.isLoading = false;
+            this._jobService.setLoading(false);
           }
         },
         (err) => {
@@ -282,13 +284,14 @@ export class ApplyComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.selectedResumeFile = '';
-          this.isLoading = false;
+          this._jobService.setLoading(false);
         }
       );
     };
   }
   convertCoverLetterFileToBase64(file: File, name: string): void {
-    this.isLoading = true;
+    this._jobService.setLoading(true);
+    this.isLoading = this._jobService.isLoading$;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -300,7 +303,7 @@ export class ApplyComponent implements OnInit {
         (response: any) => {
           if (response.valid && response.data) {
             this.coverLetterValue = response.data;
-            this.isLoading = false;
+            this._jobService.setLoading(false);
           }
         },
         (err) => {
@@ -310,7 +313,7 @@ export class ApplyComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.selectedCoverLetterFile = '';
-          this.isLoading = false;
+          this._jobService.setLoading(false);
         }
       );
     };
@@ -327,8 +330,9 @@ export class ApplyComponent implements OnInit {
 
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
-    console.log(jobApplication);
-    this.isLoading = true;
+    this._jobService.setLoading(true);
+    this.isLoading = this._jobService.getLoading();
+    this.isSubmitting = true;
     this._jobService.submitJobApplication(jobApplication).subscribe({
       next: () => {
         this.notyf.success({
@@ -336,7 +340,7 @@ export class ApplyComponent implements OnInit {
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
-        this.isLoading = false;
+        this.isSubmitting = false;
         this.personalFormGroup.reset();
         this.experienceFormGroup.reset();
         this.questionsFormGroup.reset();
@@ -346,6 +350,8 @@ export class ApplyComponent implements OnInit {
         this.educationHistories = [];
         this.selectedResumeFile = null;
         this.selectedCoverLetterFile = null;
+        this._jobService.setLoading(false);
+        this.isLoading = this._jobService.getLoading();
       },
       error: (error) => {
         this.notyf.error({
@@ -353,7 +359,9 @@ export class ApplyComponent implements OnInit {
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
-        this.isLoading = false;
+        this.isSubmitting = false;
+        this._jobService.setLoading(false);
+        this.isLoading = this._jobService.getLoading();
       },
     });
   }

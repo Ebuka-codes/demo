@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
@@ -10,7 +11,6 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Modal } from 'bootstrap';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Notyf } from 'notyf';
-import { map, startWith } from 'rxjs';
 import {
   DetailsType,
   jobType,
@@ -19,6 +19,7 @@ import {
 } from 'src/app/shared/type';
 import { DashboardService } from '../dashboard.service';
 import * as bootstrap from 'bootstrap';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-create-job',
@@ -33,6 +34,13 @@ export class CreateJobComponent {
   @ViewChild('newJobSkill') newJobSkill!: ElementRef<HTMLInputElement>;
   @ViewChild('myQuestionModal') modalElement!: ElementRef;
   @ViewChild(QuillEditorComponent) quillEditor!: QuillEditorComponent;
+
+  jobTitleOption!: Observable<any[]>;
+  jobLocationOption!: Observable<any[]>;
+  jobEmploymentOption!: Observable<any[]>;
+  jobSkillOption!: Observable<any[]>;
+  jobTypeOption!: Observable<any[]>;
+
   modalInstance!: Modal;
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   selectedWorkmode: number | null = null;
@@ -56,7 +64,7 @@ export class CreateJobComponent {
   filteredOptions: any;
   data: Array<DetailsType> = [];
   jobTitleData: any[] = [];
-  jobEmploymentData: any[] = [];
+  jobEmploymentData: any = [];
   jobTypeData: any[] = [];
   jobLocationData: any[] = [];
   jobSkillData: any[] = [];
@@ -65,12 +73,16 @@ export class CreateJobComponent {
   private notyf = new Notyf();
   questionType = new Array<KeyValuePair>(
     { key: 'TEXT', value: 'Text' },
-    { key: 'DROPDOWN', value: 'Dropdown' }
+    { key: 'DROPDOWN', value: 'Dropdown' },
+    { key: 'DATE', value: 'Date' }
   );
   questionTypeOptions: Array<QuestionTypeOptions> = [];
   questionTypeDropdown: Array<QuestionTypeOptions> = [];
   selectedSkills: string[] = [];
   isEndDate: boolean = true;
+  text: string = '';
+  isEditOpen: boolean = false;
+  editId: string = '';
 
   constructor(private fb: FormBuilder, private jobService: DashboardService) {
     this.form = this.fb.group({
@@ -107,23 +119,55 @@ export class CreateJobComponent {
     }
     this.getJobDetailByType();
     this.getAllQuestion();
-
-    this.filteredOptions = this.form.get('jobTitle')?.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value || ''))
-    );
     this.jobService.setLoading(false);
+  }
+
+  filterForm() {
+    this.jobTitleOption = this.form.controls['jobTitle'].valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || '', this.jobTitleData))
+    );
+
+    this.jobTypeOption = this.form.controls['jobType'].valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || '', this.jobTypeData))
+    );
+
+    this.jobLocationOption = this.form.controls[
+      'jobLocation'
+    ].valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || '', this.jobLocationData))
+    );
+    this.jobEmploymentOption = this.form.controls[
+      'employmentType'
+    ].valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || '', this.jobEmploymentData))
+    );
+
+    this.jobSkillOption = this.form.controls['jobSkill'].valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || '', this.jobSkillData))
+    );
+  }
+
+  // validateOption(control: FormControl) {
+  //   return this.options.includes(control.value)
+  //     ? null
+  //     : { invalidOption: true };
+  // }
+
+  private _filter(value: string, type: any): string[] {
+    const filterValue = value.toLowerCase();
+    console.log(filterValue);
+    return type.filter((option: any) =>
+      option?.description.toLowerCase().includes(filterValue)
+    );
   }
 
   ngAfterViewInit(): void {
     this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
-  }
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    console.log(this.jobTitleData);
-    return this.jobTitleData.filter((option) =>
-      option?.toLowerCase().includes(filterValue)
-    );
   }
 
   get jobTitle() {
@@ -209,7 +253,7 @@ export class CreateJobComponent {
         }
       },
       error: (error: any) => {
-        this.notyf.error('Failed to get question options');
+        this.notyf.error('Error occur!');
       },
     });
   }
@@ -235,9 +279,11 @@ export class CreateJobComponent {
           this.jobTitleData = this.data.filter(
             (item) => item.type.trim() === 'jobTitle'
           );
+
           this.jobLocationData = this.data?.filter(
             (item) => item.type.trim() === 'jobLocation'
           );
+
           this.jobEmploymentData = this.data?.filter(
             (item) => item.type.trim() === 'employmentType'
           );
@@ -245,12 +291,14 @@ export class CreateJobComponent {
           this.jobTypeData = this.data?.filter(
             (item) => item.type.trim() === 'jobType'
           );
+
           this.jobSkillData = this.data?.filter(
             (item) => item.type.trim() === 'jobSkill'
           );
 
           this.isLoading = false;
         }
+        this.filterForm();
       },
       error: (error: any) => {
         console.log('error', error.message);
@@ -335,7 +383,7 @@ export class CreateJobComponent {
   }
   createNewJob(newJob: jobType) {
     this.loading = true;
-    this.jobService.setLoading(true);
+    // this.jobService.setLoading(true);
     this.jobService.createJob(newJob).subscribe({
       next: () => {
         this.loading = false;
@@ -347,7 +395,8 @@ export class CreateJobComponent {
         });
         this.form.reset();
         this.isSubmitted = false;
-        this.jobService.setLoading(false);
+        // this.jobService.setLoading(false);
+        this.form.get('jobDescription')?.setValue(' ');
       },
       error: (error: any) => {
         this.loading = false;
@@ -360,7 +409,7 @@ export class CreateJobComponent {
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
-        this.jobService.setLoading(false);
+        // this.jobService.setLoading(false);
       },
     });
   }
@@ -428,24 +477,23 @@ export class CreateJobComponent {
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
     if (this.form.valid) {
-      console.log(this.form.value);
-      // this.createNewJob({
-      //   ...this.form.value,
-      //   startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
-      //     .toString()
-      //     .padStart(2, '0')}-${startDate
-      //     .getDate()
-      //     .toString()
-      //     .padStart(2, '0')}`,
-      //   endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
-      //     .toString()
-      //     .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-      //   jobStatus: 'Pending',
-      //   requiredSkills: this.selectedSkills,
-      //   employmentType: this.form.get('employmentType')?.value.toUpperCase(),
-      //   jobSalary: Number(this.form.get('jobSalary')?.value),
-      // });
-      // this.form.get('jobDescription')?.setValue('');
+      this.createNewJob({
+        ...this.form.value,
+        startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}-${startDate
+          .getDate()
+          .toString()
+          .padStart(2, '0')}`,
+        endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+        jobStatus: 'Pending',
+        requiredSkills: this.selectedSkills,
+        employmentType: this.form.get('employmentType')?.value.toUpperCase(),
+        jobSalary: Number(this.form.get('jobSalary')?.value),
+      });
+      this.form.get('jobDescription')?.setValue(' ');
     } else {
       console.log('please check your form!');
       this.isSubmitted = true;
@@ -458,5 +506,68 @@ export class CreateJobComponent {
     } else {
       this.isEndDate = false;
     }
+  }
+
+  handleEdit(event: any, id: string, value: string) {
+    event.stopPropagation();
+    this.text = value;
+    this.editId = id;
+    this.isEditOpen = true;
+  }
+  editData(value: string, type: string) {
+    if (this.editId) {
+      this.jobService.setLoading(true);
+      this.jobService
+        .editQueryDetails(this.editId, { description: value, type: type })
+        .subscribe(
+          () => {
+            this.jobService.setLoading(false);
+            this.getJobDetailByType();
+            this.notyf.success({
+              message: 'Edited successfully',
+              duration: 4000,
+              position: { x: 'right', y: 'top' },
+            });
+            this.text = '';
+            this.isEditOpen = false;
+            this.form.get(`${type}`)?.setValue('');
+          },
+          (error) => {
+            this.notyf.error({
+              message: 'Error Occured',
+              duration: 4000,
+              position: { x: 'right', y: 'top' },
+            });
+            this.text = '';
+            this.isEditOpen = false;
+          }
+        );
+    }
+  }
+  handleDelete(id: string, type: string, value: string) {
+    this.jobService.setLoading(true);
+    this.jobService.deleteQueryDetails(id).subscribe(
+      () => {
+        this.jobService.setLoading(false);
+        this.getJobDetailByType();
+        this.notyf.success({
+          message: 'Deleted successfully',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.form.get(`${type}`)?.setValue('');
+        this.form.get('requiredSkills')?.setValue('');
+        this.text = '';
+      },
+      (error) => {
+        this.notyf.error({
+          message: 'Error Occured',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.form.get(type)?.setValue('');
+        this.jobService.setLoading(false);
+      }
+    );
   }
 }

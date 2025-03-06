@@ -36,7 +36,7 @@ export class CorporateComponent implements OnInit {
   isLoading: boolean = false;
   filteredData: Array<any> = [];
   isLoadingLogo: boolean = false;
-  constructor(private fb: FormBuilder, private jobService: DashboardService) {
+  constructor(private fb: FormBuilder, public jobService: DashboardService) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
@@ -146,16 +146,15 @@ export class CorporateComponent implements OnInit {
   }
   getCorporate() {
     this.jobService.setLoading(true);
+    this.submitLoading = true;
     this.jobService.getCorporate().subscribe({
       next: (response: any) => {
-        this.submitLoading = false;
         if (response) {
           this.data = response;
           this.filteredData = [...this.data];
-
-          console.log(this.filteredData);
+          this.submitLoading = false;
+          this.jobService.setLoading(false);
         }
-        this.jobService.setLoading(false);
       },
 
       error: () => {

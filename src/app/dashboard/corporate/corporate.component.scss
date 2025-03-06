@@ -20,7 +20,7 @@
     padding: 10px 20px;
     margin-bottom: 50px;
     margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     h2 {
       font-size: 22px;
       background-color: white;
@@ -186,10 +186,6 @@
       }
     }
 
-    .loader-input-bg {
-      background-color: #eeeeee24 !important;
-    }
-
     small {
       color: rgba(216, 5, 5, 0.89);
       font-size: 13px;
@@ -255,6 +251,16 @@ input[type="checkbox"] {
   img {
     color: white;
   }
+}
+.close-btn {
+  cursor: pointer;
+  font-size: 12px;
+  background-color: #28a745;
+  border-radius: 100%;
+  color: white;
+  cursor: pointer;
+  margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+  padding: 2px;
 }
 .ngb-dropdown-menu {
   z-index: 1050 !important;

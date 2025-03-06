@@ -76,12 +76,12 @@
         text-align: center;
         border: none;
         cursor: pointer;
-        background-color: #1c73e8;
+        background-color: #28a745;
         color: #ffffff;
         &:hover,
         :focus {
           box-shadow: #0000004d 0 2px 6px;
-          background-color: #2661bd;
+          background-color: #28a745;
           outline: none;
         }
       }
@@ -91,5 +91,8 @@
       font-size: 14px;
       margin: 5px 0px;
     }
+  }
+  input[type]:checked {
+    accent-color: #28a745;
   }
 }

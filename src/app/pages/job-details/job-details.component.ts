@@ -20,10 +20,10 @@ export class JobDetailsComponent implements OnInit {
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
   constructor(
-    private _jobService: JobRecruitService,
+    private jobService: JobRecruitService,
     private routes: ActivatedRoute,
     private navigateRoute: Router,
-    private location: Location
+    private loaction: Location
   ) {}
   ngOnInit(): void {
     this.routes.params.subscribe((params) => {
@@ -34,7 +34,7 @@ export class JobDetailsComponent implements OnInit {
   }
   getJobDetailsById(id: string) {
     this.isLoading = true;
-    this._jobService.getJobDetailsById(id).subscribe({
+    this.jobService.getJobDetailsById(id).subscribe({
       next: (response) => {
         if (response.valid && response.data) {
           this.data = response.data;
@@ -48,15 +48,12 @@ export class JobDetailsComponent implements OnInit {
     });
   }
   handleApplyJob() {
-    this._jobService.setJobDetailId(
+    this.jobService.setJobDetailId(
       this.data?.id !== undefined ? this.data?.id : ''
     );
     this.navigateRoute.navigateByUrl('/auth/login', { replaceUrl: true });
   }
   handleBack() {
-    this.navigateRoute.navigateByUrl(
-      `/job/apply/${this._jobService.getJobDetailId()}`,
-      { replaceUrl: true }
-    );
+    this.loaction.back();
   }
 }

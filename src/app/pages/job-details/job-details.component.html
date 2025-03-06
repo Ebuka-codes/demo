@@ -1,6 +1,7 @@
 <section>
   <div *ngIf="isLoading" class="progress-bar"></div>
-  <div class="job-detail-container" *ngIf="!isLoading && !errorMessage">
+  <app-loader-spinner *ngIf="isLoading" />
+  <div class="job-detail-container" *ngIf="!isLoading">
     <div class="job-nav">
       <span>
         <a (click)="handleBack()" class="d-flex items-center">

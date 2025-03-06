@@ -82,7 +82,7 @@
         cursor: pointer;
         margin: 15px;
         border: 1px solid #ddd;
-        border-radius: 0.5rem;
+        border-radius: 25px;
         padding: 10px 15px;
         background: transparent;
         &:hover,
@@ -125,7 +125,7 @@
     .ai-btn {
       background-color: #eeeeee59;
       border: 0.0625rem solid #0000;
-      border-radius: 0.5rem;
+      border-radius: 25px;
       box-shadow: none;
       color: #28a745;
       cursor: pointer;
@@ -169,28 +169,47 @@
         cursor: not-allowed;
       }
     }
-  }
 
-  ::ng-deep .mat-mdc-form-field-infix {
-    input {
-      padding: 0 !important;
-      border: none !important;
-      height: auto !important;
-    }
-
-    input .addInput {
-      color: #6d6d6d;
-      padding: 5px 10px;
-      text-overflow: ellipsis;
-      font-size: 14px;
-      font-weight: 400;
-      outline: none;
-      border: 1px solid #dddd !important;
-      border-radius: 5px !important;
-      width: 100% !important;
-      ::placeholder {
-        font-size: 14px;
+    ::ng-deep .mat-mdc-form-field-infix {
+      input {
+        padding: 0 !important;
+        border: none !important;
+        height: auto !important;
       }
+
+      input .addInput {
+        color: #6d6d6d;
+        padding: 5px 10px;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        font-weight: 400;
+        outline: none;
+        border: 1px solid #dddd !important;
+        border-radius: 5px !important;
+        width: 100% !important;
+        ::placeholder {
+          font-size: 14px;
+        }
+      }
+    }
+    .close-btn {
+      cursor: pointer;
+      font-size: 12px;
+      background-color: #28a745;
+      border-radius: 100%;
+      color: white;
+      cursor: pointer;
+      margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+      padding: 2px;
+    }
+  }
+  .auto-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }
@@ -216,4 +235,11 @@
   h5 {
     font-size: 18px;
   }
+}
+
+mat-option {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }

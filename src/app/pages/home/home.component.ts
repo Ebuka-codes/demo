@@ -25,7 +25,6 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this._jobService.getJobList().subscribe((data) => {
       this.jobList = data;
-      console.log(this.jobList);
       this.jobCategory = this.jobList?.filter((job: any) => job.jobType);
       console.log(this.jobCategory);
     });
@@ -33,7 +32,6 @@ export class HomeComponent implements OnInit {
   }
 
   searchJob() {
-    console.log('working');
     if (this.searchInput) {
       this.onSearchInput(this.searchInput);
     }

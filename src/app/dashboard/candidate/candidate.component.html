@@ -255,7 +255,10 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="!filteredData?.length">
+        <tr *ngIf="isLoading | async">
+          <td>Loading...</td>
+        </tr>
+        <tr *ngIf="!(jobService.isLoading$ | async) && !filteredData?.length">
           <td>No record found</td>
         </tr>
       </tbody>
@@ -275,26 +278,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">View Candidate</h5>
-        <span
-          style="
-            cursor: pointer;
-            font-size: 12px;
-            background-color: #28a745;
-            border-radius: 100%;
-            color: white;
-            visibility: none;
-            width: 23px;
-            height: 23px;
-            margin-left: 400px;
-          "
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
+        <span class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
             class="size-6"
+            style="width: 20px"
           >
             <path
               fill-rule="evenodd"
@@ -314,7 +304,9 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>{{ viewData?.name | titlecase }}</span>
+            <span>{{
+              viewData?.name ? (viewData?.name | titlecase) : "N/A"
+            }}</span>
           </div>
         </div>
 
@@ -397,7 +389,9 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>{{ viewData?.state | titlecase }}</span>
+            <span>{{
+              viewData?.state ? (viewData?.state | titlecase) : "N/A"
+            }}</span>
           </div>
         </div>
 
@@ -533,11 +527,26 @@
               <div ngbAccordionBody>
                 <ul *ngFor="let item of viewData?.questionAnswers">
                   <li>
-                    <strong>Descriptions</strong> : {{ item.description }}
+                    <strong>Question</strong> :
+                    {{ item.questionOption.description }}
                   </li>
-                  <li *ngFor="let item of viewData?.questionAnswers.options">
-                    <strong>Answer</strong> : {{ item.description }}
-                  </li>
+
+                  <ng-container
+                    *ngIf="item.questionOption.questionType === 'DROPDOWN'"
+                    ><li
+                      *ngFor="
+                        let item of viewData?.questionAnswers.questionOption
+                          .options
+                      "
+                    >
+                      <strong>Answer</strong> : {{ item }}
+                    </li>
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="item.questionOption.questionType === 'TEXT'"
+                    ><li><strong>Answer</strong> : {{ item.answer }}</li>
+                  </ng-container>
                 </ul>
               </div>
             </div>

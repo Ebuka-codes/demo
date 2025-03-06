@@ -66,9 +66,9 @@
                 margin-left: 6px;
               "
             />
-            Name
+            Corporate Name
           </th>
-          <th>Name</th>
+
           <th>Email</th>
           <th>Address</th>
           <th>Phone</th>
@@ -89,14 +89,12 @@
               "
             />
 
-            {{ item?.name | titlecase }}
+            {{ item?.name ? (item?.name | titlecase) : "N/A" }}
           </td>
-
-          <td>{{ item.name ? (item.name | titlecase) : "N/A" }}</td>
-          <td>{{ item.address || "N/A" }}</td>
-          <td>{{ item.email || "N/A" }}</td>
-          <td>{{ item.phone || "N/A" }}</td>
-          <td>{{ item.hmCode || "N/A" }}</td>
+          <td>{{ item?.email || "N/A" }}</td>
+          <td>{{ item?.address || "N/A" }}</td>
+          <td>{{ item?.phone || "N/A" }}</td>
+          <td>{{ item?.hmCode || "N/A" }}</td>
 
           <td>
             <div class="action">
@@ -177,7 +175,10 @@
           </td>
         </tr>
 
-        <tr *ngIf="!filteredData.length">
+        <tr *ngIf="jobService.isLoading$ | async">
+          <td>Loading...</td>
+        </tr>
+        <tr *ngIf="!(jobService.isLoading$ | async) && !filteredData?.length">
           <td>No record found</td>
         </tr>
       </tbody>
@@ -197,28 +198,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Create Candidate</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Create Corporate</h5>
 
-        <span
-          style="
-            cursor: pointer;
-            font-size: 12px;
-            background-color: #28a745;
-            border-radius: 100%;
-            color: white;
-            visibility: none;
-            width: 23px;
-            height: 23px;
-            margin-left: 267px;
-          "
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
+        <span class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
             class="size-6"
+            style="width: 20px"
           >
             <path
               fill-rule="evenodd"
@@ -312,7 +300,7 @@
             </div>
 
             <button type="submit" class="submit-btn">
-              <ng-container *ngIf="isSubmitted; else showLoader">
+              <ng-container *ngIf="submitLoading; else showLoader">
                 <span class="mini-loader-spinner"></span>
               </ng-container>
               <ng-template #showLoader>

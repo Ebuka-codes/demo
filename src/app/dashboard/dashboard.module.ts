@@ -19,7 +19,6 @@ import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from './components/ui/header/header.component';
 import { ComfirmDeleteModalComponent } from './components/ui/comfirm-delete-modal/comfirm-delete-modal.component';
 import { CorporateComponent } from './corporate/corporate.component';
-import { JobComponent } from './jobs/job.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { CreateJobComponent } from './create-job/create-job.component';
 import { ViewCandidateModalComponent } from './components/ui/view-candidate-modal/view-candidate-modal.component';
@@ -33,7 +32,6 @@ import { CorporateListComponent } from './corporate-list/corporate-list.componen
     SidebarComponent,
     ComfirmDeleteModalComponent,
     CorporateComponent,
-    JobComponent,
     CandidateComponent,
     CreateJobComponent,
     ViewCandidateModalComponent,

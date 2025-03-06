@@ -1,4 +1,4 @@
-<div *ngIf="isLoading" class="progress-bar"></div>
+<div *ngIf="isLoading | async" class="progress-bar"></div>
 <div class="apply-container">
   <form>
     <mat-horizontal-stepper>
@@ -105,74 +105,6 @@
         </div>
       </mat-step>
 
-      <!-- application question -->
-      <mat-step [stepControl]="questionsFormGroup">
-        <ng-container *ngIf="data?.questionOptions?.length; else showQuestion">
-          <div class="questions">
-            <div class="question-header">
-              <h2 class="question-header__title">Application Questions</h2>
-              <p>Please answer the following questions.</p>
-            </div>
-            <div class="question-content">
-              <form action="" [formGroup]="questionsFormGroup">
-                <ng-container *ngIf="!isLoadingQuestion; else showQuestion">
-                  <div *ngFor="let item of data?.questionOptions" class="group">
-                    <label for="question">{{ item.description }}</label>
-                    <mat-form-field>
-                      <input
-                        *ngIf="item.questionType === 'TEXT'"
-                        matInput
-                        [formControlName]="item.id"
-                      />
-
-                      <input
-                        *ngIf="item.questionType === 'DATE'"
-                        matInput
-                        [formControlName]="item.id"
-                        [matDatepicker]="picker"
-                        readonly
-                      />
-                      <mat-datepicker-toggle
-                        *ngIf="item.questionType === 'DATE'"
-                        matSuffix
-                        [for]="picker"
-                      ></mat-datepicker-toggle>
-                      <mat-datepicker #picker></mat-datepicker>
-
-                      <mat-select
-                        *ngIf="item.questionType === 'DROPDOWN'"
-                        [formControlName]="item.id"
-                      >
-                        <mat-option
-                          *ngFor="let option of item.options"
-                          [value]="option"
-                        >
-                          {{ option }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </ng-container>
-                <ng-template #showQuestion>
-                  <p>Loading Question...</p>
-                </ng-template>
-              </form>
-            </div>
-          </div>
-          <div class="page-btn">
-            <button class="prev" mat-button matStepperPrevious type="button">
-              Back
-            </button>
-            <button class="next" mat-button matStepperNext type="button">
-              Next
-            </button>
-          </div>
-        </ng-container>
-        <ng-template #showQuestion>
-          <span class="mt-4"> Application question is empty</span>
-        </ng-template>
-      </mat-step>
-
       <!-- work and experience -->
       <mat-step [stepControl]="experienceFormGroup">
         <div class="work-info">
@@ -236,13 +168,27 @@
                         <span>
                           <h5 class="modal-title">Add Work History</h5>
                         </span>
+
                         <span
-                          class="btn-close"
-                          style="cursor: pointer"
+                          class="close-btn"
                           data-bs-dismiss="modal"
                           aria-label="Close"
                           (click)="resetWorkHistoryForm()"
-                        ></span>
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="size-6"
+                            style="width: 20px"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
                       </div>
                       <div class="modal-body">
                         <div class="group">
@@ -405,13 +351,27 @@
                         <span>
                           <h5 class="modal-title">Add Education</h5>
                         </span>
+
                         <span
-                          class="btn-close"
-                          style="cursor: pointer"
+                          class="close-btn"
                           data-bs-dismiss="modal"
                           aria-label="Close"
                           (click)="resetEducationHistoryForm()"
-                        ></span>
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="size-6"
+                            style="width: 20px"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
                       </div>
 
                       <div class="modal-body">
@@ -591,13 +551,27 @@
                           <span>
                             <h5 class="modal-title">Add Skill</h5>
                           </span>
+
                           <span
-                            class="btn-close"
-                            style="cursor: pointer"
+                            class="close-btn"
                             data-bs-dismiss="modal"
                             aria-label="Close"
                             (click)="resetSkillForm()"
-                          ></span>
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              class="size-6"
+                              style="width: 20px"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </span>
                         </div>
                         <div class="modal-body">
                           <div class="group">
@@ -684,8 +658,7 @@
         </div>
       </mat-step>
 
-      <!-- supporting-doc -->
-      <mat-step [stepControl]="supportingFormGroup">
+      <mat-step>
         <form action="" [formGroup]="supportingFormGroup">
           <div class="supporting-doc">
             <div class="supporting-doc__header">
@@ -694,119 +667,183 @@
             </div>
             <div class="supporting-doc__content">
               <div>
-                <ng-container *ngIf="!selectedResumeFile; else elseTemplate">
-                  <div>
-                    <button
-                      class="supporting-btn"
-                      type="button"
-                      (click)="triggerFileInput()"
+                <div>
+                  <button
+                    class="supporting-btn"
+                    type="button"
+                    [disabled]="selectedResumeFile"
+                    (click)="triggerFileInput()"
+                  >
+                    <span> UPLOAD RESUME</span></button
+                  ><label class="visually-hidden" for="resume"
+                    >UPLOAD RESUME/CV</label
+                  ><input
+                    #resumeInput
+                    id="resumeInput"
+                    class="visually-hidden"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    (change)="onFileChange($event)"
+                  />
+                </div>
+                <div
+                  style="margin: 10px 0px"
+                  [style.visibility]="selectedResumeFile ? 'visible' : 'hidden'"
+                >
+                  <span
+                    style="
+                      display: flex;
+                      justify-content: space-around;
+                      align-items: center;
+                    "
+                  >
+                    <span style="color: black"
+                      >{{ selectedResumeFile | slice : 0 : 20 }}...</span
                     >
-                      <span> UPLOAD RESUME</span></button
-                    ><label class="visually-hidden" for="resume"
-                      >UPLOAD RESUME/CV</label
-                    ><input
-                      #resumeInput
-                      id="resumeInput"
-                      class="visually-hidden"
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      (change)="onFileChange($event)"
-                    />
-                  </div>
-                </ng-container>
-                <ng-template #elseTemplate>
-                  <div class="supporting-upload-file">
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                        />
-                      </svg>
-                      <span style="color: black; margin: 10px 0px">{{
-                        selectedResumeFile
-                      }}</span>
-                      <button (click)="handleRemoveResumeFile()">Remove</button>
-                    </span>
-                  </div>
-                </ng-template>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; height: 20px"
+                      (click)="handleRemoveResumeFile()"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </span>
+                </div>
               </div>
 
               <div>
-                <ng-container
-                  *ngIf="!selectedCoverLetterFile; else showCoverLetter"
+                <div>
+                  <button
+                    class="supporting-btn"
+                    type="button"
+                    [disabled]="selectedCoverLetterFile"
+                    (click)="triggerCoverInput()"
+                  >
+                    <span>ADD COVER LETTER</span></button
+                  ><label class="visually-hidden" for="coverletter"
+                    >ADD COVER LETTER<</label
+                  ><input
+                    #coverInput
+                    id="coverLetter"
+                    class="visually-hidden"
+                    type="file"
+                    accept=".pdf,.doc,.docx,.txt,.rtf"
+                    (change)="onCoverLetterFileChange($event)"
+                    accept=".pdf,.doc,.docx"
+                  />
+                </div>
+
+                <div
+                  style="margin: 10px 0px"
+                  [style.visibility]="
+                    selectedCoverLetterFile ? 'visible' : 'hidden'
+                  "
                 >
-                  <div>
-                    <button
-                      class="supporting-btn"
-                      type="button"
-                      (click)="triggerCoverInput()"
+                  <span
+                    style="
+                      display: flex;
+                      justify-content: space-around;
+                      align-items: center;
+                    "
+                  >
+                    <span style="color: black"
+                      >{{ selectedCoverLetterFile | slice : 0 : 20 }}...</span
                     >
-                      <span>ADD COVER LETTER</span></button
-                    ><label class="visually-hidden" for="coverletter"
-                      >ADD COVER LETTER<</label
-                    ><input
-                      #coverInput
-                      id="coverLetter"
-                      class="visually-hidden"
-                      type="file"
-                      accept=".pdf,.doc,.docx,.txt,.rtf"
-                      (change)="onCoverLetterFileChange($event)"
-                      accept=".pdf,.doc,.docx"
-                    />
-                  </div>
-                </ng-container>
-                <ng-template #showCoverLetter>
-                  <div class="supporting-upload-file">
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                        />
-                      </svg>
-                      <span style="color: black; margin: 10px 0px">{{
-                        selectedCoverLetterFile
-                      }}</span>
-                      <button (click)="handleRemoveCoverLetter()">
-                        Remove
-                      </button>
-                    </span>
-                  </div>
-                </ng-template>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; height: 20px"
+                      (click)="handleRemoveCoverLetter()"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </form>
+
+        <ng-container *ngIf="data?.questionOptions?.length">
+          <div class="questions">
+            <div class="question-header">
+              <h2 class="question-header__title">Application Questions</h2>
+              <p>Please answer the following questions.</p>
+            </div>
+            <div class="question-content">
+              <form action="" [formGroup]="questionsFormGroup">
+                <div *ngFor="let item of data?.questionOptions" class="group">
+                  <label for="question">{{ item.description }}</label>
+                  <mat-form-field>
+                    <input
+                      *ngIf="item.questionType === 'TEXT'"
+                      matInput
+                      [formControlName]="item.id"
+                    />
+
+                    <input
+                      *ngIf="item.questionType === 'DATE'"
+                      matInput
+                      [formControlName]="item.id"
+                      [matDatepicker]="picker"
+                      readonly
+                    />
+                    <mat-datepicker-toggle
+                      *ngIf="item.questionType === 'DATE'"
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+
+                    <mat-select
+                      *ngIf="item.questionType === 'DROPDOWN'"
+                      [formControlName]="item.id"
+                    >
+                      <mat-option
+                        *ngFor="let option of item.options"
+                        [value]="option"
+                      >
+                        {{ option }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </form>
+            </div>
+          </div>
+        </ng-container>
+
         <div class="supporting-page-btn">
           <button class="prev" mat-button matStepperPrevious type="button">
             Back
           </button>
           <button
             type="submit"
-            [disabled]="isLoading"
+            [disabled]="isSubmitting"
             class="submit-btn"
             type="submit"
+            mat-button
             (click)="onSubmit()"
           >
-            <ng-container *ngIf="isLoading; else showLoader">
-              <span class="loader">Processing...</span>
+            <ng-container *ngIf="isSubmitting; else showLoader">
+              <span class="mini-loader-spinner"></span>
             </ng-container>
             <ng-template #showLoader>
               <span>Submit</span>

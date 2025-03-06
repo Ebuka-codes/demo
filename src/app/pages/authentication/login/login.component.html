@@ -28,10 +28,7 @@
       >
 
       <div *ngIf="term?.invalid && term?.touched">
-        <small *ngIf="term?.errors?.['required']"
-          >Email Address field is required</small
-        >
-        <small *ngIf="!term?.errors?.['required']">Invalid email format</small>
+        <small *ngIf="term?.errors?.['required']">Term field is required</small>
       </div>
     </div>
     <div class="btn-content">

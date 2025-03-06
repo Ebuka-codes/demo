@@ -34,8 +34,8 @@
     <div class="job-category-content">
       <button
         *ngFor="let item of jobCategory"
-        (click)="toggleJobType(item)"
-        [ngClass]="{ selected: selectedJobTypes.includes(item) }"
+        (click)="toggleJobType(item?.jobType)"
+        [ngClass]="{ selected: selectedJobTypes.includes(item.jobType) }"
       >
         {{ item.jobType }}
       </button>

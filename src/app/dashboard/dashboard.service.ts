@@ -136,6 +136,35 @@ export class DashboardService {
       }
     );
   }
+
+  editQueryDetails(id: string, value: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.put<DetailsType>(
+      this.baseUrl + `query-details/${id}`,
+      value,
+      {
+        headers,
+      }
+    );
+  }
+
+  deleteQueryDetails(id: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.delete<DetailsType>(
+      this.baseUrl + `query-details/${id}`,
+
+      {
+        headers,
+      }
+    );
+  }
+
   getQueryDetailsByType() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -174,6 +203,6 @@ export class DashboardService {
     this.isLoadingSubject.next(loading);
   }
   getLoading() {
-    return this.isLoading$;
+    return this.isLoadingSubject.getValue();
   }
 }

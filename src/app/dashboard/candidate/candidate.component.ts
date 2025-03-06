@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Notyf } from 'notyf';
 import { Observable } from 'rxjs';
-import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { CandidateInfo } from 'src/app/shared/type';
 import { DashboardService } from '../dashboard.service';
 
@@ -18,7 +17,7 @@ export class CandidateComponent implements OnInit {
   filteredData!: any;
   viewData: any;
   searchText!: string;
-  constructor(private jobService: DashboardService) {}
+  constructor(public jobService: DashboardService) {}
 
   ngOnInit(): void {
     this.getCandidate();
@@ -38,6 +37,7 @@ export class CandidateComponent implements OnInit {
   }
   getCandidate() {
     this.jobService.setLoading(true);
+    this.isLoading = this.jobService.isLoading$;
     this.dataLoading = true;
     this.jobService.getCandidate().subscribe({
       next: (response: any) => {
@@ -55,6 +55,7 @@ export class CandidateComponent implements OnInit {
           position: { x: 'right', y: 'top' },
         });
         this.jobService.setLoading(false);
+        this.isLoading = this.jobService.isLoading$;
         this.dataLoading = false;
       },
       complete: () => {
