@@ -1,37 +1,37 @@
-.corporate-container {
+.job-container {
   h2 {
     font-size: 24px;
     font-weight: 600;
+    margin-left: 20px;
   }
   button {
     padding: 11px;
     width: 100px;
     background-color: #28a745;
-    border-radius: 10px;
+    border-radius: 25px;
     font-size: 14px;
     font-weight: 600;
     color: white;
     border: none;
   }
-  .corporate-table {
+  .job-table {
     background-color: white;
     border-radius: 10px;
     padding: 10px 20px;
     margin-bottom: 50px;
     margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     h2 {
       font-size: 22px;
       background-color: white;
       border-radius: 5px;
     }
-    .corporate-table-header {
+    .job-table-header {
       display: flex;
       justify-content: space-between;
       gap: 10px;
       width: 100%;
       margin: 10px 0px;
-      .corporate-table-search {
+      .job-table-search {
         position: relative;
         width: 90%;
         input {
@@ -42,7 +42,7 @@
           font-weight: 400;
           outline: none;
           border: 1px solid #dddd;
-          border-radius: 10px;
+          border-radius: 20px;
           ::placeholder {
             font-size: 16px;
           }
@@ -58,12 +58,18 @@
       button {
         padding: 11px;
         width: 100px;
-        background-color: #28a745;
-        border-radius: 10px;
+        background-color: transparent;
+        border-radius: 25px;
         font-size: 14px;
         font-weight: 600;
-        color: white;
-        border: none;
+        color: #28a745;
+        border: 1px solid #28a745;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background-color: #23863a;
+          color: white;
+        }
       }
     }
 
@@ -97,17 +103,39 @@
       padding-left: 10px;
     }
 
-    tbody tr input:checked {
-      border: 1px solid blue;
-      ::after {
-        content: "";
-        opacity: 1;
-      }
-    }
     tbody td {
       font-size: 14px;
       color: #585858;
       padding: 15px;
+    }
+
+    tbody {
+      .status-btn {
+        .active {
+          background-color: #d4edda;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #0dab6f;
+          border: none;
+          font-size: 13px;
+        }
+        .closed {
+          background-color: #f8d7da;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #721c24;
+          border: none;
+          font-size: 13px;
+        }
+        .pending {
+          background-color: #fff3cd;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #e8be29;
+          border: none;
+          font-size: 13px;
+        }
+      }
     }
     .action {
       cursor: pointer;
@@ -135,9 +163,4 @@
   tbody tr:nth-child(odd) {
     background-color: white !important;
   }
-}
-
-.ngb-dropdown-menu {
-  z-index: 1050 !important;
-  position: absolute !important;
 }

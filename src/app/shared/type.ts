@@ -1,4 +1,4 @@
-export interface jobType {
+export interface job {
   id: string;
   jobTitle: string;
   jobDescription: string;
@@ -25,15 +25,6 @@ export interface optionType {
   ];
 }
 
-export interface Corporate {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  code: string;
-  hmCode: string;
-}
 export interface DetailsType {
   id?: string;
   description: string;
@@ -45,7 +36,7 @@ export interface KeyValuePair {
   value: any;
 }
 export interface QuestionTypeOptions {
-  id?: string;
+  id: string;
   description: string;
 }
 
@@ -99,28 +90,4 @@ interface Skill {
 interface QuestionOptionAnswer {
   questionOptionId: string;
   answer: string;
-}
-export interface file {
-  base64String: 'string';
-  fileName: 'string';
-}
-export interface CandidateInfo {
-  id: string;
-  name: string;
-  createdAt: string;
-  address: string;
-  phone: string;
-  email: string;
-  countryName: string;
-  city: string;
-  state: string;
-  resume: string;
-  coverLetter: string;
-
-  jobDetail: {
-    jobTitle: string;
-    workMode: string;
-    jobType: string;
-    employmentType: string;
-  };
 }

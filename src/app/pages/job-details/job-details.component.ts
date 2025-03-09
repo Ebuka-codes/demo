@@ -2,8 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { JobRecruitService } from '../../shared/job-recruit.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { jobType } from 'src/app/shared/type';
 import { Location } from '@angular/common';
+import { job } from 'src/app/shared/type';
 
 @Component({
   selector: 'app-job-details',
@@ -16,7 +16,7 @@ export class JobDetailsComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
   id$!: Observable<string | null>;
-  data?: jobType;
+  data!: job;
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
   constructor(

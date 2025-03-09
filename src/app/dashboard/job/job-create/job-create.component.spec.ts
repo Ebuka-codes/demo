@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateJobComponent } from './create-job.component';
+import { CreateJobComponent } from './job-create.component';
 
 describe('CreateJobComponent', () => {
   let component: CreateJobComponent;
@@ -8,7 +8,7 @@ describe('CreateJobComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateJobComponent]
+      declarations: [CreateJobComponent],
     });
     fixture = TestBed.createComponent(CreateJobComponent);
     component = fixture.componentInstance;

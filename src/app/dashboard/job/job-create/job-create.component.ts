@@ -2,7 +2,6 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
@@ -13,20 +12,21 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { Notyf } from 'notyf';
 import {
   DetailsType,
-  jobType,
   KeyValuePair,
   QuestionTypeOptions,
 } from 'src/app/shared/type';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from '../../dashboard.service';
 import * as bootstrap from 'bootstrap';
 import { map, Observable, startWith } from 'rxjs';
+import { job } from '../shared/job';
+import { JobService } from '../shared/job.service';
 
 @Component({
-  selector: 'app-create-job',
-  templateUrl: './create-job.component.html',
-  styleUrls: ['./create-job.component.scss'],
+  selector: 'app-job-create',
+  templateUrl: './job-create.component.html',
+  styleUrls: ['./job-create.component.scss'],
 })
-export class CreateJobComponent {
+export class JobCreateComponent {
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
   @ViewChild('newEmpType') newEmpType!: ElementRef<HTMLInputElement>;
   @ViewChild('newJobTitle') newJobTitle!: ElementRef<HTMLInputElement>;
@@ -34,13 +34,6 @@ export class CreateJobComponent {
   @ViewChild('newJobSkill') newJobSkill!: ElementRef<HTMLInputElement>;
   @ViewChild('myQuestionModal') modalElement!: ElementRef;
   @ViewChild(QuillEditorComponent) quillEditor!: QuillEditorComponent;
-
-  jobTitleOption!: Observable<any[]>;
-  jobLocationOption!: Observable<any[]>;
-  jobEmploymentOption!: Observable<any[]>;
-  jobSkillOption!: Observable<any[]>;
-  jobTypeOption!: Observable<any[]>;
-
   modalInstance!: Modal;
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   selectedWorkmode: number | null = null;
@@ -61,6 +54,11 @@ export class CreateJobComponent {
       },
     },
   };
+  jobTitleOption!: Observable<any[]>;
+  jobLocationOption!: Observable<any[]>;
+  jobEmploymentOption!: Observable<any[]>;
+  jobSkillOption!: Observable<any[]>;
+  jobTypeOption!: Observable<any[]>;
   filteredOptions: any;
   data: Array<DetailsType> = [];
   jobTitleData: any[] = [];
@@ -71,20 +69,20 @@ export class CreateJobComponent {
   typeValue: string = '';
   isLoading: boolean = false;
   private notyf = new Notyf();
-  questionType = new Array<KeyValuePair>(
-    { key: 'TEXT', value: 'Text' },
-    { key: 'DROPDOWN', value: 'Dropdown' },
-    { key: 'DATE', value: 'Date' }
-  );
   questionTypeOptions: Array<QuestionTypeOptions> = [];
   questionTypeDropdown: Array<QuestionTypeOptions> = [];
   selectedSkills: string[] = [];
-  isEndDate: boolean = true;
+  isEditDate: boolean = true;
   text: string = '';
   isEditOpen: boolean = false;
   editId: string = '';
+  viewQuestionData: any;
 
-  constructor(private fb: FormBuilder, private jobService: DashboardService) {
+  constructor(
+    private fb: FormBuilder,
+    private jobService: JobService,
+    private dashboardService: DashboardService
+  ) {
     this.form = this.fb.group({
       jobTitle: [
         '',
@@ -103,13 +101,6 @@ export class CreateJobComponent {
       questionOptions: ['', Validators.required],
       jobDescription: ['', Validators.required],
     });
-
-    this.questionForm = this.fb.group({
-      questionType: ['', Validators.required],
-      description: ['', Validators.required],
-      options: this.fb.array([]),
-      optionsDescription: [''],
-    });
   }
 
   ngOnInit(): void {
@@ -119,7 +110,7 @@ export class CreateJobComponent {
     }
     this.getJobDetailByType();
     this.getAllQuestion();
-    this.jobService.setLoading(false);
+    this.dashboardService.setLoading(false);
   }
 
   filterForm() {
@@ -151,13 +142,6 @@ export class CreateJobComponent {
       map((value) => this._filter(value || '', this.jobSkillData))
     );
   }
-
-  // validateOption(control: FormControl) {
-  //   return this.options.includes(control.value)
-  //     ? null
-  //     : { invalidOption: true };
-  // }
-
   private _filter(value: string, type: any): string[] {
     const filterValue = value.toLowerCase();
     console.log(filterValue);
@@ -193,12 +177,6 @@ export class CreateJobComponent {
   }
   get workMode() {
     return this.form.get('workMode');
-  }
-  get questionTypes() {
-    return this.questionForm.get('questionType');
-  }
-  get description() {
-    return this.questionForm.get('description');
   }
 
   get requiredSkills() {
@@ -253,24 +231,18 @@ export class CreateJobComponent {
         }
       },
       error: (error: any) => {
-        this.notyf.error('Error occur!');
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
       },
     });
   }
+  updateQuestion() {
+    this.getAllQuestion();
+  }
 
-  showQuestionModal() {
-    this.modalInstance.show();
-  }
-  addQuestionOption() {
-    this.questionTypeOptions.push({
-      id: '',
-      description: this.questionForm.get('optionsDescription')?.value,
-    });
-    this.questionForm.get('optionsDescription')?.setValue('');
-  }
-  removeQuestionOption(index: number) {
-    this.questionTypeOptions.splice(index, 1);
-  }
   getJobDetailByType() {
     this.jobService.getQueryDetailsByType().subscribe({
       next: (response: any) => {
@@ -279,7 +251,6 @@ export class CreateJobComponent {
           this.jobTitleData = this.data.filter(
             (item) => item.type.trim() === 'jobTitle'
           );
-
           this.jobLocationData = this.data?.filter(
             (item) => item.type.trim() === 'jobLocation'
           );
@@ -307,6 +278,45 @@ export class CreateJobComponent {
     });
   }
 
+  getQuestionsById(id: string) {
+    this.dashboardService.setLoading(true);
+    this.jobService.getQuestionsById(id).subscribe((response: any) => {
+      if (response.valid && response.data) {
+        this.viewQuestionData = response.data;
+        this.form.patchValue(this.viewQuestionData);
+        this.dashboardService.setLoading(false);
+      } else {
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.dashboardService.setLoading(false);
+      }
+    });
+  }
+  deleteQuestionsById(id: string) {
+    this.dashboardService.setLoading(true);
+    this.jobService.deleteQuestionsById(id).subscribe((response: any) => {
+      if (response.valid) {
+        this.dashboardService.setLoading(false);
+        this.getAllQuestion();
+
+        this.notyf.error({
+          message: 'Deleted successfully!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+      } else {
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.dashboardService.setLoading(false);
+      }
+    });
+  }
   selectSkill(skill: string | undefined) {
     if (skill) {
       if (!this.selectedSkills.includes(skill)) {
@@ -331,18 +341,18 @@ export class CreateJobComponent {
   }
 
   createNewQueryDetails(data: DetailsType) {
-    this.jobService.setLoading(true);
+    this.dashboardService.setLoading(true);
     this.jobService.createQueryDetails(data).subscribe({
       next: (response: any) => {
         if (response.valid) {
           this.getJobDetailByType();
           this.notyf.success({
-            message: 'New query created successfully!',
+            message: 'Created successfully!',
             duration: 4000,
             position: { x: 'right', y: 'top' },
           });
         }
-        this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
       },
       error: (error: any) => {
         this.notyf.error({
@@ -351,7 +361,7 @@ export class CreateJobComponent {
           position: { x: 'right', y: 'top' },
         });
 
-        this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
       },
     });
   }
@@ -381,13 +391,12 @@ export class CreateJobComponent {
       this.selectedSkills = [];
     }
   }
-  createNewJob(newJob: jobType) {
+  createNewJob(newJob: job) {
     this.loading = true;
-    // this.jobService.setLoading(true);
+    // this.dashboardService.setLoading(true);
     this.jobService.createJob(newJob).subscribe({
       next: () => {
         this.loading = false;
-        this.form.enable();
         this.notyf.success({
           message: 'Job created successfully!',
           duration: 4000,
@@ -395,7 +404,7 @@ export class CreateJobComponent {
         });
         this.form.reset();
         this.isSubmitted = false;
-        // this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
         this.form.get('jobDescription')?.setValue(' ');
       },
       error: (error: any) => {
@@ -409,68 +418,11 @@ export class CreateJobComponent {
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
-        // this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
       },
     });
   }
-  resetQuestionForm() {
-    this.questionForm.reset();
-    this.questionTypeOptions = [];
-    this.isSubmittedQuestion = false;
-  }
-  onSubmitQuestion() {
-    if (this.questionForm.valid) {
-      this.isLoadingQuestion = true;
 
-      const questionData = {
-        description: this.questionForm.get('description')?.value,
-        questionType: this.questionForm.get('questionType')?.value,
-        options: this.questionTypeOptions,
-      };
-      this.jobService.setLoading(true);
-
-      this.jobService.createQuestion(questionData).subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.notyf.success({
-              message: 'New question created successfully!',
-              duration: 4000,
-              position: { x: 'right', y: 'top' },
-            });
-            this.isLoadingQuestion = false;
-
-            this.modalInstance.hide();
-            this.resetQuestionForm();
-            this.questionTypeOptions = [];
-            this.getAllQuestion();
-            const backdrops = document.getElementsByClassName('modal-backdrop');
-            while (backdrops.length > 0) {
-              backdrops[0].parentNode?.removeChild(backdrops[0]);
-            }
-            this.jobService.setLoading(false);
-          }
-        },
-        error: (error: any) => {
-          this.notyf.error({
-            message: 'Error occur!',
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-          this.isLoadingQuestion = false;
-
-          this.questionTypeOptions = [];
-          this.modalInstance.hide();
-          const backdrops = document.getElementsByClassName('modal-backdrop');
-          while (backdrops.length > 0) {
-            backdrops[0].parentNode?.removeChild(backdrops[0]);
-          }
-          this.resetQuestionForm();
-        },
-      });
-    } else {
-      this.isSubmittedQuestion = true;
-    }
-  }
   onSubmit(): void {
     const startDateValue = this.form.get('startDate')?.value;
     const endDateValue = this.form.get('endDate')?.value;
@@ -488,9 +440,10 @@ export class CreateJobComponent {
         endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
           .toString()
           .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-        jobStatus: 'Pending',
+        jobStatus: 'PENDING',
         requiredSkills: this.selectedSkills,
         employmentType: this.form.get('employmentType')?.value.toUpperCase(),
+        jobType: this.form.get('jobType')?.value.toUpperCase(),
         jobSalary: Number(this.form.get('jobSalary')?.value),
       });
       this.form.get('jobDescription')?.setValue(' ');
@@ -499,12 +452,13 @@ export class CreateJobComponent {
       this.isSubmitted = true;
     }
   }
-
+  minEndDate!: Date;
   onStartDateChange() {
-    if (!this.form.get('startDate')?.value) {
-      this.isEndDate = true;
-    } else {
-      this.isEndDate = false;
+    if (this.form.get('startDate')?.value) {
+      let selectedDate = new Date(this.form.get('startDate')?.value);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+      this.minEndDate = selectedDate;
+      this.isEditDate = false;
     }
   }
 
@@ -516,15 +470,15 @@ export class CreateJobComponent {
   }
   editData(value: string, type: string) {
     if (this.editId) {
-      this.jobService.setLoading(true);
+      this.dashboardService.setLoading(true);
       this.jobService
         .editQueryDetails(this.editId, { description: value, type: type })
         .subscribe(
           () => {
-            this.jobService.setLoading(false);
+            this.dashboardService.setLoading(false);
             this.getJobDetailByType();
             this.notyf.success({
-              message: 'Edited successfully',
+              message: 'Edited successfully!',
               duration: 4000,
               position: { x: 'right', y: 'top' },
             });
@@ -545,13 +499,13 @@ export class CreateJobComponent {
     }
   }
   handleDelete(id: string, type: string, value: string) {
-    this.jobService.setLoading(true);
+    this.dashboardService.setLoading(true);
     this.jobService.deleteQueryDetails(id).subscribe(
       () => {
-        this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
         this.getJobDetailByType();
         this.notyf.success({
-          message: 'Deleted successfully',
+          message: 'Deleted successfully!',
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
@@ -566,7 +520,7 @@ export class CreateJobComponent {
           position: { x: 'right', y: 'top' },
         });
         this.form.get(type)?.setValue('');
-        this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
       }
     );
   }

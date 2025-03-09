@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Notyf } from 'notyf';
 import { Observable } from 'rxjs';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
-import { jobType } from 'src/app/shared/type';
+import { job } from 'src/app/shared/type';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +10,7 @@ import { jobType } from 'src/app/shared/type';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  jobList!: jobType[];
+  jobList!: Array<job>;
   jobCategory!: any[];
   isLoading!: Observable<boolean>;
   isLoadingSearch: boolean = false;

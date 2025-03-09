@@ -1,42 +1,47 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { Notyf } from 'notyf';
-import { Corporate } from 'src/app/shared/type';
 import { DashboardService } from '../dashboard.service';
 import { Modal } from 'bootstrap';
+import { CorporateService } from './shared/corporate.service';
+import { Corporate } from './shared/corporate';
 
 @Component({
   selector: 'app-corporate',
   templateUrl: './corporate.component.html',
   styleUrls: ['./corporate.component.scss'],
 })
-export class CorporateComponent implements OnInit {
+export class CorporateComponent {
   @ViewChild('inputLogo') inputLogo!: ElementRef<HTMLInputElement>;
   @ViewChild('myModal') modalElement!: ElementRef;
   modalInstance!: Modal;
-
-  ngAfterViewInit() {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
-  }
 
   form!: FormGroup;
   submitLoading: boolean = false;
   isSubmitted: boolean = false;
   logoUrl: string = '';
   notyf = new Notyf();
-  data: any[] = [];
-  searchText: string = '';
+  data!: any[];
+  searchText!: string;
   isLoading: boolean = false;
-  filteredData: Array<any> = [];
+  filteredData: Array<Corporate> = [];
   isLoadingLogo: boolean = false;
-  constructor(private fb: FormBuilder, public jobService: DashboardService) {
+  editedData: any;
+  corporateViewData: any;
+  corpkey = new FormControl();
+  constructor(
+    private fb: FormBuilder,
+    public corporateService: CorporateService,
+    public dashboardService: DashboardService
+  ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
@@ -70,6 +75,26 @@ export class CorporateComponent implements OnInit {
     this.getCorporate();
   }
 
+  ngAfterViewInit(): void {
+    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+  }
+  handleGetCorpKey() {
+    if (this.corpkey) {
+      this.dashboardService.setLoading(true);
+      setTimeout(() => {
+        localStorage.setItem('corp-key', this.corpkey.value);
+        this.dashboardService.setLoading(false);
+        this.corpkey.setValue('');
+
+        this.notyf.success({
+          message: 'Corporate switched successfully!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+      }, 1000);
+    }
+  }
+
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -98,6 +123,7 @@ export class CorporateComponent implements OnInit {
   }
 
   handleSearch() {
+    console.log(this.searchText);
     if (this.searchText.trim() === '') {
       this.filteredData = [...this.data];
     } else {
@@ -111,18 +137,18 @@ export class CorporateComponent implements OnInit {
     this.isLoadingLogo = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    this.jobService.setLoading(true);
+    this.dashboardService.setLoading(true);
     reader.onload = () => {
       const data = {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.jobService.convertFileToBase64(data).subscribe(
+      this.corporateService.convertFileToBase64(data).subscribe(
         (response: any) => {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;
             this.isLoadingLogo = false;
-            this.jobService.setLoading(false);
+            this.dashboardService.setLoading(false);
 
             console.log(this.logoUrl);
           }
@@ -134,7 +160,7 @@ export class CorporateComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
 
-          this.jobService.setLoading(false);
+          this.dashboardService.setLoading(false);
           this.isLoadingLogo = false;
         }
       );
@@ -143,23 +169,24 @@ export class CorporateComponent implements OnInit {
 
   resetForm() {
     this.form.reset();
+    this.isSubmitted = false;
   }
   getCorporate() {
-    this.jobService.setLoading(true);
+    this.dashboardService.setLoading(true);
     this.submitLoading = true;
-    this.jobService.getCorporate().subscribe({
+    this.corporateService.getCorporate().subscribe({
       next: (response: any) => {
         if (response) {
           this.data = response;
           this.filteredData = [...this.data];
           this.submitLoading = false;
-          this.jobService.setLoading(false);
+          this.dashboardService.setLoading(false);
         }
       },
 
       error: () => {
         this.submitLoading = false;
-        this.jobService.setLoading(false);
+        this.dashboardService.setLoading(false);
         this.notyf.error({
           message: 'Error occur!',
           duration: 4000,
@@ -171,7 +198,7 @@ export class CorporateComponent implements OnInit {
   createCorporate(corporate: Corporate) {
     this.submitLoading = true;
     this.form.disable();
-    this.jobService.createCorporate(corporate).subscribe({
+    this.corporateService.createCorporate(corporate).subscribe({
       next: () => {
         this.submitLoading = false;
         this.notyf.success({
@@ -183,7 +210,6 @@ export class CorporateComponent implements OnInit {
         this.form.enable();
         this.isSubmitted = false;
         this.getCorporate();
-
         this.modalInstance.hide();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
@@ -201,6 +227,16 @@ export class CorporateComponent implements OnInit {
       },
     });
   }
+  onEditCorporate() {
+    this.getCorporate();
+  }
+  handleEditCorporate(id: string) {
+    this.editedData = this.filteredData?.find((item) => item.id === id);
+  }
+  handleViewCorporate(id: string) {
+    this.corporateViewData = this.filteredData?.find((item) => item.id === id);
+  }
+
   onSubmit() {
     this.isSubmitted = false;
     this.isSubmitted = true;

@@ -95,28 +95,57 @@
         opacity: 1;
       }
     }
-    tbody td {
-      font-size: 14px;
-      color: #585858;
-      padding: 15px;
-    }
-    .action {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      svg {
-        width: 20px;
-        height: 20px;
+    tbody {
+      td {
+        font-size: 14px;
+        color: #000000;
+        padding: 15px;
       }
-      .humburger-icon svg {
-        color: #dfdede;
-        width: 28px;
-        height: 28px;
+      .status-btn {
+        .active {
+          background-color: #d4edda;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #0dab6f;
+          border: none;
+          font-size: 13px;
+        }
+        .closed {
+          background-color: #f8d7da;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #721c24;
+          border: none;
+          font-size: 13px;
+        }
+        .pending {
+          background-color: #fff3cd;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #e8be29;
+          border: none;
+          font-size: 13px;
+        }
+      }
+
+      .action {
         cursor: pointer;
-      }
-      .humburger-icon[ngbDropdownToggle]::after {
-        display: none !important;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+        .humburger-icon svg {
+          color: #d9d9d9;
+          width: 28px;
+          height: 28px;
+          cursor: pointer;
+        }
+        .humburger-icon[ngbDropdownToggle]::after {
+          display: none !important;
+        }
       }
     }
   }
@@ -126,143 +155,6 @@
   tbody tr:nth-child(odd) {
     background-color: white !important;
   }
-}
-
-.modal-header {
-  h5 {
-    font-size: 18px !important;
-  }
-  .closeModal-icon {
-    cursor: pointer;
-    float: right;
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-}
-.mocal-body {
-  tbody tr {
-    text-align: center;
-  }
-  tbody tr:nth-child(even) {
-    background-color: #f8f9fd;
-  }
-  tbody tr:nth-child(odd) {
-    background-color: white !important;
-  }
-}
-
-.work-history {
-  padding: 10px 20px;
-  margin-top: 20px 0px;
-  h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-}
-.education-history {
-  padding: 10px 20px;
-  margin-top: 20px 0px;
-  h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-}
-
-.skill-history {
-  padding: 10px 20px;
-  margin-top: 20px 0px;
-  h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-}
-
-.question {
-  padding: 10px 20px;
-  margin-top: 20px 0px;
-  h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-}
-
-.action-btn {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  margin: 10px 0px;
-  button {
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    color: white;
-    font-size: 14px;
-    background-color: transparent;
-  }
-  a {
-    text-decoration: none;
-    color: white;
-  }
-  svg {
-    width: 20px !important;
-    height: 20px;
-  }
-}
-.interview-btn {
-  background-color: #28a745;
-  border-radius: 25px;
-  border: none;
-}
-.resume-btn,
-.coverLetter-btn {
-  background-color: #007bff;
-  border-radius: 25px;
-  border: none;
-}
-
-.form-group {
-  padding: 0px 10px;
-  font-size: 14px;
-  margin: 0px auto;
-  display: flex;
-  place-items: center;
-
-  width: 100%;
-  label {
-    font-weight: 500;
-    text-align: center;
-  }
-}
-
-.form-group div {
-  background: transparent;
-}
-
-.form-group div.form-control-static {
-  height: 100%;
-}
-
-.form-group div.control-label {
-  border-right: 2px solid #ffffff;
-}
-.form-group:nth-child(odd),
-.form-group.odd {
-  background: #f4f4f4;
-}
-
-.form-group:nth-child(even),
-.form-group.even {
-  background: #f9f9f9;
-}
-
-::ng-deep .modal-lg {
-  width: 600px;
 }
 
 input[type="checkbox"] {

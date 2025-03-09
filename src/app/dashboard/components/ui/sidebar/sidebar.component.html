@@ -57,10 +57,9 @@
           </span>
         </a>
       </li>
-      <li>
+      <li [ngClass]="isJobActive ? 'side-link active' : 'side-link'">
         <a
-          class="side-link"
-          routerLink="/dashboard/create-job/shl"
+          [routerLink]="['/dashboard/job']"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -88,7 +87,7 @@
       <li>
         <a
           class="side-link"
-          routerLink="/dashboard/candidate/shl"
+          routerLink="/dashboard/candidate"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >

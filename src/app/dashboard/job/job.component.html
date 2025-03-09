@@ -1,23 +1,23 @@
-<div class="corporate-container">
+<div class="job-container">
   <div
     style="display: flex; justify-content: space-between; align-items: center"
   >
-    <h2>Corporate</h2>
+    <h2>Jobs</h2>
     <button
-      routerLink="/dashboard/corporate/create"
       type="button"
       style="margin-right: 10px"
+      [routerLink]="['/dashboard/job/create']"
     >
       Add New
     </button>
   </div>
-  <div class="corporate-table">
-    <div class="corporate-table-header">
-      <div class="corporate-table-search">
+  <div class="job-table">
+    <div class="job-table-header">
+      <div class="job-table-search">
         <input
           type="text"
-          placeholder="Search by name"
-          [(ngModel)]="searchText"
+          placeholder="Search"
+          [formControl]="searchText"
           (ngModelChange)="handleSearch()"
         />
         <svg
@@ -38,6 +38,9 @@
       </div>
       <div>
         <button type="button">Filter</button>
+      </div>
+      <div>
+        <button type="button">Export</button>
       </div>
     </div>
     <table>
@@ -61,18 +64,18 @@
                 margin-left: 6px;
               "
             />
-            Name
+            Job Title
           </th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Address</th>
-          <th>Phone</th>
-          <th>HmCode</th>
+          <th>Jot Type</th>
+          <th>Work Mode</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of filteredData">
+        <tr *ngFor="let item of jobData">
           <td style="display: flex; gap: 20px; align-items: center">
             <input
               type="checkbox"
@@ -83,15 +86,23 @@
                 border-radius: 5px;
               "
             />
-
-            {{ item?.name | titlecase }}
+            {{ item?.jobTitle | titlecase }}
           </td>
+          <td>{{ item?.jobType | titlecase }}</td>
+          <td>{{ item?.workMode | titlecase }}</td>
+          <td>{{ item?.startDate || "N/A" }}</td>
+          <td>{{ item?.endDate || "N/A" }}</td>
 
-          <td>{{ item.name | titlecase }}</td>
-          <td>{{ item.address }}</td>
-          <td>{{ item.email }}</td>
-          <td>{{ item.phone }}</td>
-          <td>{{ item.hmCode }}</td>
+          <td class="status-btn">
+            <span
+              [ngClass]="{
+                pending: item.jobStatus === 'Pending' || 'PENDING',
+                active: item.jobStatus === 'Active' || 'ACTIVE',
+                closed: item.jobStatus === 'closed' || 'CLOSED'
+              }"
+              >{{ item?.jobStatus | titlecase }}</span
+            >
+          </td>
 
           <td>
             <div class="action">
@@ -119,7 +130,7 @@
                   <button
                     style="font-size: 14px"
                     data-bs-toggle="modal"
-                    data-bs-target="#viewCandidateModal"
+                    data-bs-target="#viewJobModal"
                     ngbDropdownItem
                   >
                     <svg
@@ -129,7 +140,6 @@
                       stroke-width="1.5"
                       stroke="currentColor"
                       class="size-6"
-                      style="color: #6c757d"
                     >
                       <path
                         stroke-linecap="round"
@@ -144,22 +154,66 @@
                     </svg>
                     View
                   </button>
+
+                  <button
+                    style="font-size: 14px"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editJobModal"
+                    ngbDropdownItem
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    Edit
+                  </button>
+
+                  <button
+                    style="font-size: 14px"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteJobModal"
+                    ngbDropdownItem
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                      />
+                    </svg>
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
           </td>
         </tr>
 
-        <tr *ngIf="!filteredData.length">
+        <tr *ngIf="isLoading$ | async">
+          <td>Loading...</td>
+        </tr>
+        <tr *ngIf="!(isLoading$ | async) && !jobData.length">
           <td>No record found</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
-<!-- <app-view-candidate-modal [candidateViewData]="candidateViewData" /> -->
-
-<!-- <app-comfirm-delete-modal
-    (deleteCandidate)="deleteCandidate()"
-    [isDeleting]="isDeleting"
-  />  -->

@@ -1,0 +1,96 @@
+<div
+  class="modal fade"
+  #myModal
+  id="viewCorporateModal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">View Corporate</h5>
+        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+
+      <div class="modal-body" *ngIf="corporateViewData">
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Corporate Name</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{
+              corporateViewData.name
+                ? (corporateViewData.name | titlecase)
+                : "N/A"
+            }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Email</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ corporateViewData.email }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Address</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ corporateViewData.address }}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>Phone</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ corporateViewData.phone }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-6 control-label form-control-static p-2">
+            <label><strong>HmCode</strong></label>
+          </div>
+          <div
+            class="col-sm-6 form-control-static p-2"
+            style="word-wrap: break-word"
+          >
+            <span>{{ corporateViewData.hmCode || "N/A" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

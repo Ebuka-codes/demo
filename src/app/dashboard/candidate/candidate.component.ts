@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Notyf } from 'notyf';
 import { Observable } from 'rxjs';
-import { CandidateInfo } from 'src/app/shared/type';
 import { DashboardService } from '../dashboard.service';
+import { Candidate } from './shared/candidate';
+import { CandidateService } from './shared/candidate.service';
 
 @Component({
   selector: 'app-candidate',
@@ -11,20 +12,21 @@ import { DashboardService } from '../dashboard.service';
 })
 export class CandidateComponent implements OnInit {
   notyf = new Notyf();
-  candidateData!: Array<CandidateInfo>;
+  candidateData!: Array<Candidate>;
   isLoading!: Observable<boolean>;
-  dataLoading: boolean = false;
   filteredData!: any;
-  viewData: any;
+  candidateViewData: any;
   searchText!: string;
-  constructor(public jobService: DashboardService) {}
+  constructor(
+    public dashboardService: DashboardService,
+    private candidateService: CandidateService
+  ) {}
 
   ngOnInit(): void {
     this.getCandidate();
   }
 
   handleSearch() {
-    console.log(this.searchText);
     if (this.searchText.trim() === '') {
       this.filteredData = [...this.candidateData];
     } else {
@@ -36,40 +38,35 @@ export class CandidateComponent implements OnInit {
     }
   }
   getCandidate() {
-    this.jobService.setLoading(true);
-    this.isLoading = this.jobService.isLoading$;
-    this.dataLoading = true;
-    this.jobService.getCandidate().subscribe({
+    this.dashboardService.setLoading(true);
+    this.isLoading = this.dashboardService.isLoading$;
+    this.candidateService.getCandidate().subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
           this.candidateData = response.data;
           this.filteredData = this.candidateData;
-          this.jobService.setLoading(false);
-          this.dataLoading = false;
+          this.dashboardService.setLoading(false);
         }
       },
       error: (error) => {
         this.notyf.error({
-          message: error.error.message,
+          message: error.message,
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
-        this.jobService.setLoading(false);
-        this.isLoading = this.jobService.isLoading$;
-        this.dataLoading = false;
+        this.dashboardService.setLoading(false);
+        this.isLoading = this.dashboardService.isLoading$;
       },
       complete: () => {
         console.log('Candidate data fetched');
       },
     });
   }
-
-  handleViewCandidate(value: string) {
-    if (value) {
-      this.viewData = this.filteredData.find(
-        (candidate: any) => candidate.id === value
+  handleViewCandidate(id: string) {
+    if (id) {
+      this.candidateViewData = this.filteredData.find(
+        (candidate: any) => candidate.id === id
       );
-      console.log(this.viewData);
     }
   }
 }

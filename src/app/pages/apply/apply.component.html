@@ -33,21 +33,39 @@
               <h2 class="contact-info-header__title">Contact Information</h2>
               <p>Please enter your contact information.</p>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="firstName">First Name * </label>
-              <input type="text" formControlName="firstName" required />
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="firstName"
+                  required
+                />
+              </mat-form-field>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="lastName">Last Name * </label>
-              <input type="text" formControlName="lastName" required />
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="lastName"
+                  required
+                />
+              </mat-form-field>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="email">Email * </label>
-              <input type="email" formControlName="email" required />
+              <mat-form-field>
+                <input matInput type="email" formControlName="email" required />
+              </mat-form-field>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="phone">Phone * </label>
-              <input type="text" formControlName="phone" required />
+              <mat-form-field>
+                <input matInput type="text" formControlName="phone" required />
+              </mat-form-field>
             </div>
           </div>
 
@@ -56,7 +74,7 @@
               <h2 class="address-info-header__title">Address</h2>
               <p>Please enter your home address.</p>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="countryName">Country Name * </label>
               <mat-form-field appearance="fill">
                 <mat-select
@@ -69,7 +87,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="state">State * </label>
               <mat-form-field appearance="fill">
                 <mat-select
@@ -87,14 +105,18 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="input-group">
+            <div class="form-group">
               <label for="city">City* </label>
-              <input type="text" formControlName="city" />
+              <mat-form-field>
+                <input matInput type="text" formControlName="city" />
+              </mat-form-field>
             </div>
 
-            <div class="input-group">
+            <div class="form-group">
               <label for="address">Home Address * </label>
-              <input type="text" formControlName="address" />
+              <mat-form-field>
+                <input matInput type="text" formControlName="address" />
+              </mat-form-field>
             </div>
           </div>
         </form>
@@ -106,7 +128,7 @@
       </mat-step>
 
       <!-- work and experience -->
-      <mat-step [stepControl]="experienceFormGroup">
+      <mat-step [stepControl]="workFormGroup">
         <div class="work-info">
           <div class="work-info__header">
             <h2 class="work-info-header__title">Work and Education History</h2>
@@ -115,7 +137,7 @@
             </p>
           </div>
           <div class="content">
-            <form action="" [formGroup]="experienceFormGroup">
+            <form action="" [formGroup]="workFormGroup">
               <div class="work-history">
                 <h4 class="fs-5">Work history</h4>
                 <div class="job-divider"></div>
@@ -191,8 +213,8 @@
                         </span>
                       </div>
                       <div class="modal-body">
-                        <div class="group">
-                          <label for="companyName">Company Name*</label>
+                        <div class="form-group">
+                          <label for="companyName">Company Name *</label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -202,8 +224,8 @@
                             />
                           </mat-form-field>
                         </div>
-                        <div class="group">
-                          <label for="JobTitle">JobTitle</label>
+                        <div class="form-group">
+                          <label for="JobTitle">JobTitle *</label>
                           <mat-form-field>
                             <input
                               matInput
@@ -214,56 +236,74 @@
                           </mat-form-field>
                         </div>
                         <div class="row">
-                          <div class="group col">
-                            <label for="startDate">Start Date</label>
+                          <div class="form-group col">
+                            <label for="startDate">Start Date *</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
+                                monthYearFormat
                                 [matDatepicker]="workStartDatePicker"
                                 formControlName="startDate"
                                 readonly
-                                (ngModelChange)="onStartDateChange()"
                               />
                               <mat-datepicker-toggle
-                                matSuffix
+                                matIconSuffix
                                 [for]="workStartDatePicker"
                               ></mat-datepicker-toggle>
                               <mat-datepicker
                                 #workStartDatePicker
+                                startView="multi-year"
+                                (monthSelected)="
+                                  onMonthYearWorkSelect(
+                                    $event,
+                                    'startDate',
+                                    workStartDatePicker
+                                  )
+                                "
                               ></mat-datepicker>
                             </mat-form-field>
                           </div>
 
-                          <div class="group col">
-                            <label for="endDate">End Date</label>
+                          <div class="form-group col">
+                            <label for="endDate">End Date *</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
+                                monthYearFormat
                                 [matDatepicker]="workEndDatePicker"
                                 formControlName="endDate"
                                 required
                                 readonly
-                                [disabled]="isEndDate"
                               />
                               <mat-datepicker-toggle
                                 matSuffix
                                 [for]="workEndDatePicker"
-                                [disabled]="isEndDate"
                               ></mat-datepicker-toggle>
                               <mat-datepicker
                                 #workEndDatePicker
+                                startView="multi-year"
+                                (monthSelected)="
+                                  onMonthYearWorkSelect(
+                                    $event,
+                                    'endDate',
+                                    workEndDatePicker
+                                  )
+                                "
                               ></mat-datepicker>
                             </mat-form-field>
                           </div>
                         </div>
-                        <div class="input-group">
-                          <label for="jobDescription">Job Description</label>
-                          <textarea
-                            type="text"
-                            formControlName="jobDescription"
-                            required
-                            style="height: 150px"
-                          ></textarea>
+                        <div class="form-group">
+                          <label for="jobDescription">Job Description *</label>
+                          <mat-form-field>
+                            <input
+                              matInput
+                              type="text"
+                              formControlName="jobDescription"
+                              required
+                              class="text"
+                            />
+                          </mat-form-field>
                         </div>
                       </div>
 
@@ -290,7 +330,9 @@
                   </div>
                 </div>
               </div>
+            </form>
 
+            <form [formGroup]="educationFormGroup">
               <div class="education-history">
                 <h4 class="fs-5">Education history</h4>
                 <div class="job-divider"></div>
@@ -375,7 +417,7 @@
                       </div>
 
                       <div class="modal-body">
-                        <div class="group">
+                        <div class="form-group">
                           <label for="degree">Degree *</label>
                           <mat-form-field appearance="fill">
                             <input
@@ -398,8 +440,10 @@
                           </mat-form-field>
                         </div>
 
-                        <div class="group">
-                          <label for="institutionName">Institution Name</label>
+                        <div class="form-group">
+                          <label for="institutionName"
+                            >Institution Name *</label
+                          >
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -409,17 +453,16 @@
                             />
                           </mat-form-field>
                         </div>
-
                         <div class="row">
-                          <div class="group col">
-                            <label for="startDate">Start Date</label>
+                          <div class="form-group col">
+                            <label for="startDate">Start Date *</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
+                                monthYearFormat
                                 [matDatepicker]="educationStartDatePicker"
                                 formControlName="startDate"
                                 readonly
-                                (ngModelChange)="onStartDateChange()"
                               />
                               <mat-datepicker-toggle
                                 matSuffix
@@ -427,34 +470,49 @@
                               ></mat-datepicker-toggle>
                               <mat-datepicker
                                 #educationStartDatePicker
+                                startView="multi-year"
+                                (monthSelected)="
+                                  onMonthYearEductionSelect(
+                                    $event,
+                                    'startDate',
+                                    educationStartDatePicker
+                                  )
+                                "
                               ></mat-datepicker>
                             </mat-form-field>
                           </div>
 
-                          <div class="group col">
-                            <label for="endDate">End Date</label>
+                          <div class="form-group col">
+                            <label for="endDate">End Date *</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
+                                monthYearFormat
                                 [matDatepicker]="eductionEndDatePicker"
                                 formControlName="endDate"
                                 required
                                 readonly
-                                [disabled]="isEndDate"
                               />
                               <mat-datepicker-toggle
                                 matSuffix
                                 [for]="eductionEndDatePicker"
-                                [disabled]="isEndDate"
                               ></mat-datepicker-toggle>
                               <mat-datepicker
                                 #eductionEndDatePicker
+                                startView="multi-year"
+                                (monthSelected)="
+                                  onMonthYearEductionSelect(
+                                    $event,
+                                    'endDate',
+                                    eductionEndDatePicker
+                                  )
+                                "
                               ></mat-datepicker>
                             </mat-form-field>
                           </div>
                         </div>
-                        <div class="group">
-                          <label for="fieldOfStudy">Field of Study</label>
+                        <div class="form-group">
+                          <label for="fieldOfStudy">Field of Study *</label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -465,8 +523,8 @@
                           </mat-form-field>
                         </div>
 
-                        <div class="group">
-                          <label for="educationLevel">Education Level</label>
+                        <div class="form-group">
+                          <label for="educationLevel">Education Level *</label>
                           <mat-form-field appearance="fill">
                             <mat-select
                               formControlName="educationLevel"
@@ -506,6 +564,9 @@
                   </div>
                 </div>
               </div>
+            </form>
+
+            <form action="" [formGroup]="skillFormGroup">
               <div class="skills-info">
                 <div class="skills-info-content">
                   <h4 class="fs-5">Skills</h4>
@@ -574,8 +635,8 @@
                           </span>
                         </div>
                         <div class="modal-body">
-                          <div class="group">
-                            <label for="JobTitle">Skill Name*</label>
+                          <div class="form-group">
+                            <label for="JobTitle">Skill Name *</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -585,8 +646,8 @@
                               />
                             </mat-form-field>
                           </div>
-                          <div class="group">
-                            <label for="JobTitle">Proficiency Level</label>
+                          <div class="form-group">
+                            <label for="JobTitle">Proficiency Level *</label>
                             <mat-form-field>
                               <input
                                 matInput
@@ -597,9 +658,9 @@
                             </mat-form-field>
                           </div>
 
-                          <div class="group">
+                          <div class="form-group">
                             <label for="yearsOfExperience"
-                              >Years Of Experience</label
+                              >Years Of Experience *</label
                             >
                             <mat-form-field>
                               <input

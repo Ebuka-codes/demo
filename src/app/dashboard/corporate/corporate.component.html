@@ -3,15 +3,37 @@
     style="display: flex; justify-content: space-between; align-items: center"
   >
     <h2>Corporate</h2>
-    <button
-      data-bs-toggle="modal"
-      data-bs-target="#addCandidate"
-      type="button"
-      type="button"
-      style="margin-right: 10px"
-    >
-      Add New
-    </button>
+    <div class="corporate-action">
+      <div class="corporate-search">
+        <mat-form-field>
+          <mat-select placeholder="Select Corporate" [formControl]="corpkey">
+            <mat-option *ngFor="let item of data" [value]="item.hmCode">
+              {{ item.hmCode }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          type="button"
+          type="button"
+          style="margin-right: 10px"
+          (click)="handleGetCorpKey()"
+        >
+          Swicth
+        </button>
+      </div>
+      <div>
+        <button
+          data-bs-toggle="modal"
+          data-bs-target="#createCorporateModal"
+          type="button"
+          type="button"
+          style="margin-right: 10px"
+        >
+          Add New
+        </button>
+      </div>
+    </div>
   </div>
   <div class="corporate-table">
     <div class="corporate-table-header">
@@ -122,8 +144,9 @@
                   <button
                     style="font-size: 14px"
                     data-bs-toggle="modal"
-                    data-bs-target="#viewCandidateModal"
+                    data-bs-target="#viewCorporateModal"
                     ngbDropdownItem
+                    (click)="handleViewCorporate(item.id)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +173,32 @@
                   <button
                     style="font-size: 14px"
                     data-bs-toggle="modal"
-                    data-bs-target="#viewCandidateModal"
+                    data-bs-target="#editCorporateModal"
+                    ngbDropdownItem
+                    (click)="handleEditCorporate(item.id)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    Edit
+                  </button>
+
+                  <button
+                    style="font-size: 14px"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteCorporateModal"
                     ngbDropdownItem
                   >
                     <svg
@@ -175,141 +223,23 @@
           </td>
         </tr>
 
-        <tr *ngIf="jobService.isLoading$ | async">
+        <tr *ngIf="dashboardService.isLoading$ | async">
           <td>Loading...</td>
         </tr>
-        <tr *ngIf="!(jobService.isLoading$ | async) && !filteredData?.length">
+        <tr
+          *ngIf="
+            !(dashboardService.isLoading$ | async) && !filteredData?.length
+          "
+        >
           <td>No record found</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
-
-<div
-  class="modal fade"
-  #myModal
-  id="addCandidate"
-  tabindex="-1"
-  aria-labelledby="modalLabel"
-  aria-hidden="true"
-  (hidden.bs.modal)="resetForm()"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Create Corporate</h5>
-
-        <span class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="size-6"
-            style="width: 20px"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </span>
-      </div>
-      <div class="modal-body">
-        <div class="corporate-content">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-              <label for="corporateName"
-                >Corporate Name <span class="required-icon">*</span></label
-              >
-              <input type="text" formControlName="name" />
-              <div *ngIf="name?.invalid && isSubmitted">
-                <small *ngIf="name?.errors?.['required']">
-                  Corporate Name field is required
-                </small>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="address"
-                >Address<span class="required-icon">*</span></label
-              >
-              <input type="text" formControlName="address" />
-              <div *ngIf="address?.invalid && isSubmitted">
-                <small *ngIf="address?.errors?.['required']">
-                  Address field is required
-                </small>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="email"
-                >Email<span class="required-icon">*</span></label
-              >
-              <input type="text" formControlName="email" />
-              <div *ngIf="email?.invalid && isSubmitted">
-                <small *ngIf="email?.errors?.['required']">
-                  Email field is required
-                </small>
-                <small
-                  *ngIf="!email?.errors?.['required'] && email?.errors?.['invalidEmail']"
-                  >Invalid email format</small
-                >
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="phone"
-                >Phone <span class="required-icon">*</span></label
-              >
-              <input type="text" formControlName="phone" />
-              <div *ngIf="phone?.invalid && isSubmitted">
-                <small *ngIf="phone?.errors?.['required']">
-                  Phone field is required
-                </small>
-                <small
-                  *ngIf="!phone?.errors?.['required'] && phone?.errors?.['invalidPhone']"
-                  >Invalid Phone Number</small
-                >
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="logo">Logo<span class="required-icon">*</span></label>
-              <input
-                #inputLogo
-                type="file"
-                accept=".jpg,.png,.jpeg"
-                formControlName="logo"
-                (change)="onFileChange($event)"
-              />
-              <div *ngIf="logo?.invalid && isSubmitted">
-                <small *ngIf="logo?.errors?.['required']">
-                  Logo field is required
-                </small>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="hmCode"
-                >HmCode<span class="required-icon">*</span></label
-              >
-              <input type="text" formControlName="hmCode" />
-              <div *ngIf="hmCode?.invalid && isSubmitted">
-                <small *ngIf="hmCode?.errors?.['required']">
-                  HmCode field is required
-                </small>
-              </div>
-            </div>
-
-            <button type="submit" class="submit-btn">
-              <ng-container *ngIf="submitLoading; else showLoader">
-                <span class="mini-loader-spinner"></span>
-              </ng-container>
-              <ng-template #showLoader>
-                <span>Submit</span>
-              </ng-template>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-corporate-create />
+<app-corporate-edit
+  [editedData]="editedData"
+  (onEditCorporate)="onEditCorporate()"
+/>
+<app-corporate-view [corporateViewData]="corporateViewData" />

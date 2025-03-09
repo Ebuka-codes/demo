@@ -1,10 +1,7 @@
 .apply-container {
   ::ng-deep .mat-stepper-horizontal {
-    width: 80%;
+    width: 70%;
     margin: 0px auto;
-  }
-  ::ng-deep .mat-step-icon-selected {
-    background-color: #28a745;
   }
 
   form {
@@ -51,7 +48,7 @@
         border: none;
         font-weight: 600;
         cursor: pointer;
-        background-color: #28a745;
+        background-color: rgb(8, 8, 216);
         color: #ffffff;
         outline: none;
       }
@@ -85,22 +82,19 @@
       }
     }
 
-    .input-group {
+    .form-group {
       font-size: 1.25rem;
       margin: 10px 0px;
       display: flex;
       flex-direction: column;
       input,
-      textarea {
-        color: #6d6d6d;
-        padding: 10px 10px;
-        height: 55px;
+      select {
+        color: #6d6d6d !important;
         text-overflow: ellipsis;
         font-size: 14px;
         font-weight: 400;
         outline: none;
-        border: 1px solid #dddd;
-        border-radius: 5px !important;
+        border-color: #dddd;
         margin-top: 3px;
       }
       label {
@@ -153,16 +147,6 @@
       }
       .content {
         margin: 10px 0px;
-        .group {
-          margin: 10px 0px;
-          display: flex !important;
-          flex-direction: column;
-          label {
-            font-size: 14px;
-            color: #484747b5;
-            font-weight: 500;
-          }
-        }
       }
       .work-history-list {
         background-color: #eeeded29;
@@ -256,7 +240,6 @@
         }
       }
     }
-
     .skills-info {
       margin: 20px 0px;
       .skills-info__header {
@@ -403,11 +386,11 @@
       display: inline-flex;
       gap: 20px;
       align-items: center;
-      margin-left: 20px;
+      margin-left: 50px;
       .prev {
         border: none;
         outline: none;
-        padding: 0.5rem 2rem;
+        padding: 0.8rem 2rem;
         border-radius: 50px;
         text-decoration: none;
         line-height: 1.5rem;
@@ -430,7 +413,7 @@
         background-color: #28a745 !important;
         border: none;
         outline: none;
-        padding: 0.5rem 2rem;
+        padding: 0.8rem 2rem;
         border-radius: 25px;
         text-decoration: none;
         line-height: 1.5rem;
@@ -455,7 +438,7 @@
       .prev {
         border: none;
         outline: none;
-        padding: 0.5rem 2rem;
+        padding: 0.8rem 2rem;
         border-radius: 50px;
         text-decoration: none;
         line-height: 1.5rem;
@@ -477,7 +460,7 @@
       .next {
         border: none;
         outline: none;
-        padding: 0.5rem 2rem;
+        padding: 0.8rem 2rem;
         border-radius: 50px;
         text-decoration: none;
         line-height: 1.5rem;
@@ -538,11 +521,9 @@
       }
     }
     .btn {
-      padding: 0.7rem 2.5rem;
+      padding: 10px 2.5rem;
       border-radius: 50px;
       text-decoration: none;
-      transition: background 0.15s ease 0s, color 0.15s ease 0s,
-        box-shadow 0.15s ease 0s;
       box-sizing: border-box;
       position: relative;
       display: inline-block;
@@ -674,4 +655,8 @@
     width: 100%;
     opacity: 1;
   }
+}
+
+.mat-mdc-form-field-flex:has(.text) {
+  height: 150px;
 }

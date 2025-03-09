@@ -3,11 +3,11 @@
   flex-direction: column;
   gap: 2rem;
   padding: 1.5rem;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   overflow-y: auto;
   position: fixed;
   width: 252px;
   background-color: white;
+  border-right: 1px solid #e5e3e3;
 }
 .side_one {
   height: 100vh;
@@ -51,14 +51,14 @@ li {
   position: relative;
 }
 
-.side-link.active,
-.side.active:hover {
+.side-link.active {
   background-color: #28a745;
   color: #ffffff;
   transition: all 0.5s ease-in-out;
-}
-.active {
-  color: white !important;
+
+  a {
+    color: white !important;
+  }
 }
 
 .side-sink {
@@ -69,13 +69,13 @@ li {
   left: 13px;
   z-index: -1;
 }
+.active {
+  color: white !important;
+}
+
 a {
   color: #000000 !important;
   font-size: 14px;
-}
-
-.side-inner a.active {
-  background-color: #f3f3f3;
 }
 
 .sidebar-icon {

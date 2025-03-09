@@ -1,4 +1,11 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,31 +15,46 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
-import { jobType } from 'src/app/shared/type';
 import { Notyf } from 'notyf';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { job } from 'src/app/shared/type';
+import moment, * as _moment from 'moment';
+import { Moment } from 'moment';
+
+import { DateFormatService } from 'src/app/shared/date-format.service';
+import { MatDatepicker } from '@angular/material/datepicker';
+import {
+  educationLevels,
+  months,
+  nigeriaStates,
+} from 'src/app/shared/constants';
+
 @Component({
   selector: 'app-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
-
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [],
 })
 export class ApplyComponent implements OnInit {
   @ViewChild('resumeInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('coverInput') coverInput!: ElementRef<HTMLInputElement>;
   @ViewChild('stepper') stepper!: MatStepper;
+  @ViewChild('matSelectPanel') matSelectPanel!: ElementRef;
   personalFormGroup!: FormGroup;
   questionsFormGroup!: FormGroup;
-  experienceFormGroup!: FormGroup;
+  educationFormGroup!: FormGroup;
+  workFormGroup!: FormGroup;
+  skillFormGroup!: FormGroup;
   supportingFormGroup!: FormGroup;
   isSubmitting: boolean = false;
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
   isLoading!: Observable<any>;
   isLoadingQuestion: boolean = false;
-  data!: jobType;
+  data!: job;
   id: string | null = '';
   candidateEmail: string | null = '';
   workHistories: any[] = [];
@@ -42,26 +64,17 @@ export class ApplyComponent implements OnInit {
   formControls: any = {};
   resumeValue: any;
   coverLetterValue: any;
+  nigeriaStates = nigeriaStates;
+  educationLevels = educationLevels;
   //prettier-ignore
-  months: string[] = ['January','February','March','April','May','June','July','August','September','October','November','December',
-  ];
-  //prettier-ignore
-  educationLevels: string[] = ["High School","Associate Degree","Bachelor's Degree","Master's Degree","Doctorate (PhD)","Diploma", "Certificate", "Postgraduate Diploma"
-  ];
-  //prettier-ignore
-  nigeriaStates: string[] = [
-    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
-    "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", "Imo", 
-    "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", 
-    "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
-    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
-  ];
+
   private notyf = new Notyf();
-  isEndDate: boolean = true;
+
   constructor(
     private fb: FormBuilder,
     private _jobService: JobRecruitService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dateFormatPicker: DateFormatService
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: [''],
@@ -75,20 +88,26 @@ export class ApplyComponent implements OnInit {
       linkedinProfile: [''],
     });
 
-    this.experienceFormGroup = this.fb.group({
+    this.workFormGroup = this.fb.group({
       companyName: [''],
       jobTitle: [''],
       startDate: [''],
       endDate: [''],
       jobDescription: [''],
+    });
+    this.educationFormGroup = this.fb.group({
       degree: [''],
       major: [''],
       institutionName: [''],
-      schoolStartDate: [''],
-      schoolEndDate: [''],
+      startDate: [''],
+      endDate: [''],
       fieldOfStudy: [''],
       educationLevel: [''],
+    });
+    this.skillFormGroup = this.fb.group({
       skillName: [''],
+      skillDescription: [''],
+      experience: [''],
       proficiencyLevel: [''],
       yearsOfExperience: [''],
     });
@@ -117,6 +136,28 @@ export class ApplyComponent implements OnInit {
     this.getCandidateInfo();
   }
 
+  getCandidateInfo() {
+    this.candidateEmail = this._jobService.getCandidateEmail();
+    this._jobService
+      .getCandidateInfo(this.candidateEmail)
+      .subscribe((candidateDate) => {
+        if (candidateDate.valid && candidateDate.data) {
+          const fullName = candidateDate.data?.name?.split(' ');
+          this.personalFormGroup.patchValue({
+            ...candidateDate.data,
+            firstName: fullName[0],
+            lastName: fullName[1],
+          });
+        } else {
+          this.notyf.error({
+            message: 'Error occur!',
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+          });
+        }
+      });
+  }
+
   validatePhone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -134,30 +175,48 @@ export class ApplyComponent implements OnInit {
     };
   }
 
-  getQuestions() {
-    let formControls: any = {};
-    this.data.questionOptions.forEach((question: any) => {
-      formControls[question.id] = new FormControl('');
-    });
-    this.questionsFormGroup = this.fb.group(formControls);
+  onMonthYearWorkSelect(
+    event: Moment,
+    formControlName: string,
+    datePicker: MatDatepicker<Moment>
+  ) {
+    this.dateFormatPicker.setMonthAndYear(
+      this.workFormGroup,
+      formControlName,
+      event,
+      datePicker
+    );
   }
+
+  onMonthYearEductionSelect(
+    event: Moment,
+    formControlName: string,
+    datePicker: MatDatepicker<Moment>
+  ) {
+    this.dateFormatPicker.setMonthAndYear(
+      this.educationFormGroup,
+      formControlName,
+      event,
+      datePicker
+    );
+  }
+
   addWorkHistory() {
-    const startDateValue = this.experienceFormGroup.get('startDate')?.value;
-    const endDateValue = this.experienceFormGroup.get('endDate')?.value;
+    const startDateValue = this.workFormGroup.get('startDate')?.value;
+    const endDateValue = this.workFormGroup.get('endDate')?.value;
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
     const data = {
-      companyName: this.experienceFormGroup.get('companyName')?.value,
-      jobTitle: this.experienceFormGroup.get('jobTitle')?.value,
+      companyName: this.workFormGroup.get('companyName')?.value,
+      jobTitle: this.workFormGroup.get('jobTitle')?.value,
       startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
-      endDate: `${startDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .padStart(2, '0')}`,
+      endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-      jobDescription: this.experienceFormGroup.get('jobDescription')?.value,
+        .padStart(2, '0')}`,
+      jobDescription: this.workFormGroup.get('jobDescription')?.value,
     };
-    console.log(data);
     this.workHistories.push(data);
     this.resetWorkHistoryForm();
   }
@@ -165,31 +224,31 @@ export class ApplyComponent implements OnInit {
     this.workHistories.splice(index, 1);
   }
   resetWorkHistoryForm() {
-    this.experienceFormGroup.get('companyName')?.reset();
-    this.experienceFormGroup.get('jobTitle')?.reset();
-    this.experienceFormGroup.get('startDate')?.reset();
-    this.experienceFormGroup.get('endDate')?.reset();
-    this.experienceFormGroup.get('jobDescription')?.reset();
+    this.workFormGroup.get('companyName')?.reset();
+    this.workFormGroup.get('jobTitle')?.reset();
+    this.workFormGroup.get('startDate')?.reset();
+    this.workFormGroup.get('endDate')?.reset();
+    this.workFormGroup.get('jobDescription')?.reset();
   }
 
   addEducationHistory() {
-    const startDateValue = this.experienceFormGroup.get('startDate')?.value;
-    const endDateValue = this.experienceFormGroup.get('endDate')?.value;
+    const startDateValue = this.educationFormGroup.get('startDate')?.value;
+    const endDateValue = this.educationFormGroup.get('endDate')?.value;
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
     const data = {
-      degree: this.experienceFormGroup.get('degree')?.value,
-      major: this.experienceFormGroup.get('major')?.value,
-      institutionName: this.experienceFormGroup.get('institutionName')?.value,
+      degree: this.educationFormGroup.get('degree')?.value,
+      major: this.educationFormGroup.get('major')?.value,
+      institutionName: this.educationFormGroup.get('institutionName')?.value,
       startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
-      endDate: `${startDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .padStart(2, '0')}`,
+      endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+        .padStart(2, '0')}`,
 
-      fieldOfStudy: this.experienceFormGroup.get('fieldOfStudy')?.value,
-      educationLevel: this.experienceFormGroup.get('educationLevel')?.value,
+      fieldOfStudy: this.educationFormGroup.get('fieldOfStudy')?.value,
+      educationLevel: this.educationFormGroup.get('educationLevel')?.value,
     };
 
     console.log(data);
@@ -200,13 +259,13 @@ export class ApplyComponent implements OnInit {
     this.educationHistories.splice(index, 1);
   }
   resetEducationHistoryForm() {
-    this.experienceFormGroup.get('degree')?.reset(),
-      this.experienceFormGroup.get('major')?.reset(),
-      this.experienceFormGroup.get('institutionName')?.reset(),
-      this.experienceFormGroup.get('startDate')?.reset(),
-      this.experienceFormGroup.get('startDate')?.reset(),
-      this.experienceFormGroup.get('fieldOfStudy')?.reset(),
-      this.experienceFormGroup.get('educationLevel')?.reset();
+    this.educationFormGroup.get('degree')?.reset(),
+      this.educationFormGroup.get('major')?.reset(),
+      this.educationFormGroup.get('institutionName')?.reset(),
+      this.educationFormGroup.get('startDate')?.reset(),
+      this.educationFormGroup.get('endDate')?.reset(),
+      this.educationFormGroup.get('fieldOfStudy')?.reset(),
+      this.educationFormGroup.get('educationLevel')?.reset();
   }
 
   removeSkills(index: number) {
@@ -215,27 +274,29 @@ export class ApplyComponent implements OnInit {
 
   addSkillHistory() {
     const data = {
-      skillName: this.experienceFormGroup.get('skillName')?.value,
-      proficiencyLevel: this.experienceFormGroup.get('proficiencyLevel')?.value,
-      noOfYears: Number(
-        this.experienceFormGroup.get('yearsOfExperience')?.value
-      ),
+      skillName: this.skillFormGroup.get('skillName')?.value,
+      proficiencyLevel: this.skillFormGroup.get('proficiencyLevel')?.value,
+      noOfYears: Number(this.skillFormGroup.get('yearsOfExperience')?.value),
     };
     this.skillHisories.push(data);
     this.resetSkillForm();
   }
   resetSkillForm() {
-    this.experienceFormGroup.get('skillName')?.reset(),
-      this.experienceFormGroup.get('proficiencyLevel')?.reset();
-    this.experienceFormGroup.get('yearsOfExperience')?.reset();
+    this.skillFormGroup.get('skillName')?.reset(),
+      this.skillFormGroup.get('proficiencyLevel')?.reset();
+    this.skillFormGroup.get('yearsOfExperience')?.reset();
+  }
+  endDateFilter(date: Date | null): boolean {
+    return this.workFormGroup.get('startDate')?.value
+      ? date! >= this.workFormGroup.get('startDate')?.value
+      : false;
   }
 
   formatDate(value: string) {
     const date = new Date(value);
-    return `${date.getDate()} ${
-      this.months[date.getMonth()]
-    } ${date.getFullYear()}`;
+    return `${months[date.getMonth()]} ${date.getFullYear()}`;
   }
+
   triggerFileInput() {
     this.fileInput.nativeElement.click();
   }
@@ -328,6 +389,13 @@ export class ApplyComponent implements OnInit {
     this.coverLetterValue = '';
   }
 
+  getQuestions() {
+    let formControls: any = {};
+    this.data.questionOptions.forEach((question: any) => {
+      formControls[question.id] = new FormControl('');
+    });
+    this.questionsFormGroup = this.fb.group(formControls);
+  }
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
     this._jobService.setLoading(true);
@@ -342,7 +410,9 @@ export class ApplyComponent implements OnInit {
         });
         this.isSubmitting = false;
         this.personalFormGroup.reset();
-        this.experienceFormGroup.reset();
+        this.educationFormGroup.reset();
+        this.workFormGroup.reset();
+        this.skillFormGroup.reset();
         this.questionsFormGroup.reset();
         this.supportingFormGroup.reset();
         this.skillHisories = [];
@@ -364,27 +434,6 @@ export class ApplyComponent implements OnInit {
         this.isLoading = this._jobService.getLoading();
       },
     });
-  }
-  getCandidateInfo() {
-    this.candidateEmail = this._jobService.getCandidateEmail();
-    this._jobService
-      .getCandidateInfo(this.candidateEmail)
-      .subscribe((candidateDate) => {
-        if (candidateDate.valid && candidateDate.data) {
-          const fullName = candidateDate.data?.name?.split(' ');
-          this.personalFormGroup.patchValue({
-            ...candidateDate.data,
-            firstName: fullName[0],
-            lastName: fullName[1],
-          });
-        } else {
-          this.notyf.error({
-            message: 'Error occur!',
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-        }
-      });
   }
   onSubmit(): void {
     const formValues = this.questionsFormGroup?.value;
@@ -414,18 +463,5 @@ export class ApplyComponent implements OnInit {
       jobDetailId: this.route.snapshot.paramMap.get('id'),
     };
     this.submitJobApplication(data);
-  }
-
-  onStartDateChange() {
-    if (!this.experienceFormGroup.get('startDate')?.value) {
-      this.isEndDate = true;
-    } else {
-      this.isEndDate = false;
-    }
-  }
-  endDateFilter(date: Date | null): boolean {
-    return this.experienceFormGroup.get('startDate')?.value
-      ? date! >= this.experienceFormGroup.get('startDate')?.value
-      : false;
   }
 }

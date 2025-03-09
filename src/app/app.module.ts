@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -20,6 +20,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { ApplyComponent } from './pages/apply/apply.component';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
 import { LoginComponent } from './pages/authentication/login/login.component';
+import { monthYearFormatDirective } from './shared/directives/month-date-format.directive';
+import { YearDateFormatDirective } from './shared/directives/year-date-format.directive';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,8 @@ import { LoginComponent } from './pages/authentication/login/login.component';
     ApplyComponent,
     JobDetailsComponent,
     LoginComponent,
+    monthYearFormatDirective,
+    YearDateFormatDirective,
   ],
   imports: [
     BrowserModule,
@@ -47,10 +52,11 @@ import { LoginComponent } from './pages/authentication/login/login.component';
     MatSnackBarModule,
     MatIconModule,
     MatStepperModule,
-    FormsModule,
     NgbModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -3,7 +3,7 @@ import { DashboardComponent } from './dashboard.component';
 import { NgModule } from '@angular/core';
 import { CorporateComponent } from './corporate/corporate.component';
 import { CandidateComponent } from './candidate/candidate.component';
-import { CreateJobComponent } from './create-job/create-job.component';
+import { JobComponent } from './job/job.component';
 
 const routes: Routes = [
   {
@@ -11,13 +11,22 @@ const routes: Routes = [
     component: DashboardComponent,
 
     children: [
+      { path: 'candidate', component: CandidateComponent },
+
+      {
+        path: 'job',
+        component: JobComponent,
+      },
       {
         path: 'corporate',
-        component: CorporateComponent,
-      },
-      { path: 'candidate/:id', component: CandidateComponent },
 
-      { path: 'create-job/:id', component: CreateJobComponent },
+        loadChildren: () =>
+          import('./corporate/corporate.module').then((m) => m.CorporateModule),
+      },
+      {
+        path: 'job',
+        loadChildren: () => import('./job/job.module').then((m) => m.JobModule),
+      },
     ],
   },
 ];

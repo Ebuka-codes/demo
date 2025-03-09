@@ -4,16 +4,60 @@
     font-weight: 600;
     margin-left: 20px;
   }
-  button {
-    padding: 11px;
-    width: 100px;
-    background-color: #28a745;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    border: none;
+  .corporate-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .corporate-search {
+      background-color: white;
+      border-radius: 25px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding-left: 20px;
+      width: 300px;
+      flex-shrink: 0;
+      button {
+        padding: 11px;
+        width: 100px;
+        background-color: #28a745;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        flex-direction: column;
+        justify-content: center;
+        padding: 11px 40px;
+        align-items: center;
+        text-align: center;
+        display: flex;
+        border: none;
+      }
+      ::ng-deep .mat-mdc-form-field-flex {
+        height: 40px !important;
+      }
+      ::ng-deep .mat-mdc-text-field-wrapper {
+        border: none !important;
+      }
+      ::ng-deep .mat-mdc-select-arrow {
+        display: none;
+      }
+      ::ng-deep .mat-mdc-select-placeholder {
+        font-size: 14px;
+      }
+    }
+    button {
+      padding: 11px;
+      width: 100px;
+      background-color: #28a745;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      border: none;
+    }
   }
+
   .corporate-table {
     background-color: white;
     border-radius: 10px;
@@ -113,8 +157,10 @@
     }
     tbody td {
       font-size: 14px;
-      color: #585858;
+      color: #000000;
       padding: 15px;
+      white-space: normal;
+      word-wrap: break-word;
     }
     .action {
       cursor: pointer;
@@ -126,7 +172,7 @@
         height: 20px;
       }
       .humburger-icon svg {
-        color: #dfdede;
+        color: #d9d9d9;
         width: 28px;
         height: 28px;
         cursor: pointer;
@@ -142,126 +188,11 @@
   tbody tr:nth-child(odd) {
     background-color: white !important;
   }
-
-  .create-corporate {
-    width: 60%;
-    margin: 10px auto;
-    .create-corporate-header {
-      text-align: center;
-      h2 {
-        font-weight: 600;
-        font-size: 24px;
-      }
-      p {
-        font-size: 14px;
-      }
-    }
-  }
 }
-
-.corporate-content {
-  padding: 10px 15px;
-  form {
-    margin-top: 20px;
-    .form-group {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 10px;
-      margin: 15px 0px;
-      label {
-        font-size: 13px;
-        color: #484747;
-      }
-      input {
-        color: #6d6d6d;
-        padding: 10px 10px;
-        height: 50px;
-        text-overflow: ellipsis;
-        font-size: 14px;
-        font-weight: 400;
-        outline: none;
-        border: 1px solid #dddd;
-        border-radius: 5px;
-        margin-top: 3px;
-      }
-    }
-
-    small {
-      color: rgba(216, 5, 5, 0.89);
-      font-size: 13px;
-    }
-    .required-icon {
-      position: relative;
-      top: 2px;
-    }
-    .errorInput {
-      border: 1px solid rgba(216, 5, 5, 0.89);
-    }
-    .submit-btn {
-      background-color: #28a745;
-      border: 0.0625rem solid #0000;
-      border-radius: 25px;
-      box-shadow: none;
-      color: #fff;
-      cursor: pointer;
-      display: block;
-      flex-shrink: 0;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0;
-      min-width: 100px;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
-
-      &:disabled {
-        cursor: not-allowed;
-      }
-    }
-
-    .mini-loader-spinner {
-      border: 3px solid white;
-      border-color: white transparent white white;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      margin: 0px auto;
-      animation: spin 0.5s linear infinite;
-      cursor: not-allowed;
-    }
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  }
-}
-
 input[type="checkbox"] {
   accent-color: #28a745;
 }
 
-::ng-deep .btn-close {
-  color: white;
-  img {
-    color: white;
-  }
-}
-.close-btn {
-  cursor: pointer;
-  font-size: 12px;
-  background-color: #28a745;
-  border-radius: 100%;
-  color: white;
-  cursor: pointer;
-  margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
-  padding: 2px;
-}
 .ngb-dropdown-menu {
   z-index: 1050 !important;
   position: absolute !important;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
-import { Corporate, DetailsType, file, JobApplication, jobType } from './type';
+import { DetailsType, job, JobApplication } from './type';
 import { enviroments } from 'src/environments/enviorments';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class JobRecruitService {
   baseUrl = enviroments.API_URL;
-  private jobListSubject$ = new BehaviorSubject<jobType[] | null>(null);
+  private jobListSubject$ = new BehaviorSubject<job[] | null>(null);
   private jobCategorySubject$ = new BehaviorSubject<any | null>(null);
   private category$ = this.jobCategorySubject$.asObservable();
   job$ = this.jobListSubject$.asObservable();
@@ -43,15 +43,6 @@ export class JobRecruitService {
     this.encodedValue = btoa(lastPath?.replace(/^\/+|\/+$/g, '').toUpperCase());
   }
 
-  createJob(newJob: jobType): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    return this.httpClient.post<jobType>(this.baseUrl + 'job-details', newJob, {
-      headers,
-    });
-  }
   getJobList(): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -199,18 +190,18 @@ export class JobRecruitService {
     });
   }
 
-  createCorporate(corporate: Corporate) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-    return this.httpClient.post<Corporate>(
-      this.baseUrl + `corporates`,
-      corporate,
-      {
-        headers,
-      }
-    );
-  }
+  // createCorporate(corporate: Corporate) {
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //   });
+  //   return this.httpClient.post<Corporate>(
+  //     this.baseUrl + `corporates`,
+  //     corporate,
+  //     {
+  //       headers,
+  //     }
+  //   );
+  // }
 
   getQueryDetailsByType() {
     const headers = new HttpHeaders({
@@ -251,7 +242,7 @@ export class JobRecruitService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.httpClient.post<file>(
+    return this.httpClient.post<any>(
       'http://localhost:8088/document/upload-base64',
       file,
       {

@@ -1,21 +1,37 @@
 .create-job {
   margin: 20px auto;
-  .create-job__header {
+  .create-job-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
     h2 {
       font-weight: 600;
-      font-size: 24px;
-      margin-bottom: 40px;
+      font-size: 23px;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    .nav-back {
+      background-color: white;
+      border-radius: 50px;
+      padding: 3px 5px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: #0000004d 0 2px 6px;
     }
     p {
       font-size: 14px;
     }
   }
-  .create-job__content {
+  .create-job-content {
     background-color: white;
     padding: 10px 10px;
     border-radius: 10px;
     margin-top: 10px;
     margin-bottom: 50px;
+    width: 90%;
     form {
       margin-top: 40px;
       .row {
@@ -66,18 +82,7 @@
         position: relative;
         top: 2px;
       }
-      .errorInput {
-        border: 1px solid rgba(216, 5, 5, 0.89);
-      }
-      .question-dropdown-options {
-        background-color: rgb(238 238 238 / 25%);
-        border-radius: 4px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 10px;
-        margin: 10px 0px;
-      }
+
       .question-btn {
         cursor: pointer;
         margin: 15px;
@@ -110,15 +115,7 @@
         }
       }
     }
-    .question-btn {
-      color: #28a745;
-      font-size: 14px;
-      border: none;
-      outline: none;
-      margin-left: 15px;
-      padding: 3px 4px;
-      margin: 10px 0px;
-    }
+
     &:disabled {
       cursor: pointer;
     }
@@ -128,6 +125,7 @@
       border-radius: 25px;
       box-shadow: none;
       color: #28a745;
+      margin-bottom: 30px;
       cursor: pointer;
       display: flex;
       gap: 5px;
@@ -138,35 +136,11 @@
       min-width: 100px;
       padding: 0.75rem 1rem;
       text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
       margin-left: 15px;
 
       svg {
         width: 20px;
         height: 20px;
-      }
-    }
-    .submit-btn {
-      background-color: #28a745;
-      border: 0.0625rem solid #0000;
-      border-radius: 25px;
-      box-shadow: none;
-      color: #fff;
-      cursor: pointer;
-      display: block;
-      flex-shrink: 0;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0;
-      min-width: 100px;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
-      margin-left: 15px;
-      &:disabled {
-        cursor: not-allowed;
       }
     }
 
@@ -192,15 +166,35 @@
         }
       }
     }
-    .close-btn {
+    .question-btn {
+      color: #28a745;
+      font-size: 14px;
+      border: none;
+      outline: none;
+      margin-left: 15px;
+      padding: 3px 4px;
+      margin: 10px 0px;
+    }
+
+    .submit-btn {
+      border-radius: 25px;
+      box-shadow: none;
       cursor: pointer;
-      font-size: 12px;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      border: none;
+      margin-right: 20px;
+      margin-bottom: 10px;
+      margin-top: 10px;
       background-color: #28a745;
-      border-radius: 100%;
       color: white;
-      cursor: pointer;
-      margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
-      padding: 2px;
     }
   }
   .auto-info {
@@ -213,33 +207,10 @@
     }
   }
 }
-::ng-deep .modal-body {
-  form {
-    margin-top: 10px !important;
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      margin: 10px 0px;
-    }
-  }
-}
 .custom-dropdown {
   .mat-select-panel {
     z-index: 1055 !important;
     position: absolute !important;
   }
-}
-
-.modal-header {
-  h5 {
-    font-size: 18px;
-  }
-}
-
-mat-option {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 }
