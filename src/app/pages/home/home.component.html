@@ -37,7 +37,7 @@
         (click)="toggleJobType(item?.jobType)"
         [ngClass]="{ selected: selectedJobTypes.includes(item.jobType) }"
       >
-        {{ item.jobType }}
+        {{ item.jobType | titlecase }}
       </button>
     </div>
   </section>

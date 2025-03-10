@@ -115,25 +115,30 @@ header {
     margin: 10px 10px;
 
     button {
-      border: 1px solid #ddd;
+      border: 1px solid #28a745;
       border-radius: 15px;
       text-transform: uppercase;
-      background: hsl(60, 7%, 95%);
+      background: #f2fae6;
       font-weight: 400;
       cursor: pointer;
       outline: none;
-      padding: 8px 10px;
+      padding: 8px 20px;
       letter-spacing: 0.03em;
       font-size: 12px;
-      max-width: 80%;
       white-space: nowrap;
       text-transform: capitalize;
+      color: #28a745;
+
+      &:hover {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        transition: all 0.5s ease;
+      }
     }
   }
   button.selected {
     background: #28a745 !important;
     border: none;
-    color: white;
+    color: white !important;
   }
 }
 

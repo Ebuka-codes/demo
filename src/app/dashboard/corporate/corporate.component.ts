@@ -13,6 +13,13 @@ import { DashboardService } from '../dashboard.service';
 import { Modal } from 'bootstrap';
 import { CorporateService } from './shared/corporate.service';
 import { Corporate } from './shared/corporate';
+import {
+  debounce,
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  switchMap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-corporate',
@@ -30,8 +37,8 @@ export class CorporateComponent {
   logoUrl: string = '';
   notyf = new Notyf();
   data!: any[];
-  searchText!: string;
-  isLoading: boolean = false;
+  searchText: string = '';
+  isLoading$!: Observable<any>;
   filteredData: Array<Corporate> = [];
   isLoadingLogo: boolean = false;
   editedData: any;
@@ -80,6 +87,7 @@ export class CorporateComponent {
   }
   handleGetCorpKey() {
     if (this.corpkey) {
+      console.log(this.corpkey.value);
       this.dashboardService.setLoading(true);
       setTimeout(() => {
         localStorage.setItem('corp-key', this.corpkey.value);
@@ -93,6 +101,31 @@ export class CorporateComponent {
         });
       }, 1000);
     }
+  }
+  getCorporate() {
+    this.dashboardService.setLoading(true);
+    this.submitLoading = true;
+    this.corporateService.getCorporate().subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.data = response;
+          console.log(this.data);
+          this.filteredData = [...this.data];
+          this.submitLoading = false;
+          this.dashboardService.setLoading(false);
+        }
+      },
+
+      error: () => {
+        this.submitLoading = false;
+        this.dashboardService.setLoading(false);
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+      },
+    });
   }
 
   validateEmail(): ValidatorFn {
@@ -123,17 +156,23 @@ export class CorporateComponent {
   }
 
   handleSearch() {
-    console.log(this.searchText);
-    if (this.searchText.trim() === '') {
-      this.filteredData = [...this.data];
-    } else {
-      this.filteredData = this.data.filter((item: any) =>
-        item.name?.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    }
+    // this.dashboardService.setLoading(true);
+    // this.isLoading$ = this.dashboardService.isLoading$;
+    // this.searchText.valueChanges.pipe(
+    //   distinctUntilChanged(),
+    //   debounceTime(300)
+    //   // switchMap((value) => this.corporateService)
+    // );
+    // this.searchText.console.log(this.searchText);
+    // if (this.searchText.trim() === '') {
+    //   this.filteredData = [...this.data];
+    // } else {
+    //   this.filteredData = this.data.filter((item: any) =>
+    //     item.name?.toLowerCase().includes(this.searchText.toLowerCase())
+    //   );
+    // }
   }
   convertResumeToBase64(file: File, name: string): void {
-    this.isLoading = true;
     this.isLoadingLogo = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -171,30 +210,7 @@ export class CorporateComponent {
     this.form.reset();
     this.isSubmitted = false;
   }
-  getCorporate() {
-    this.dashboardService.setLoading(true);
-    this.submitLoading = true;
-    this.corporateService.getCorporate().subscribe({
-      next: (response: any) => {
-        if (response) {
-          this.data = response;
-          this.filteredData = [...this.data];
-          this.submitLoading = false;
-          this.dashboardService.setLoading(false);
-        }
-      },
 
-      error: () => {
-        this.submitLoading = false;
-        this.dashboardService.setLoading(false);
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-      },
-    });
-  }
   createCorporate(corporate: Corporate) {
     this.submitLoading = true;
     this.form.disable();
@@ -227,9 +243,13 @@ export class CorporateComponent {
       },
     });
   }
+  onCreateCorporate() {
+    this.getCorporate();
+  }
   onEditCorporate() {
     this.getCorporate();
   }
+
   handleEditCorporate(id: string) {
     this.editedData = this.filteredData?.find((item) => item.id === id);
   }

@@ -295,15 +295,18 @@
                         </div>
                         <div class="form-group">
                           <label for="jobDescription">Job Description *</label>
-                          <mat-form-field>
-                            <input
-                              matInput
-                              type="text"
-                              formControlName="jobDescription"
-                              required
-                              class="text"
-                            />
-                          </mat-form-field>
+
+                          <textarea
+                            type="text"
+                            formControlName="jobDescription"
+                            required
+                            rows="10"
+                            style="
+                              border-radius: 5px;
+                              padding: 10px;
+                              resize: vertical;
+                            "
+                          ></textarea>
                         </div>
                       </div>
 
@@ -428,7 +431,7 @@
                             />
                           </mat-form-field>
                         </div>
-                        <div class="group">
+                        <div class="form-group">
                           <label for="major">Major *</label>
                           <mat-form-field>
                             <input
@@ -892,7 +895,13 @@
         </ng-container>
 
         <div class="supporting-page-btn">
-          <button class="prev" mat-button matStepperPrevious type="button">
+          <button
+            class="prev"
+            mat-button
+            matStepperPrevious
+            type="button"
+            [disabled]="isSubmitting"
+          >
             Back
           </button>
           <button
@@ -904,7 +913,7 @@
             (click)="onSubmit()"
           >
             <ng-container *ngIf="isSubmitting; else showLoader">
-              <span class="mini-loader-spinner"></span>
+              <span>Processing...</span>
             </ng-container>
             <ng-template #showLoader>
               <span>Submit</span>

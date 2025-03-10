@@ -41,6 +41,15 @@
       p {
         color: #28a745;
         font-size: 14px;
+        outline: none;
+      }
+
+      a {
+        outline: none;
+        text-decoration: none;
+        color: #28a745;
+        display: flex;
+        align-items: center;
       }
     }
   }
@@ -52,7 +61,7 @@
     gap: 2rem;
     padding: 8px 0 32px;
     justify-content: space-between;
-
+    margin-top: 10px;
     div {
       display: flex;
       flex-direction: column;
@@ -91,13 +100,14 @@
         font-weight: 700 !important;
       }
     }
-    ul li {
+
+    li {
       padding: 5px 0px;
-      font-size: 15px;
     }
     p {
       padding: 5px 0px;
-      font-size: 15px;
+      font-size: 16px;
+      line-height: 2;
     }
   }
   .job-divider {

@@ -3,7 +3,6 @@ import { DashboardService } from '../dashboard.service';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
 import {
-  debounce,
   debounceTime,
   distinctUntilChanged,
   Observable,
@@ -45,30 +44,30 @@ export class JobComponent implements OnInit {
       },
     });
   }
-  handleSearch() {}
-  //   this.dashboardService.setLoading(true);
-  //   this.isLoading$ = this.dashboardService.isLoading$;
-  //   this.searchText.valueChanges
-  //     .pipe(
-  //       debounceTime(500),
-  //       distinctUntilChanged(),
-  //       switchMap((value) =>
-  //         value ? this.jobService.filterjob(value) : of([])
-  //       )
-  //     )
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         if (response.valid && response.data) {
-  //           this.jobData = response.data;
-  //           this.dashboardService.setLoading(false);
-  //         } else {
-  //           this.jobData = [];
-  //         }
-  //       },
-  //       error: () => {
-  //         console.log('Error: No Jobs Found');
-  //         this.dashboardService.setLoading(false);
-  //       },
-  //     });
-  // }
+  handleSearch() {
+    this.dashboardService.setLoading(true);
+    this.isLoading$ = this.dashboardService.isLoading$;
+    this.searchText.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((value) =>
+          value ? this.jobService.filterjob(value) : of([])
+        )
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.jobData = response.data;
+            this.dashboardService.setLoading(false);
+          } else {
+            this.jobData = [];
+          }
+        },
+        error: () => {
+          console.log('Error: No Jobs Found');
+          this.dashboardService.setLoading(false);
+        },
+      });
+  }
 }

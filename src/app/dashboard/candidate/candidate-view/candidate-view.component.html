@@ -173,7 +173,9 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>{{ candidateViewData.jobDetail.jobStatus | titlecase }}</span>
+            <span>{{
+              candidateViewData?.jobDetail?.jobStatus | titlecase
+            }}</span>
           </div>
         </div>
       </div>
@@ -194,7 +196,8 @@
 
                   <li><strong>End Date</strong>: {{ item?.endDate }}</li>
                   <li>
-                    <strong>Job Description</strong> : {{ item.jobDescription }}
+                    <strong>Job Description</strong> :
+                    {{ item?.jobDescription }}
                   </li>
                 </ul>
               </div>
@@ -212,22 +215,23 @@
             <div ngbAccordionCollapse>
               <div ngbAccordionBody>
                 <ul *ngFor="let item of candidateViewData?.educationHistories">
-                  <li><strong>Degree </strong>: {{ item.degree }}</li>
+                  <li><strong>Degree </strong>: {{ item?.degree }}</li>
                   <li>
-                    <strong>institutionName</strong>: {{ item.institutionName }}
+                    <strong>institutionName</strong>:
+                    {{ item?.institutionName }}
                   </li>
                   <li>
-                    <strong>Field of study</strong>: {{ item.fieldOfStudy }}
+                    <strong>Field of study</strong>: {{ item?.fieldOfStudy }}
                   </li>
 
-                  <li><strong>major</strong>: {{ item.major }}</li>
+                  <li><strong>major</strong>: {{ item?.major }}</li>
                   <li>
-                    <strong>educationLevel</strong> : {{ item.educationLevel }}
+                    <strong>educationLevel</strong> : {{ item?.educationLevel }}
                   </li>
 
-                  <li><strong>Start Date</strong> : {{ item.startDate }}</li>
+                  <li><strong>Start Date</strong> : {{ item?.startDate }}</li>
 
-                  <li><strong>End Date</strong> : {{ item.endDate }}</li>
+                  <li><strong>End Date</strong> : {{ item?.endDate }}</li>
                 </ul>
               </div>
             </div>
@@ -244,13 +248,13 @@
             <div ngbAccordionCollapse>
               <div ngbAccordionBody>
                 <ul *ngFor="let item of candidateViewData?.skills">
-                  <li><strong>Skill Name</strong> : {{ item.skillName }}</li>
+                  <li><strong>Skill Name</strong> : {{ item?.skillName }}</li>
                   <li>
                     <strong>proficiency Level</strong> :
-                    {{ item.proficiencyLevel }}
+                    {{ item?.proficiencyLevel }}
                   </li>
                   <li>
-                    <strong>Year of Experience</strong> : {{ item.noOfYears }}
+                    <strong>Year of Experience</strong> : {{ item?.noOfYears }}
                   </li>
                 </ul>
               </div>
@@ -270,24 +274,24 @@
                 <ul *ngFor="let item of candidateViewData?.questionAnswers">
                   <li>
                     <strong>Question</strong> :
-                    {{ item.questionOption.description }}
+                    {{ item?.questionOption?.description }}
                   </li>
 
                   <ng-container
                     *ngIf="item.questionOption.questionType === 'DROPDOWN'"
                     ><li *ngFor="let item of item.questionOption.options">
-                      <strong>Answer</strong> : {{ item.description }}
+                      <strong>Answer</strong> : {{ item?.description }}
                     </li>
                   </ng-container>
 
                   <ng-container
-                    *ngIf="item.questionOption.questionType === 'TEXT'"
-                    ><li><strong>Answer</strong> : {{ item.answer }}</li>
+                    *ngIf="item?.questionOption?.questionType === 'TEXT'"
+                    ><li><strong>Answer</strong> : {{ item?.answer }}</li>
                   </ng-container>
 
                   <ng-container
-                    *ngIf="item.questionOption.questionType === 'DATE'"
-                    ><li><strong>Answer</strong> : {{ item.answer }}</li>
+                    *ngIf="item?.questionOption?.questionType === 'DATE'"
+                    ><li><strong>Answer</strong> : {{ item?.answer }}</li>
                   </ng-container>
                 </ul>
               </div>
@@ -298,7 +302,7 @@
 
       <div class="action-btn">
         <div class="resume-btn">
-          <button *ngIf="candidateViewData.resume">
+          <button *ngIf="candidateViewData?.resume">
             <a
               [href]="candidateViewData.resume"
               target="_blank"
@@ -323,7 +327,7 @@
           </button>
         </div>
         <div class="coverLetter-btn">
-          <button *ngIf="candidateViewData.coverLetter">
+          <button *ngIf="candidateViewData?.coverLetter">
             <a
               [href]="candidateViewData.coverLetter"
               target="_blank"

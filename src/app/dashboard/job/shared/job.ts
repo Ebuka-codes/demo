@@ -5,7 +5,7 @@ export interface job {
   employmentType: string;
   jobLocation: string;
   jobSalary: number;
-  jobStatus: string;
+  status: string;
   jobType: string;
   startDate: string;
   endDate: string;

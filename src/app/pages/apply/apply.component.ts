@@ -401,39 +401,39 @@ export class ApplyComponent implements OnInit {
     this._jobService.setLoading(true);
     this.isLoading = this._jobService.getLoading();
     this.isSubmitting = true;
-    this._jobService.submitJobApplication(jobApplication).subscribe({
-      next: () => {
-        this.notyf.success({
-          message: 'Submitted successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.isSubmitting = false;
-        this.personalFormGroup.reset();
-        this.educationFormGroup.reset();
-        this.workFormGroup.reset();
-        this.skillFormGroup.reset();
-        this.questionsFormGroup.reset();
-        this.supportingFormGroup.reset();
-        this.skillHisories = [];
-        this.workHistories = [];
-        this.educationHistories = [];
-        this.selectedResumeFile = null;
-        this.selectedCoverLetterFile = null;
-        this._jobService.setLoading(false);
-        this.isLoading = this._jobService.getLoading();
-      },
-      error: (error) => {
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.isSubmitting = false;
-        this._jobService.setLoading(false);
-        this.isLoading = this._jobService.getLoading();
-      },
-    });
+    // this._jobService.submitJobApplication(jobApplication).subscribe({
+    //   next: () => {
+    //     this.notyf.success({
+    //       message: 'Submitted successfully!',
+    //       duration: 4000,
+    //       position: { x: 'right', y: 'top' },
+    //     });
+    //     this.isSubmitting = false;
+    //     this.personalFormGroup.reset();
+    //     this.educationFormGroup.reset();
+    //     this.workFormGroup.reset();
+    //     this.skillFormGroup.reset();
+    //     this.questionsFormGroup.reset();
+    //     this.supportingFormGroup.reset();
+    //     this.skillHisories = [];
+    //     this.workHistories = [];
+    //     this.educationHistories = [];
+    //     this.selectedResumeFile = null;
+    //     this.selectedCoverLetterFile = null;
+    //     this._jobService.setLoading(false);
+    //     this.isLoading = this._jobService.getLoading();
+    //   },
+    //   error: (error) => {
+    //     this.notyf.error({
+    //       message: 'Error occur!',
+    //       duration: 4000,
+    //       position: { x: 'right', y: 'top' },
+    //     });
+    //     this.isSubmitting = false;
+    //     this._jobService.setLoading(false);
+    //     this.isLoading = this._jobService.getLoading();
+    //   },
+    // });
   }
   onSubmit(): void {
     const formValues = this.questionsFormGroup?.value;

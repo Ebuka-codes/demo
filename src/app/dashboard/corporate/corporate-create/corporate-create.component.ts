@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -22,7 +28,7 @@ export class CorporateCreateComponent {
   @ViewChild('myModal') modalElement!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   modalInstance!: Modal;
-
+  @Output() onCreateCorporate: EventEmitter<void> = new EventEmitter();
   form!: FormGroup;
   submitLoading: boolean = false;
   isSubmitted: boolean = false;
@@ -172,8 +178,8 @@ export class CorporateCreateComponent {
         this.form.enable();
         this.isSubmitted = false;
         this.dashboardService.setLoading(false);
-
         this.modalInstance.hide();
+        this.onCreateCorporate.emit();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
       },

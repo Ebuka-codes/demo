@@ -3,9 +3,10 @@ import { CandidateViewComponent } from './candidate-view/candidate-view.componen
 import { FormsModule } from '@angular/forms';
 import { CandidateComponent } from './candidate.component';
 import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [CandidateViewComponent, CandidateComponent],
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, NgbModule],
 })
 export class CandidateModule {}

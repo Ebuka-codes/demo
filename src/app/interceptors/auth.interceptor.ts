@@ -16,7 +16,6 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const corpValue = localStorage.getItem('corp-key') || '';
-    console.log('intercerpt is runing', corpValue);
 
     if (req.headers.has('corp-key')) {
       const modifiedReq = req.clone({

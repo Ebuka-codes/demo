@@ -91,7 +91,6 @@ export class JobCreateComponent {
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
-      jobStatus: [''],
       jobType: ['', Validators.required],
       companyName: ['', Validators.required],
       workMode: ['', Validators.required],
@@ -144,7 +143,6 @@ export class JobCreateComponent {
   }
   private _filter(value: string, type: any): string[] {
     const filterValue = value.toLowerCase();
-    console.log(filterValue);
     return type.filter((option: any) =>
       option?.description.toLowerCase().includes(filterValue)
     );
@@ -440,15 +438,13 @@ export class JobCreateComponent {
         endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
           .toString()
           .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-        jobStatus: 'PENDING',
         requiredSkills: this.selectedSkills,
         employmentType: this.form.get('employmentType')?.value.toUpperCase(),
-        jobType: this.form.get('jobType')?.value.toUpperCase(),
+        jobType: this.form.get('jobType')?.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),
       });
       this.form.get('jobDescription')?.setValue(' ');
     } else {
-      console.log('please check your form!');
       this.isSubmitted = true;
     }
   }
