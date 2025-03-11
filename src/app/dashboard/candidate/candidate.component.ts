@@ -14,7 +14,7 @@ export class CandidateComponent implements OnInit {
   notyf = new Notyf();
   candidateData!: Array<Candidate>;
   isLoading!: Observable<boolean>;
-  filteredData!: any;
+  filteredData: Array<Candidate> = [];
   candidateViewData: any;
   searchText!: string;
   constructor(
@@ -44,7 +44,6 @@ export class CandidateComponent implements OnInit {
       next: (response: any) => {
         if (response.valid && response.data) {
           this.candidateData = response.data;
-          console.log(this.candidateData);
           this.filteredData = this.candidateData;
           this.dashboardService.setLoading(false);
         }

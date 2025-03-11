@@ -13,6 +13,7 @@ export class CorporateService {
   createCorporate(corporate: Corporate) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'corp-key': 'true',
     });
     return this.httpClient.post<Corporate>(
       this.baseUrl + `corporates`,
@@ -22,18 +23,20 @@ export class CorporateService {
       }
     );
   }
-
   getCorporate() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'corp-key': 'true',
     });
     return this.httpClient.get<any>(this.baseUrl + `corporates`, {
       headers,
     });
   }
   editCorporate(id: string, data: Corporate) {
+    console.log(id, 'me');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'corp-key': 'true',
     });
     return this.httpClient.put<Corporate>(
       this.baseUrl + `corporates/${id}`,

@@ -34,14 +34,9 @@
     span {
       cursor: pointer;
       svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         color: #28a745;
-      }
-      p {
-        color: #28a745;
-        font-size: 14px;
-        outline: none;
       }
 
       a {
@@ -50,6 +45,7 @@
         color: #28a745;
         display: flex;
         align-items: center;
+        font-size: 14px;
       }
     }
   }
@@ -86,28 +82,31 @@
 
   ::ng-deep .job-details-desc {
     margin-top: 10px;
-    h2 {
-      font-size: 20px !important;
-      font-weight: 600;
-      line-height: 2.5rem;
+    a {
+      color: blue;
     }
+    h1,
+    h2,
     h3,
-    h4,
-    h5 {
-      font-size: 19px;
-      font-weight: 700 !important;
-      strong {
-        font-weight: 700 !important;
-      }
+    h4 {
+      color: black;
+      font-size: 16px;
+      font-weight: 500;
+      margin: 10px 0px;
     }
-
+    ul,
+    ol {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      padding-left: 20px;
+    }
     li {
-      padding: 5px 0px;
+      margin-bottom: 8px;
+      font-size: 15px;
     }
     p {
-      padding: 5px 0px;
-      font-size: 16px;
-      line-height: 2;
+      margin-bottom: 30px;
+      font-size: 15px;
     }
   }
   .job-divider {

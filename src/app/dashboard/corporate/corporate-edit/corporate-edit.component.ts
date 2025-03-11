@@ -100,7 +100,7 @@ export class CorporateEditComponent {
   validatePhone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
-      const valid = /^\+?\d{0,10}$/.test(value);
+      const valid = /^\+?\d{0,11}$/.test(value);
       return valid ? null : { invalidPhone: { value: control.value } };
     };
   }

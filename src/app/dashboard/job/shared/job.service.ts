@@ -23,6 +23,15 @@ export class JobService {
       headers,
     });
   }
+  getJobById(id: string | null) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.get<job>(this.baseUrl + `job-details/${id}`, {
+      headers,
+    });
+  }
   getAllJobs() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

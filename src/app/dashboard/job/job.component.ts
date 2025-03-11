@@ -10,6 +10,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-job',
@@ -20,13 +21,17 @@ export class JobComponent implements OnInit {
   jobData!: Array<job>;
   isLoading$!: Observable<any>;
   searchText = new FormControl('');
+  corpKey!: string | null;
+  viewJobData!: Array<job>;
   constructor(
     public jobService: JobService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private route: Router
   ) {}
 
   ngOnInit(): void {
     this.getAllJob();
+    this.corpKey = localStorage.getItem('corp-key');
   }
   getAllJob() {
     this.dashboardService.setLoading(true);
@@ -35,12 +40,14 @@ export class JobComponent implements OnInit {
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
           this.jobData = reponse.data;
+          console.log(this.jobData);
           this.dashboardService.setLoading(false);
         }
       },
       error: (error) => {
         console.log('Error: ', error);
         this.dashboardService.setLoading(false);
+        this.jobData = [];
       },
     });
   }
@@ -69,5 +76,13 @@ export class JobComponent implements OnInit {
           this.dashboardService.setLoading(false);
         },
       });
+  }
+
+  handleViewJoDetail(id: string) {
+    this.viewJobData = this.jobData.filter((job) => job.id === id);
+  }
+
+  handleEditJob(id: string) {
+    this.route.navigateByUrl(`/dashboard/job/edit/${id}`, { replaceUrl: true });
   }
 }

@@ -19,7 +19,6 @@ import { Notyf } from 'notyf';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
-import moment, * as _moment from 'moment';
 import { Moment } from 'moment';
 
 import { DateFormatService } from 'src/app/shared/date-format.service';
@@ -133,30 +132,30 @@ export class ApplyComponent implements OnInit {
           console.log(error.message);
         },
       });
-    this.getCandidateInfo();
+    // this.getCandidateInfo();
   }
 
-  getCandidateInfo() {
-    this.candidateEmail = this._jobService.getCandidateEmail();
-    this._jobService
-      .getCandidateInfo(this.candidateEmail)
-      .subscribe((candidateDate) => {
-        if (candidateDate.valid && candidateDate.data) {
-          const fullName = candidateDate.data?.name?.split(' ');
-          this.personalFormGroup.patchValue({
-            ...candidateDate.data,
-            firstName: fullName[0],
-            lastName: fullName[1],
-          });
-        } else {
-          this.notyf.error({
-            message: 'Error occur!',
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-        }
-      });
-  }
+  // getCandidateInfo() {
+  //   this.candidateEmail = this._jobService.getCandidateEmail();
+  //   this._jobService
+  //     .getCandidateInfo(this.candidateEmail)
+  //     .subscribe((candidateDate) => {
+  //       if (candidateDate.valid && candidateDate.data) {
+  //         const fullName = candidateDate.data?.name?.split(' ');
+  //         this.personalFormGroup.patchValue({
+  //           ...candidateDate.data,
+  //           firstName: fullName[0],
+  //           lastName: fullName[1],
+  //         });
+  //       } else {
+  //         this.notyf.error({
+  //           message: 'Error occur!',
+  //           duration: 4000,
+  //           position: { x: 'right', y: 'top' },
+  //         });
+  //       }
+  //     });
+  // }
 
   validatePhone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -211,10 +210,10 @@ export class ApplyComponent implements OnInit {
       jobTitle: this.workFormGroup.get('jobTitle')?.value,
       startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`,
+        .padStart(2, '0')}-01`,
       endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`,
+        .padStart(2, '0')}-01`,
       jobDescription: this.workFormGroup.get('jobDescription')?.value,
     };
     this.workHistories.push(data);
@@ -242,16 +241,13 @@ export class ApplyComponent implements OnInit {
       institutionName: this.educationFormGroup.get('institutionName')?.value,
       startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`,
+        .padStart(2, '0')}-01`,
       endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`,
-
+        .padStart(2, '0')}-01`,
       fieldOfStudy: this.educationFormGroup.get('fieldOfStudy')?.value,
       educationLevel: this.educationFormGroup.get('educationLevel')?.value,
     };
-
-    console.log(data);
     this.educationHistories.push(data);
     this.resetEducationHistoryForm();
   }
@@ -401,39 +397,39 @@ export class ApplyComponent implements OnInit {
     this._jobService.setLoading(true);
     this.isLoading = this._jobService.getLoading();
     this.isSubmitting = true;
-    // this._jobService.submitJobApplication(jobApplication).subscribe({
-    //   next: () => {
-    //     this.notyf.success({
-    //       message: 'Submitted successfully!',
-    //       duration: 4000,
-    //       position: { x: 'right', y: 'top' },
-    //     });
-    //     this.isSubmitting = false;
-    //     this.personalFormGroup.reset();
-    //     this.educationFormGroup.reset();
-    //     this.workFormGroup.reset();
-    //     this.skillFormGroup.reset();
-    //     this.questionsFormGroup.reset();
-    //     this.supportingFormGroup.reset();
-    //     this.skillHisories = [];
-    //     this.workHistories = [];
-    //     this.educationHistories = [];
-    //     this.selectedResumeFile = null;
-    //     this.selectedCoverLetterFile = null;
-    //     this._jobService.setLoading(false);
-    //     this.isLoading = this._jobService.getLoading();
-    //   },
-    //   error: (error) => {
-    //     this.notyf.error({
-    //       message: 'Error occur!',
-    //       duration: 4000,
-    //       position: { x: 'right', y: 'top' },
-    //     });
-    //     this.isSubmitting = false;
-    //     this._jobService.setLoading(false);
-    //     this.isLoading = this._jobService.getLoading();
-    //   },
-    // });
+    this._jobService.submitJobApplication(jobApplication).subscribe({
+      next: () => {
+        this.notyf.success({
+          message: 'Submitted successfully!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.isSubmitting = false;
+        this.personalFormGroup.reset();
+        this.educationFormGroup.reset();
+        this.workFormGroup.reset();
+        this.skillFormGroup.reset();
+        this.questionsFormGroup.reset();
+        this.supportingFormGroup.reset();
+        this.skillHisories = [];
+        this.workHistories = [];
+        this.educationHistories = [];
+        this.selectedResumeFile = null;
+        this.selectedCoverLetterFile = null;
+        this._jobService.setLoading(false);
+        this.isLoading = this._jobService.getLoading();
+      },
+      error: (error) => {
+        this.notyf.error({
+          message: 'Error occur!',
+          duration: 4000,
+          position: { x: 'right', y: 'top' },
+        });
+        this.isSubmitting = false;
+        this._jobService.setLoading(false);
+        this.isLoading = this._jobService.getLoading();
+      },
+    });
   }
   onSubmit(): void {
     const formValues = this.questionsFormGroup?.value;
@@ -457,7 +453,7 @@ export class ApplyComponent implements OnInit {
       educationHistories: this.educationHistories,
       workHistories: this.workHistories,
       skills: this.skillHisories,
-      questionOptionAnswersDTO: questionOption,
+      questionOptionAnswersDTO: questionOption ? questionOption : [],
       resume: this.resumeValue ? this.resumeValue.path : '',
       coverLetter: this.coverLetterValue ? this.coverLetterValue.path : '',
       jobDetailId: this.route.snapshot.paramMap.get('id'),

@@ -20,13 +20,14 @@ import * as bootstrap from 'bootstrap';
 import { map, Observable, startWith } from 'rxjs';
 import { job } from '../shared/job';
 import { JobService } from '../shared/job.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-job-create',
-  templateUrl: './job-create.component.html',
-  styleUrls: ['./job-create.component.scss'],
+  selector: 'app-job-edit',
+  templateUrl: './job-edit.component.html',
+  styleUrls: ['./job-edit.component.scss'],
 })
-export class JobCreateComponent {
+export class JobEditComponent {
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
   @ViewChild('newEmpType') newEmpType!: ElementRef<HTMLInputElement>;
   @ViewChild('newJobTitle') newJobTitle!: ElementRef<HTMLInputElement>;
@@ -81,7 +82,8 @@ export class JobCreateComponent {
   constructor(
     private fb: FormBuilder,
     private jobService: JobService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
       jobTitle: [
@@ -110,6 +112,12 @@ export class JobCreateComponent {
     this.getJobDetailByType();
     this.getAllQuestion();
     this.dashboardService.setLoading(false);
+
+    this.jobService
+      .getJobById(this.route.snapshot.paramMap.get('id'))
+      .subscribe((response) => {
+        this.form.patchValue(response);
+      });
   }
 
   filterForm() {

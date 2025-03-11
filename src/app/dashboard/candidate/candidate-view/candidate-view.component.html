@@ -10,7 +10,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">View Candidate</h5>
-        <span class="close-btn" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -173,127 +173,131 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>{{
-              candidateViewData?.jobDetail?.jobStatus | titlecase
-            }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="work-history">
-        <div ngbAccordion>
-          <div ngbAccordionItem>
-            <h2 ngbAccordionHeader>
-              <button ngbAccordionButton>Work History</button>
-            </h2>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ul *ngFor="let item of candidateViewData.workHistories">
-                  <li><strong>Job Type</strong>: {{ item?.jobTitle }}</li>
-                  <li>
-                    <strong>Company Name</strong>: {{ item?.companyName }}
-                  </li>
-                  <li><strong>Start Date</strong>: {{ item?.startDate }}</li>
-
-                  <li><strong>End Date</strong>: {{ item?.endDate }}</li>
-                  <li>
-                    <strong>Job Description</strong> :
-                    {{ item?.jobDescription }}
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <span>{{ candidateViewData.jobDetail.status | titlecase }}</span>
           </div>
         </div>
       </div>
 
-      <div class="education-history">
-        <div ngbAccordion>
-          <div ngbAccordionItem>
-            <h2 ngbAccordionHeader>
-              <button ngbAccordionButton>Education</button>
-            </h2>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ul *ngFor="let item of candidateViewData?.educationHistories">
-                  <li><strong>Degree </strong>: {{ item?.degree }}</li>
-                  <li>
-                    <strong>institutionName</strong>:
-                    {{ item?.institutionName }}
-                  </li>
-                  <li>
-                    <strong>Field of study</strong>: {{ item?.fieldOfStudy }}
-                  </li>
-
-                  <li><strong>major</strong>: {{ item?.major }}</li>
-                  <li>
-                    <strong>educationLevel</strong> : {{ item?.educationLevel }}
-                  </li>
-
-                  <li><strong>Start Date</strong> : {{ item?.startDate }}</li>
-
-                  <li><strong>End Date</strong> : {{ item?.endDate }}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="skill-history">
-        <div ngbAccordion>
-          <div ngbAccordionItem>
-            <h2 ngbAccordionHeader>
-              <button ngbAccordionButton>Skill</button>
-            </h2>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ul *ngFor="let item of candidateViewData?.skills">
-                  <li><strong>Skill Name</strong> : {{ item?.skillName }}</li>
-                  <li>
-                    <strong>proficiency Level</strong> :
-                    {{ item?.proficiencyLevel }}
-                  </li>
-                  <li>
-                    <strong>Year of Experience</strong> : {{ item?.noOfYears }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="question">
-        <div ngbAccordion>
-          <div ngbAccordionItem>
-            <h2 ngbAccordionHeader>
-              <button ngbAccordionButton>Questions</button>
-            </h2>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ul *ngFor="let item of candidateViewData?.questionAnswers">
-                  <li>
-                    <strong>Question</strong> :
-                    {{ item?.questionOption?.description }}
-                  </li>
-
-                  <ng-container
-                    *ngIf="item.questionOption.questionType === 'DROPDOWN'"
-                    ><li *ngFor="let item of item.questionOption.options">
-                      <strong>Answer</strong> : {{ item?.description }}
+      <div class="candidate-additional-info">
+        <div class="work-history">
+          <div ngbAccordion>
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>Work History</button>
+              </h2>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ul *ngFor="let item of candidateViewData?.workHistories">
+                    <li><strong>Job Type</strong>: {{ item?.jobTitle }}</li>
+                    <li>
+                      <strong>Company Name</strong>: {{ item?.companyName }}
                     </li>
-                  </ng-container>
+                    <li><strong>Start Date</strong>: {{ item?.startDate }}</li>
 
-                  <ng-container
-                    *ngIf="item?.questionOption?.questionType === 'TEXT'"
-                    ><li><strong>Answer</strong> : {{ item?.answer }}</li>
-                  </ng-container>
+                    <li><strong>End Date</strong>: {{ item?.endDate }}</li>
+                    <li>
+                      <strong>Job Description</strong> :
+                      {{ item?.jobDescription }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="education-history">
+          <div ngbAccordion>
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>Education</button>
+              </h2>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ul
+                    *ngFor="let item of candidateViewData?.educationHistories"
+                  >
+                    <li><strong>Degree </strong>: {{ item?.degree }}</li>
+                    <li>
+                      <strong>institutionName</strong>:
+                      {{ item?.institutionName }}
+                    </li>
+                    <li>
+                      <strong>Field of study</strong>: {{ item?.fieldOfStudy }}
+                    </li>
 
-                  <ng-container
-                    *ngIf="item?.questionOption?.questionType === 'DATE'"
-                    ><li><strong>Answer</strong> : {{ item?.answer }}</li>
-                  </ng-container>
-                </ul>
+                    <li><strong>major</strong>: {{ item?.major }}</li>
+                    <li>
+                      <strong>educationLevel</strong> :
+                      {{ item?.educationLevel }}
+                    </li>
+
+                    <li><strong>Start Date</strong> : {{ item?.startDate }}</li>
+
+                    <li><strong>End Date</strong> : {{ item?.endDate }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-history">
+          <div ngbAccordion>
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>Skill</button>
+              </h2>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ul *ngFor="let item of candidateViewData?.skills">
+                    <li><strong>Skill Name</strong> : {{ item?.skillName }}</li>
+                    <li>
+                      <strong>proficiency Level</strong> :
+                      {{ item?.proficiencyLevel }}
+                    </li>
+                    <li>
+                      <strong>Year of Experience</strong> :
+                      {{ item?.noOfYears }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="question">
+          <div ngbAccordion>
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>Questions & Answers</button>
+              </h2>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ul *ngFor="let item of candidateViewData?.questionAnswers">
+                    <li>
+                      <strong>Question</strong> :
+                      {{ item?.questionOption?.description }}
+                    </li>
+
+                    <ng-container
+                      *ngIf="item.questionOption.questionType === 'DROPDOWN'"
+                      ><li *ngFor="let item of item.questionOption.options">
+                        <strong>Answer</strong> : {{ item?.description }}
+                      </li>
+                    </ng-container>
+
+                    <ng-container
+                      *ngIf="item?.questionOption?.questionType === 'TEXT'"
+                      ><li><strong>Answer</strong> : {{ item?.answer }}</li>
+                    </ng-container>
+
+                    <ng-container
+                      *ngIf="item?.questionOption?.questionType === 'DATE'"
+                      ><li><strong>Answer</strong> : {{ item?.answer }}</li>
+                    </ng-container>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

@@ -14,9 +14,17 @@ import { CommonModule } from '@angular/common';
 import { JobRoutingModule } from './job-routing.module';
 import { JobComponent } from './job.component';
 import { JobQuestionCreateComponent } from './job-question-create/job-question-create.component';
+import { JobViewComponent } from './job-view/job-view.component';
+import { JobEditComponent } from './job-edit/job-edit.component';
 
 @NgModule({
-  declarations: [JobCreateComponent, JobComponent, JobQuestionCreateComponent],
+  declarations: [
+    JobCreateComponent,
+    JobComponent,
+    JobQuestionCreateComponent,
+    JobViewComponent,
+    JobEditComponent,
+  ],
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,

@@ -55,6 +55,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.form.valid) {
       this.isNext = true;
+      console.log(this._jobService.getJobDetailId());
       this.route.navigateByUrl(
         `/job/apply/${this._jobService.getJobDetailId()}`,
         { replaceUrl: true }

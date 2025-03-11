@@ -58,7 +58,7 @@ interface JobDetail {
   employmentType: string;
   jobLocation: string;
   jobSalary: number;
-  jobStatus: string;
+  status: string;
   jobType: string;
   companyName: string;
   workMode: string;
@@ -90,4 +90,5 @@ export interface Candidate {
   coverLetter: string;
   yearsOfExperience: number;
   jobDetail: JobDetail;
+  status: string;
 }

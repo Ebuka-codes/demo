@@ -222,9 +222,9 @@
           </td>
         </tr>
 
-        <tr *ngIf="dashboardService.isLoading$ | async">
+        <!-- <tr *ngIf="dashboardService.isLoading$ | async">
           <td>Loading...</td>
-        </tr>
+        </tr> -->
         <tr
           *ngIf="
             !(dashboardService.isLoading$ | async) && !filteredData?.length

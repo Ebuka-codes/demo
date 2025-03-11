@@ -4,7 +4,6 @@
   margin: 0px auto;
   display: flex;
   place-items: center;
-
   width: 100%;
   label {
     font-weight: 500;
@@ -25,12 +24,12 @@
 }
 .form-group:nth-child(odd),
 .form-group.odd {
-  background: #f4f4f4;
+  background: #f9f9f9;
 }
 
 .form-group:nth-child(even),
 .form-group.even {
-  background: #f9f9f9;
+  background-color: rgb(120 179 77 / 18%);
 }
 .close-icon {
   cursor: pointer;

@@ -4,15 +4,40 @@
     font-weight: 600;
     margin-left: 20px;
   }
-  button {
-    padding: 11px;
-    width: 100px;
-    background-color: #28a745;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    border: none;
+
+  .job-action {
+    margin: 20px 0px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    .btn-add {
+      padding: 11px;
+      width: 100px;
+      background-color: #28a745;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      margin-left: 10px;
+      border: none;
+    }
+
+    .btn-list {
+      padding: 11px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      background-color: transparent;
+
+      svg {
+        color: #28a745;
+      }
+    }
+    a {
+      text-decoration: none;
+      color: rgb(40, 40, 41);
+    }
   }
   .job-table {
     background-color: white;
@@ -114,8 +139,8 @@
     tbody {
       .status-btn {
         .active {
-          background-color: #d4edda;
-          padding: 3px 20px;
+          background-color: #e7f7ef;
+          padding: 5px 20px;
           border-radius: 5px;
           color: #0dab6f;
           border: none;
@@ -123,15 +148,15 @@
         }
         .closed {
           background-color: #f8d7da;
-          padding: 3px 20px;
+          padding: 5px 20px;
           border-radius: 5px;
           color: #721c24;
           border: none;
           font-size: 13px;
         }
         .pending {
-          background-color: #fff3cd;
-          padding: 3px 20px;
+          background-color: #fff6d3;
+          padding: 5px 20px;
           border-radius: 5px;
           color: #e8be29;
           border: none;

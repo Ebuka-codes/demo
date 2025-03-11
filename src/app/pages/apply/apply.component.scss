@@ -409,6 +409,9 @@
           box-shadow: #0000004d 0 2px 6px;
           background-color: #dddddd;
         }
+        &:disabled {
+          cursor: not-allowed;
+        }
       }
       .submit-btn {
         background-color: #28a745 !important;

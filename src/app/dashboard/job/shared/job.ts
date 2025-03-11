@@ -13,6 +13,7 @@ export interface job {
   workMode: string;
   questionOptions: Array<optionType>;
   requiredSkills: string[];
+  createdAt: string;
 }
 export interface optionType {
   id: string;

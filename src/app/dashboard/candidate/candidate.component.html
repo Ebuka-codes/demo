@@ -5,7 +5,7 @@
       <div class="candidate-search">
         <input
           type="text"
-          placeholder="Search by job title.."
+          placeholder="Search"
           [(ngModel)]="searchText"
           (ngModelChange)="handleSearch()"
         />
@@ -81,14 +81,14 @@
 
           <td>
             {{
-              item?.jobDetail?.jobTitle
+              item.jobDetail.jobTitle
                 ? (item?.jobDetail?.jobTitle | titlecase)
                 : "N/A"
             }}
           </td>
           <td>
             {{
-              item?.jobDetail?.jobType
+              item.jobDetail.jobType
                 ? (item?.jobDetail?.jobType | titlecase)
                 : "N/A"
             }}
@@ -112,11 +112,11 @@
           <td class="status-btn">
             <span
               [ngClass]="{
-                pending: item.jobStatus === 'PENDING',
-                active: item.jobStatus === 'APPROVED',
-                closed: item.jobStatus === 'REJECTED'
+                pending: item.status === 'PENDING',
+                active: item.status === 'APPROVED',
+                closed: item.status === 'REJECTED'
               }"
-              >{{ item?.jobStatus | titlecase }}</span
+              >{{ item?.status | titlecase }}</span
             >
           </td>
 
@@ -275,4 +275,5 @@
     </table>
   </div>
 </div>
+
 <app-candidate-view [candidateViewData]="candidateViewData" />
