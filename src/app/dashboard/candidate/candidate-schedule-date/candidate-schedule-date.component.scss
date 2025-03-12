@@ -1,0 +1,40 @@
+.modal-header {
+  .close-icon {
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #28a745;
+    border-radius: 100%;
+    color: white;
+    cursor: pointer;
+    margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+    padding: 2px;
+  }
+}
+.modal-body {
+  .schedule-date-btn {
+    background-color: #28a745;
+    border-radius: 25px;
+    border: none;
+    &:hover {
+      background-color: #218838;
+    }
+  }
+  form {
+    label {
+      font-size: 13px;
+      color: #484747;
+    }
+    input {
+      color: #6d6d6d;
+      padding: 10px 10px;
+      height: 50px;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      font-weight: 400;
+      outline: none;
+      border: 1px solid #dddd;
+      border-radius: 5px;
+      margin-top: 3px;
+    }
+  }
+}

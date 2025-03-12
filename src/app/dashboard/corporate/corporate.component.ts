@@ -13,13 +13,7 @@ import { DashboardService } from '../dashboard.service';
 import { Modal } from 'bootstrap';
 import { CorporateService } from './shared/corporate.service';
 import { Corporate } from './shared/corporate';
-import {
-  debounce,
-  debounceTime,
-  distinctUntilChanged,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-corporate',

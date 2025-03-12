@@ -19,18 +19,18 @@ export const MONTH_YEAR_FORMATS = {
 };
 
 export const months: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
   'May',
   'June',
   'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 
 export const educationLevels: string[] = [

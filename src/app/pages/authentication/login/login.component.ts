@@ -7,7 +7,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { JobRecruitService } from 'src/app/shared/job-recruit.service';
+import { Location } from '@angular/common';
+import { Observable, take } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
   selector: 'app-login',
@@ -17,16 +20,18 @@ import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 export class LoginComponent {
   form!: FormGroup;
   isNext: boolean = false;
+  isLoading!: Observable<boolean>;
   constructor(
     private fb: FormBuilder,
     private route: Router,
-    private _jobService: JobRecruitService
+    private authService: AuthService,
+    private location: Location,
+    private loaderService: LoaderService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, this.validateEmail()]],
       term: ['', Validators.required],
     });
-    console.log(this._jobService.getJobDetailId());
   }
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -45,22 +50,46 @@ export class LoginComponent {
     return this.form.get('term');
   }
   handleBack() {
-    this.route.navigateByUrl(
-      `/job-details/${this._jobService.getJobDetailId()}`,
-      {
-        replaceUrl: true,
-      }
-    );
+    this.location.back();
+  }
+  getUserData(email: string) {
+    this.authService
+      .getLoggedInUserData(email)
+      .pipe(take(1))
+      .subscribe({
+        next: (response: any) => {
+          const id = response?.data?.id;
+          console.log(id);
+          this.route.navigateByUrl(`/job/apply/${id}`, {
+            replaceUrl: true,
+          });
+          this.isNext = true;
+        },
+      });
   }
   onSubmit() {
     if (this.form.valid) {
-      this.isNext = true;
-      console.log(this._jobService.getJobDetailId());
-      this.route.navigateByUrl(
-        `/job/apply/${this._jobService.getJobDetailId()}`,
-        { replaceUrl: true }
-      );
-      this._jobService.setCandidateEmail(this.form.get('email')?.value);
+      this.loaderService.setLoading(true);
+      this.isLoading = this.loaderService.isLoading$;
+      this.authService.login(this.form.get('email')?.value).subscribe({
+        next: (response: any) => {
+          if (response.data === true) {
+            this.getUserData(this.form.get('email')?.value);
+            this.isNext = true;
+            this.loaderService.setLoading(false);
+          } else {
+            this.isNext = true;
+            this.loaderService.setLoading(false);
+            this.route.navigateByUrl(`/job/apply`, {
+              replaceUrl: true,
+            });
+          }
+        },
+        error: (err) => {
+          this.isNext = false;
+          this.loaderService.setLoading(false);
+        },
+      });
     } else {
       this.form.markAllAsTouched();
     }

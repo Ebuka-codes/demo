@@ -58,7 +58,7 @@
 
   .form-group:nth-child(even),
   .form-group.even {
-    background-color: rgb(120 179 77 / 18%);
+    background-color: rgb(77 179 121 / 18%);
   }
 }
 
@@ -108,7 +108,7 @@
   margin: 30px 0px;
   button {
     border: none;
-    padding: 10px 20px;
+    padding: 13px 20px;
     border-radius: 25px;
     display: flex;
     gap: 5px;
@@ -116,6 +116,7 @@
     color: white;
     font-size: 14px;
     background-color: transparent;
+    transition: all 0.5s ease-in-out;
   }
   a {
     text-decoration: none;
@@ -126,14 +127,32 @@
     height: 20px;
   }
 }
+.hire {
+  background-color: #17a2b8;
+  border-radius: 25px;
+  border: none;
+  &:hover {
+    background-color: #138496;
+  }
+}
 .interview-btn {
-  background-color: #28a745;
+  background-color: #fd7e14;
   border-radius: 25px;
   border: none;
 }
-.resume-btn,
-.coverLetter-btn {
-  background-color: #007bff;
+.reject {
+  background-color: #dc3545;
   border-radius: 25px;
   border: none;
+  &:hover {
+    background-color: #c82333;
+  }
+}
+.schedule-date {
+  background-color: #28a745;
+  border-radius: 25px;
+  border: none;
+  &:hover {
+    background-color: #218838;
+  }
 }

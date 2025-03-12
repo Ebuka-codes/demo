@@ -48,9 +48,7 @@ export class JobDetailsComponent implements OnInit {
     });
   }
   handleApplyJob() {
-    this.jobService.setJobDetailId(
-      this.data?.id !== undefined ? this.data?.id : ''
-    );
+    localStorage.setItem('JobId', this.data?.id);
     this.navigateRoute.navigateByUrl('/auth/login', { replaceUrl: true });
   }
   handleBack() {

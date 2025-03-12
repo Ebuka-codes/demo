@@ -28,6 +28,7 @@ import {
   months,
   nigeriaStates,
 } from 'src/app/shared/constants';
+import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
   selector: 'app-apply',
@@ -65,15 +66,14 @@ export class ApplyComponent implements OnInit {
   coverLetterValue: any;
   nigeriaStates = nigeriaStates;
   educationLevels = educationLevels;
-  //prettier-ignore
-
   private notyf = new Notyf();
 
   constructor(
     private fb: FormBuilder,
-    private _jobService: JobRecruitService,
+    private jobService: JobRecruitService,
     private route: ActivatedRoute,
-    private dateFormatPicker: DateFormatService
+    private dateFormatPicker: DateFormatService,
+    private loaderService: LoaderService
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: [''],
@@ -117,45 +117,40 @@ export class ApplyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoadingQuestion = true;
-    this._jobService
-      .getJobDetailsById(this.route.snapshot.paramMap.get('id'))
-      .subscribe({
-        next: (response) => {
-          if (response.valid && response.data) {
-            this.data = response.data;
-            this.isLoadingQuestion = false;
-            this.getQuestions();
-          }
-        },
-        error: (error) => {
-          console.log(error.message);
-        },
-      });
-    // this.getCandidateInfo();
-  }
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.jobService.setLoading(true);
+      this.isLoading = this.jobService.isLoading$;
+      this.jobService
+        .getCandidatesInfo(this.route.snapshot.paramMap.get('id'))
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              this.data = response.data;
+              this.personalFormGroup.patchValue({
+                firstName: response.data.name.split(' ')[0],
+                lastName: response.data.name.split(' ')[1],
+                email: response.data.email,
+                phone: response.data.phone,
+                countryName: response.data.countryName,
+                state: response.data.state,
+                address: response.data.address,
+                city: response.data.city,
+              });
+            }
+            this.jobService.setLoading(false);
+          },
+          error: (error) => {
+            this.notyf.error({
+              message: 'Error occur',
+              duration: 4000,
+            });
+            this.loaderService.setLoading(false);
+          },
+        });
+    }
 
-  // getCandidateInfo() {
-  //   this.candidateEmail = this._jobService.getCandidateEmail();
-  //   this._jobService
-  //     .getCandidateInfo(this.candidateEmail)
-  //     .subscribe((candidateDate) => {
-  //       if (candidateDate.valid && candidateDate.data) {
-  //         const fullName = candidateDate.data?.name?.split(' ');
-  //         this.personalFormGroup.patchValue({
-  //           ...candidateDate.data,
-  //           firstName: fullName[0],
-  //           lastName: fullName[1],
-  //         });
-  //       } else {
-  //         this.notyf.error({
-  //           message: 'Error occur!',
-  //           duration: 4000,
-  //           position: { x: 'right', y: 'top' },
-  //         });
-  //       }
-  //     });
-  // }
+    this.getQuestions();
+  }
 
   validatePhone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -318,8 +313,8 @@ export class ApplyComponent implements OnInit {
     }
   }
   convertResumeToBase64(file: File, name: string): void {
-    this._jobService.setLoading(true);
-    this.isLoading = this._jobService.isLoading$;
+    this.jobService.setLoading(true);
+    this.isLoading = this.jobService.isLoading$;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -327,11 +322,11 @@ export class ApplyComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this._jobService.convertFileToBase64(data).subscribe(
+      this.jobService.convertFileToBase64(data).subscribe(
         (response: any) => {
           if (response.valid && response.data) {
             this.resumeValue = response.data;
-            this._jobService.setLoading(false);
+            this.jobService.setLoading(false);
           }
         },
         (err) => {
@@ -341,14 +336,14 @@ export class ApplyComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.selectedResumeFile = '';
-          this._jobService.setLoading(false);
+          this.jobService.setLoading(false);
         }
       );
     };
   }
   convertCoverLetterFileToBase64(file: File, name: string): void {
-    this._jobService.setLoading(true);
-    this.isLoading = this._jobService.isLoading$;
+    this.jobService.setLoading(true);
+    this.isLoading = this.jobService.isLoading$;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -356,11 +351,11 @@ export class ApplyComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this._jobService.convertFileToBase64(data).subscribe(
+      this.jobService.convertFileToBase64(data).subscribe(
         (response: any) => {
           if (response.valid && response.data) {
             this.coverLetterValue = response.data;
-            this._jobService.setLoading(false);
+            this.jobService.setLoading(false);
           }
         },
         (err) => {
@@ -370,7 +365,7 @@ export class ApplyComponent implements OnInit {
             position: { x: 'right', y: 'top' },
           });
           this.selectedCoverLetterFile = '';
-          this._jobService.setLoading(false);
+          this.jobService.setLoading(false);
         }
       );
     };
@@ -387,17 +382,17 @@ export class ApplyComponent implements OnInit {
 
   getQuestions() {
     let formControls: any = {};
-    this.data.questionOptions.forEach((question: any) => {
+    this.data?.questionOptions.forEach((question: any) => {
       formControls[question.id] = new FormControl('');
     });
     this.questionsFormGroup = this.fb.group(formControls);
   }
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
-    this._jobService.setLoading(true);
-    this.isLoading = this._jobService.getLoading();
+    this.jobService.setLoading(true);
+    this.isLoading = this.jobService.getLoading();
     this.isSubmitting = true;
-    this._jobService.submitJobApplication(jobApplication).subscribe({
+    this.jobService.submitJobApplication(jobApplication).subscribe({
       next: () => {
         this.notyf.success({
           message: 'Submitted successfully!',
@@ -416,8 +411,8 @@ export class ApplyComponent implements OnInit {
         this.educationHistories = [];
         this.selectedResumeFile = null;
         this.selectedCoverLetterFile = null;
-        this._jobService.setLoading(false);
-        this.isLoading = this._jobService.getLoading();
+        this.jobService.setLoading(false);
+        this.isLoading = this.jobService.getLoading();
       },
       error: (error) => {
         this.notyf.error({
@@ -426,8 +421,8 @@ export class ApplyComponent implements OnInit {
           position: { x: 'right', y: 'top' },
         });
         this.isSubmitting = false;
-        this._jobService.setLoading(false);
-        this.isLoading = this._jobService.getLoading();
+        this.jobService.setLoading(false);
+        this.isLoading = this.jobService.getLoading();
       },
     });
   }
@@ -456,7 +451,7 @@ export class ApplyComponent implements OnInit {
       questionOptionAnswersDTO: questionOption ? questionOption : [],
       resume: this.resumeValue ? this.resumeValue.path : '',
       coverLetter: this.coverLetterValue ? this.coverLetterValue.path : '',
-      jobDetailId: this.route.snapshot.paramMap.get('id'),
+      jobDetailId: localStorage.getItem('JobId'),
     };
     this.submitJobApplication(data);
   }

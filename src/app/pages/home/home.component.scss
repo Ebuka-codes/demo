@@ -115,11 +115,9 @@ header {
     margin: 10px 10px;
 
     button {
-      border: 1px solid #28a745;
+      border: none;
       border-radius: 15px;
-      text-transform: uppercase;
-      background: #f2fae6;
-      font-weight: 400;
+      font-weight: 600;
       cursor: pointer;
       outline: none;
       padding: 8px 20px;
@@ -127,11 +125,14 @@ header {
       font-size: 12px;
       white-space: nowrap;
       text-transform: capitalize;
+      background-color: #dee2e64f;
       color: #28a745;
 
       &:hover {
         box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         transition: all 0.5s ease;
+        background-color: #28a745;
+        color: white;
       }
     }
   }
@@ -144,6 +145,7 @@ header {
 
 .job-listing {
   margin-top: 20px;
+  width: 100%;
   .job-header {
     display: flex;
     gap: 5px;
@@ -153,114 +155,113 @@ header {
       font-size: 18px !important;
       font-weight: 500;
     }
-    .add-btn {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      background: none;
-      background-color: #28a745;
-      border: 0.0625rem solid #0000;
-      border-radius: 25px;
-      box-shadow: none;
-      color: #fff;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0;
-      min-width: 90px;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
-      word-break: keep-all;
-
-      .icon {
-        width: 20px;
-        height: 20px;
-        color: white;
-      }
-    }
   }
   .job-listing-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 20px;
-
     margin: 20px 0px;
-    .job-info {
-      a {
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-      }
-      border: 1px solid #dddd;
-      padding: 1rem;
-      border-radius: 10px;
-      margin: 10px 0;
 
+    .job-card {
+      max-width: 450px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease-in-out;
       cursor: pointer;
-      gap: 2px;
+
+      &:hover {
+        transform: translateY(-3px);
+      }
+
       .job-title {
-        font-size: 20px;
-        font-weight: 600;
+        font-size: 18px;
+        font-weight: bold;
         color: #333;
       }
-      .company-name,
-      .company-location {
-        font-size: 14px;
-        font-weight: 400;
-        color: #4a4a4a;
-        line-height: 1.3;
-        margin-top: 4px;
+      a {
+        text-decoration: none;
+        color: #333;
       }
-      .job-desc {
-        margin: 4px 0px;
+
+      .company-name {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .location {
+        display: flex;
+        font-size: 14px;
+        gap: 5px;
+        svg {
+          width: 18px;
+          height: 18px;
+          color: #8d8b8b;
+        }
+        p {
+          position: relative;
+          bottom: 2px;
+        }
+      }
+      .tags {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+
+        span {
+          font-size: 12px;
+          font-weight: 600;
+          padding: 4px 8px;
+          border-radius: 10px;
+        }
+
+        .job-type {
+          background-color: #dee2e64f;
+          color: #28a745;
+        }
+
+        .work-mode {
+          background-color: #dee2e64f;
+          color: #28a745;
+        }
+        .employment-type {
+          background-color: #dee2e64f;
+          color: #28a745;
+        }
+      }
+
+      .job-dates {
+        font-size: 13px;
+        color: #888;
+        margin-top: 15px;
         display: flex;
         align-items: center;
         gap: 10px;
-      }
-      .jobType,
-      .workMode {
-        background-color: #f3f2f1;
-        border-radius: 0.25rem;
-        color: #595959;
-        font-size: 0.8rem;
-        font-weight: 700;
-        line-height: 1.3125rem;
-        margin-top: 10px;
-        margin-bottom: 0.25rem;
-        margin-right: 0.25rem;
-        padding: 0.2rem 0.5rem;
-
-        vertical-align: middle;
-      }
-      &:hover {
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        transition: all 0.5s ease;
+        svg {
+          width: 18px;
+          height: 18px;
+        }
       }
     }
   }
 
   button {
-    background-color: #28a745;
+    background-color: #dee2e64f;
+    color: #3333338f;
     border: 0.0625rem solid #0000;
-    border-radius: 25px;
-    box-shadow: none;
-    box-sizing: border-box;
-    color: #fff;
+    border-radius: 15px;
     cursor: pointer;
-    display: block;
-    flex-shrink: 0;
     font-size: 0.875rem;
     font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1.43;
-    line-height: 1.125rem;
     min-width: 150px;
     padding: 0.75rem 1rem;
-    text-align: center;
-    text-decoration: none;
-    white-space: nowrap;
-    word-break: keep-all;
+    margin-top: 15px;
+
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      transition: all 0.5s ease;
+    }
   }
 }

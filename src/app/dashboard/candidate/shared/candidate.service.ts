@@ -25,8 +25,40 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.delete<any>(this.baseUrl + `candidates/${id}`, {
+    return this.httpClient.delete(this.baseUrl + `candidates/${id}`, {
       headers,
     });
+  }
+  hireCandidateById(id: string, data: {}) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.put(this.baseUrl + `candidates/hire/${id}`, data, {
+      headers,
+    });
+  }
+  rejectCandidateById(id: string, data: {}) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.put(this.baseUrl + `candidates/reject/${id}`, data, {
+      headers,
+    });
+  }
+
+  scheduleCandidateById(id: string, data: {}) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.put(
+      this.baseUrl + `candidates/schedule/${id}`,
+      data,
+      {
+        headers,
+      }
+    );
   }
 }

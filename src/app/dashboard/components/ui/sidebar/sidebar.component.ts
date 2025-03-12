@@ -15,7 +15,6 @@ export class SidebarComponent {
       .subscribe(() => {
         this.isJobActive = this.route.url.startsWith('/dashboard/job');
         this.cdr.detectChanges();
-        console.log(this.isJobActive);
       });
   }
 }

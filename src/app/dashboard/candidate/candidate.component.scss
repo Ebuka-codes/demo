@@ -104,24 +104,25 @@
         padding: 15px;
       }
       .status-btn {
-        .active {
-          background-color: #d4edda;
+        .hired {
+          background-color: #e7f7ef;
           padding: 3px 20px;
           border-radius: 5px;
           color: #0dab6f;
           border: none;
           font-size: 13px;
         }
-        .closed {
-          background-color: #f8d7da;
+        .rejected {
+          background-color: #ff000017;
           padding: 3px 20px;
           border-radius: 5px;
-          color: #721c24;
+          color: #e50c20;
+
           border: none;
           font-size: 13px;
         }
         .pending {
-          background-color: #fff3cd;
+          background-color: #fff6d3;
           padding: 3px 20px;
           border-radius: 5px;
           color: #e8be29;

@@ -22,7 +22,7 @@ export class CandidateComponent implements OnInit {
     private candidateService: CandidateService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getCandidate();
   }
 
@@ -40,7 +40,7 @@ export class CandidateComponent implements OnInit {
   getCandidate() {
     this.dashboardService.setLoading(true);
     this.isLoading = this.dashboardService.isLoading$;
-    this.candidateService.getCandidate().subscribe({
+    this.candidateService?.getCandidate().subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
           this.candidateData = response.data;
@@ -68,5 +68,32 @@ export class CandidateComponent implements OnInit {
         (candidate: any) => candidate.id === id
       );
     }
+  }
+  handleUpdateCandidateTable() {
+    this.getCandidate();
+  }
+
+  handleReject(id: string) {
+    this.dashboardService.setLoading(true);
+    this.candidateService
+      .rejectCandidateById(id, { status: 'REJECTED' })
+      .subscribe({
+        next: (response: any) => {
+          this.notyf.success({
+            message: response.message,
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+          });
+          this.getCandidate();
+          this.dashboardService.setLoading(false);
+        },
+        error: () => {
+          this.notyf.error({
+            message: 'Error rejecting Candidate!',
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+          });
+        },
+      });
   }
 }

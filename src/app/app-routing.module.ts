@@ -19,6 +19,11 @@ const routes: Routes = [
     component: ApplyComponent,
   },
   {
+    path: 'job/apply',
+    component: ApplyComponent,
+  },
+
+  {
     path: 'apply/:id',
     component: HomeComponent,
   },

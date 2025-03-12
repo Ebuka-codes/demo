@@ -33,7 +33,6 @@ export class CorporateService {
     });
   }
   editCorporate(id: string, data: Corporate) {
-    console.log(id, 'me');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
@@ -52,7 +51,7 @@ export class CorporateService {
       'Content-Type': 'application/json',
     });
     return this.httpClient.post<file>(
-      'http://localhost:8088/document/upload-base64',
+      this.baseUrl + 'document/upload-base64',
       file,
       {
         headers,

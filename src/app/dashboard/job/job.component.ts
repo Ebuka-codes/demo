@@ -40,7 +40,6 @@ export class JobComponent implements OnInit {
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
           this.jobData = reponse.data;
-          console.log(this.jobData);
           this.dashboardService.setLoading(false);
         }
       },

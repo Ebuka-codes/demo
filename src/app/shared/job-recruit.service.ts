@@ -21,7 +21,6 @@ export class JobRecruitService {
   lastPath$ = this.lastpathSubject$.asObservable();
   error$ = this.errorSubject.asObservable();
   private jobDetailsId: string | null = null;
-  private candiateEmail: string | null = null;
   encodedValue: any;
   isLoading: boolean = false;
 
@@ -78,7 +77,6 @@ export class JobRecruitService {
       headers,
     });
   }
-
   searchJobs(params: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -105,25 +103,6 @@ export class JobRecruitService {
     );
   }
 
-  getAllQuestions() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    return this.httpClient.get(this.baseUrl + `question-options`, {
-      headers,
-    });
-  }
-
-  createQuestion(question: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    return this.httpClient.post(this.baseUrl + `question-options`, question, {
-      headers,
-    });
-  }
   getJobType() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -143,18 +122,17 @@ export class JobRecruitService {
       .subscribe();
     return this.category$;
   }
-  getCandidateInfo(email: any) {
+
+  getCandidatesInfo(id: string | null) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
-    return this.httpClient.post<any>(
-      this.baseUrl + `candidates/exist/${email}`,
-      {
-        headers,
-      }
-    );
+    return this.httpClient.get(this.baseUrl + `candidates/${id}`, {
+      headers,
+    });
   }
+
   submitJobApplication(application: JobApplication) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -168,40 +146,6 @@ export class JobRecruitService {
       }
     );
   }
-
-  getCandidate() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    console.log(this.encodedValue);
-    return this.httpClient.get<any>(this.baseUrl + `candidates`, {
-      headers,
-    });
-  }
-
-  deleteCandidateById(id: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    return this.httpClient.delete<any>(this.baseUrl + `candidates/${id}`, {
-      headers,
-    });
-  }
-
-  // createCorporate(corporate: Corporate) {
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //   });
-  //   return this.httpClient.post<Corporate>(
-  //     this.baseUrl + `corporates`,
-  //     corporate,
-  //     {
-  //       headers,
-  //     }
-  //   );
-  // }
 
   getQueryDetailsByType() {
     const headers = new HttpHeaders({
@@ -243,7 +187,7 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
     });
     return this.httpClient.post<any>(
-      'http://localhost:8088/document/upload-base64',
+      this.baseUrl + 'document/upload-base64',
       file,
       {
         headers,
@@ -256,12 +200,6 @@ export class JobRecruitService {
   }
   getJobDetailId(): string | null {
     return this.jobDetailsId;
-  }
-  setCandidateEmail(email: string) {
-    this.candiateEmail = email;
-  }
-  getCandidateEmail(): string | null {
-    return this.candiateEmail;
   }
 
   setLoading(loading: boolean) {

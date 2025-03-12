@@ -111,15 +111,23 @@ export class JobEditComponent {
     }
     this.getJobDetailByType();
     this.getAllQuestion();
-    this.dashboardService.setLoading(false);
-
+    this.dashboardService.setLoading(true);
     this.jobService
       .getJobById(this.route.snapshot.paramMap.get('id'))
-      .subscribe((response) => {
-        this.form.patchValue(response);
+      .subscribe((response: any) => {
+        if (response.data) {
+          this.form.patchValue(response.data);
+          setTimeout(() => {
+            this.form.controls['jobDescription'].setValue(
+              response.data.jobDescription,
+              { emitEvent: false }
+            );
+          }, 1000);
+          this.dashboardService.setLoading(false);
+        }
+        this.dashboardService.setLoading(false);
       });
   }
-
   filterForm() {
     this.jobTitleOption = this.form.controls['jobTitle'].valueChanges.pipe(
       startWith(''),

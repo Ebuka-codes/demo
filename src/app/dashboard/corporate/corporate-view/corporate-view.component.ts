@@ -8,7 +8,4 @@ import { Corporate } from '../shared/corporate';
 })
 export class CorporateViewComponent {
   @Input() corporateViewData!: Corporate;
-  constructor() {
-    console.log(this.corporateViewData);
-  }
 }

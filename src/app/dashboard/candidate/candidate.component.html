@@ -113,8 +113,8 @@
             <span
               [ngClass]="{
                 pending: item.status === 'PENDING',
-                active: item.status === 'APPROVED',
-                closed: item.status === 'REJECTED'
+                hired: item.status === 'HIRED',
+                rejected: item.status === 'REJECTED'
               }"
               >{{ item?.status | titlecase }}</span
             >
@@ -225,7 +225,11 @@
                       Cover letter
                     </a>
                   </button>
-                  <button style="font-size: 14px" ngbDropdownItem>
+                  <button
+                    style="font-size: 14px"
+                    ngbDropdownItem
+                    (click)="handleReject(item.id)"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -265,9 +269,9 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="isLoading | async">
+        <!-- <tr *ngIf="isLoading | async">
           <td>Loading...</td>
-        </tr>
+        </tr> -->
         <tr *ngIf="!(isLoading | async) && !filteredData?.length">
           <td>No record found</td>
         </tr>
@@ -276,4 +280,8 @@
   </div>
 </div>
 
-<app-candidate-view [candidateViewData]="candidateViewData" />
+<app-candidate-view
+  [candidateViewData]="candidateViewData"
+  (handleUpdateCandidateTable)="handleUpdateCandidateTable()"
+/>
+<app-candidate-schedule-date />

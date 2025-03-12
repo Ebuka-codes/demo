@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Notyf } from 'notyf';
 import { Observable } from 'rxjs';
+import { months } from 'src/app/shared/constants';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { job } from 'src/app/shared/type';
 
@@ -91,5 +92,12 @@ export class HomeComponent implements OnInit {
   }
   showJobList() {
     this.end = this.end * 2;
+  }
+
+  formatDate(value: string) {
+    const date = new Date(value);
+    return `${date.getDate()} ${
+      months[date.getMonth() + 1]
+    } ${date.getFullYear()}`;
   }
 }

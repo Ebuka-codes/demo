@@ -185,7 +185,6 @@ export class CorporateEditComponent {
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
         this.onEditCorporate.emit();
-        this.dashboardService.setLoading(false);
         this.notyf.success({
           message: 'Corporate updated successfully!',
           duration: 4000,

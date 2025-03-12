@@ -65,6 +65,9 @@
           background-color: #dddddd;
           outline: none;
         }
+        &:disabled {
+          cursor: not-allowed;
+        }
       }
       .btn-next {
         padding: 0.5rem 2rem;
@@ -94,5 +97,48 @@
   }
   input[type]:checked {
     accent-color: #28a745;
+  }
+  .mini-loader-spinner {
+    border: 3px solid white;
+    border-color: white transparent white white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px auto;
+    animation: spin 0.5s linear infinite;
+    cursor: not-allowed;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-bottom: 4px solid #28a745;
+  animation: load 1.5s infinite ease-in-out;
+  z-index: 20000;
+}
+
+@keyframes load {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
   }
 }

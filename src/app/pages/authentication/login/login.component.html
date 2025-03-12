@@ -1,3 +1,4 @@
+<div *ngIf="isLoading | async" class="progress-bar"></div>
 <section class="login-container">
   <div style="margin-bottom: 40px">
     <h2>You dont have an account</h2>
@@ -32,10 +33,20 @@
       </div>
     </div>
     <div class="btn-content">
-      <button class="btn-cancel" type="button" (click)="handleBack()">
+      <button
+        class="btn-cancel"
+        type="button"
+        (click)="handleBack()"
+        [disabled]="isLoading | async"
+      >
         Back
       </button>
-      <button type="submit" class="btn-next" (click)="onSubmit()">Next</button>
+      <button type="submit" class="btn-next" (click)="onSubmit()">
+        <ng-container *ngIf="isLoading | async; else showText">
+          <div class="mini-loader-spinner"></div>
+        </ng-container>
+        <ng-template #showText> Next</ng-template>
+      </button>
     </div>
   </form>
 </section>
