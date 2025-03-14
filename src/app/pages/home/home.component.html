@@ -29,15 +29,15 @@
     <button type="submit" (click)="searchJob()">Find jobs</button>
   </header>
 
-  <section class="job-category" *ngIf="jobCategory?.length">
-    <span>{{ jobList.length }} job open</span>
+  <section class="job-category" *ngIf="jobList?.length">
+    <span>{{ jobList.length }} OPEN JOBS</span>
     <div class="job-category-content">
       <button
         *ngFor="let item of jobCategory"
-        (click)="toggleJobType(item?.jobType)"
-        [ngClass]="{ selected: selectedJobTypes.includes(item.jobType) }"
+        (click)="toggleJobType(item)"
+        [ngClass]="{ selected: selectedJobTypes.includes(item) }"
       >
-        {{ item.jobType | titlecase }}
+        {{ item | titlecase }}
       </button>
     </div>
   </section>
@@ -49,9 +49,7 @@
       <app-loader-spinner />
     </ng-container>
     <ng-template #showJobListing>
-      <div class="job-header" *ngIf="jobList?.length">
-        <h4>Jobs for you</h4>
-      </div>
+      <div class="job-header" *ngIf="jobList?.length"></div>
       <ng-container *ngIf="!isLoadingSearch; else elseTemplate">
         <div class="job-listing-content">
           <div *ngFor="let item of jobList?.slice(start, end)" class="job-card">
@@ -79,7 +77,9 @@
                   />
                 </svg>
 
-                <p>{{ item.jobLocation }}</p>
+                <p>
+                  {{ item.jobLocation }}
+                </p>
               </span>
               <div class="tags">
                 <span class="job-type">{{ item.jobType | titlecase }}</span>
@@ -112,7 +112,7 @@
         </div>
         <button
           type="button"
-          *ngIf="jobList.length > 6"
+          *ngIf="jobList.length > 8"
           (click)="showJobList()"
         >
           Show more Job

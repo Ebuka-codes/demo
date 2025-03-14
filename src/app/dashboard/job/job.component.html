@@ -215,6 +215,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#deleteJobModal"
                     ngbDropdownItem
+                    (click)="handleDeleteJob(item.id)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -249,3 +250,4 @@
   </div>
 </div>
 <app-job-view [viewJobData]="viewJobData" />
+<app-job-delete (jobDeleted)="getAllJob()" [jobId]="jobId" />

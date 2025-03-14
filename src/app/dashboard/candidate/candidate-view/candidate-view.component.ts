@@ -9,10 +9,11 @@ import {
 import { Candidate } from '../shared/candidate';
 import { Notyf } from 'notyf';
 import { CandidateService } from '../shared/candidate.service';
-import { DashboardService } from '../../dashboard.service';
 import { Modal } from 'bootstrap';
 import * as bootsrap from 'bootstrap';
 import { take } from 'rxjs';
+import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/shared/service/toast.service';
 
 @Component({
   selector: 'app-candidate-view',
@@ -21,72 +22,63 @@ import { take } from 'rxjs';
 })
 export class CandidateViewComponent {
   @Input() candidateViewData!: Candidate;
-  @Output() handleUpdateCandidateTable: EventEmitter<void> = new EventEmitter();
+  @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
   @ViewChild('myModal') modalElement!: ElementRef;
+  @ViewChild('scheduleModal') modalSchedule!: ElementRef;
   modalInstance!: Modal;
+  modalScheduleInstance!: Modal;
   notyf = new Notyf();
 
   constructor(
     private candidateService: CandidateService,
-    private dashboardService: DashboardService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) {}
 
   ngAfterViewInit(): void {
     this.modalInstance = new bootsrap.Modal(this.modalElement.nativeElement);
   }
   hireCandidate(id: string) {
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.candidateService
       .hireCandidateById(id, { status: 'HIRED' })
       .pipe(take(1))
       .subscribe({
-        next: (response: any) => {
+        next: () => {
           this.modalInstance.hide();
           const backdrop = document.querySelector('.modal-backdrop');
           backdrop?.remove();
-          this.handleUpdateCandidateTable.emit();
-          this.notyf.success({
-            message: response.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
+          this.candidateUpdate.emit();
+          this.toastService.success('Candidate hired successfully');
         },
-        error: (error) => {
-          this.dashboardService.setLoading(false);
-          this.notyf.error({
-            message: 'Error hiring candidate!',
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
+        error: () => {
+          this.loaderService.setLoading(false);
+          this.toastService.error('Error hiring candidate!');
+        },
+      });
+  }
+  rejectCandidate(id: string) {
+    this.loaderService.setLoading(true);
+    this.candidateService
+      .rejectCandidateById(id, { status: 'REJECTED' })
+      .subscribe({
+        next: () => {
+          this.modalInstance.hide();
+          const backdrop = document.querySelector('.modal-backdrop');
+          backdrop?.remove();
+          this.toastService.success('Candidate rejected');
+          this.candidateUpdate.emit();
+        },
+        error: () => {
+          this.toastService.error('Error rejecting Candidate!');
+          this.loaderService.setLoading(false);
         },
       });
   }
 
-  rejectCandidate(id: string) {
-    this.dashboardService.setLoading(true);
-    this.candidateService
-      .rejectCandidateById(id, { status: 'REJECTED' })
-      .subscribe({
-        next: (response: any) => {
-          this.modalInstance.hide();
-          const backdrop = document.querySelector('.modal-backdrop');
-          backdrop?.remove();
-          this.notyf.success({
-            message: response.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-          this.handleUpdateCandidateTable.emit();
-        },
-        error: () => {
-          this.dashboardService.setLoading(false);
-          this.notyf.error({
-            message: 'Error rejecting Candidate!',
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-          this.dashboardService.setLoading(false);
-        },
-      });
+  handleText() {
+    this.modalInstance.hide();
+
+    this.modalScheduleInstance.show();
   }
 }

@@ -91,4 +91,5 @@ export interface Candidate {
   yearsOfExperience: number;
   jobDetail: JobDetail;
   status: string;
+  scheduledDate: string;
 }

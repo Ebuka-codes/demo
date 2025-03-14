@@ -26,10 +26,6 @@ export class DateFormatService {
     updatedDate.month(momentDate.month());
     updatedDate.year(momentDate.year());
     formGroup.get(formControlName)?.setValue(updatedDate);
-
-    console.log(`Start Date: ${formGroup.get('startDate')?.value}`);
-    console.log(`End Date: ${formGroup.get('endDate')?.value}`);
-
     datepicker.close();
   }
 }

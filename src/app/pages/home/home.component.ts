@@ -20,14 +20,19 @@ export class HomeComponent implements OnInit {
   private notyf = new Notyf();
   selectedJobTypes: string[] = [];
   start: number = 0;
-  end: number = 6;
+  end: number = 8;
 
   constructor(private _jobService: JobRecruitService) {}
   ngOnInit(): void {
     this._jobService.getJobList().subscribe((data) => {
       this.jobList = data;
-      this.jobCategory = this.jobList?.filter((job: any) => job.jobType);
-      console.log(this.jobCategory);
+      this.jobCategory = Array.from(
+        new Set(
+          this.jobList
+            ?.filter((job: any) => job.jobType)
+            .map((job: any) => job.jobType)
+        )
+      );
     });
     this.isLoading = this._jobService.isLoading$;
   }

@@ -38,12 +38,7 @@
   <div class="corporate-table">
     <div class="corporate-table-header">
       <div class="corporate-table-search">
-        <input
-          type="text"
-          placeholder="Search"
-          [(ngModel)]="searchText"
-          (ngModelChange)="handleSearch()"
-        />
+        <input type="text" placeholder="Search" [(ngModel)]="searchText" />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -61,9 +56,6 @@
       </div>
       <div>
         <button type="button">Filter</button>
-      </div>
-      <div>
-        <button type="button">Export</button>
       </div>
     </div>
     <table>
@@ -91,7 +83,6 @@
           </th>
 
           <th>Email</th>
-          <th>Address</th>
           <th>Phone</th>
           <th>HmCode</th>
           <th>Action</th>
@@ -113,7 +104,6 @@
             {{ item?.name ? (item?.name | titlecase) : "N/A" }}
           </td>
           <td>{{ item?.email || "N/A" }}</td>
-          <td>{{ item?.address || "N/A" }}</td>
           <td>{{ item?.phone || "N/A" }}</td>
           <td>{{ item?.hmCode || "N/A" }}</td>
 
@@ -199,6 +189,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#deleteCorporateModal"
                     ngbDropdownItem
+                    (click)="handleDeleteCorporate(item.id)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -221,25 +212,20 @@
             </div>
           </td>
         </tr>
-
-        <!-- <tr *ngIf="dashboardService.isLoading$ | async">
-          <td>Loading...</td>
-        </tr> -->
-        <tr
-          *ngIf="
-            !(dashboardService.isLoading$ | async) && !filteredData?.length
-          "
-        >
+        <tr *ngIf="!filteredData?.length">
           <td>No record found</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
-<app-corporate-create />
+<app-corporate-create (corporateCreated)="getCorporate()" />
 <app-corporate-edit
   [editedData]="editedData"
-  (onEditCorporate)="onEditCorporate()"
-  (onCreateCorporate)="onCreateCorporate()"
+  (corporateEdited)="getCorporate()"
 />
 <app-corporate-view [corporateViewData]="corporateViewData" />
+<app-corporate-delete
+  [corporateId]="corporateId"
+  (corporateDeleted)="getCorporate()"
+/>

@@ -23,6 +23,30 @@ export class JobService {
       headers,
     });
   }
+
+  editJob(id: string | null, newJob: job) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.put<job>(
+      this.baseUrl + `job-details/${id}`,
+      newJob,
+      {
+        headers,
+      }
+    );
+  }
+
+  deleteJob(id: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.delete(this.baseUrl + `job-details/${id}`, {
+      headers,
+    });
+  }
   getJobById(id: string | null) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

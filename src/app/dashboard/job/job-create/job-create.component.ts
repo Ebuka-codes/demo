@@ -1,4 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -10,16 +15,14 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Modal } from 'bootstrap';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Notyf } from 'notyf';
-import {
-  DetailsType,
-  KeyValuePair,
-  QuestionTypeOptions,
-} from 'src/app/shared/type';
-import { DashboardService } from '../../dashboard.service';
+import { DetailsType, QuestionTypeOptions } from 'src/app/shared/type';
 import * as bootstrap from 'bootstrap';
 import { map, Observable, startWith } from 'rxjs';
 import { job } from '../shared/job';
 import { JobService } from '../shared/job.service';
+import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/shared/service/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-job-create',
@@ -81,7 +84,10 @@ export class JobCreateComponent {
   constructor(
     private fb: FormBuilder,
     private jobService: JobService,
-    private dashboardService: DashboardService
+    private loaderService: LoaderService,
+    private toastService: ToastService,
+    private route: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
       jobTitle: [
@@ -101,7 +107,6 @@ export class JobCreateComponent {
       jobDescription: ['', Validators.required],
     });
   }
-
   ngOnInit(): void {
     if (this.froalaEditorInstance) {
       this.froalaEditorInstance.edit.off();
@@ -109,34 +114,34 @@ export class JobCreateComponent {
     }
     this.getJobDetailByType();
     this.getAllQuestion();
-    this.dashboardService.setLoading(false);
+    this.loaderService.setLoading(false);
   }
 
   filterForm() {
-    this.jobTitleOption = this.form.controls['jobTitle'].valueChanges.pipe(
+    this.jobTitleOption = this.form.controls['jobTitle']?.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || '', this.jobTitleData))
     );
 
-    this.jobTypeOption = this.form.controls['jobType'].valueChanges.pipe(
+    this.jobTypeOption = this.form.controls['jobType']?.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || '', this.jobTypeData))
     );
 
     this.jobLocationOption = this.form.controls[
       'jobLocation'
-    ].valueChanges.pipe(
+    ]?.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || '', this.jobLocationData))
     );
     this.jobEmploymentOption = this.form.controls[
       'employmentType'
-    ].valueChanges.pipe(
+    ]?.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || '', this.jobEmploymentData))
     );
 
-    this.jobSkillOption = this.form.controls['jobSkill'].valueChanges.pipe(
+    this.jobSkillOption = this.form.controls['jobSkill']?.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || '', this.jobSkillData))
     );
@@ -149,7 +154,7 @@ export class JobCreateComponent {
   }
 
   ngAfterViewInit(): void {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
 
   get jobTitle() {
@@ -277,27 +282,23 @@ export class JobCreateComponent {
   }
 
   getQuestionsById(id: string) {
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.jobService.getQuestionsById(id).subscribe((response: any) => {
       if (response.valid && response.data) {
         this.viewQuestionData = response.data;
         this.form.patchValue(this.viewQuestionData);
-        this.dashboardService.setLoading(false);
+        this.loaderService.setLoading(false);
       } else {
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.dashboardService.setLoading(false);
+        this.toastService.error('Error occur!');
+        this.loaderService.setLoading(false);
       }
     });
   }
   deleteQuestionsById(id: string) {
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.jobService.deleteQuestionsById(id).subscribe((response: any) => {
       if (response.valid) {
-        this.dashboardService.setLoading(false);
+        this.loaderService.setLoading(false);
         this.getAllQuestion();
 
         this.notyf.error({
@@ -311,7 +312,7 @@ export class JobCreateComponent {
           duration: 4000,
           position: { x: 'right', y: 'top' },
         });
-        this.dashboardService.setLoading(false);
+        this.loaderService.setLoading(false);
       }
     });
   }
@@ -339,27 +340,18 @@ export class JobCreateComponent {
   }
 
   createNewQueryDetails(data: DetailsType) {
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.jobService.createQueryDetails(data).subscribe({
       next: (response: any) => {
         if (response.valid) {
           this.getJobDetailByType();
-          this.notyf.success({
-            message: 'Created successfully!',
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
+          this.toastService.success('Created successfully!');
+          this.loaderService.setLoading(false);
         }
-        this.dashboardService.setLoading(false);
       },
       error: (error: any) => {
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-
-        this.dashboardService.setLoading(false);
+        this.toastService.error('Error occur!');
+        this.loaderService.setLoading(false);
       },
     });
   }
@@ -391,36 +383,25 @@ export class JobCreateComponent {
   }
   createNewJob(newJob: job) {
     this.loading = true;
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.jobService.createJob(newJob).subscribe({
-      next: () => {
-        this.loading = false;
-        this.notyf.success({
-          message: 'Job created successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.form.reset();
-        this.isSubmitted = false;
-        this.dashboardService.setLoading(false);
-        this.form.get('jobDescription')?.setValue(' ');
+      next: (response: any) => {
+        if (response.valid) {
+          this.loaderService.setLoading(false);
+          this.toastService.success('Job created successfully!');
+          this.route.navigate(['/dashboard/job']);
+        }
       },
-      error: (error: any) => {
+      error: () => {
         this.loading = false;
-        this.isSubmitted = false;
         this.form.enable();
         this.form.reset();
         this.form.get('jobDescription')?.setValue(' ');
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.dashboardService.setLoading(false);
+        this.toastService.error('Error occur!');
+        this.loaderService.setLoading(false);
       },
     });
   }
-
   onSubmit(): void {
     const startDateValue = this.form.get('startDate')?.value;
     const endDateValue = this.form.get('endDate')?.value;
@@ -466,57 +447,44 @@ export class JobCreateComponent {
   }
   editData(value: string, type: string) {
     if (this.editId) {
-      this.dashboardService.setLoading(true);
+      this.loaderService.setLoading(true);
       this.jobService
         .editQueryDetails(this.editId, { description: value, type: type })
-        .subscribe(
-          () => {
-            this.dashboardService.setLoading(false);
-            this.getJobDetailByType();
-            this.notyf.success({
-              message: 'Edited successfully!',
-              duration: 4000,
-              position: { x: 'right', y: 'top' },
-            });
-            this.text = '';
-            this.isEditOpen = false;
-            this.form.get(`${type}`)?.setValue('');
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid & response.data) {
+              this.loaderService.setLoading(false);
+              this.getJobDetailByType();
+              this.text = '';
+              this.isEditOpen = false;
+              this.form.get(`${type}`)?.setValue('');
+              this.toastService.success(response.message);
+            }
           },
-          (error) => {
-            this.notyf.error({
-              message: 'Error Occured',
-              duration: 4000,
-              position: { x: 'right', y: 'top' },
-            });
+          error: (err) => {
+            this.toastService.error('Error occur!');
             this.text = '';
             this.isEditOpen = false;
-          }
-        );
+          },
+        });
     }
   }
   handleDelete(id: string, type: string, value: string) {
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.jobService.deleteQueryDetails(id).subscribe(
-      () => {
-        this.dashboardService.setLoading(false);
+      (response: any) => {
+        this.loaderService.setLoading(false);
         this.getJobDetailByType();
-        this.notyf.success({
-          message: 'Deleted successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
+        this.toastService.success(response.message);
         this.form.get(`${type}`)?.setValue('');
         this.form.get('requiredSkills')?.setValue('');
         this.text = '';
       },
       (error) => {
-        this.notyf.error({
-          message: 'Error Occured',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
+        this.toastService.error('Error occur!');
+
         this.form.get(type)?.setValue('');
-        this.dashboardService.setLoading(false);
+        this.loaderService.setLoading(false);
       }
     );
   }

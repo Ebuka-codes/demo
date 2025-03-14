@@ -28,66 +28,72 @@
       </div>
 
       <div class="modal-body" *ngIf="corporateViewData">
-        <div class="form-group">
-          <div class="col-sm-6 control-label form-control-static p-2">
-            <label><strong>Corporate Name</strong></label>
-          </div>
-          <div
-            class="col-sm-6 form-control-static p-2"
-            style="word-wrap: break-word"
-          >
-            <span>{{
-              corporateViewData.name
-                ? (corporateViewData.name | titlecase)
-                : "N/A"
-            }}</span>
-          </div>
+        <div class="logo" *ngIf="corporateViewData.logo">
+          <img [src]="corporateViewData.logo" alt="Logo" />
         </div>
 
-        <div class="form-group">
-          <div class="col-sm-6 control-label form-control-static p-2">
-            <label><strong>Email</strong></label>
+        <div class="content">
+          <div class="form-group">
+            <div class="col-sm-6 control-label form-control-static p-2">
+              <label><strong>Corporate Name</strong></label>
+            </div>
+            <div
+              class="col-sm-6 form-control-static p-2"
+              style="word-wrap: break-word"
+            >
+              <span>{{
+                corporateViewData.name
+                  ? (corporateViewData.name | titlecase)
+                  : "N/A"
+              }}</span>
+            </div>
           </div>
-          <div
-            class="col-sm-6 form-control-static p-2"
-            style="word-wrap: break-word"
-          >
-            <span>{{ corporateViewData.email }}</span>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-sm-6 control-label form-control-static p-2">
-            <label><strong>Address</strong></label>
+          <div class="form-group">
+            <div class="col-sm-6 control-label form-control-static p-2">
+              <label><strong>Email</strong></label>
+            </div>
+            <div
+              class="col-sm-6 form-control-static p-2"
+              style="word-wrap: break-word"
+            >
+              <span>{{ corporateViewData.email }}</span>
+            </div>
           </div>
-          <div
-            class="col-sm-6 form-control-static p-2"
-            style="word-wrap: break-word"
-          >
-            <span>{{ corporateViewData.address }}</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-6 control-label form-control-static p-2">
-            <label><strong>Phone</strong></label>
-          </div>
-          <div
-            class="col-sm-6 form-control-static p-2"
-            style="word-wrap: break-word"
-          >
-            <span>{{ corporateViewData.phone }}</span>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-sm-6 control-label form-control-static p-2">
-            <label><strong>HmCode</strong></label>
+          <div class="form-group">
+            <div class="col-sm-6 control-label form-control-static p-2">
+              <label><strong>Address</strong></label>
+            </div>
+            <div
+              class="col-sm-6 form-control-static p-2"
+              style="word-wrap: break-word"
+            >
+              <span>{{ corporateViewData.address }}</span>
+            </div>
           </div>
-          <div
-            class="col-sm-6 form-control-static p-2"
-            style="word-wrap: break-word"
-          >
-            <span>{{ corporateViewData.hmCode || "N/A" }}</span>
+          <div class="form-group">
+            <div class="col-sm-6 control-label form-control-static p-2">
+              <label><strong>Phone</strong></label>
+            </div>
+            <div
+              class="col-sm-6 form-control-static p-2"
+              style="word-wrap: break-word"
+            >
+              <span>{{ corporateViewData.phone }}</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-6 control-label form-control-static p-2">
+              <label><strong>HmCode</strong></label>
+            </div>
+            <div
+              class="col-sm-6 form-control-static p-2"
+              style="word-wrap: break-word"
+            >
+              <span>{{ corporateViewData.hmCode || "N/A" }}</span>
+            </div>
           </div>
         </div>
       </div>

@@ -1,13 +1,3 @@
-export const YEAR_FORMATS = {
-  parse: { dateInput: 'DD/MM/YYYY' },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
-
 export const MONTH_YEAR_FORMATS = {
   parse: { dateInput: 'MM/YYYY' },
   display: {

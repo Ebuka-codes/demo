@@ -1,6 +1,6 @@
 <div
   class="modal fade"
-  #myModal
+  #scheduleModal
   id="scheduleDateModal"
   tabindex="-1"
   aria-labelledby="modalLabel"
@@ -29,7 +29,7 @@
 
       <div class="modal-body">
         <form [formGroup]="scheduleDateForm" (ngSubmit)="onSubmit()">
-          <label for="schedule-date">Schedule Date </label>
+          <label for="schedule-date">Schedule Date * </label>
           <mat-form-field>
             <input
               matInput

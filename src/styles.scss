@@ -158,11 +158,10 @@ html body * {
   }
   a {
     text-decoration: none;
-    color: rgb(14 13 13 / 59%);
+    color: rgb(14 13 13 / 84%);
   }
   .dropdown-item {
-    color: rgb(14 13 13 / 59%);
-
+    color: rgb(14 13 13);
     :focus,
     :hover svg {
       color: white;
@@ -202,7 +201,7 @@ html body * {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #333;
+  color: rgb(14 13 13 / 84%);
   background-color: transparent;
   transition: background-color 0.3s, color 0.3s;
 }
@@ -233,4 +232,8 @@ html body * {
 }
 .modal-xl {
   min-width: 1000px !important;
+}
+
+input[type="checkbox"] {
+  accent-color: #28a745;
 }

@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
 import { Moment } from 'moment';
 
-import { DateFormatService } from 'src/app/shared/date-format.service';
+import { DateFormatService } from 'src/app/shared/service/date-format.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {
   educationLevels,

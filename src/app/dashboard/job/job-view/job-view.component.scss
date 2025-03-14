@@ -79,6 +79,9 @@
       margin-bottom: 30px;
       font-size: 14px;
     }
+    p:has(br) {
+      display: none;
+    }
   }
   .btn-action {
     button {

@@ -185,7 +185,9 @@
             class="col-sm-6 form-control-static p-2"
             style="word-wrap: break-word"
           >
-            <span>Not available</span>
+            <span>{{
+              candidateViewData.scheduledDate || "Not available"
+            }}</span>
           </div>
         </div>
       </div>
@@ -230,16 +232,16 @@
                   >
                     <li><strong>Degree </strong>: {{ item?.degree }}</li>
                     <li>
-                      <strong>institutionName</strong>:
+                      <strong>Institution Name</strong>:
                       {{ item?.institutionName }}
                     </li>
                     <li>
                       <strong>Field of study</strong>: {{ item?.fieldOfStudy }}
                     </li>
 
-                    <li><strong>major</strong>: {{ item?.major }}</li>
+                    <li><strong>Major</strong>: {{ item?.major }}</li>
                     <li>
-                      <strong>educationLevel</strong> :
+                      <strong>Education Level</strong> :
                       {{ item?.educationLevel }}
                     </li>
 
@@ -379,6 +381,7 @@
           class="schedule-date"
           data-bs-dismiss="#scheduleDateModal"
           data-target="modal"
+          (click)="handleText()"
         >
           <button>
             <svg
@@ -424,4 +427,4 @@
   </div>
 </div>
 
-
+<app-candidate-schedule-date />

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../dashboard.service';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
 import {
@@ -11,6 +10,7 @@ import {
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
   selector: 'app-job',
@@ -23,9 +23,10 @@ export class JobComponent implements OnInit {
   searchText = new FormControl('');
   corpKey!: string | null;
   viewJobData!: Array<job>;
+  jobId!: string;
   constructor(
     public jobService: JobService,
-    private dashboardService: DashboardService,
+    private loaderService: LoaderService,
     private route: Router
   ) {}
 
@@ -34,25 +35,25 @@ export class JobComponent implements OnInit {
     this.corpKey = localStorage.getItem('corp-key');
   }
   getAllJob() {
-    this.dashboardService.setLoading(true);
-    this.isLoading$ = this.dashboardService.isLoading$;
+    this.loaderService.setLoading(true);
+    this.isLoading$ = this.loaderService.isLoading$;
     this.jobService.getAllJobs().subscribe({
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
           this.jobData = reponse.data;
-          this.dashboardService.setLoading(false);
+          this.loaderService.setLoading(false);
         }
       },
       error: (error) => {
         console.log('Error: ', error);
-        this.dashboardService.setLoading(false);
+        this.loaderService.setLoading(false);
         this.jobData = [];
       },
     });
   }
   handleSearch() {
-    this.dashboardService.setLoading(true);
-    this.isLoading$ = this.dashboardService.isLoading$;
+    this.loaderService.setLoading(true);
+    this.isLoading$ = this.loaderService.isLoading$;
     this.searchText.valueChanges
       .pipe(
         debounceTime(500),
@@ -65,14 +66,14 @@ export class JobComponent implements OnInit {
         next: (response: any) => {
           if (response.valid && response.data) {
             this.jobData = response.data;
-            this.dashboardService.setLoading(false);
+            this.loaderService.setLoading(false);
           } else {
             this.jobData = [];
           }
         },
         error: () => {
           console.log('Error: No Jobs Found');
-          this.dashboardService.setLoading(false);
+          this.loaderService.setLoading(false);
         },
       });
   }
@@ -80,8 +81,10 @@ export class JobComponent implements OnInit {
   handleViewJoDetail(id: string) {
     this.viewJobData = this.jobData.filter((job) => job.id === id);
   }
-
   handleEditJob(id: string) {
     this.route.navigateByUrl(`/dashboard/job/edit/${id}`, { replaceUrl: true });
+  }
+  handleDeleteJob(id: string) {
+    this.jobId = id;
   }
 }

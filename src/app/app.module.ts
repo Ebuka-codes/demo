@@ -21,7 +21,6 @@ import { ApplyComponent } from './pages/apply/apply.component';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
 import { LoginComponent } from './pages/authentication/login/login.component';
 import { monthYearFormatDirective } from './shared/directives/month-date-format.directive';
-import { YearDateFormatDirective } from './shared/directives/year-date-format.directive';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
@@ -33,7 +32,6 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     JobDetailsComponent,
     LoginComponent,
     monthYearFormatDirective,
-    YearDateFormatDirective,
   ],
   imports: [
     BrowserModule,

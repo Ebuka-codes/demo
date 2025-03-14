@@ -12,12 +12,12 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { DashboardService } from '../../dashboard.service';
-import { Notyf } from 'notyf';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { Corporate } from '../shared/corporate';
 import { CorporateService } from '../shared/corporate.service';
+import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/shared/service/toast.service';
 
 @Component({
   selector: 'app-corporate-create',
@@ -27,13 +27,12 @@ import { CorporateService } from '../shared/corporate.service';
 export class CorporateCreateComponent {
   @ViewChild('myModal') modalElement!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Output() corporateCreated: EventEmitter<void> = new EventEmitter();
   modalInstance!: Modal;
-  @Output() onCreateCorporate: EventEmitter<void> = new EventEmitter();
   form!: FormGroup;
   submitLoading: boolean = false;
   isSubmitted: boolean = false;
   logoUrl: string = '';
-  notyf = new Notyf();
   data: any[] = [];
   searchText: string = '';
   isLoading: boolean = false;
@@ -42,7 +41,8 @@ export class CorporateCreateComponent {
   constructor(
     private fb: FormBuilder,
     public corporateService: CorporateService,
-    private dashboardService: DashboardService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -74,7 +74,7 @@ export class CorporateCreateComponent {
 
   ngOnInit(): void {}
   ngAfterViewInit() {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
 
   validateEmail(): ValidatorFn {
@@ -129,7 +129,7 @@ export class CorporateCreateComponent {
     this.isLoadingLogo = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     reader.onload = () => {
       const data = {
         base64String: reader.result as string,
@@ -140,17 +140,12 @@ export class CorporateCreateComponent {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;
             this.isLoadingLogo = false;
-            this.dashboardService.setLoading(false);
+            this.loaderService.setLoading(false);
           }
         },
-        (err) => {
-          this.notyf.error({
-            message: err.error.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-
-          this.dashboardService.setLoading(false);
+        () => {
+          this.toastService.error('Netwok connection error');
+          this.loaderService.setLoading(false);
           this.isLoadingLogo = false;
         }
       );
@@ -161,39 +156,29 @@ export class CorporateCreateComponent {
     this.file = '';
     this.logoUrl = '';
   }
-
   createCorporate(corporate: Corporate) {
     this.submitLoading = true;
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.form.disable();
     this.corporateService.createCorporate(corporate).subscribe({
       next: () => {
         this.submitLoading = false;
-        this.notyf.success({
-          message: 'Corporate created successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
         this.form.reset();
         this.form.enable();
         this.isSubmitted = false;
-        this.dashboardService.setLoading(false);
+        this.loaderService.setLoading(false);
         this.modalInstance.hide();
-        this.onCreateCorporate.emit();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
+        this.toastService.success('Corporate added successfully!');
+        this.corporateCreated.emit();
       },
-
       error: () => {
         this.submitLoading = false;
         this.form.enable();
         this.form.reset();
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.dashboardService.setLoading(false);
+        this.toastService.error('Error occur!');
+        this.loaderService.setLoading(false);
       },
     });
   }

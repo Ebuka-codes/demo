@@ -30,7 +30,7 @@ header {
   background-color: white;
   padding: 10px 15px;
   width: 100%;
-  border-radius: 25px;
+  border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   display: flex;
   justify-content: space-between;
@@ -49,7 +49,6 @@ header {
       width: 25px;
       height: 25px;
       color: #b0b0b0;
-
       padding-right: 5px;
     }
     input {
@@ -62,7 +61,7 @@ header {
       font-weight: 400;
       outline: none;
       border: 1px solid #dddd;
-      border-radius: 25px;
+      border-radius: 10px;
       ::placeholder {
         font-size: 16px;
       }
@@ -73,7 +72,7 @@ header {
     background: none;
     background-color: #28a745;
     border: 0.0625rem solid #0000;
-    border-radius: 25px;
+    border-radius: 10px;
     box-shadow: none;
     box-sizing: border-box;
     color: #fff;
@@ -99,20 +98,20 @@ header {
   display: flex;
   gap: 5px;
   align-items: center;
-  margin: 15px 0px;
+  margin: 20px 0px;
   span {
     text-transform: capitalize;
     border-right: 1px solid #ddd;
-    padding-right: 5px;
-    font-size: 12px;
-    font-weight: 500;
+    padding-right: 10px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
   }
   .job-category-content {
     display: flex;
     gap: 5px;
     align-items: center;
-    margin: 10px 10px;
+    margin: 10px 15px;
 
     button {
       border: none;
@@ -142,7 +141,6 @@ header {
     color: white !important;
   }
 }
-
 .job-listing {
   margin-top: 20px;
   width: 100%;
@@ -159,7 +157,7 @@ header {
   .job-listing-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 20px;
+    gap: 30px;
     margin: 20px 0px;
 
     .job-card {
@@ -180,6 +178,7 @@ header {
         font-size: 18px;
         font-weight: bold;
         color: #333;
+        text-transform: capitalize;
       }
       a {
         text-decoration: none;
@@ -189,12 +188,14 @@ header {
       .company-name {
         font-size: 14px;
         color: #666;
+        text-transform: capitalize;
       }
 
       .location {
         display: flex;
         font-size: 14px;
         gap: 5px;
+        text-transform: capitalize;
         svg {
           width: 18px;
           height: 18px;
@@ -248,10 +249,10 @@ header {
   }
 
   button {
-    background-color: #dee2e64f;
-    color: #3333338f;
+    background-color: #28a745;
+    color: #ffff;
     border: 0.0625rem solid #0000;
-    border-radius: 15px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: 700;

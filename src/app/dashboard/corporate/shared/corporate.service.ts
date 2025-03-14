@@ -46,6 +46,16 @@ export class CorporateService {
     );
   }
 
+  deleteCorporate(id: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.delete(this.baseUrl + `corporates/${id}`, {
+      headers,
+    });
+  }
+
   convertFileToBase64(file: file) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
