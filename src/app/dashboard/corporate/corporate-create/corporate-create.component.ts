@@ -47,7 +47,7 @@ export class CorporateCreateComponent {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', [Validators.required, this.validatePhone()]],
+      phone: [''],
       email: ['', [Validators.required, this.validateEmail()]],
       logo: [''],
       hmCode: ['', Validators.required],
@@ -84,13 +84,6 @@ export class CorporateCreateComponent {
         value
       );
       return valid ? null : { invalidEmail: control.value };
-    };
-  }
-  validatePhone(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const value = control.value;
-      const valid = /^\+?\d{0,11}$/.test(value);
-      return valid ? null : { invalidPhone: { value: control.value } };
     };
   }
 

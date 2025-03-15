@@ -237,3 +237,25 @@ html body * {
 input[type="checkbox"] {
   accent-color: #28a745;
 }
+.mat-calendar-body-selected {
+  background-color: #28a745 !important;
+}
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(
+    .mat-calendar-body-comparison-identical
+  ) {
+  background-color: #28a74545 !important;
+}
+
+.mat-calendar-body-today {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.mat-mdc-icon-button svg {
+  color: #28a745 !important;
+}
+
+.mat-mdc-button-touch-target:hover {
+  background-color: transparent !important;
+}

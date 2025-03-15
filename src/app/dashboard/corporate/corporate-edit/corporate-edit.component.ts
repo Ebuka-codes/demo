@@ -52,7 +52,7 @@ export class CorporateEditComponent {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', [Validators.required, this.validatePhone()]],
+      phone: [''],
       email: ['', [Validators.required, this.validateEmail()]],
       hmCode: ['', Validators.required],
       logo: [''],

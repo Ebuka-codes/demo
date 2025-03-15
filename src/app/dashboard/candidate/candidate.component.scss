@@ -104,6 +104,16 @@
         padding: 15px;
       }
       .status-btn {
+        .scheduled {
+          background-color: #e0ebff;
+          padding: 3px 20px;
+          border-radius: 5px;
+          color: #2a5dcc;
+          border: none;
+          font-size: 13px;
+          max-width: 100px;
+        }
+
         .hired {
           background-color: #e7f7ef;
           padding: 3px 20px;
@@ -111,13 +121,14 @@
           color: #0dab6f;
           border: none;
           font-size: 13px;
+          max-width: 100px;
         }
         .rejected {
           background-color: #ff000017;
           padding: 3px 20px;
           border-radius: 5px;
           color: #e50c20;
-
+          max-width: 100px;
           border: none;
           font-size: 13px;
         }
@@ -128,6 +139,7 @@
           color: #e8be29;
           border: none;
           font-size: 13px;
+          max-width: 100px;
         }
       }
       .action {
@@ -147,6 +159,28 @@
         }
         .humburger-icon[ngbDropdownToggle]::after {
           display: none !important;
+        }
+
+        .action-icon {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          padding-right: 3px;
+          cursor: pointer;
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+          span:nth-child(1) {
+            color: #6d6d6d;
+          }
+          span:nth-child(2) {
+            color: #28a745;
+          }
+          span:nth-child(3) {
+            color: #e50c20;
+          }
         }
       }
     }

@@ -1,12 +1,13 @@
 <div
   class="modal fade"
-  #scheduleModal
-  id="scheduleDateModal"
+  #scheduledModal
+  id="scheduleModal"
   tabindex="-1"
   aria-labelledby="modalLabel"
   aria-hidden="true"
+  (hidden.bs.modal)="resetScheduleForm()"
 >
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Schedule Date</h5>
@@ -28,23 +29,35 @@
       </div>
 
       <div class="modal-body">
-        <form [formGroup]="scheduleDateForm" (ngSubmit)="onSubmit()">
-          <label for="schedule-date">Schedule Date * </label>
+        <form [formGroup]="scheduledDateForm" (ngSubmit)="onSubmit()">
+          <label for="schedule-date">Select Date * </label>
           <mat-form-field>
             <input
               matInput
-              [matDatepicker]="scheduleDate"
-              formControlName="scheduleDate"
+              [matDatepicker]="scheduleDatePicker"
+              formControlName="scheduledDate"
             />
-            <mat-datepicker-toggle matIconSuffix [for]="scheduleDate">
-              <mat-datepicker #scheduleDate></mat-datepicker>
+            <mat-datepicker-toggle matIconSuffix [for]="scheduleDatePicker">
+              <mat-datepicker #scheduleDatePicker></mat-datepicker>
             </mat-datepicker-toggle>
           </mat-form-field>
-          <div *ngIf="scheduleDate && submitted">
+          <div *ngIf="scheduleDate?.invalid && submitted">
             <small>Schedule date is required</small>
           </div>
+
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="isLoading$ | async"
+          >
+            <ng-container *ngIf="isLoading$ | async; else showLoader">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #showLoader>
+              <span>Submit</span>
+            </ng-template>
+          </button>
         </form>
-        <button type="submit" class="schedule-date-btn">submit</button>
       </div>
     </div>
   </div>

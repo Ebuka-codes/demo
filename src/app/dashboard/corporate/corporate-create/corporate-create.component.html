@@ -73,15 +73,6 @@
                 >Phone <span class="required-icon">*</span></label
               >
               <input type="text" formControlName="phone" />
-              <div *ngIf="phone?.invalid && isSubmitted">
-                <small *ngIf="phone?.errors?.['required']">
-                  Phone field is required
-                </small>
-                <small
-                  *ngIf="!phone?.errors?.['required'] && phone?.errors?.['invalidPhone']"
-                  >Invalid Phone Number</small
-                >
-              </div>
             </div>
 
             <div class="form-group">

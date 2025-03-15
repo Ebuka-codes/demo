@@ -48,13 +48,13 @@ export class CandidateService {
     });
   }
 
-  scheduleCandidateById(id: string, data: {}) {
+  scheduleCandidateById(id: string, data: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
     return this.httpClient.put(
-      this.baseUrl + `candidates/schedule/${id}`,
+      this.baseUrl + `candidates/schedule/${id}?scheduledDate=${data}`,
       data,
       {
         headers,

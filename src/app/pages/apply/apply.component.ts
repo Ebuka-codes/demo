@@ -29,6 +29,7 @@ import {
   nigeriaStates,
 } from 'src/app/shared/constants';
 import { LoaderService } from 'src/app/shared/service/loader.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-apply',
@@ -73,7 +74,8 @@ export class ApplyComponent implements OnInit {
     private jobService: JobRecruitService,
     private route: ActivatedRoute,
     private dateFormatPicker: DateFormatService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private location: Location
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: [''],
@@ -413,6 +415,7 @@ export class ApplyComponent implements OnInit {
         this.selectedCoverLetterFile = null;
         this.jobService.setLoading(false);
         this.isLoading = this.jobService.getLoading();
+        this.location.historyGo(-3);
       },
       error: (error) => {
         this.notyf.error({

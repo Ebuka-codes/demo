@@ -57,7 +57,6 @@
           <th>Job Title</th>
           <th>Job Type</th>
           <th>Work Mode</th>
-          <th>Employment Type</th>
           <th>Application Date</th>
           <th>Status</th>
           <th>Action</th>
@@ -100,28 +99,86 @@
                 : "N/A"
             }}
           </td>
-          <td>
-            {{
-              item?.jobDetail?.employmentType
-                ? (item?.jobDetail?.employmentType | titlecase)
-                : "N/A"
-            }}
-          </td>
+
           <td>{{ item?.createdAt }}</td>
 
           <td class="status-btn">
-            <span
+            <div
               [ngClass]="{
                 pending: item.status === 'PENDING',
                 hired: item.status === 'HIRED',
-                rejected: item.status === 'REJECTED'
+                rejected: item.status === 'REJECTED',
+                scheduled: item.status === 'INTERVIEW_SCHEDULED'
               }"
-              >{{ item?.status | titlecase }}</span
             >
+              {{ item?.status?.slice(0, 9) | titlecase }}
+            </div>
           </td>
 
           <td>
             <div class="action">
+              <div class="action-icon">
+                <span
+                  data-bs-toggle="modal"
+                  data-bs-target="#viewCandidateModal"
+                  (click)="handleViewCandidate(item.id)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                </span>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                    />
+                  </svg>
+                </span>
+                <span (click)="handleReject(item.id)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <line x1="18" y1="10" x2="22" y2="14"></line>
+                    <line x1="22" y1="10" x2="18" y2="14"></line>
+                  </svg>
+                </span>
+              </div>
+
               <div ngbDropdown class="d-inline-block" container="body">
                 <span
                   class="humburger-icon"
@@ -143,35 +200,6 @@
                   </svg>
                 </span>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button
-                    style="font-size: 14px"
-                    data-bs-toggle="modal"
-                    data-bs-target="#viewCandidateModal"
-                    ngbDropdownItem
-                    (click)="handleViewCandidate(item.id)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
-                    View
-                  </button>
-
                   <button
                     style="font-size: 14px"
                     ngbDropdownItem
@@ -225,53 +253,12 @@
                       Cover letter
                     </a>
                   </button>
-                  <button
-                    style="font-size: 14px"
-                    ngbDropdownItem
-                    (click)="handleReject(item.id)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="4" y1="4" x2="20" y2="20"></line>
-                    </svg>
-
-                    Reject
-                  </button>
-                  <button style="font-size: 14px" ngbDropdownItem>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                      />
-                    </svg>
-                    Interview
-                  </button>
                 </div>
               </div>
             </div>
           </td>
         </tr>
-        <!-- <tr *ngIf="isLoading | async">
-          <td>Loading...</td>
-        </tr> -->
+
         <tr *ngIf="!(isLoading | async) && !filteredData?.length">
           <td>No record found</td>
         </tr>
@@ -279,7 +266,6 @@
     </table>
   </div>
 </div>
-
 <app-candidate-view
   [candidateViewData]="candidateViewData"
   (candidateUpdate)="getCandidate()"
