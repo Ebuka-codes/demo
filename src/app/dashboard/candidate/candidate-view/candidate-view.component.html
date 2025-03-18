@@ -194,130 +194,113 @@
 
       <div class="candidate-additional-info">
         <div class="work-history">
-          <div *ngIf="(workHistories$ | async)?.length ?? 0 > 0">
-            <div ngbAccordion>
-              <div ngbAccordionItem>
-                <h2 ngbAccordionHeader>
-                  <button ngbAccordionButton>Work History</button>
-                </h2>
-                <div ngbAccordionCollapse>
-                  <div ngbAccordionBody>
-                    <ul *ngFor="let item of workHistories$ | async">
-                      <li><strong>Job Type</strong>: {{ item?.jobTitle }}</li>
-                      <li>
-                        <strong>Company Name</strong>: {{ item?.companyName }}
-                      </li>
-                      <li>
-                        <strong>Start Date</strong>: {{ item?.startDate }}
-                      </li>
-                      <li><strong>End Date</strong>: {{ item?.endDate }}</li>
-                      <li>
-                        <strong>Job Description</strong>:
-                        {{ item?.jobDescription }}
-                      </li>
-                    </ul>
-                  </div>
+          <ngb-accordion #acc="ngbAccordion" activeIds="1">
+            <ngb-panel [ngbCollapse]="true">
+              <ng-template ngbPanelTitle>Work History</ng-template>
+              <ng-template ngbPanelContent>
+                <div *ngFor="let job of candidateViewData?.workHistories">
+                  <p><strong>Job Title:</strong> {{ job.jobTitle }}</p>
+                  <p><strong>Company Name:</strong> {{ job.companyName }}</p>
+                  <p><strong>Start Date:</strong> {{ job.startDate }}</p>
+                  <p><strong>End Date:</strong> {{ job.endDate }}</p>
+                  <p><strong>Description:</strong> {{ job.jobDescription }}</p>
+                  <hr />
                 </div>
-              </div>
-            </div>
-          </div>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
         </div>
         <div class="education-history">
-          <div ngbAccordion>
-            <div ngbAccordionItem>
-              <h2 ngbAccordionHeader>
-                <button ngbAccordionButton>Education</button>
-              </h2>
-              <div ngbAccordionCollapse>
-                <div ngbAccordionBody>
-                  <ul
-                    *ngFor="let item of candidateViewData?.educationHistories"
-                  >
-                    <li><strong>Degree </strong>: {{ item?.degree }}</li>
-                    <li>
-                      <strong>Institution Name</strong>:
-                      {{ item?.institutionName }}
-                    </li>
-                    <li>
-                      <strong>Field of study</strong>: {{ item?.fieldOfStudy }}
-                    </li>
+          <ngb-accordion #acc="ngbAccordion" activeIds="2">
+            <ngb-panel>
+              <ng-template ngbPanelTitle>Education History</ng-template>
+              <ng-template ngbPanelContent>
+                <div *ngFor="let item of candidateViewData?.educationHistories">
+                  <p><strong>Degree:</strong> {{ item.degree }}</p>
+                  <p>
+                    <strong>Institution Name:</strong>
+                    {{ item.institutionName }}
+                  </p>
+                  <p><strong>Major:</strong> {{ item.major }}</p>
+                  <p>
+                    <strong>Field of study:</strong> {{ item?.fieldOfStudy }}
+                  </p>
 
-                    <li><strong>Major</strong>: {{ item?.major }}</li>
-                    <li>
-                      <strong>Education Level</strong> :
-                      {{ item?.educationLevel }}
-                    </li>
+                  <p>
+                    <strong>Educational Level:</strong>
+                    {{ item.educationLevel }}
+                  </p>
 
-                    <li><strong>Start Date</strong> : {{ item?.startDate }}</li>
-
-                    <li><strong>End Date</strong> : {{ item?.endDate }}</li>
-                  </ul>
+                  <p>
+                    <strong>Start Date:</strong>
+                    {{ item.startDate }}
+                  </p>
+                  <p>
+                    <strong>End Date:</strong>
+                    {{ item.endDate }}
+                  </p>
+                  <hr />
                 </div>
-              </div>
-            </div>
-          </div>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
         </div>
 
         <div class="skill-history">
-          <div ngbAccordion>
-            <div ngbAccordionItem>
-              <h2 ngbAccordionHeader>
-                <button ngbAccordionButton>Skill</button>
-              </h2>
-              <div ngbAccordionCollapse>
-                <div ngbAccordionBody>
-                  <ul *ngFor="let item of candidateViewData?.skills">
-                    <li><strong>Skill Name</strong> : {{ item?.skillName }}</li>
-                    <li>
-                      <strong>Proficiency Level</strong> :
-                      {{ item?.proficiencyLevel }}
-                    </li>
-                    <li>
-                      <strong>Year of Experience</strong> :
-                      {{ item?.noOfYears }}
-                    </li>
-                  </ul>
+          <ngb-accordion #acc="ngbAccordion" activeIds="3">
+            <ngb-panel [ngbCollapse]="true">
+              <ng-template ngbPanelTitle>Skill History</ng-template>
+              <ng-template ngbPanelContent>
+                <div *ngFor="let item of candidateViewData?.skills">
+                  <p><strong>Skill Name:</strong> {{ item.skillName }}</p>
+                  <p>
+                    <strong>Proficiency Level:</strong>
+                    {{ item.proficiencyLevel }}
+                  </p>
+
+                  <p>
+                    <strong>Year of experience:</strong> {{ item?.noOfYears }}
+                  </p>
+
+                  <hr />
                 </div>
-              </div>
-            </div>
-          </div>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
         </div>
 
         <div class="question">
-          <div ngbAccordion>
-            <div ngbAccordionItem>
-              <h2 ngbAccordionHeader>
-                <button ngbAccordionButton>Questions & Answers</button>
-              </h2>
-              <div ngbAccordionCollapse>
-                <div ngbAccordionBody>
-                  <ul *ngFor="let item of candidateViewData?.questionAnswers">
-                    <li>
-                      <strong>Question</strong> :
-                      {{ item?.questionOption?.description }}
+          <ngb-accordion #acc="ngbAccordion" activeIds="3">
+            <ngb-panel [ngbCollapse]="true">
+              <ng-template ngbPanelTitle>Questions & Answers</ng-template>
+              <ng-template ngbPanelContent>
+                <div *ngFor="let item of candidateViewData?.questionAnswers">
+                  <p>
+                    <strong>Question</strong>:
+                    {{ item?.questionOption?.description }}
+                  </p>
+
+                  <ng-container
+                    *ngIf="item.questionOption.questionType === 'DROPDOWN'"
+                    ><li *ngFor="let item of item.questionOption.options">
+                      <strong>Answer</strong> : {{ item?.description }}
                     </li>
+                  </ng-container>
 
-                    <ng-container
-                      *ngIf="item.questionOption.questionType === 'DROPDOWN'"
-                      ><li *ngFor="let item of item.questionOption.options">
-                        <strong>Answer</strong> : {{ item?.description }}
-                      </li>
-                    </ng-container>
+                  <ng-container
+                    *ngIf="item?.questionOption?.questionType === 'TEXT'"
+                    ><li><strong>Answer</strong>: {{ item?.answer }}</li>
+                  </ng-container>
 
-                    <ng-container
-                      *ngIf="item?.questionOption?.questionType === 'TEXT'"
-                      ><li><strong>Answer</strong> : {{ item?.answer }}</li>
-                    </ng-container>
-
-                    <ng-container
-                      *ngIf="item?.questionOption?.questionType === 'DATE'"
-                      ><li><strong>Answer</strong> : {{ item?.answer }}</li>
-                    </ng-container>
-                  </ul>
+                  <ng-container
+                    *ngIf="item?.questionOption?.questionType === 'DATE'"
+                    ><li><strong>Answer</strong>: {{ item?.answer }}</li>
+                  </ng-container>
+                  <hr />
                 </div>
-              </div>
-            </div>
-          </div>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
         </div>
       </div>
 
@@ -382,9 +365,9 @@
         </div>
         <div
           class="schedule-date"
-          data-bs-dismiss="#scheduleDateModal"
-          data-target="modal"
-          (click)="openScheduleModal(candidateViewData.id)"
+          data-bs-dismiss="modal"
+          data-target="#scheduleDateModal"
+          (click)="handleViewCandidate(candidateViewData.id)"
         >
           <button>
             <svg
@@ -406,7 +389,7 @@
           </button>
         </div>
 
-        <div class="interview-btn">
+        <!-- <div class="interview-btn">
           <button>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -424,12 +407,8 @@
             </svg>
             Interwiew
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </div>
-<app-candidate-schedule-date
-  [candidateId]="candidateId"
-  (candidateUpdate)="updateCandidateTable()"
-/>

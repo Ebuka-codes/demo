@@ -11,12 +11,14 @@ import {
 } from '@angular/material/form-field';
 import { CandidateScheduleDateComponent } from './candidate-schedule-date/candidate-schedule-date.component';
 import { MatInputModule } from '@angular/material/input';
+import { CandidateRejectComponent } from './candidate-reject/candidate-reject.component';
 
 @NgModule({
   declarations: [
     CandidateViewComponent,
     CandidateComponent,
     CandidateScheduleDateComponent,
+    CandidateRejectComponent,
   ],
   imports: [
     FormsModule,

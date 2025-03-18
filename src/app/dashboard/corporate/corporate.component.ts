@@ -94,7 +94,9 @@ export class CorporateComponent {
       next: (response: any) => {
         if (response) {
           this.data = response;
-          this.filteredData = [...this.data];
+          this.filteredData = [
+            ...this.data.sort((a, b) => a.name.localeCompare(b.name)),
+          ];
           this.submitLoading = false;
           this.loaderService.setLoading(false);
         }

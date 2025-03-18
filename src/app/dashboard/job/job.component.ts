@@ -40,7 +40,9 @@ export class JobComponent implements OnInit {
     this.jobService.getAllJobs().subscribe({
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
-          this.jobData = reponse.data;
+          this.jobData = reponse.data.sort((a: any, b: any) =>
+            a.jobTitle.localeCompare(b.jobTitle)
+          );
           this.loaderService.setLoading(false);
         }
       },

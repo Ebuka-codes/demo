@@ -1,18 +1,16 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { Candidate } from '../shared/candidate';
 import { CandidateService } from '../shared/candidate.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
-import { BehaviorSubject, take } from 'rxjs';
+import { take } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/shared/service/toast.service';
 
@@ -24,28 +22,19 @@ import { ToastService } from 'src/app/shared/service/toast.service';
 export class CandidateViewComponent {
   @Input() candidateViewData!: Candidate;
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
+  @Output() openScheduleModal: EventEmitter<string> = new EventEmitter();
   @ViewChild('myModal') modalElement!: ElementRef;
   @ViewChild('scheduleModal') modalSchedule!: ElementRef;
   modalInstance!: Modal;
   modalScheduleInstance!: Modal;
-  workHistories$ = new BehaviorSubject<any[]>([]);
   candidateId!: string;
 
   constructor(
     private candidateService: CandidateService,
     private loaderService: LoaderService,
-    private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private toastService: ToastService
   ) {}
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['candidateViewData']?.currentValue) {
-      setTimeout(() => {
-        this.workHistories$.next(this.candidateViewData?.workHistories || []);
-        this.cdr.detectChanges();
-      }, 0);
-    }
-  }
   ngAfterViewInit(): void {
     this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
   }
@@ -86,24 +75,12 @@ export class CandidateViewComponent {
         },
       });
   }
-  openScheduleModal(id: string) {
-    const viewCandidateModal =
-      Modal.getInstance(
-        document.getElementById('viewCandidateModal') as HTMLDivElement
-      ) ||
-      new Modal(
-        document.getElementById('viewCandidateModal') as HTMLDivElement
-      );
-    viewCandidateModal.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    backdrop?.remove();
 
-    const scheduleModal = new Modal(
-      document.getElementById('scheduleModal') as HTMLDivElement
-    );
-    this.candidateId = id;
-    scheduleModal.show();
+  handleViewCandidate(id: string) {
+    this.openScheduleModal.emit(id);
+    const backdrop = document.querySelector('.modal-backdrop');
   }
+
   updateCandidateTable() {
     this.candidateUpdate.emit();
   }

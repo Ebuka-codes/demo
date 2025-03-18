@@ -15,7 +15,6 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
-import { Notyf } from 'notyf';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
@@ -30,6 +29,8 @@ import {
 } from 'src/app/shared/constants';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Location } from '@angular/common';
+import { ToastService } from 'src/app/shared/service/toast.service';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-apply',
@@ -44,6 +45,8 @@ export class ApplyComponent implements OnInit {
   @ViewChild('coverInput') coverInput!: ElementRef<HTMLInputElement>;
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('matSelectPanel') matSelectPanel!: ElementRef;
+  @ViewChild('deleteIcon') deleteIcon!: ElementRef<SVGAElement>;
+  @ViewChild('listItem') listItem!: ElementRef<HTMLUListElement>;
   personalFormGroup!: FormGroup;
   questionsFormGroup!: FormGroup;
   educationFormGroup!: FormGroup;
@@ -56,7 +59,7 @@ export class ApplyComponent implements OnInit {
   isLoading!: Observable<any>;
   isLoadingQuestion: boolean = false;
   data!: job;
-  id: string | null = '';
+  editId!: number;
   candidateEmail: string | null = '';
   workHistories: any[] = [];
   educationHistories: any[] = [];
@@ -67,15 +70,15 @@ export class ApplyComponent implements OnInit {
   coverLetterValue: any;
   nigeriaStates = nigeriaStates;
   educationLevels = educationLevels;
-  private notyf = new Notyf();
+  isEditModalOpen = false;
 
   constructor(
     private fb: FormBuilder,
     private jobService: JobRecruitService,
     private route: ActivatedRoute,
     private dateFormatPicker: DateFormatService,
-    private loaderService: LoaderService,
-    private location: Location
+    private location: Location,
+    private toastService: ToastService
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: [''],
@@ -107,10 +110,8 @@ export class ApplyComponent implements OnInit {
     });
     this.skillFormGroup = this.fb.group({
       skillName: [''],
-      skillDescription: [''],
-      experience: [''],
       proficiencyLevel: [''],
-      yearsOfExperience: [''],
+      noOfYears: [''],
     });
     this.supportingFormGroup = this.fb.group({
       resume: [''],
@@ -140,13 +141,12 @@ export class ApplyComponent implements OnInit {
               });
             }
             this.jobService.setLoading(false);
+            this.isLoading = this.jobService.isLoading$;
           },
-          error: (error) => {
-            this.notyf.error({
-              message: 'Error occur',
-              duration: 4000,
-            });
-            this.loaderService.setLoading(false);
+          error: () => {
+            this.toastService.error('Error occur');
+            this.jobService.setLoading(false);
+            this.isLoading = this.jobService.isLoading$;
           },
         });
     }
@@ -213,8 +213,20 @@ export class ApplyComponent implements OnInit {
         .padStart(2, '0')}-01`,
       jobDescription: this.workFormGroup.get('jobDescription')?.value,
     };
-    this.workHistories.push(data);
+    if (this.editId >= 0 && this.editId < this.workHistories.length) {
+      this.workHistories[this.editId] = {
+        ...this.workHistories[this.editId],
+        ...data,
+      };
+    } else {
+      this.workHistories.push(data);
+    }
+    this.editId = -1;
+
     this.resetWorkHistoryForm();
+  }
+  showWorkHistoryModal() {
+    this.isEditModalOpen = false;
   }
   removeWorkHistory(index: number): void {
     this.workHistories.splice(index, 1);
@@ -225,6 +237,29 @@ export class ApplyComponent implements OnInit {
     this.workFormGroup.get('startDate')?.reset();
     this.workFormGroup.get('endDate')?.reset();
     this.workFormGroup.get('jobDescription')?.reset();
+  }
+
+  handleEditWorkHistory(id: number) {
+    if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
+      const workHistoryModal =
+        Modal.getInstance(
+          document.getElementById('workHistoryModal') as HTMLDivElement
+        ) ||
+        new Modal(
+          document.getElementById('workHistoryModal') as HTMLDivElement
+        );
+      workHistoryModal?.show();
+
+      const backdrop = document.querySelector('.modal-backdrop');
+      backdrop?.classList.add('show');
+
+      this.editId = id;
+      const workHistory = this.workHistories[id];
+      if (workHistory) {
+        this.workFormGroup.setValue(workHistory);
+      }
+      this.isEditModalOpen = true;
+    }
   }
 
   addEducationHistory() {
@@ -245,12 +280,47 @@ export class ApplyComponent implements OnInit {
       fieldOfStudy: this.educationFormGroup.get('fieldOfStudy')?.value,
       educationLevel: this.educationFormGroup.get('educationLevel')?.value,
     };
-    this.educationHistories.push(data);
+
+    if (this.editId >= 0 && this.editId < this.educationHistories.length) {
+      this.educationHistories[this.editId] = {
+        ...this.workHistories[this.editId],
+        ...data,
+      };
+    } else {
+      this.educationHistories.push(data);
+    }
+    this.editId = -1;
     this.resetEducationHistoryForm();
   }
   removeEducationHistory(index: number): void {
     this.educationHistories.splice(index, 1);
   }
+  showEducationModal() {
+    this.isEditModalOpen = false;
+  }
+
+  handleEditEducation(id: number) {
+    if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
+      const educationModal =
+        Modal.getInstance(
+          document.getElementById('educationHistoryModal') as HTMLDivElement
+        ) ||
+        new Modal(
+          document.getElementById('educationHistoryModal') as HTMLDivElement
+        );
+      educationModal?.show();
+
+      const backdrop = document.querySelector('.modal-backdrop');
+      backdrop?.classList.add('show');
+      this.editId = id;
+      const educationHistory = this.educationHistories[id];
+      if (educationHistory) {
+        this.educationFormGroup.setValue(educationHistory);
+      }
+      this.isEditModalOpen = true;
+    }
+  }
+
   resetEducationHistoryForm() {
     this.educationFormGroup.get('degree')?.reset(),
       this.educationFormGroup.get('major')?.reset(),
@@ -269,15 +339,47 @@ export class ApplyComponent implements OnInit {
     const data = {
       skillName: this.skillFormGroup.get('skillName')?.value,
       proficiencyLevel: this.skillFormGroup.get('proficiencyLevel')?.value,
-      noOfYears: Number(this.skillFormGroup.get('yearsOfExperience')?.value),
+      noOfYears: Number(this.skillFormGroup.get('noOfYears')?.value),
     };
-    this.skillHisories.push(data);
+
+    if (this.editId >= 0 && this.editId < this.skillHisories.length) {
+      this.skillHisories[this.editId] = {
+        ...this.skillHisories[this.editId],
+        ...data,
+      };
+    } else {
+      this.skillHisories.push(data);
+    }
+    this.editId = -1;
     this.resetSkillForm();
   }
+  handleEditSkill(id: number) {
+    if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
+      const skillModal =
+        Modal.getInstance(
+          document.getElementById('skillModal') as HTMLDivElement
+        ) || new Modal(document.getElementById('skillModal') as HTMLDivElement);
+      skillModal?.show();
+      const backdrop = document.querySelector('.modal-backdrop');
+      backdrop?.classList.add('show');
+      this.editId = id;
+
+      const skillHistory = this.skillHisories[id];
+      console.log(skillHistory);
+      if (skillHistory) {
+        this.skillFormGroup.setValue(skillHistory);
+      }
+      this.isEditModalOpen = true;
+    }
+  }
+  showSkillModal() {
+    this.isEditModalOpen = false;
+  }
+
   resetSkillForm() {
     this.skillFormGroup.get('skillName')?.reset(),
       this.skillFormGroup.get('proficiencyLevel')?.reset();
-    this.skillFormGroup.get('yearsOfExperience')?.reset();
+    this.skillFormGroup.get('noOfYears')?.reset();
   }
   endDateFilter(date: Date | null): boolean {
     return this.workFormGroup.get('startDate')?.value
@@ -332,11 +434,7 @@ export class ApplyComponent implements OnInit {
           }
         },
         (err) => {
-          this.notyf.error({
-            message: err.error.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
+          this.toastService.error('Error occur');
           this.selectedResumeFile = '';
           this.jobService.setLoading(false);
         }
@@ -361,11 +459,7 @@ export class ApplyComponent implements OnInit {
           }
         },
         (err) => {
-          this.notyf.error({
-            message: err.error.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
+          this.toastService.error('Error occur');
           this.selectedCoverLetterFile = '';
           this.jobService.setLoading(false);
         }
@@ -394,13 +488,9 @@ export class ApplyComponent implements OnInit {
     this.jobService.setLoading(true);
     this.isLoading = this.jobService.getLoading();
     this.isSubmitting = true;
+
     this.jobService.submitJobApplication(jobApplication).subscribe({
       next: () => {
-        this.notyf.success({
-          message: 'Submitted successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
         this.isSubmitting = false;
         this.personalFormGroup.reset();
         this.educationFormGroup.reset();
@@ -415,14 +505,13 @@ export class ApplyComponent implements OnInit {
         this.selectedCoverLetterFile = null;
         this.jobService.setLoading(false);
         this.isLoading = this.jobService.getLoading();
-        this.location.historyGo(-3);
+        this.toastService.success('Submitted successfully!');
+        setTimeout(() => {
+          this.location.back();
+        }, 3000);
       },
-      error: (error) => {
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
+      error: () => {
+        this.toastService.error('Error occur');
         this.isSubmitting = false;
         this.jobService.setLoading(false);
         this.isLoading = this.jobService.getLoading();

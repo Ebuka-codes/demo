@@ -18,6 +18,7 @@ import { JobService } from '../shared/job.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
+import Quill from 'quill';
 
 @Component({
   selector: 'app-job-edit',
@@ -33,6 +34,7 @@ export class JobEditComponent {
   @ViewChild('myQuestionModal') modalElement!: ElementRef;
   @ViewChild(QuillEditorComponent) quillEditor!: QuillEditorComponent;
   @ViewChild('editor') editor!: QuillEditorComponent;
+  private quill!: Quill;
   modalInstance!: Modal;
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   selectedWorkmode: number | null = null;
@@ -104,26 +106,38 @@ export class JobEditComponent {
     });
   }
 
+  onEditorCreated(quillInstance: Quill) {
+    this.quill = quillInstance;
+  }
+
   ngOnInit(): void {
     this.getJobDetailByType();
     this.getAllQuestion();
     this.loaderService.setLoading(true);
     this.jobService
       .getJobById(this.route.snapshot.paramMap.get('id'))
-      .subscribe((response: any) => {
-        if (response.data) {
-          this.form.patchValue(response.data);
-          setTimeout(() => {
-            this.description = response.data.description;
-          }, 1000);
-          this.loaderService.setLoading(false);
-        } else {
-          this.loaderService.setLoading(false);
-        }
-      });
+      .subscribe({
+        next: (response: any) => {
+          if (response.data) {
+            this.form.patchValue(response.data);
 
-    if (this.quillEditor && this.editor.quillEditor) {
-    }
+            setTimeout(() => {
+              if (this.quill) {
+                this.quill.setContents(
+                  this.quill.clipboard.convert({
+                    html: response.data.jobDescription,
+                  })
+                );
+              }
+            }, 1000);
+
+            this.loaderService.setLoading(false);
+          }
+        },
+        error: (err) => {
+          this.loaderService.setLoading(false);
+        },
+      });
   }
 
   ngAfterViewInit(): void {

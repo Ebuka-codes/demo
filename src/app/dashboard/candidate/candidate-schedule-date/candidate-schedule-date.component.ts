@@ -13,12 +13,12 @@ import { Observable } from 'rxjs';
 })
 export class CandidateScheduleDateComponent {
   @Input() candidateId!: string;
+  @Input() ViewCandidateId!: string;
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
   modalInstance!: Modal;
   scheduledDateForm!: FormGroup;
-  submitted!: boolean;
+  submitted: boolean = false;
   isLoading$!: Observable<boolean>;
-
   constructor(
     private fb: FormBuilder,
     private candidateService: CandidateService,
@@ -30,21 +30,25 @@ export class CandidateScheduleDateComponent {
     });
   }
 
-  get scheduleDate() {
-    return this.scheduledDateForm.get('scheduleDate');
+  get scheduledDate() {
+    return this.scheduledDateForm.get('scheduledDate');
   }
-
   resetScheduleForm() {
     this.scheduledDateForm.reset();
     this.submitted = false;
+    this.closeModal();
   }
   closeModal() {
-    const modal =
+    const scheduleModal =
       Modal.getInstance(
         document.getElementById('scheduleModal') as HTMLDivElement
       ) ||
       new Modal(document.getElementById('scheduleModal') as HTMLDivElement);
-    modal.hide();
+    scheduleModal.hide();
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+      backdrop.remove();
+    }
   }
   createScheduleDate(candidateId: string, data: any) {
     this.loaderService.setLoading(true);
@@ -76,11 +80,12 @@ export class CandidateScheduleDateComponent {
     const dataFormate = `${year}-${month.toString().padStart(2, '0')}-${day
       .toString()
       .padStart(2, '0')}`;
-
     this.submitted = true;
     if (this.scheduledDateForm.invalid) {
+      console.log('invalid');
       return;
+    } else {
+      this.createScheduleDate(this.candidateId, dataFormate);
     }
-    this.createScheduleDate(this.candidateId, dataFormate);
   }
 }

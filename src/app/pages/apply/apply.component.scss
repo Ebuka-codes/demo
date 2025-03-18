@@ -157,10 +157,12 @@
         border-radius: 5px;
         ul {
           list-style: none;
-
           .item {
             padding: 10px;
             border-bottom: 1px solid #cccccc4d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
 
           .item:last-child {
@@ -213,6 +215,9 @@
           .item {
             padding: 10px;
             border-bottom: 1px solid #cccccc4d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
 
           .item:last-child {
@@ -263,10 +268,12 @@
           border-radius: 5px;
           ul {
             list-style: none;
-
             .item {
               padding: 10px;
               border-bottom: 1px solid #cccccc4d;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
             }
 
             .item:last-child {

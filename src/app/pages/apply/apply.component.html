@@ -133,7 +133,8 @@
           <div class="work-info__header">
             <h2 class="work-info-header__title">Work and Education History</h2>
             <p>
-              Please enter details about your work experience and education.
+              Please enter details about your work experience,education and
+              skill.
             </p>
           </div>
           <div class="content">
@@ -144,41 +145,69 @@
                 <div class="work-history-list" *ngIf="workHistories.length">
                   <ul class="mb-4 mt-4">
                     <li
+                      #listItem
                       class="item"
+                      style="cursor: pointer"
                       *ngFor="let work of workHistories; let i = index"
+                      (click)="handleEditWorkHistory(i)"
                     >
-                      <strong>{{ work.jobTitle }}</strong> at
-                      {{ work.companyName }} ({{ formatDate(work.startDate) }} -
-                      {{ formatDate(work.endDate) }})
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                        (click)="removeWorkHistory(i)"
+                      <span>
+                        <strong>{{ work.jobTitle }}</strong> at
+                        {{ work.companyName }} ({{
+                          formatDate(work.startDate)
+                        }}
+                        - {{ formatDate(work.endDate) }})
+                      </span>
+                      <span
+                        style="display: flex; gap: 10px; align-items: center"
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                          (click)="removeWorkHistory(i)"
+                          #deleteIcon
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </span>
                     </li>
                   </ul>
                 </div>
                 <button
                   class="work-history-btn mb-3"
                   data-bs-toggle="modal"
-                  data-bs-target="#addWorkHistory"
+                  data-bs-target="#workHistoryModal"
+                  (click)="showWorkHistoryModal()"
                 >
                   + Add Work History
                 </button>
 
                 <div
                   class="modal fade"
-                  id="addWorkHistory"
+                  id="workHistoryModal"
                   tabindex="-1"
                   aria-labelledby="modalLabel"
                   aria-hidden="true"
@@ -188,7 +217,16 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <span>
-                          <h5 class="modal-title">Add Work History</h5>
+                          <h5 class="modal-title">
+                            <ng-container
+                              *ngIf="isEditModalOpen; else showText"
+                            >
+                              Edit Work History
+                            </ng-container>
+                            <ng-template #showText>
+                              Add Work History
+                            </ng-template>
+                          </h5>
                         </span>
 
                         <span
@@ -326,7 +364,12 @@
                           aria-label="Close"
                           (click)="addWorkHistory()"
                         >
-                          Add
+                          <ng-container
+                            *ngIf="isEditModalOpen; else showBtnText"
+                          >
+                            update
+                          </ng-container>
+                          <ng-template #showBtnText>Add </ng-template>
                         </button>
                       </div>
                     </div>
@@ -345,46 +388,72 @@
                 >
                   <ul class="mb-4 mt-4">
                     <li
+                      #listItem
+                      style="cursor: pointer"
                       class="item"
                       *ngFor="
                         let education of educationHistories;
                         let i = index
                       "
+                      (click)="handleEditEducation(i)"
                     >
-                      <strong>{{ education.educationLevel }}</strong> at
-                      {{ education.institutionName }} ({{
-                        formatDate(education.startDate)
-                      }}
-                      - {{ formatDate(education.endDate) }})
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                        (click)="removeEducationHistory(i)"
+                      <span>
+                        <strong>{{ education.educationLevel }}</strong> at
+                        {{ education.institutionName }} ({{
+                          formatDate(education.startDate)
+                        }}
+                        - {{ formatDate(education.endDate) }})
+                      </span>
+                      <span
+                        style="display: flex; gap: 10px; align-items: center"
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                          (click)="removeEducationHistory(i)"
+                          #deleteIcon
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </span>
                     </li>
                   </ul>
                 </div>
                 <button
                   class="education-history-btn mb-3"
                   data-bs-toggle="modal"
-                  data-bs-target="#addEducationHistory"
+                  data-bs-target="#educationHistoryModal"
+                  (click)="showEducationModal()"
                 >
                   + Add Education
                 </button>
 
                 <div
                   class="modal fade"
-                  id="addEducationHistory"
+                  id="educationHistoryModal"
                   tabindex="-1"
                   aria-labelledby="modalLabel"
                   aria-hidden="true"
@@ -394,7 +463,16 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <span>
-                          <h5 class="modal-title">Add Education</h5>
+                          <h5 class="modal-title">
+                            <ng-container
+                              *ngIf="isEditModalOpen; else showEduText"
+                            >
+                              Edit Education
+                            </ng-container>
+                            <ng-template #showEduText>
+                              Add Education
+                            </ng-template>
+                          </h5>
                         </span>
 
                         <span
@@ -560,7 +638,12 @@
                           aria-label="Close"
                           (click)="addEducationHistory()"
                         >
-                          Add
+                          <ng-container
+                            *ngIf="isEditModalOpen; else showBtnText"
+                          >
+                            Update
+                          </ng-container>
+                          <ng-template #showText> Add </ng-template>
                         </button>
                       </div>
                     </div>
@@ -577,33 +660,56 @@
                   <div class="skill-history-list" *ngIf="skillHisories.length">
                     <ul class="mb-4 mt-4">
                       <li
+                        style="cursor: pointer"
                         class="item"
                         *ngFor="let skill of skillHisories; let i = index"
+                        (click)="handleEditSkill(i)"
+                        #listItem
                       >
                         <strong>{{ skill.skillName }}</strong>
 
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-6"
-                          (click)="removeSkills(i)"
+                        <span
+                          style="display: flex; gap: 10px; align-items: center"
                         >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
-                        </svg>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-6"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                            />
+                          </svg>
+
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-6"
+                            (click)="removeSkills(i)"
+                            #deleteIcon
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M6 18 18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </span>
                       </li>
                     </ul>
                   </div>
 
                   <div
                     class="modal fade"
-                    id="addSkill"
+                    id="skillModal"
                     tabindex="-1"
                     aria-labelledby="modalLabel"
                     aria-hidden="true"
@@ -613,7 +719,16 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <span>
-                            <h5 class="modal-title">Add Skill</h5>
+                            <h5 class="modal-title">
+                              <ng-container
+                                *ngIf="isEditModalOpen; else showSkillText"
+                              >
+                                Edit Skill
+                              </ng-container>
+                              <ng-template #showSkillText>
+                                Add skill
+                              </ng-template>
+                            </h5>
                           </span>
 
                           <span
@@ -662,14 +777,12 @@
                           </div>
 
                           <div class="form-group">
-                            <label for="yearsOfExperience"
-                              >Years Of Experience *</label
-                            >
+                            <label for="noOfYears">Years Of Experience *</label>
                             <mat-form-field>
                               <input
                                 matInput
                                 type="text"
-                                formControlName="yearsOfExperience"
+                                formControlName="noOfYears"
                                 required
                               />
                             </mat-form-field>
@@ -692,7 +805,12 @@
                             aria-label="Close"
                             (click)="addSkillHistory()"
                           >
-                            Add
+                            <ng-container
+                              *ngIf="isEditModalOpen; else showSkillBtnText"
+                            >
+                              Update
+                            </ng-container>
+                            <ng-template #showSkillBtnText> Add </ng-template>
                           </button>
                         </div>
                       </div>
@@ -702,7 +820,8 @@
                     <button
                       class="skills-btn"
                       data-bs-toggle="modal"
-                      data-bs-target="#addSkill"
+                      data-bs-target="#skillModal"
+                      (click)="showSkillModal()"
                     >
                       + Add skills
                     </button>

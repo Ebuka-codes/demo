@@ -27,7 +27,6 @@
           </svg>
         </span>
       </div>
-
       <div class="modal-body">
         <form [formGroup]="scheduledDateForm" (ngSubmit)="onSubmit()">
           <label for="schedule-date">Select Date * </label>
@@ -36,13 +35,16 @@
               matInput
               [matDatepicker]="scheduleDatePicker"
               formControlName="scheduledDate"
+              [readonly]="true"
             />
             <mat-datepicker-toggle matIconSuffix [for]="scheduleDatePicker">
               <mat-datepicker #scheduleDatePicker></mat-datepicker>
             </mat-datepicker-toggle>
           </mat-form-field>
-          <div *ngIf="scheduleDate?.invalid && submitted">
-            <small>Schedule date is required</small>
+          <div *ngIf="scheduledDate?.invalid && submitted">
+            <small *ngIf="scheduledDate?.errors?.['required']"
+              >Schedule date is required</small
+            >
           </div>
 
           <button

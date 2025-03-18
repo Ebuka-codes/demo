@@ -176,7 +176,6 @@ export class CorporateCreateComponent {
     });
   }
   onSubmit() {
-    this.isSubmitted = false;
     this.isSubmitted = true;
     console.log(this.form.value);
     if (this.form.invalid) {

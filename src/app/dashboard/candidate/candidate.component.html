@@ -143,7 +143,11 @@
                     />
                   </svg>
                 </span>
-                <span>
+                <span
+                  data-bs-target="#scheduleModal"
+                  data-bs-toggle="modal"
+                  (click)="handleScheduleDate(item.id)"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -159,7 +163,11 @@
                     />
                   </svg>
                 </span>
-                <span (click)="handleReject(item.id)">
+                <span
+                  (click)="handleReject(item.id)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#candidateRejectModal"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -267,6 +275,15 @@
   </div>
 </div>
 <app-candidate-view
+  (openScheduleModal)="openScheduleModal($event)"
   [candidateViewData]="candidateViewData"
+  (candidateUpdate)="getCandidate()"
+/>
+<app-candidate-reject
+  [candidateId]="candidateId"
+  (candidateUpdate)="getCandidate()"
+/>
+<app-candidate-schedule-date
+  [candidateId]="candidateId"
   (candidateUpdate)="getCandidate()"
 />

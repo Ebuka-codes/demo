@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Notyf } from 'notyf';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { Candidate } from './shared/candidate';
 import { CandidateService } from './shared/candidate.service';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-candidate',
@@ -12,12 +13,16 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
   styleUrls: ['./candidate.component.scss'],
 })
 export class CandidateComponent implements OnInit {
-  notyf = new Notyf();
+  @ViewChild('viewCandidateModal') firstModal!: ElementRef;
+  @ViewChild('scheduleDateModal') secondModal!: ElementRef;
   candidateData!: Array<Candidate>;
   isLoading!: Observable<boolean>;
   filteredData: Array<Candidate> = [];
   candidateViewData: any;
   searchText!: string;
+  candidateId!: string;
+  scheduleModalOpen: boolean = false;
+
   constructor(
     private toastService: ToastService,
     private loaderService: LoaderService,
@@ -45,7 +50,9 @@ export class CandidateComponent implements OnInit {
       next: (response: any) => {
         if (response.valid && response.data) {
           this.candidateData = response.data;
-          this.filteredData = this.candidateData;
+          this.filteredData = this.candidateData.sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
           this.loaderService.setLoading(false);
         }
       },
@@ -59,30 +66,61 @@ export class CandidateComponent implements OnInit {
       },
     });
   }
+
+  openScheduleModal(id: string) {
+    this.closModal('viewCandidateModal');
+    const scheduleModal = new Modal(
+      document.getElementById('scheduleModal') as HTMLDivElement
+    );
+    this.candidateId = id;
+    scheduleModal.show();
+  }
+
+  closModal(modalId: string) {
+    const viewCandidateModal =
+      Modal.getInstance(document.getElementById(modalId) as HTMLDivElement) ||
+      new Modal(document.getElementById(modalId) as HTMLDivElement);
+    viewCandidateModal.hide();
+
+    setTimeout(() => {
+      if (document.querySelector('.modal.show') === null) {
+        document.body.classList.remove('modal-open');
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+          backdrop.remove();
+        }
+      }
+    }, 300);
+  }
+
   handleViewCandidate(id: string) {
     if (id) {
       this.candidateViewData = this.filteredData.find(
         (candidate: any) => candidate.id === id
       );
+      const viewCandidateModal =
+        Modal.getInstance(
+          document.getElementById('viewCandidateModal') as HTMLDivElement
+        ) ||
+        new Modal(
+          document.getElementById('viewCandidateModal') as HTMLDivElement
+        );
+      console.log(id, 'me');
+      viewCandidateModal.show();
     }
   }
-  handleUpdateCandidateTable() {
-    this.getCandidate();
+  handleScheduleDate(id: string) {
+    this.scheduleModalOpen = true;
+    this.candidateId = id;
+    const modal =
+      Modal.getInstance(
+        document.getElementById('scheduleModal') as HTMLDivElement
+      ) ||
+      new Modal(document.getElementById('scheduleModal') as HTMLDivElement);
+    modal.show();
   }
 
   handleReject(id: string) {
-    this.loaderService.setLoading(true);
-    this.candidateService
-      .rejectCandidateById(id, { status: 'REJECTED' })
-      .subscribe({
-        next: (response: any) => {
-          this.toastService.success(response.message);
-          this.getCandidate();
-          this.loaderService.setLoading(false);
-        },
-        error: () => {
-          this.toastService.error('Error rejecting Candidate!');
-        },
-      });
+    this.candidateId = id;
   }
 }

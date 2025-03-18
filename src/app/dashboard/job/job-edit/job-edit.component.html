@@ -805,7 +805,11 @@
           >Job Description <span class="required-icon">*</span></label
         >
         <div style="margin-bottom: 20px">
-          <quill-editor #editor></quill-editor>
+          <quill-editor
+            #editor
+            formControlName="jobDescription"
+            (onEditorCreated)="onEditorCreated($event)"
+          ></quill-editor>
         </div>
 
         <div
@@ -820,7 +824,6 @@
 
       <div style="margin-top: 70px">
         <button
-          type="submit"
           [disabled]="loading"
           class="submit-btn"
           type="submit"
