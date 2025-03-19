@@ -386,19 +386,26 @@ export class JobCreateComponent {
     this.loaderService.setLoading(true);
     this.jobService.createJob(newJob).subscribe({
       next: (response: any) => {
-        if (response.valid) {
+        if (response.valid && response.data) {
           this.loaderService.setLoading(false);
           this.toastService.success('Job created successfully!');
           this.route.navigate(['/dashboard/job']);
+        } else {
+          console.log('Invalid Response:', response);
+          this.loading = false;
+          this.loaderService.setLoading(false);
+          this.toastService.error('Error occur!');
+          this.form.reset();
+          this.form.get('jobDescription')?.setValue(' ');
         }
       },
       error: () => {
         this.loading = false;
+        this.loaderService.setLoading(false);
+        this.toastService.error('Error occur!');
         this.form.enable();
         this.form.reset();
         this.form.get('jobDescription')?.setValue(' ');
-        this.toastService.error('Error occur!');
-        this.loaderService.setLoading(false);
       },
     });
   }
