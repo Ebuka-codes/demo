@@ -1,7 +1,7 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
 <div class="apply-container">
   <form>
-    <mat-horizontal-stepper>
+    <mat-horizontal-stepper #stepper [linear]="true">
       <!-- personal-information -->
       <mat-step [stepControl]="personalFormGroup">
         <form action="" [formGroup]="personalFormGroup">
@@ -34,7 +34,7 @@
               <p>Please enter your contact information.</p>
             </div>
             <div class="form-group">
-              <label for="firstName">First Name * </label>
+              <label for="firstName">First name * </label>
               <mat-form-field>
                 <input
                   matInput
@@ -43,9 +43,20 @@
                   required
                 />
               </mat-form-field>
+
+              <div *ngIf="firstName?.invalid && firstName?.touched">
+                <small *ngIf="firstName?.errors?.['required']"
+                  >First name is required</small
+                >
+
+                <small
+                  *ngIf="firstName?.errors?.['minlength'] && !firstName?.errors?.['required'] && firstName?.touched"
+                  >First name should be atlest three character</small
+                >
+              </div>
             </div>
             <div class="form-group">
-              <label for="lastName">Last Name * </label>
+              <label for="lastName">Last name * </label>
               <mat-form-field>
                 <input
                   matInput
@@ -54,18 +65,49 @@
                   required
                 />
               </mat-form-field>
+
+              <div *ngIf="lastName?.invalid && lastName?.touched">
+                <small *ngIf="lastName?.errors?.['required']"
+                  >Last name is required</small
+                >
+
+                <small
+                  *ngIf="lastName?.errors?.['minlength'] && !lastName?.errors?.['required'] && lastName?.touched"
+                  >last name should be atlest three character</small
+                >
+              </div>
             </div>
             <div class="form-group">
-              <label for="email">Email * </label>
+              <label for="email">Email address * </label>
               <mat-form-field>
                 <input matInput type="email" formControlName="email" required />
               </mat-form-field>
+
+              <div *ngIf="email?.invalid && email?.touched">
+                <small *ngIf="email?.errors?.['required']"
+                  >Email address is required</small
+                >
+
+                <small
+                  *ngIf="email?.errors?.['invalidEmail'] && !email?.errors?.['required'] && email?.touched"
+                  >Email address is invalid
+                </small>
+              </div>
             </div>
             <div class="form-group">
-              <label for="phone">Phone * </label>
+              <label for="phone">Phone number * </label>
               <mat-form-field>
                 <input matInput type="text" formControlName="phone" required />
               </mat-form-field>
+              <div *ngIf="phone?.invalid && phone?.touched">
+                <small *ngIf="phone?.errors?.['required']"
+                  >Phone number is required</small
+                >
+                <small
+                  *ngIf="phone?.errors?.['invalidPhone'] && !phone?.errors?.['required'] && phone?.touched"
+                  >Phone number is invalid</small
+                >
+              </div>
             </div>
           </div>
 
@@ -86,6 +128,12 @@
                   <mat-option value="Nigeria"> Nigeria </mat-option>
                 </mat-select>
               </mat-form-field>
+
+              <div *ngIf="countryName?.invalid && countryName?.touched">
+                <small *ngIf="countryName?.errors?.['required']"
+                  >Country name is required</small
+                >
+              </div>
             </div>
             <div class="form-group">
               <label for="state">State * </label>
@@ -104,12 +152,28 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+
+              <div *ngIf="state?.invalid && state?.touched">
+                <small *ngIf="state?.errors?.['required']"
+                  >State is required</small
+                >
+              </div>
             </div>
             <div class="form-group">
               <label for="city">City* </label>
               <mat-form-field>
                 <input matInput type="text" formControlName="city" />
               </mat-form-field>
+
+              <div *ngIf="city?.invalid && city?.touched">
+                <small *ngIf="city?.errors?.['required']"
+                  >City is required</small
+                >
+                <small
+                  *ngIf="city?.errors?.['minlength'] && !city?.errors?.['required'] && city?.touched"
+                  >City should be atlest three character</small
+                >
+              </div>
             </div>
 
             <div class="form-group">
@@ -117,18 +181,34 @@
               <mat-form-field>
                 <input matInput type="text" formControlName="address" />
               </mat-form-field>
+
+              <div *ngIf="address?.invalid && address?.touched">
+                <small *ngIf="address?.errors?.['required']"
+                  >Home address is required</small
+                >
+                <small
+                  *ngIf="address?.errors?.['minlength'] && !address?.errors?.['required'] && address?.touched"
+                  >Address should be atlest three character</small
+                >
+              </div>
             </div>
           </div>
         </form>
         <div class="page-btn">
-          <button class="next" mat-button matStepperNext type="button">
+          <button
+            class="next"
+            mat-button
+            matStepperNext
+            type="button"
+            (click)="nextStep()"
+          >
             Next
           </button>
         </div>
       </mat-step>
 
-      <!-- work and experience -->
-      <mat-step [stepControl]="workFormGroup">
+      <!-- work and eduction -->
+      <mat-step [stepControl]="workEducationAndSkill">
         <div class="work-info">
           <div class="work-info__header">
             <h2 class="work-info-header__title">Work and Education History</h2>
@@ -142,6 +222,17 @@
               <div class="work-history">
                 <h4 class="fs-5">Work history</h4>
                 <div class="job-divider"></div>
+                <div
+                  style="
+                    color: rgba(216, 5, 5, 0.89);
+                    font-size: 14px;
+                    margin: 5px 0px;
+                  "
+                  *ngIf="workErrorMessage"
+                >
+                  {{ workErrorMessage }}
+                </div>
+
                 <div class="work-history-list" *ngIf="workHistories.length">
                   <ul class="mb-4 mt-4">
                     <li
@@ -149,7 +240,7 @@
                       class="item"
                       style="cursor: pointer"
                       *ngFor="let work of workHistories; let i = index"
-                      (click)="handleEditWorkHistory(i)"
+                      (click)="handleEditWorkHistory(1, i)"
                     >
                       <span>
                         <strong>{{ work.jobTitle }}</strong> at
@@ -196,22 +287,18 @@
                     </li>
                   </ul>
                 </div>
-                <button
-                  class="work-history-btn mb-3"
-                  data-bs-toggle="modal"
-                  data-bs-target="#workHistoryModal"
-                  (click)="showWorkHistoryModal()"
-                >
+                <button class="work-history-btn mb-3" (click)="openModal(1)">
                   + Add Work History
                 </button>
 
                 <div
                   class="modal fade"
+                  #modal1
                   id="workHistoryModal"
                   tabindex="-1"
                   aria-labelledby="modalLabel"
                   aria-hidden="true"
-                  (hidden.bs.modal)="resetWorkHistoryForm()"
+                  (hidden.bs.modal)="closeModal(1)"
                 >
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -229,12 +316,7 @@
                           </h5>
                         </span>
 
-                        <span
-                          class="close-btn"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          (click)="resetWorkHistoryForm()"
-                        >
+                        <span class="close-btn" (click)="closeModal(1)">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -261,6 +343,14 @@
                               required
                             />
                           </mat-form-field>
+
+                          <div
+                            *ngIf="companyName?.invalid && companyName?.touched"
+                          >
+                            <small *ngIf="companyName?.errors?.['required']"
+                              >Company name is required</small
+                            >
+                          </div>
                         </div>
                         <div class="form-group">
                           <label for="JobTitle">JobTitle *</label>
@@ -272,6 +362,12 @@
                               required
                             />
                           </mat-form-field>
+
+                          <div *ngIf="jobTitle?.invalid && jobTitle?.touched">
+                            <small *ngIf="jobTitle?.errors?.['required']"
+                              >Job title is required</small
+                            >
+                          </div>
                         </div>
                         <div class="row">
                           <div class="form-group col">
@@ -300,6 +396,13 @@
                                 "
                               ></mat-datepicker>
                             </mat-form-field>
+                            <div
+                              *ngIf="startDate?.invalid && startDate?.touched"
+                            >
+                              <small *ngIf="startDate?.errors?.['required']"
+                                >Start date is required</small
+                              >
+                            </div>
                           </div>
 
                           <div class="form-group col">
@@ -329,6 +432,12 @@
                                 "
                               ></mat-datepicker>
                             </mat-form-field>
+
+                            <div *ngIf="endDate?.invalid && endDate?.touched">
+                              <small *ngIf="endDate?.errors?.['required']"
+                                >End date is required</small
+                              >
+                            </div>
                           </div>
                         </div>
                         <div class="form-group">
@@ -345,6 +454,16 @@
                               resize: vertical;
                             "
                           ></textarea>
+
+                          <div
+                            *ngIf="
+                              jobDescription?.invalid && jobDescription?.touched
+                            "
+                          >
+                            <small *ngIf="jobDescription?.errors?.['required']"
+                              >Job description is required</small
+                            >
+                          </div>
                         </div>
                       </div>
 
@@ -352,17 +471,15 @@
                         <button
                           type="button"
                           class="btn btn-cancel"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
+                          (click)="closeModal(1)"
                         >
                           Close
                         </button>
                         <button
-                          type="button"
+                          type="submit"
                           class="btn btn-submit"
-                          data-bs-dismiss="modal"
                           aria-label="Close"
-                          (click)="addWorkHistory()"
+                          (click)="addWorkHistory(1)"
                         >
                           <ng-container
                             *ngIf="isEditModalOpen; else showBtnText"
@@ -383,6 +500,17 @@
                 <h4 class="fs-5">Education history</h4>
                 <div class="job-divider"></div>
                 <div
+                  style="
+                    color: rgba(216, 5, 5, 0.89);
+                    font-size: 14px;
+                    margin: 5px 0px;
+                  "
+                  *ngIf="educationErrorMessage"
+                >
+                  {{ educationErrorMessage }}
+                </div>
+
+                <div
                   class="education-history-list"
                   *ngIf="educationHistories.length"
                 >
@@ -395,7 +523,7 @@
                         let education of educationHistories;
                         let i = index
                       "
-                      (click)="handleEditEducation(i)"
+                      (click)="handleEditEducation(2, i)"
                     >
                       <span>
                         <strong>{{ education.educationLevel }}</strong> at
@@ -444,20 +572,17 @@
                 </div>
                 <button
                   class="education-history-btn mb-3"
-                  data-bs-toggle="modal"
-                  data-bs-target="#educationHistoryModal"
-                  (click)="showEducationModal()"
+                  (click)="openModal(2)"
                 >
                   + Add Education
                 </button>
 
                 <div
                   class="modal fade"
+                  #modal2
                   id="educationHistoryModal"
                   tabindex="-1"
-                  aria-labelledby="modalLabel"
-                  aria-hidden="true"
-                  (hidden.bs.modal)="resetEducationHistoryForm()"
+                  (hidden.bs.modal)="closeModal(2)"
                 >
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -475,12 +600,7 @@
                           </h5>
                         </span>
 
-                        <span
-                          class="close-btn"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          (click)="resetEducationHistoryForm()"
-                        >
+                        <span class="close-btn" (click)="closeModal(2)">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -508,6 +628,12 @@
                               required
                             />
                           </mat-form-field>
+
+                          <div *ngIf="degree?.invalid && degree?.touched">
+                            <small *ngIf="degree?.errors?.['required']"
+                              >Degree is required</small
+                            >
+                          </div>
                         </div>
                         <div class="form-group">
                           <label for="major">Major *</label>
@@ -519,6 +645,11 @@
                               required
                             />
                           </mat-form-field>
+                          <div *ngIf="major?.invalid && major?.touched">
+                            <small *ngIf="major?.errors?.['required']"
+                              >Major is required</small
+                            >
+                          </div>
                         </div>
 
                         <div class="form-group">
@@ -533,6 +664,17 @@
                               required
                             />
                           </mat-form-field>
+
+                          <div
+                            *ngIf="
+                              institutionName?.invalid &&
+                              institutionName?.touched
+                            "
+                          >
+                            <small *ngIf="institutionName?.errors?.['required']"
+                              >Institution name is required</small
+                            >
+                          </div>
                         </div>
                         <div class="row">
                           <div class="form-group col">
@@ -561,6 +703,18 @@
                                 "
                               ></mat-datepicker>
                             </mat-form-field>
+
+                            <div
+                              *ngIf="
+                                schoolStartDate?.invalid &&
+                                schoolStartDate?.touched
+                              "
+                            >
+                              <small
+                                *ngIf="schoolStartDate?.errors?.['required']"
+                                >Start date date is required</small
+                              >
+                            </div>
                           </div>
 
                           <div class="form-group col">
@@ -590,6 +744,16 @@
                                 "
                               ></mat-datepicker>
                             </mat-form-field>
+
+                            <div
+                              *ngIf="
+                                schoolEndDate?.invalid && schoolEndDate?.touched
+                              "
+                            >
+                              <small *ngIf="schoolEndDate?.errors?.['required']"
+                                >End date date is required</small
+                              >
+                            </div>
                           </div>
                         </div>
                         <div class="form-group">
@@ -602,6 +766,16 @@
                               required
                             />
                           </mat-form-field>
+
+                          <div
+                            *ngIf="
+                              fieldOfStudy?.invalid && fieldOfStudy?.touched
+                            "
+                          >
+                            <small *ngIf="fieldOfStudy?.errors?.['required']"
+                              >Field of study is required</small
+                            >
+                          </div>
                         </div>
 
                         <div class="form-group">
@@ -619,6 +793,16 @@
                               </mat-option>
                             </mat-select>
                           </mat-form-field>
+
+                          <div
+                            *ngIf="
+                              educationLevel?.invalid && educationLevel?.touched
+                            "
+                          >
+                            <small *ngIf="educationLevel?.errors?.['required']">
+                              Education level is required</small
+                            >
+                          </div>
                         </div>
                       </div>
 
@@ -632,11 +816,9 @@
                           Close
                         </button>
                         <button
-                          type="button"
+                          type="submit"
                           class="btn btn-submit"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          (click)="addEducationHistory()"
+                          (click)="addEducationHistory(2)"
                         >
                           <ng-container
                             *ngIf="isEditModalOpen; else showBtnText"
@@ -663,7 +845,7 @@
                         style="cursor: pointer"
                         class="item"
                         *ngFor="let skill of skillHisories; let i = index"
-                        (click)="handleEditSkill(i)"
+                        (click)="handleEditSkill(3, i)"
                         #listItem
                       >
                         <strong>{{ skill.skillName }}</strong>
@@ -707,13 +889,20 @@
                     </ul>
                   </div>
 
+                  <div>
+                    <button class="skills-btn" (click)="openModal(3)">
+                      + Add skills
+                    </button>
+                  </div>
+
                   <div
                     class="modal fade"
+                    #modal3
                     id="skillModal"
                     tabindex="-1"
                     aria-labelledby="modalLabel"
                     aria-hidden="true"
-                    (hidden.bs.modal)="resetSkillForm()"
+                    (hidden.bs.modal)="closeModal(3)"
                   >
                     <div class="modal-dialog modal-lg">
                       <div class="modal-content">
@@ -733,9 +922,8 @@
 
                           <span
                             class="close-btn"
-                            data-bs-dismiss="modal"
                             aria-label="Close"
-                            (click)="resetSkillForm()"
+                            (click)="closeModal(3)"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -754,7 +942,7 @@
                         </div>
                         <div class="modal-body">
                           <div class="form-group">
-                            <label for="JobTitle">Skill Name *</label>
+                            <label for="JobTitle">Skill name *</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -763,9 +951,16 @@
                                 required
                               />
                             </mat-form-field>
+                            <div
+                              *ngIf="skillName?.invalid && skillName?.touched"
+                            >
+                              <small *ngIf="skillName?.errors?.['required']"
+                                >Skill name is required</small
+                              >
+                            </div>
                           </div>
                           <div class="form-group">
-                            <label for="JobTitle">Proficiency Level *</label>
+                            <label for="JobTitle">Proficiency level *</label>
                             <mat-form-field>
                               <input
                                 matInput
@@ -774,18 +969,38 @@
                                 required
                               />
                             </mat-form-field>
+                            <div
+                              *ngIf="
+                                proficiencyLevel?.invalid &&
+                                proficiencyLevel?.touched
+                              "
+                            >
+                              <small
+                                *ngIf="proficiencyLevel?.errors?.['required']"
+                                >Proficiency level required</small
+                              >
+                            </div>
                           </div>
-
                           <div class="form-group">
-                            <label for="noOfYears">Years Of Experience *</label>
+                            <label for="noOfYears">Years of experience *</label>
                             <mat-form-field>
                               <input
                                 matInput
-                                type="text"
+                                type="number"
                                 formControlName="noOfYears"
                                 required
+                                inputmode="numeric"
+                                min="0"
+                                (keydown)="preventInvalidKeys($event)"
                               />
                             </mat-form-field>
+                            <div
+                              *ngIf="noOfYears?.invalid && noOfYears?.touched"
+                            >
+                              <small *ngIf="noOfYears?.errors?.['required']"
+                                >Years of experience is required</small
+                              >
+                            </div>
                           </div>
                         </div>
 
@@ -799,11 +1014,9 @@
                             Close
                           </button>
                           <button
-                            type="button"
+                            type="submit"
                             class="btn btn-submit"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                            (click)="addSkillHistory()"
+                            (click)="addSkillHistory(3)"
                           >
                             <ng-container
                               *ngIf="isEditModalOpen; else showSkillBtnText"
@@ -816,16 +1029,6 @@
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <button
-                      class="skills-btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#skillModal"
-                      (click)="showSkillModal()"
-                    >
-                      + Add skills
-                    </button>
-                  </div>
                 </div>
               </div>
             </form>
@@ -835,7 +1038,13 @@
           <button class="prev" mat-button matStepperPrevious type="button">
             Back
           </button>
-          <button class="next" mat-button matStepperNext type="button">
+          <button
+            class="next"
+            mat-button
+            matStepperNext
+            type="button"
+            (click)="nextStep2()"
+          >
             Next
           </button>
         </div>
@@ -865,13 +1074,14 @@
                     id="resumeInput"
                     class="visually-hidden"
                     type="file"
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf"
                     (change)="onFileChange($event)"
                   />
                 </div>
                 <div
+                  *ngIf="resume?.valid"
                   style="margin: 10px 0px"
-                  [style.visibility]="selectedResumeFile ? 'visible' : 'hidden'"
+                  [style.visibility]="resume?.value ? 'visible' : 'hidden'"
                 >
                   <span
                     style="
@@ -901,6 +1111,12 @@
                     </svg>
                   </span>
                 </div>
+
+                <div *ngIf="resume?.invalid && submitted">
+                  <small *ngIf="resume?.errors?.['required']"
+                    >Resume is required</small
+                  >
+                </div>
               </div>
 
               <div>
@@ -919,17 +1135,16 @@
                     id="coverLetter"
                     class="visually-hidden"
                     type="file"
-                    accept=".pdf,.doc,.docx,.txt,.rtf"
+                    accept=".pdf"
                     (change)="onCoverLetterFileChange($event)"
                     accept=".pdf,.doc,.docx"
                   />
                 </div>
 
-                <div
+                <span
+                  *ngIf="coverLetter?.valid"
                   style="margin: 10px 0px"
-                  [style.visibility]="
-                    selectedCoverLetterFile ? 'visible' : 'hidden'
-                  "
+                  [style.visibility]="coverLetter?.value ? 'visible' : 'hidden'"
                 >
                   <span
                     style="
@@ -958,6 +1173,12 @@
                       />
                     </svg>
                   </span>
+                </span>
+
+                <div *ngIf="coverLetter?.invalid && submitted">
+                  <small *ngIf="coverLetter?.errors?.['required']"
+                    >Cover letter is required</small
+                  >
                 </div>
               </div>
             </div>

@@ -264,12 +264,19 @@
 
                   <hr />
                 </div>
+
+                <p *ngIf="!candidateViewData?.skills?.length">
+                  Candidate has no skill uploaded
+                </p>
               </ng-template>
             </ngb-panel>
           </ngb-accordion>
         </div>
 
-        <div class="question">
+        <div
+          class="question"
+          *ngIf="candidateViewData?.questionAnswers?.length"
+        >
           <ngb-accordion #acc="ngbAccordion" activeIds="3">
             <ngb-panel [ngbCollapse]="true">
               <ng-template ngbPanelTitle>Questions & Answers</ng-template>
