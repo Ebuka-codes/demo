@@ -469,6 +469,7 @@ export class JobCreateComponent {
         this.toastService.error('Error occur!');
         this.form.enable();
         this.form.reset();
+        this.isSubmitted = false;
         this.form.get('jobDescription')?.setValue(' ');
       },
     });
