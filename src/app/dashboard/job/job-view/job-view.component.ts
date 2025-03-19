@@ -9,6 +9,10 @@ import { months } from 'src/app/shared/constants';
 })
 export class JobViewComponent {
   @Input() viewJobData!: Array<job>;
+  constructor() {}
+  ngOnInit(): void {
+    console.log(this.viewJobData);
+  }
   formatDate(data: string) {
     const date = new Date(data);
     return `${

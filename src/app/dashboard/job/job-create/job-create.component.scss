@@ -95,6 +95,7 @@
           box-shadow: #0000004d 0 2px 6px;
         }
       }
+
       .mini-loader-spinner {
         border: 3px solid white;
         border-color: white transparent white white;
@@ -224,4 +225,45 @@ input[type="checkbox"] {
     z-index: 1055 !important;
     position: absolute !important;
   }
+}
+
+.option-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+.option-text {
+  flex: 1; /* Pushes icons to the right extreme */
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.icon-container {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+}
+
+::ng-deep .mat-mdc-option input {
+  border: 1px solid #dddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+  outline: none;
+  font-size: 14px;
+  margin: 5px 20px;
+  width: 390px;
+}
+
+.addInput {
+  border: 1px solid #dddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+  outline: none;
+  font-size: 14px;
+  margin: 5px 20px;
+  width: 390px;
 }

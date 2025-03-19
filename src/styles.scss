@@ -259,3 +259,19 @@ input[type="checkbox"] {
 .mat-mdc-button-touch-target:hover {
   background-color: transparent !important;
 }
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mdc-list-item__primary-text {
+  color: #6d6d6d !important;
+}
+
+.mat-primary .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-full {
+  background-color: #28a745 !important;
+}
+
+.mat-mdc-option .mat-pseudo-checkbox-minimal {
+  display: none !important;
+}
+.mat-mdc-option .mdc-list-item input {
+  border: 1px solid red;
+}
