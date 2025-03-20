@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -41,7 +42,7 @@ export class JobEditComponent {
   isSubmitted: boolean = false;
   isSubmittedQuestion: boolean = false;
   isLoadingQuestion: boolean = false;
-  form: FormGroup;
+  form!: FormGroup;
   questionForm!: FormGroup;
   formatAmountValue: string = '';
   loading: boolean = false;
@@ -102,7 +103,7 @@ export class JobEditComponent {
       requiredSkills: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      questionOptions: ['', Validators.required],
+      questionOptions: [[], Validators.required],
       jobDescription: ['', Validators.required],
     });
   }
@@ -113,16 +114,22 @@ export class JobEditComponent {
 
   ngOnInit(): void {
     this.getJobDetailByType();
+    this.fetchData();
     this.getAllQuestion();
+  }
+
+  ngAfterViewInit(): void {
+    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
+  }
+
+  fetchData() {
     this.loaderService.setLoading(true);
     this.jobService
       .getJobById(this.route.snapshot.paramMap.get('id'))
       .subscribe({
         next: (response: any) => {
           if (response.data) {
-            this.form.patchValue({
-              ...response.data,
-            });
+            this.form.patchValue(response.data);
 
             setTimeout(() => {
               if (this.quill) {
@@ -143,9 +150,6 @@ export class JobEditComponent {
       });
   }
 
-  ngAfterViewInit(): void {
-    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
-  }
   filterForm() {
     this.jobTitleOption = this.form.controls['jobTitle']?.valueChanges.pipe(
       startWith(''),
@@ -218,8 +222,8 @@ export class JobEditComponent {
     return this.form.get('endDate');
   }
 
-  get questionOption() {
-    return this.form.get('questionOptions');
+  get questionOption(): FormArray {
+    return this.form.get('questionOptions') as FormArray;
   }
 
   nameValidator(): ValidatorFn {
@@ -256,6 +260,11 @@ export class JobEditComponent {
       next: (response: any) => {
         if (response.valid && response?.data) {
           this.questionTypeDropdown = response.data;
+          const selectedIds = this.questionTypeDropdown.map((q) => q.id);
+          setTimeout(() => {
+            this.form.get('questionOptions')?.patchValue(selectedIds);
+            console.log('Patched Form:', this.form.value);
+          }, 1000);
         }
       },
       error: () => {
@@ -497,7 +506,6 @@ export class JobEditComponent {
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
     if (this.form.valid) {
-      console.log(this.form.value);
       this.handleEditJob(this.route.snapshot.paramMap.get('id'), {
         ...this.form.value,
         startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)

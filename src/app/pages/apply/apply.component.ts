@@ -81,6 +81,7 @@ export class ApplyComponent implements OnInit {
   educationErrorMessage = '';
   submitted: boolean = false;
   questionData!: job;
+  jobId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -170,8 +171,9 @@ export class ApplyComponent implements OnInit {
           },
         });
     }
-
-    this.getQuestions();
+    setTimeout(() => {
+      this.getQuestionsByJobDetail();
+    }, 100);
   }
 
   ngAfterViewInit() {
@@ -637,14 +639,16 @@ export class ApplyComponent implements OnInit {
     this.supportingFormGroup.get('coverLetter')?.setValue('');
     this.selectedCoverLetterFile = '';
   }
-
-  getQuestions() {
-    const jobId = localStorage.getItem('jobId');
-    this.jobService.getQuestion(jobId).subscribe({
+  getQuestionsByJobDetail() {
+    this.jobId = localStorage.getItem('jobId');
+    this.jobService.getJobDetails(this.jobId).subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
-          console.log(response.data);
+          this.questionData = response.data;
         }
+      },
+      error: (err) => {
+        console.log('Error occurred');
       },
     });
 
