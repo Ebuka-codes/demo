@@ -37,94 +37,66 @@
                 *ngFor="let option of jobTitleOption | async"
                 [value]="option?.description"
               >
-                <div class="auto-info">
-                  <div
-                    style="
-                      display: grid;
-                      grid-template-columns: 1fr 1fr;
-                      gap: 20px;
-                      position: relative;
-                    "
-                  >
-                    <span>{{ option?.description | titlecase }}</span>
-                    <div>
-                      <span
-                        style="
-                          display: flex;
-                          gap: 10px;
-                          position: absolute;
-                          top: 1px;
-                          left: 360px;
-                        "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-6"
-                          style="width: 20px; color: #919295dd"
-                          (click)="
-                            handleEdit($event, option?.id, option.description)
-                          "
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ option?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery($event, option?.id, option.description)
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
 
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          class="size-6"
-                          (click)="
-                            handleDelete(
-                              option?.id,
-                              'jobTitle',
-                              option.description
-                            )
-                          "
-                          style="width: 20px; color: #919295dd"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          option?.id,
+                          'jobTitle',
+                          option.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               </mat-option>
 
-              <mat-option>
-                <input
-                  style="
-                    border: 1px solid #dddd;
-                    border-radius: 5px;
-                    padding: 5px 10px;
-                    outline: none;
-                    font-size: 14px;
-                    width: 450px;
-                  "
-                  placeholder="Type job title press enter"
-                  #newJobTitle
-                  (click)="$event.stopPropagation()"
-                  (keydown.enter)="
-                    isEditOpen
-                      ? editData(newJobTitle.value, 'jobTitle')
-                      : addNewData(newJobTitle.value, 'jobTitle')
-                  "
-                  (keydown)="handleKeydown($event)"
-                  autofocus
-                  [value]="text"
-                />
-              </mat-option>
+              <input
+                placeholder="Type job title press enter"
+                class="addInput"
+                #newJobTitle
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobTitle.value, 'jobTitle')
+                    : addNewQueryData($event, newJobTitle.value, 'jobTitle')
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
             </mat-autocomplete>
           </mat-form-field>
 
@@ -201,98 +173,74 @@
                 *ngFor="let location of jobLocationOption | async"
                 [value]="location.description"
               >
-                <div class="auto-info">
-                  <div
-                    style="
-                      display: grid;
-                      grid-template-columns: 1fr 1fr;
-                      gap: 20px;
-                      position: relative;
-                    "
-                  >
-                    <span>{{ location?.description | titlecase }}</span>
-                    <div>
-                      <span
-                        style="
-                          display: flex;
-                          gap: 10px;
-                          position: absolute;
-                          top: 1px;
-                          left: 360px;
-                        "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-6"
-                          style="width: 20px; color: #919295dd"
-                          (click)="
-                            handleEdit(
-                              $event,
-                              location.id,
-                              location.description
-                            )
-                          "
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ location?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery(
+                          $event,
+                          location.id,
+                          location.description
+                        )
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
 
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          class="size-6"
-                          (click)="
-                            handleDelete(
-                              location.id,
-                              'jobLocation',
-                              location.description
-                            )
-                          "
-                          style="width: 20px; color: #919295dd"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          location.id,
+                          'jobLocation',
+                          location.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               </mat-option>
 
-              <mat-option>
-                <input
-                  style="
-                    border: 1px solid #dddd;
-                    border-radius: 5px;
-                    padding: 5px 10px;
-                    outline: none;
-                    font-size: 14px;
-                    width: 450px;
-                  "
-                  placeholder="Type location press enter"
-                  #newJobLocation
-                  (click)="$event.stopPropagation()"
-                  (keydown.enter)="
-                    isEditOpen
-                      ? editData(newJobLocation.value, 'jobLocation')
-                      : addNewData(newJobLocation.value, 'jobLocation')
-                  "
-                  (keydown)="handleKeydown($event)"
-                  autofocus
-                  [value]="text"
-                />
-              </mat-option>
+              <input
+                placeholder="Type location press enter"
+                class="addInput"
+                #newJobLocation
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobLocation.value, 'jobLocation')
+                    : addNewQueryData(
+                        $event,
+                        newJobLocation.value,
+                        'jobLocation'
+                      )
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
             </mat-autocomplete>
           </mat-form-field>
           <div *ngIf="jobLocation?.invalid && isSubmitted">
@@ -308,106 +256,83 @@
           <label for="jobType"
             >Job type <span class="required-icon">*</span></label
           >
+
           <mat-form-field>
             <input
               type="text"
               matInput
-              [matAutocomplete]="me"
+              [matAutocomplete]="type"
               formControlName="jobType"
             />
-            <mat-autocomplete #me="matAutocomplete">
+            <mat-autocomplete #type="matAutocomplete">
               <mat-option
                 *ngFor="let jobType of jobTypeOption | async"
                 [value]="jobType.description | titlecase"
               >
-                <div class="auto-info">
-                  <div
-                    style="
-                      display: grid;
-                      grid-template-columns: 1fr 1fr;
-                      gap: 20px;
-                      position: relative;
-                    "
-                  >
-                    <span>{{ jobType?.description | titlecase }}</span>
-                    <div
-                      style="
-                        align-self: end;
-                        position: absolute;
-                        top: 1px;
-                        left: 360px;
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ jobType?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery(
+                          $event,
+                          jobType?.id,
+                          jobType.description
+                        )
                       "
                     >
-                      <span style="display: flex; gap: 3px">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-6"
-                          style="width: 20px; color: #919295dd"
-                          (click)="
-                            handleEdit($event, jobType.id, jobType.description)
-                          "
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
 
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          class="size-6"
-                          (click)="
-                            handleDelete(
-                              jobType.id,
-                              'jobType',
-                              jobType.description
-                            )
-                          "
-                          style="width: 20px; color: #919295dd"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          jobType?.id,
+                          'jobTitle',
+                          jobType.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               </mat-option>
 
-              <mat-option>
-                <input
-                  #newJobType
-                  style="
-                    border: 1px solid #dddd;
-                    border-radius: 5px;
-                    padding: 5px 10px;
-                    outline: none;
-                    font-size: 14px;
-                    width: 450px;
-                  "
-                  placeholder="Type job type press enter"
-                  formControlName="jobType"
-                  (click)="$event.stopPropagation()"
-                  (keydown.enter)="
-                    isEditOpen
-                      ? editData(newJobType.value, 'jobType')
-                      : addNewData(newJobType.value, 'jobType')
-                  "
-                  (keydown)="handleKeydown($event)"
-                  autofocus
-                  [value]="text"
-                />
-              </mat-option>
+              <input
+                placeholder="Type job title press enter"
+                class="addInput"
+                #newJobType
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobType.value, 'jobType')
+                    : addNewQueryData($event, newJobType.value, 'jobType')
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
             </mat-autocomplete>
           </mat-form-field>
 
@@ -422,6 +347,7 @@
           <label for="employementType"
             >Employment type <span class="required-icon">*</span></label
           >
+
           <mat-form-field>
             <input
               type="text"
@@ -434,99 +360,74 @@
                 *ngFor="let employmentType of jobEmploymentOption | async"
                 [value]="employmentType.description | titlecase"
               >
-                <div class="auto-info">
-                  <div
-                    style="
-                      display: grid;
-                      grid-template-columns: 1fr 1fr;
-                      gap: 20px;
-                      position: relative;
-                    "
-                  >
-                    <span>{{ employmentType?.description | titlecase }}</span>
-                    <div>
-                      <span
-                        style="
-                          display: flex;
-                          gap: 10px;
-                          position: absolute;
-                          top: 1px;
-                          left: 360px;
-                        "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-6"
-                          style="width: 20px; color: #919295dd"
-                          (click)="
-                            handleEdit(
-                              $event,
-                              employmentType.id,
-                              employmentType.description
-                            )
-                          "
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ employmentType?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery(
+                          $event,
+                          employmentType?.id,
+                          employmentType?.description
+                        )
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
 
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          class="size-6"
-                          (click)="
-                            handleDelete(
-                              employmentType.id,
-                              'employmentType',
-                              employmentType.description
-                            )
-                          "
-                          style="width: 20px; color: #919295dd"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          employmentType?.id,
+                          'employmentType',
+                          employmentType.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               </mat-option>
 
-              <mat-option>
-                <input
-                  #newEmpType
-                  style="
-                    border: 1px solid #dddd;
-                    border-radius: 5px;
-                    padding: 5px 10px;
-                    outline: none;
-                    font-size: 14px;
-                    width: 450px;
-                  "
-                  placeholder="Type employee type press enter"
-                  formControlName="employmentType"
-                  (click)="$event.stopPropagation()"
-                  (keydown.enter)="
-                    isEditOpen
-                      ? editData(newEmpType.value, 'employmentType')
-                      : addNewData(newEmpType.value, 'employmentType')
-                  "
-                  (keydown)="handleKeydown($event)"
-                  autofocus
-                  [value]="text"
-                />
-              </mat-option>
+              <input
+                placeholder="Type job title press enter"
+                class="addInput"
+                #newEmpType
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newEmpType.value, 'employmentType')
+                    : addNewQueryData(
+                        $event,
+                        newEmpType.value,
+                        'employmentType'
+                      )
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
             </mat-autocomplete>
           </mat-form-field>
 
@@ -566,110 +467,69 @@
             >Required Skills<span class="required-icon">*</span></label
           >
 
-          <mat-form-field class="full-width">
-            <input
-              matInput
-              [matAutocomplete]="auto"
+          <mat-form-field>
+            <mat-select
+              panelClass="custom-dropdown"
+              disableRipple
               formControlName="requiredSkills"
-              (keydown)="handleKeydown($event)"
-            />
-
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              (optionSelected)="selectSkill($event.option.value)"
+              multiple
             >
-              <mat-option
-                *ngFor="let skill of jobSkillData"
-                [value]="skill.description | titlecase"
-              >
-                <div class="auto-info">
-                  <div
-                    style="
-                      display: grid;
-                      grid-template-columns: 1fr 1fr;
-                      gap: 20px;
-                      position: relative;
-                    "
-                  >
-                    <span>{{ skill?.description | titlecase }}</span>
-                    <div>
-                      <span
-                        style="
-                          display: flex;
-                          gap: 10px;
-                          position: absolute;
-                          top: 1px;
-                          left: 360px;
-                        "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-6"
-                          style="width: 20px; color: #919295dd"
-                          (click)="
-                            handleEdit($event, skill.id, skill.description)
-                          "
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
+              <mat-option *ngFor="let skill of jobSkillData" [value]="skill.id">
+                <div class="option-container">
+                  <div class="option-text">{{ skill.description }}</div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery($event, skill.id, skill.description)
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
 
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          class="size-6"
-                          (click)="
-                            handleDelete(
-                              skill.id,
-                              'jobSkill',
-                              skill.description
-                            )
-                          "
-                          style="width: 20px; color: #919295dd"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(skill.id, 'jobSkill', skill.id)
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               </mat-option>
 
-              <mat-option>
-                <input
-                  #newJobSkill
-                  style="
-                    border: 1px solid #dddd;
-                    border-radius: 5px;
-                    padding: 5px 10px;
-                    outline: none;
-                    font-size: 14px;
-                    width: 450px;
-                  "
-                  placeholder="Type skill and press enter"
-                  (click)="$event.stopPropagation()"
-                  (keydown.enter)="
-                    isEditOpen
-                      ? editData(newJobSkill.value, 'jobSkill')
-                      : addNewData(newJobSkill.value, 'jobSkill')
-                  "
-                  (keydown)="handleKeydown($event)"
-                  [value]="text"
-                />
-              </mat-option>
-            </mat-autocomplete>
+              <input
+                #newJobSkill
+                placeholder="Type skill and press enter"
+                class="addInput"
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobSkill.value, 'jobSkill')
+                    : addNewQueryData($event, newJobSkill.value, 'jobSkill')
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
+            </mat-select>
           </mat-form-field>
 
           <span *ngIf="requiredSkills?.invalid && isSubmitted">
@@ -806,6 +666,7 @@
         >
         <div style="margin-bottom: 20px">
           <quill-editor
+            formControlName="jobDescription"
             #editor
             formControlName="jobDescription"
             (onEditorCreated)="onEditorCreated($event)"
@@ -824,6 +685,7 @@
 
       <div style="margin-top: 70px">
         <button
+          type="submit"
           [disabled]="loading"
           class="submit-btn"
           type="submit"

@@ -76,6 +76,19 @@ export class CandidateComponent implements OnInit {
     scheduleModal.show();
   }
 
+  openFilterModal() {
+    const modal = Modal.getInstance(
+      (document.querySelector('#filterCandidateModal') as HTMLDivElement) ||
+        new Modal(
+          document.querySelector('#filterCandidateModal') as HTMLDivElement
+        )
+    );
+    modal?.show();
+  }
+  updateCandidateData(data: Candidate[]) {
+    this.filteredData = data;
+  }
+
   closModal(modalId: string) {
     const viewCandidateModal =
       Modal.getInstance(document.getElementById(modalId) as HTMLDivElement) ||

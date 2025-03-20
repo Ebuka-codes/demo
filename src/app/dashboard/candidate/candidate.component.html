@@ -25,7 +25,7 @@
         </svg>
       </div>
       <div>
-        <button type="button">Filter</button>
+        <button type="button" (click)="openFilterModal()">Filter</button>
       </div>
       <div>
         <button type="button">Export</button>
@@ -287,3 +287,5 @@
   [candidateId]="candidateId"
   (candidateUpdate)="getCandidate()"
 />
+
+<app-candidate-filter (updateCandidateData)="updateCandidateData($event)" />

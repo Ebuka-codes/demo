@@ -142,16 +142,35 @@ export class JobService {
     });
   }
 
-  filterjob(data: string) {
+  searchjob(data: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.post<job[]>(
+    return this.httpClient.get(
       this.baseUrl + `job-details/search?keyword=${data}`,
       {
         headers,
       }
     );
+  }
+  getJobType() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.get<any>(this.baseUrl + 'job-details/jobtype', {
+      headers,
+    });
+  }
+
+  filterJob(data: {}) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.post<any>(this.baseUrl + 'filter/job', data, {
+      headers,
+    });
   }
 }

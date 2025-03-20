@@ -5,13 +5,12 @@ import { CandidateComponent } from './candidate.component';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import {
-  MatFormFieldControl,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { CandidateScheduleDateComponent } from './candidate-schedule-date/candidate-schedule-date.component';
 import { MatInputModule } from '@angular/material/input';
 import { CandidateRejectComponent } from './candidate-reject/candidate-reject.component';
+import { CandidateFilterComponent } from './candidate-filter/candidate-filter.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -19,6 +18,7 @@ import { CandidateRejectComponent } from './candidate-reject/candidate-reject.co
     CandidateComponent,
     CandidateScheduleDateComponent,
     CandidateRejectComponent,
+    CandidateFilterComponent,
   ],
   imports: [
     FormsModule,
@@ -28,6 +28,7 @@ import { CandidateRejectComponent } from './candidate-reject/candidate-reject.co
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
+    MatSelectModule,
   ],
 })
 export class CandidateModule {}

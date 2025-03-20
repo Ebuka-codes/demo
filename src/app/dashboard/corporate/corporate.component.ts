@@ -92,13 +92,11 @@ export class CorporateComponent {
     this.submitLoading = true;
     this.corporateService.getCorporate().subscribe({
       next: (response: any) => {
-        if (response) {
+        if (Array.isArray(response)) {
           this.data = response;
-          this.filteredData = [
-            ...this.data.sort((a, b) => a.name.localeCompare(b.name)),
-          ];
-          this.submitLoading = false;
+          this.filteredData = this.data;
           this.loaderService.setLoading(false);
+          this.submitLoading = false;
         }
       },
 

@@ -52,7 +52,10 @@
       <div class="job-header" *ngIf="jobList?.length"></div>
       <ng-container *ngIf="!isLoadingSearch; else elseTemplate">
         <div class="job-listing-content">
-          <div *ngFor="let item of jobList?.slice(start, end)" class="job-card">
+          <div
+            *ngFor="let item of jobList?.slice(minData, maxData)"
+            class="job-card"
+          >
             <a routerLink="/job-details/{{ item.id }}">
               <h2 class="job-title">{{ item.jobTitle }}</h2>
               <p class="company-name">{{ item.companyName }}</p>
@@ -112,7 +115,7 @@
         </div>
         <button
           type="button"
-          *ngIf="jobList.length > 8"
+          *ngIf="jobList.length > maxData"
           (click)="showJobList()"
         >
           Show more Job

@@ -19,8 +19,8 @@ export class HomeComponent implements OnInit {
   searchInput: string = '';
   private notyf = new Notyf();
   selectedJobTypes: string[] = [];
-  start: number = 0;
-  end: number = 8;
+  minData: number = 0;
+  maxData: number = 8;
 
   constructor(private _jobService: JobRecruitService) {}
   ngOnInit(): void {
@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit {
     this.onFilterChange([...this.selectedJobTypes]);
   }
   showJobList() {
-    this.end = this.end * 2;
+    this.maxData = this.maxData += 8;
   }
 
   formatDate(value: string) {

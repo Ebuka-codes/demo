@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
 import {
@@ -11,6 +11,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-job',
@@ -20,10 +21,14 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 export class JobComponent implements OnInit {
   jobData!: Array<job>;
   isLoading$!: Observable<any>;
-  searchText = new FormControl('');
+  searchText = new FormControl();
   corpKey!: string | null;
   viewJobData!: Array<job>;
   jobId!: string;
+  jobSearch!: string;
+  searchLoading = false;
+  filteredData!: Array<job>;
+  loadingData!: boolean;
   constructor(
     public jobService: JobService,
     private loaderService: LoaderService,
@@ -34,6 +39,7 @@ export class JobComponent implements OnInit {
     this.getAllJob();
     this.corpKey = localStorage.getItem('corp-key');
   }
+
   getAllJob() {
     this.loaderService.setLoading(true);
     this.isLoading$ = this.loaderService.isLoading$;
@@ -44,6 +50,8 @@ export class JobComponent implements OnInit {
             a.jobTitle.localeCompare(b.jobTitle)
           );
           this.loaderService.setLoading(false);
+
+          this.filteredData = this.jobData;
         }
       },
       error: (error) => {
@@ -54,32 +62,48 @@ export class JobComponent implements OnInit {
     });
   }
   handleSearch() {
-    // this.loaderService.setLoading(true);
-    // this.isLoading$ = this.loaderService.isLoading$;
-    // this.searchText.valueChanges
-    //   .pipe(
-    //     debounceTime(500),
-    //     distinctUntilChanged(),
-    //     switchMap((value) =>
-    //       value ? this.jobService.filterjob(value) : of([])
-    //     )
-    //   )
-    //   .subscribe({
-    //     next: (response: any) => {
-    //       if (response.valid && response.data) {
-    //         this.jobData = response.data;
-    //         this.loaderService.setLoading(false);
-    //       } else {
-    //         this.jobData = [];
-    //       }
-    //     },
-    //     error: () => {
-    //       console.log('Error: No Jobs Found');
-    //       this.loaderService.setLoading(false);
-    //     },
-    //   });
+    this.searchLoading = true;
+    if (this.searchText.value) {
+      this.searchText.valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap((value) => {
+            if (value && value.trim() !== '') {
+              return this.jobService.searchjob(value.trim());
+            } else {
+              return this.jobService.getAllJobs();
+            }
+          })
+        )
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              this.jobData = response.data;
+              this.searchLoading = false;
+            } else {
+              this.jobData = [];
+            }
+          },
+          error: () => {
+            console.log('Error: No Jobs Found');
+            this.searchLoading = false;
+          },
+        });
+    } else {
+      this.searchLoading = false;
+    }
   }
-
+  openFilterModal() {
+    const modal = Modal.getInstance(
+      (document.querySelector('#filterJobModal') as HTMLDivElement) ||
+        new Modal(document.querySelector('#filterJobModal') as HTMLDivElement)
+    );
+    modal?.show();
+  }
+  updateJobData(data: job[]) {
+    this.jobData = data;
+  }
   handleViewJoDetail(id: string) {
     this.viewJobData = this.jobData.filter((job) => job.id === id);
   }

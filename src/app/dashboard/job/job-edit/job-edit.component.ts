@@ -79,6 +79,7 @@ export class JobEditComponent {
   viewQuestionData: any;
   minEndDate!: Date;
   description: string = '';
+  selectedValue: string = '';
   constructor(
     private fb: FormBuilder,
     private jobService: JobService,
@@ -119,7 +120,12 @@ export class JobEditComponent {
       .subscribe({
         next: (response: any) => {
           if (response.data) {
-            this.form.patchValue(response.data);
+            this.form.patchValue({
+              ...response.data,
+              employmentType:
+                response.data.employmentType.charAt(0).toUpperCase() +
+                response.data.employmentType.slice(1).toLowerCase(),
+            });
 
             setTimeout(() => {
               if (this.quill) {
@@ -389,6 +395,81 @@ export class JobEditComponent {
       this.selectedSkills = [];
     }
   }
+
+  addNewQueryData(event: Event, value: string, type: string) {
+    const keyboardEvent = event as KeyboardEvent;
+    if (value) {
+      this.createNewQueryDetails({
+        type: type,
+        description: value,
+      });
+      this.newEmpType.nativeElement.value = '';
+      this.newJobSkill.nativeElement.value = '';
+      this.newJobTitle.nativeElement.value = '';
+      this.newJobLocation.nativeElement.value = '';
+      this.form.get('requiredSkills')?.setValue('');
+    }
+    keyboardEvent.stopPropagation();
+    keyboardEvent.preventDefault();
+  }
+  handleEditQuery(event: any, id: string, value: string) {
+    event.stopPropagation();
+    this.selectedValue = value;
+    this.editId = id;
+    this.isEditOpen = true;
+  }
+  editQueryData(event: Event, value: string, type: string) {
+    const keyboardEvent = event as KeyboardEvent;
+    if (this.editId) {
+      this.loaderService.setLoading(true);
+      this.jobService
+        .editQueryDetails(this.editId, {
+          description: value,
+          type: type,
+        })
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              console.log('yes');
+              this.loaderService.setLoading(false);
+              this.getJobDetailByType();
+              this.selectedValue = '';
+              this.isEditOpen = false;
+              this.form.get(`${type}`)?.setValue('');
+              this.toastService.success(response.message);
+            }
+          },
+          error: (err) => {
+            this.toastService.error('Error occur!');
+            this.selectedValue = '';
+            this.isEditOpen = false;
+          },
+        });
+    }
+    keyboardEvent.stopPropagation();
+    keyboardEvent.preventDefault();
+  }
+
+  handleDeleteQuery(id: string, type: string, value: string) {
+    this.loaderService.setLoading(true);
+    this.jobService.deleteQueryDetails(id).subscribe(
+      (response: any) => {
+        this.getJobDetailByType();
+        this.loaderService.setLoading(false);
+        this.toastService.success(response.message);
+        this.form.get(`${type}`)?.setValue('');
+        this.form.get('requiredSkills')?.setValue('');
+        this.selectedValue = '';
+      },
+      (error) => {
+        this.toastService.error('Error occur!');
+        this.form.get(type)?.setValue('');
+        this.loaderService.setLoading(false);
+        this.selectedValue = '';
+      }
+    );
+  }
+
   handleEditJob(id: string | null, newJob: job) {
     this.loading = true;
     this.loaderService.setLoading(true);
@@ -430,7 +511,7 @@ export class JobEditComponent {
         endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
           .toString()
           .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-        requiredSkills: this.selectedSkills,
+        requiredSkills: [],
         employmentType: this.form.get('employmentType')?.value.toUpperCase(),
         jobType: this.form.get('jobType')?.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),
@@ -448,52 +529,5 @@ export class JobEditComponent {
       this.minEndDate = selectedDate;
       this.isEditDate = false;
     }
-  }
-
-  handleEdit(event: any, id: string, value: string) {
-    event.stopPropagation();
-    this.text = value;
-    this.editId = id;
-    this.isEditOpen = true;
-  }
-  editData(value: string, type: string) {
-    if (this.editId) {
-      this.loaderService.setLoading(true);
-      this.jobService
-        .editQueryDetails(this.editId, { description: value, type: type })
-        .subscribe(
-          (response: any) => {
-            this.loaderService.setLoading(false);
-            this.getJobDetailByType();
-            this.toastService.success(response.message);
-            this.text = '';
-            this.isEditOpen = false;
-            this.form.get(`${type}`)?.setValue('');
-          },
-          (error) => {
-            this.toastService.error('Error occur!');
-            this.text = '';
-            this.isEditOpen = false;
-          }
-        );
-    }
-  }
-  handleDelete(id: string, type: string, value: string) {
-    this.loaderService.setLoading(true);
-    this.jobService.deleteQueryDetails(id).subscribe(
-      (response: any) => {
-        this.loaderService.setLoading(false);
-        this.getJobDetailByType();
-        this.form.get(`${type}`)?.setValue('');
-        this.form.get('requiredSkills')?.setValue('');
-        this.text = '';
-        this.toastService.success(response.message);
-      },
-      (error) => {
-        this.toastService.error('Error occur!');
-        this.form.get(type)?.setValue('');
-        this.loaderService.setLoading(false);
-      }
-    );
   }
 }

@@ -493,7 +493,7 @@ export class JobCreateComponent {
         endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
           .toString()
           .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-        requiredSkills: this.form.get('requiredSkills')?.value,
+        requiredSkills: [],
         employmentType: this.form.get('employmentType')?.value.toUpperCase(),
         jobType: this.form.get('jobType')?.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),

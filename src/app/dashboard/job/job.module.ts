@@ -17,6 +17,7 @@ import { JobQuestionCreateComponent } from './job-question-create/job-question-c
 import { JobViewComponent } from './job-view/job-view.component';
 import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDeleteComponent } from './job-delete/job-delete.component';
+import { JobFilterComponent } from './job-filter/job-filter.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { JobDeleteComponent } from './job-delete/job-delete.component';
     JobViewComponent,
     JobEditComponent,
     JobDeleteComponent,
+    JobFilterComponent,
   ],
   imports: [
     ReactiveFormsModule,
