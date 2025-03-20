@@ -1,7 +1,7 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
 <div class="apply-container">
   <form>
-    <mat-horizontal-stepper #stepper [linear]="true">
+    <mat-horizontal-stepper #stepper [linear]="false">
       <!-- personal-information -->
       <mat-step [stepControl]="personalFormGroup">
         <form action="" [formGroup]="personalFormGroup">

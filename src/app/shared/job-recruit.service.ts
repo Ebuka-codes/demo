@@ -133,6 +133,18 @@ export class JobRecruitService {
     });
   }
 
+  getQuestion(id: string | null) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': this.encodedValue,
+    });
+    return this.httpClient.get<JobApplication>(
+      this.baseUrl + `question-option/${id}`,
+      {
+        headers,
+      }
+    );
+  }
   submitJobApplication(application: JobApplication) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

@@ -426,6 +426,7 @@ export class JobCreateComponent {
   }
 
   handleDeleteQuery(id: string, type: string, value: string) {
+    const keyboardEvent = event as KeyboardEvent;
     this.loaderService.setLoading(true);
     this.jobService.deleteQueryDetails(id).subscribe(
       (response: any) => {
@@ -443,6 +444,8 @@ export class JobCreateComponent {
         this.selectedValue = '';
       }
     );
+    keyboardEvent.stopPropagation();
+    keyboardEvent.preventDefault();
   }
 
   createNewJob(newJob: job) {

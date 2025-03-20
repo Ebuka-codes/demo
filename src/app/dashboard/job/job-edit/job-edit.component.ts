@@ -122,9 +122,6 @@ export class JobEditComponent {
           if (response.data) {
             this.form.patchValue({
               ...response.data,
-              employmentType:
-                response.data.employmentType.charAt(0).toUpperCase() +
-                response.data.employmentType.slice(1).toLowerCase(),
             });
 
             setTimeout(() => {
@@ -500,6 +497,7 @@ export class JobEditComponent {
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
     if (this.form.valid) {
+      console.log(this.form.value);
       this.handleEditJob(this.route.snapshot.paramMap.get('id'), {
         ...this.form.value,
         startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)

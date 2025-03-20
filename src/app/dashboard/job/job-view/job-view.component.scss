@@ -48,6 +48,23 @@
     background-color: rgb(77 179 121 / 18%);
   }
 
+  h1 {
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 10px 0px;
+  }
+
+  ul,
+  ol {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
   .question {
     margin: 40px 0px;
   }

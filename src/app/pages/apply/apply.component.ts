@@ -80,6 +80,7 @@ export class ApplyComponent implements OnInit {
   workErrorMessage = '';
   educationErrorMessage = '';
   submitted: boolean = false;
+  questionData!: job;
 
   constructor(
     private fb: FormBuilder,
@@ -638,11 +639,20 @@ export class ApplyComponent implements OnInit {
   }
 
   getQuestions() {
-    let formControls: any = {};
-    this.data?.questionOptions.forEach((question: any) => {
-      formControls[question.id] = new FormControl('');
+    const jobId = localStorage.getItem('jobId');
+    this.jobService.getQuestion(jobId).subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          console.log(response.data);
+        }
+      },
     });
-    this.questionsFormGroup = this.fb.group(formControls);
+
+    // let formControls: any = {};
+    // this.data?.questionOptions.forEach((question: any) => {
+    //   formControls[question.id] = new FormControl('');
+    // });
+    // this.questionsFormGroup = this.fb.group(formControls);
   }
   //Post Job-Application
   submitJobApplication(jobApplication: any) {

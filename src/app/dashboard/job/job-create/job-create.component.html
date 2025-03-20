@@ -85,18 +85,22 @@
                 </div>
               </mat-option>
 
-              <input
-                placeholder="Type job title press enter"
-                class="addInput"
-                #newJobTitle
-                (keydown.enter)="
-                  isEditOpen
-                    ? editQueryData($event, newJobTitle.value, 'jobTitle')
-                    : addNewQueryData($event, newJobTitle.value, 'jobTitle')
-                "
-                (keydown)="handleKeydown($event)"
-                [value]="selectedValue"
-              />
+              <mat-option>
+                <input
+                  placeholder="Type job title press enter"
+                  class="addInput"
+                  (click)="$event.stopPropagation()"
+                  #newJobTitle
+                  (keydown.enter)="
+                    isEditOpen
+                      ? editQueryData($event, newJobTitle.value, 'jobTitle')
+                      : addNewQueryData($event, newJobTitle.value, 'jobTitle')
+                  "
+                  (keydown)="handleKeydown($event)"
+                  [value]="selectedValue"
+                  autofocus
+                />
+              </mat-option>
             </mat-autocomplete>
           </mat-form-field>
 
@@ -224,23 +228,30 @@
                   </div>
                 </div>
               </mat-option>
-
-              <input
-                placeholder="Type location press enter"
-                class="addInput"
-                #newJobLocation
-                (keydown.enter)="
-                  isEditOpen
-                    ? editQueryData($event, newJobLocation.value, 'jobLocation')
-                    : addNewQueryData(
-                        $event,
-                        newJobLocation.value,
-                        'jobLocation'
-                      )
-                "
-                (keydown)="handleKeydown($event)"
-                [value]="selectedValue"
-              />
+              <mat-option>
+                <input
+                  placeholder="Type location press enter"
+                  class="addInput"
+                  #newJobLocation
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="
+                    isEditOpen
+                      ? editQueryData(
+                          $event,
+                          newJobLocation.value,
+                          'jobLocation'
+                        )
+                      : addNewQueryData(
+                          $event,
+                          newJobLocation.value,
+                          'jobLocation'
+                        )
+                  "
+                  (keydown)="handleKeydown($event)"
+                  [value]="selectedValue"
+                  autofocus
+                />
+              </mat-option>
             </mat-autocomplete>
           </mat-form-field>
           <div *ngIf="jobLocation?.invalid && isSubmitted">
@@ -321,18 +332,22 @@
                 </div>
               </mat-option>
 
-              <input
-                placeholder="Type job title press enter"
-                class="addInput"
-                #newJobType
-                (keydown.enter)="
-                  isEditOpen
-                    ? editQueryData($event, newJobType.value, 'jobType')
-                    : addNewQueryData($event, newJobType.value, 'jobType')
-                "
-                (keydown)="handleKeydown($event)"
-                [value]="selectedValue"
-              />
+              <mat-option>
+                <input
+                  placeholder="Type job title press enter"
+                  class="addInput"
+                  #newJobType
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="
+                    isEditOpen
+                      ? editQueryData($event, newJobType.value, 'jobType')
+                      : addNewQueryData($event, newJobType.value, 'jobType')
+                  "
+                  (keydown)="handleKeydown($event)"
+                  [value]="selectedValue"
+                  autofocus
+                />
+              </mat-option>
             </mat-autocomplete>
           </mat-form-field>
 
@@ -412,22 +427,30 @@
                 </div>
               </mat-option>
 
-              <input
-                placeholder="Type job title press enter"
-                class="addInput"
-                #newEmpType
-                (keydown.enter)="
-                  isEditOpen
-                    ? editQueryData($event, newEmpType.value, 'employmentType')
-                    : addNewQueryData(
-                        $event,
-                        newEmpType.value,
-                        'employmentType'
-                      )
-                "
-                (keydown)="handleKeydown($event)"
-                [value]="selectedValue"
-              />
+              <mat-option>
+                <input
+                  placeholder="Type job title press enter"
+                  class="addInput"
+                  #newEmpType
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="
+                    isEditOpen
+                      ? editQueryData(
+                          $event,
+                          newEmpType.value,
+                          'employmentType'
+                        )
+                      : addNewQueryData(
+                          $event,
+                          newEmpType.value,
+                          'employmentType'
+                        )
+                  "
+                  (keydown)="handleKeydown($event)"
+                  [value]="selectedValue"
+                  autofocus
+                />
+              </mat-option>
             </mat-autocomplete>
           </mat-form-field>
 
@@ -517,18 +540,22 @@
                 </div>
               </mat-option>
 
-              <input
-                #newJobSkill
-                placeholder="Type skill and press enter"
-                class="addInput"
-                (keydown.enter)="
-                  isEditOpen
-                    ? editQueryData($event, newJobSkill.value, 'jobSkill')
-                    : addNewQueryData($event, newJobSkill.value, 'jobSkill')
-                "
-                (keydown)="handleKeydown($event)"
-                [value]="selectedValue"
-              />
+              <mat-option class="me">
+                <input
+                  #newJobSkill
+                  placeholder="Type skill and press enter"
+                  class="addInput"
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="
+                    isEditOpen
+                      ? editQueryData($event, newJobSkill.value, 'jobSkill')
+                      : addNewQueryData($event, newJobSkill.value, 'jobSkill')
+                  "
+                  (keydown)="handleKeydown($event)"
+                  [value]="selectedValue"
+                  autofocus
+                />
+              </mat-option>
             </mat-select>
           </mat-form-field>
 

@@ -282,3 +282,7 @@ input[type="checkbox"] {
 .modal-backdrop {
   background-color: rgba(45, 45, 45, 0.4) !important;
 }
+
+.me .mat-pseudo-checkbox {
+  display: none;
+}
