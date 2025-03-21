@@ -22,6 +22,7 @@ import { CorporateModule } from './corporate/corporate.module';
 import { CandidateModule } from './candidate/candidate.module';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { StatsComponent } from './components/ui/stats/stats.component';
+import { JobListingComponent } from './components/ui/job-listing/job-listing.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { StatsComponent } from './components/ui/stats/stats.component';
     ComfirmDeleteModalComponent,
     AdminDashboardComponent,
     StatsComponent,
+    JobListingComponent,
   ],
   imports: [
     FormsModule,

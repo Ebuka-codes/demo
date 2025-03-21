@@ -18,7 +18,7 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { JobRecruitService } from 'src/app/shared/job-recruit.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
 import { Moment } from 'moment';
@@ -91,7 +91,8 @@ export class ApplyComponent implements OnInit {
     private dateFormatPicker: DateFormatService,
     private location: Location,
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private routes: Router
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -675,8 +676,8 @@ export class ApplyComponent implements OnInit {
         this.educationFormGroup.reset();
         this.workFormGroup.reset();
         this.skillFormGroup.reset();
-        this.questionsFormGroup.reset();
         this.supportingFormGroup.reset();
+        this.questionsFormGroup?.reset();
         this.skillHisories = [];
         this.workHistories = [];
         this.educationHistories = [];
@@ -686,7 +687,9 @@ export class ApplyComponent implements OnInit {
         this.isLoading = this.jobService.getLoading();
         this.toastService.success('Submitted successfully!');
         setTimeout(() => {
-          this.location.back();
+          this.routes.navigateByUrl(
+            `/apply/${localStorage.getItem('corp-key')}`
+          );
         }, 3000);
       },
       error: () => {

@@ -1,6 +1,8 @@
 .stat-container {
   background-color: white;
-  padding: 20px 15px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 15px;
   border-radius: 10px;
   width: 700px;
   .stat {
@@ -50,7 +52,7 @@
     ul li {
       font-size: 13px;
       font-weight: 500;
-      line-height: 1;
+      line-height: 1.5;
       padding: 5px;
       list-style: circle;
     }
@@ -64,11 +66,16 @@
     margin: 20px auto;
     h4 {
       font-size: 18px;
+      margin-left: 40px;
+      font-weight: 600;
     }
     .content {
+      display: flex;
+      gap: 15px;
+      position: relative;
+      bottom: 15px;
       .pie-chart {
         position: relative;
-
         #barChart2 {
           width: 200px !important;
           height: 200px !important;
@@ -105,6 +112,65 @@
           }
         }
       }
+      .candidate-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 60px;
+        .list {
+          border-right: 1px solid #899bb159;
+          padding-right: 13px;
+          .bullet1 {
+            width: 5px;
+            height: 5px;
+            background-color: #fbc784;
+            border-radius: 50%;
+            margin-bottom: 4px;
+          }
+          .bullet2 {
+            background-color: #2e78ee;
+            width: 5px;
+            height: 5px;
+            margin-bottom: 4px;
+            border-radius: 50%;
+          }
+          .bullet3 {
+            background-color: #28a745;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            margin-bottom: 4px;
+          }
+          .bullet4 {
+            background-color: #e50c20;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            margin-bottom: 4px;
+          }
+
+          .item {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+
+            :nth-child(1) {
+              font-weight: 600;
+            }
+            :nth-child(2) {
+              font-weight: 400;
+              color: #899bb1;
+              font-size: 14px;
+            }
+          }
+        }
+      }
     }
+  }
+  ::ng-deep .dropdown-toggle {
+    border: 1px solid #6d6d6d59;
+    color: #6d6d6d;
+    font-size: 13px;
+    padding: 5px 15px;
   }
 }

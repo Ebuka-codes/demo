@@ -546,34 +546,36 @@
         }
       }
     }
-    .btn {
+
+    .btn-cancel {
+      background-color: #eeee;
       padding: 10px 2.5rem;
       border-radius: 50px;
-      text-decoration: none;
-      box-sizing: border-box;
-      position: relative;
-      display: inline-block;
-      line-height: 1.5rem;
-      max-width: 100%;
       font-size: 1rem;
       text-align: center;
       cursor: pointer;
       color: black;
       font-weight: 500;
-    }
-    .btn-cancel {
-      background-color: #eeee;
+      border: none;
+
       &:hover,
       :focus {
         box-shadow: #0000004d 0 2px 6px;
-        background-color: #f1f1f1;
+        background-color: #eeee;
         color: black;
         outline: none;
       }
     }
     .btn-submit {
       background-color: #28a745;
+      padding: 10px 2.5rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 500;
       color: white;
+      border: none;
       &:hover,
       :focus {
         box-shadow: #0000004d 0 2px 6px;

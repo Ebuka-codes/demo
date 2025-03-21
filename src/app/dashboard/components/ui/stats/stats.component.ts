@@ -17,8 +17,8 @@ export class StatsComponent {
   candidate = [
     { id: 'Pending', nested: { value: 30 } },
     { id: 'Interview', nested: { value: 15 } },
-    { id: 'Hired', nested: { value: 10 } },
-    { id: 'Rejected', nested: { value: 2 } },
+    { id: 'Hired', nested: { value: 60 } },
+    { id: 'Rejected', nested: { value: 10 } },
   ];
 
   ngOnInit(): void {
@@ -32,7 +32,7 @@ export class StatsComponent {
     .map((values) => values.nested.value)
     .reduce((a, b) => a + b, 0);
 
-  colors1 = ['#1ddb49f7', '#3333', '#28a745'];
+  colors1 = ['#1ddb49f7', '#141d28', '#28a745'];
 
   colors2 = ['#FBC784', '#2E78EE', '#28a745', '#e50c20'];
 
@@ -89,7 +89,7 @@ export class StatsComponent {
             backgroundColor: this.colors2,
           },
         ],
-        labels: this.data.map((item) => item.id),
+        labels: this.candidate.map((item) => item.id),
       },
       options: {
         cutout: '80%',
