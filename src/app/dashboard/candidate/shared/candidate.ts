@@ -8,6 +8,7 @@ interface QuestionOption {
     id: string;
     createdAt: string;
     description: string;
+    answer: string;
   }[];
   jobDetail: string;
 }

@@ -1,7 +1,7 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
 <div class="apply-container">
   <form>
-    <mat-horizontal-stepper #stepper [linear]="false">
+    <mat-horizontal-stepper #stepper [linear]="true">
       <!-- personal-information -->
       <mat-step [stepControl]="personalFormGroup">
         <form action="" [formGroup]="personalFormGroup">
@@ -34,7 +34,7 @@
               <p>Please enter your contact information.</p>
             </div>
             <div class="form-group">
-              <label for="firstName">First name * </label>
+              <label for="firstName">First name</label>
               <mat-form-field>
                 <input
                   matInput
@@ -56,7 +56,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="lastName">Last name * </label>
+              <label for="lastName">Last name</label>
               <mat-form-field>
                 <input
                   matInput
@@ -78,7 +78,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="email">Email address * </label>
+              <label for="email">Email address</label>
               <mat-form-field>
                 <input matInput type="email" formControlName="email" required />
               </mat-form-field>
@@ -95,7 +95,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="phone">Phone number * </label>
+              <label for="phone">Phone number</label>
               <mat-form-field>
                 <input matInput type="text" formControlName="phone" required />
               </mat-form-field>
@@ -117,7 +117,7 @@
               <p>Please enter your home address.</p>
             </div>
             <div class="form-group">
-              <label for="countryName">Country Name * </label>
+              <label for="countryName">Country Name</label>
               <mat-form-field appearance="fill">
                 <mat-select
                   formControlName="countryName"
@@ -136,7 +136,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="state">State * </label>
+              <label for="state">State</label>
               <mat-form-field appearance="fill">
                 <mat-select
                   formControlName="state"
@@ -160,7 +160,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="city">City* </label>
+              <label for="city">City</label>
               <mat-form-field>
                 <input matInput type="text" formControlName="city" />
               </mat-form-field>
@@ -177,7 +177,7 @@
             </div>
 
             <div class="form-group">
-              <label for="address">Home Address * </label>
+              <label for="address">Home Address</label>
               <mat-form-field>
                 <input matInput type="text" formControlName="address" />
               </mat-form-field>
@@ -200,7 +200,7 @@
             mat-button
             matStepperNext
             type="button"
-            (click)="nextStep()"
+            (click)="goToNextStep()"
           >
             Next
           </button>
@@ -353,7 +353,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="JobTitle">JobTitle *</label>
+                          <label for="JobTitle">Job Title *</label>
                           <mat-form-field>
                             <input
                               matInput
@@ -1043,7 +1043,7 @@
             mat-button
             matStepperNext
             type="button"
-            (click)="nextStep2()"
+            (click)="goToNextStep2()"
           >
             Next
           </button>
@@ -1191,43 +1191,56 @@
               <h2 class="question-header__title">Application Questions</h2>
               <p>Please answer the following questions.</p>
             </div>
+
             <div class="question-content">
               <form action="" [formGroup]="questionsFormGroup">
-                <div *ngFor="let item of data?.questionOptions" class="group">
+                <div
+                  *ngFor="let item of questionData?.questionOptions"
+                  class="group"
+                >
                   <label for="question">{{ item.description }}</label>
-                  <mat-form-field>
-                    <input
-                      *ngIf="item.questionType === 'TEXT'"
-                      matInput
-                      [formControlName]="item.id"
-                    />
+                  <div>
+                    <mat-form-field *ngIf="item.questionType === 'TEXT'">
+                      <input [formControlName]="item.id" matInput />
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field *ngIf="item.questionType === 'DATE'">
+                      <input
+                        matInput
+                        [formControlName]="item.id"
+                        [matDatepicker]="picker"
+                        readonly
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
 
-                    <input
-                      *ngIf="item.questionType === 'DATE'"
-                      matInput
-                      [formControlName]="item.id"
-                      [matDatepicker]="picker"
-                      readonly
-                    />
-                    <mat-datepicker-toggle
-                      *ngIf="item.questionType === 'DATE'"
-                      matSuffix
-                      [for]="picker"
-                    ></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                  <div>
+                    <mat-form-field *ngIf="item.questionType === 'DROPDOWN'">
+                      <mat-select [formControlName]="item.id">
+                        <mat-option
+                          *ngFor="let option of item.options"
+                          [value]="option.description"
+                        >
+                          {{ option.description }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
 
-                    <mat-select
-                      *ngIf="item.questionType === 'DROPDOWN'"
-                      [formControlName]="item.id"
-                    >
-                      <mat-option
-                        *ngFor="let option of item.options"
-                        [value]="option"
-                      >
-                        {{ option }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <div
+                    *ngIf="
+                      questionsFormGroup?.get(item.id)?.invalid &&
+                      questionsFormGroup?.get(item.id)?.touched
+                    "
+                  >
+                    <small>This field is required</small>
+                  </div>
                 </div>
               </form>
             </div>

@@ -5,6 +5,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewEncapsulation,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -81,7 +82,7 @@ export class ApplyComponent implements OnInit {
   educationErrorMessage = '';
   submitted: boolean = false;
   questionData!: job;
-  jobId: string | null = null;
+  jobId: string | null = localStorage.getItem('JobId');
 
   constructor(
     private fb: FormBuilder,
@@ -89,7 +90,8 @@ export class ApplyComponent implements OnInit {
     private route: ActivatedRoute,
     private dateFormatPicker: DateFormatService,
     private location: Location,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -141,6 +143,17 @@ export class ApplyComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCandidateInfo();
+    this.getQuestionsByJobDetail(this.jobId);
+  }
+
+  ngAfterViewInit() {
+    this.modals[1] = new Modal(this.modal1Element?.nativeElement);
+    this.modals[2] = new Modal(this.modal2Element?.nativeElement);
+    this.modals[3] = new Modal(this.modal3Element?.nativeElement);
+  }
+
+  getCandidateInfo() {
     if (this.route.snapshot.paramMap.get('id')) {
       this.jobService.setLoading(true);
       this.isLoading = this.jobService.isLoading$;
@@ -149,20 +162,24 @@ export class ApplyComponent implements OnInit {
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
-              this.data = response.data;
+              const { name, email, phone, countryName, state, address, city } =
+                response.data;
               this.personalFormGroup.patchValue({
-                firstName: response.data.name.split(' ')[0],
-                lastName: response.data.name.split(' ')[1],
-                email: response.data.email,
-                phone: response.data.phone,
-                countryName: response.data.countryName,
-                state: response.data.state,
-                address: response.data.address,
-                city: response.data.city,
+                firstName: name?.split(' ')[0] || '',
+                lastName: name?.split(' ')[1] || '',
+                email,
+                phone,
+                countryName,
+                state,
+                address,
+                city,
               });
             }
             this.jobService.setLoading(false);
             this.isLoading = this.jobService.isLoading$;
+
+            this.personalFormGroup.updateValueAndValidity();
+            this.cdr.detectChanges();
           },
           error: () => {
             this.toastService.error('Error occur');
@@ -171,15 +188,6 @@ export class ApplyComponent implements OnInit {
           },
         });
     }
-    setTimeout(() => {
-      this.getQuestionsByJobDetail();
-    }, 100);
-  }
-
-  ngAfterViewInit() {
-    this.modals[1] = new Modal(this.modal1Element?.nativeElement);
-    this.modals[2] = new Modal(this.modal2Element?.nativeElement);
-    this.modals[3] = new Modal(this.modal3Element?.nativeElement);
   }
 
   get firstName() {
@@ -289,7 +297,8 @@ export class ApplyComponent implements OnInit {
   get coverLetter() {
     return this.supportingFormGroup.get('coverLetter');
   }
-  nextStep() {
+
+  goToNextStep() {
     if (this.personalFormGroup.valid) {
       this.stepper.next();
     } else {
@@ -297,7 +306,7 @@ export class ApplyComponent implements OnInit {
     }
   }
 
-  nextStep2() {
+  goToNextStep2() {
     if (this.workEducationAndSkill.valid) {
       this.stepper.next();
     } else {
@@ -413,7 +422,6 @@ export class ApplyComponent implements OnInit {
     } else {
       this.workFormGroup.markAllAsTouched();
     }
-    // this.resetWorkHistoryForm();
   }
 
   removeWorkHistory(index: number): void {
@@ -639,24 +647,21 @@ export class ApplyComponent implements OnInit {
     this.supportingFormGroup.get('coverLetter')?.setValue('');
     this.selectedCoverLetterFile = '';
   }
-  getQuestionsByJobDetail() {
-    this.jobId = localStorage.getItem('jobId');
-    this.jobService.getJobDetails(this.jobId).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.questionData = response.data;
-        }
-      },
-      error: (err) => {
-        console.log('Error occurred');
-      },
+  getQuestionsByJobDetail(id: string | null) {
+    this.jobService.setLoading(true);
+    this.isLoading = this.jobService.isLoading$;
+    this.jobService.getJobDetails(id).subscribe((response: any) => {
+      if (response.valid && response.data) {
+        this.jobService.setLoading(false);
+        this.isLoading = this.jobService.isLoading$;
+        this.questionData = response.data;
+        let formControl: any = {};
+        this.questionData.questionOptions.forEach((question: any) => {
+          formControl[question.id] = new FormControl('', Validators.required);
+          this.questionsFormGroup = this.fb.group(formControl);
+        });
+      }
     });
-
-    // let formControls: any = {};
-    // this.data?.questionOptions.forEach((question: any) => {
-    //   formControls[question.id] = new FormControl('');
-    // });
-    // this.questionsFormGroup = this.fb.group(formControls);
   }
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
@@ -701,6 +706,7 @@ export class ApplyComponent implements OnInit {
         answer: formValues[key],
       }));
     }
+
     const data = {
       name: `${this.personalFormGroup.get('firstName')?.value} ${
         this.personalFormGroup.get('lastName')?.value
@@ -719,15 +725,18 @@ export class ApplyComponent implements OnInit {
       coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
       jobDetailId: localStorage.getItem('JobId'),
     };
+    console.log(data, localStorage.getItem('JobId'));
 
     if (
       this.personalFormGroup.valid &&
       this.workEducationAndSkill.valid &&
-      this.supportingFormGroup.valid
+      this.supportingFormGroup.valid &&
+      this.questionsFormGroup.valid
     ) {
       this.submitJobApplication(data);
     } else {
       this.submitted = true;
+      this.questionsFormGroup.markAllAsTouched();
     }
   }
 }

@@ -375,7 +375,6 @@ export class JobEditComponent {
       },
     });
   }
-
   openPanel() {
     setTimeout(() => {
       if (this.autoComplete) {

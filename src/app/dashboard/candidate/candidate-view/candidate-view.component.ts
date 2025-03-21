@@ -13,6 +13,7 @@ import * as bootstrap from 'bootstrap';
 import { take } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/shared/service/toast.service';
+import { months } from 'moment';
 
 @Component({
   selector: 'app-candidate-view',
@@ -83,5 +84,12 @@ export class CandidateViewComponent {
 
   updateCandidateTable() {
     this.candidateUpdate.emit();
+  }
+
+  formatDate(value: string) {
+    const date = new Date(value);
+    return `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
   }
 }

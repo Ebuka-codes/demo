@@ -259,7 +259,7 @@
                   </p>
 
                   <p>
-                    <strong>Year of experience:</strong> {{ item?.noOfYears }}
+                    <strong>Year of Experience:</strong> {{ item?.noOfYears }}
                   </p>
 
                   <hr />
@@ -289,9 +289,7 @@
 
                   <ng-container
                     *ngIf="item.questionOption.questionType === 'DROPDOWN'"
-                    ><li *ngFor="let item of item.questionOption.options">
-                      <strong>Answer</strong> : {{ item?.description }}
-                    </li>
+                    ><li><strong>Answer</strong> : {{ item?.answer }}</li>
                   </ng-container>
 
                   <ng-container
@@ -301,7 +299,9 @@
 
                   <ng-container
                     *ngIf="item?.questionOption?.questionType === 'DATE'"
-                    ><li><strong>Answer</strong>: {{ item?.answer }}</li>
+                    ><li>
+                      <strong>Answer</strong>: {{ formatDate(item.answer) }}
+                    </li>
                   </ng-container>
                   <hr />
                 </div>

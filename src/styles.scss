@@ -286,3 +286,10 @@ input[type="checkbox"] {
 .me .mat-pseudo-checkbox {
   display: none;
 }
+
+.mdc-text-field__input {
+  color: #6d6d6d !important;
+}
+.mdc-text-field--filled.mdc-text-field--no-label .mdc-text-field__input {
+  height: 0px;
+}

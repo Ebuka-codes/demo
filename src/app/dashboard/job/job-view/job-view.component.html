@@ -164,10 +164,8 @@
           <div class="question" *ngIf="job.questionOptions.length">
             <h1>Job Questions</h1>
             <ul>
-              <li>How long have you been working with Angular</li>
-              <li>
-                What is your preferred programming language for Angular
-                development
+              <li *ngFor="let item of job.questionOptions">
+                {{ item.description }}
               </li>
             </ul>
           </div>

@@ -102,14 +102,14 @@
         font-size: 14px;
         color: #484747b5;
         font-weight: 500;
-        margin-bottom: 4px;
+        margin-bottom: 10px;
       }
     }
     .questions {
       margin: 20px 0px;
       .question-header {
         padding-top: 10px;
-        margin-left: 45px;
+        margin-left: 60px;
         .question-header__title {
           font-style: normal;
           font-weight: 700;
@@ -123,6 +123,23 @@
         margin: 40px 0px;
         .group {
           margin: 30px 0px;
+          textArea {
+            color: #6d6d6d !important;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            font-weight: 400;
+            outline: none;
+            border-color: #dddd;
+            margin-top: 10px;
+            border-radius: 5px;
+          }
+        }
+        form {
+          margin-top: 10px !important;
+          font-size: 14px;
+          color: #484747b5;
+          font-weight: 500;
+          margin-bottom: 5px;
         }
       }
     }
@@ -308,7 +325,6 @@
       margin: 40px 0px;
       .supporting-doc__header {
         padding-top: 10px;
-        margin-left: 10px;
         margin-top: 10px;
         .supporting-doc__title {
           font-style: normal;
@@ -651,7 +667,6 @@
     opacity: 1;
   }
 }
-
 .mat-mdc-form-field-flex:has(.text) {
   height: 150px;
 }
