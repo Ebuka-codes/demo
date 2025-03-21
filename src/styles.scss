@@ -293,3 +293,15 @@ input[type="checkbox"] {
 .mdc-text-field--filled.mdc-text-field--no-label .mdc-text-field__input {
   height: 0px;
 }
+
+.dropdown-toggle {
+  border: 1px solid #6d6d6d59;
+  color: #6d6d6d;
+  font-size: 13px;
+  padding: 5px 15px;
+}
+.btn:hover {
+  background-color: transparent !important;
+  color: #6d6d6d !important;
+  border-color: #6d6d6d59 !important;
+}

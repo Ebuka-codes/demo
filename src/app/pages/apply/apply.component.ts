@@ -725,13 +725,12 @@ export class ApplyComponent implements OnInit {
       coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
       jobDetailId: localStorage.getItem('JobId'),
     };
-    console.log(data, localStorage.getItem('JobId'));
-
     if (
       this.personalFormGroup.valid &&
       this.workEducationAndSkill.valid &&
       this.supportingFormGroup.valid &&
-      this.questionsFormGroup.valid
+      (this.questionData?.questionOptions.length === 0 ||
+        this.questionsFormGroup.valid)
     ) {
       this.submitJobApplication(data);
     } else {

@@ -1,9 +1,9 @@
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { NgModule } from '@angular/core';
-import { CorporateComponent } from './corporate/corporate.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { JobComponent } from './job/job.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
   {
@@ -11,6 +11,8 @@ const routes: Routes = [
     component: DashboardComponent,
 
     children: [
+      { path: '', component: AdminDashboardComponent },
+
       { path: 'candidate', component: CandidateComponent },
 
       {

@@ -1,0 +1,110 @@
+.stat-container {
+  background-color: white;
+  padding: 20px 15px;
+  border-radius: 10px;
+  width: 700px;
+  .stat {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .card-info {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 15px;
+    padding: 15px 15px;
+    min-width: 320px;
+    height: 100%;
+    align-items: stretch;
+
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      .card-title {
+        color: #899bb1;
+        font-weight: 400;
+      }
+      .card-total {
+        font-weight: 600;
+        font-size: 18px;
+      }
+    }
+    .icon-bg {
+      background-color: #1ddb49f7;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: columns;
+      justify-content: center;
+      align-items: center;
+      padding: 13px;
+      svg {
+        color: white;
+        width: 25px;
+        height: 25px;
+      }
+    }
+    ul li {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1;
+      padding: 5px;
+      list-style: circle;
+    }
+  }
+  .pie-chart {
+    #barChart1 {
+      width: 120px !important;
+    }
+  }
+  .candidate {
+    margin: 20px auto;
+    h4 {
+      font-size: 18px;
+    }
+    .content {
+      .pie-chart {
+        position: relative;
+
+        #barChart2 {
+          width: 200px !important;
+          height: 200px !important;
+        }
+        .total {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 14.52px;
+          text-align: left;
+          position: absolute;
+          top: 50%;
+          left: 100px;
+          transform: translate(-50%, -50%);
+          line-height: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .total {
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          .title {
+            font-size: 14px;
+            font-weight: 600;
+            width: 60px;
+          }
+          .number {
+            font-size: 20px;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}

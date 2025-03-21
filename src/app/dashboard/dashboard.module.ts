@@ -20,6 +20,8 @@ import { HeaderComponent } from './components/ui/header/header.component';
 import { ComfirmDeleteModalComponent } from './components/ui/comfirm-delete-modal/comfirm-delete-modal.component';
 import { CorporateModule } from './corporate/corporate.module';
 import { CandidateModule } from './candidate/candidate.module';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { StatsComponent } from './components/ui/stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { CandidateModule } from './candidate/candidate.module';
     HeaderComponent,
     SidebarComponent,
     ComfirmDeleteModalComponent,
+    AdminDashboardComponent,
+    StatsComponent,
   ],
   imports: [
     FormsModule,

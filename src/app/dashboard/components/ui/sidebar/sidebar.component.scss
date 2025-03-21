@@ -15,8 +15,30 @@
 .logo {
   width: 158px;
   height: 32px;
-
   opacity: 0px;
+}
+.user {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .role {
+      font-size: 12px;
+      color: #899bb1;
+    }
+    span {
+      font-weight: 600;
+    }
+  }
 }
 ul {
   padding: 2px 0;
