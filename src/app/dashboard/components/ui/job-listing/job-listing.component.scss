@@ -3,7 +3,7 @@
   padding-left: 20px;
   padding-right: 15px;
   margin-top: 10px;
-  width: 700px;
+  width: 100%;
   .list-header {
     display: flex;
     justify-content: space-between;
@@ -170,9 +170,39 @@
     }
   }
   .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
     span {
       font-size: 14px;
     }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      svg {
+        width: 20px;
+        height: 20px;
+        color: #899bb1;
+        cursor: pointer;
+      }
+      .page-btn {
+        button {
+          border: none;
+          border-radius: 5px;
+          padding: 3px 10px;
+          margin: 0px 10px;
+          background-color: white;
+          cursor: pointer;
+        }
+        .active {
+          background-color: #1ddb49f7;
+        }
+      }
+    }
   }
 }
+
+

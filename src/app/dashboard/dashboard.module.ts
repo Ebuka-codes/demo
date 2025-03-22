@@ -23,6 +23,7 @@ import { CandidateModule } from './candidate/candidate.module';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { StatsComponent } from './components/ui/stats/stats.component';
 import { JobListingComponent } from './components/ui/job-listing/job-listing.component';
+import { InterviewsComponent } from './components/ui/interviews/interviews.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { JobListingComponent } from './components/ui/job-listing/job-listing.com
     AdminDashboardComponent,
     StatsComponent,
     JobListingComponent,
+    InterviewsComponent,
   ],
   imports: [
     FormsModule,

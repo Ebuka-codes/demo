@@ -20,6 +20,7 @@ $demo-theme: mat.define-light-theme(
 
 @import "bootstrap/scss/bootstrap";
 @import "notyf/notyf.min.css";
+@import "flatpickr/dist/flatpickr.min.css";
 * {
   padding: 0;
   margin: 0;
@@ -29,6 +30,9 @@ $demo-theme: mat.define-light-theme(
 html body * {
   font-family: "Inter", serif;
   scroll-behavior: smooth;
+}
+body {
+  overflow-y: auto !important;
 }
 
 .fr-toolbar {
@@ -298,4 +302,28 @@ input[type="checkbox"] {
   background-color: transparent !important;
   color: #6d6d6d !important;
   border-color: #6d6d6d59 !important;
+}
+
+.flatpickr-calendar {
+  position: static !important;
+}
+
+.flatpickr-calendar {
+  width: max-content !important;
+}
+
+.flatpickr-months {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  position: relative !important;
+}
+
+.flatpickr-day.selected {
+  background-color: #28a745 !important;
+  color: white !important;
 }

@@ -63,7 +63,7 @@
     }
   }
   .candidate {
-    margin: 20px auto;
+    margin: 20px 0px;
     h4 {
       font-size: 18px;
       margin-left: 40px;
@@ -71,7 +71,6 @@
     }
     .content {
       display: flex;
-      gap: 15px;
       position: relative;
       bottom: 15px;
       .pie-chart {
