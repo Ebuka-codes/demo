@@ -110,7 +110,6 @@ export class CandidateComponent implements OnInit {
         if (response.valid && response.data) {
           this.candidateData = response.data;
           this.filteredCandidate = this.candidateData;
-          console.log(this.filteredCandidate, 'me');
           this.loaderService.setLoading(false);
           this.isCandidateEmpty = true;
         }
