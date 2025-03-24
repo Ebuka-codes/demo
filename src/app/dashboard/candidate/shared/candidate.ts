@@ -94,3 +94,22 @@ export interface Candidate {
   status: string;
   scheduledDate: string;
 }
+
+export interface QuestionData {
+  id: string;
+  createdAt: string;
+  code: string;
+  description: string;
+  questionType: 'DATE';
+  options: Option[];
+  jobDetail: string;
+  isQualifyQuestion: boolean;
+  operator: string;
+  qualifyValue: string;
+}
+
+interface Option {
+  id: string;
+  createdAt: string;
+  description: string;
+}

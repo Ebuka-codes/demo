@@ -990,7 +990,7 @@
                                 formControlName="noOfYears"
                                 required
                                 inputmode="numeric"
-                                min="0"
+                                min="1"
                                 (keydown)="preventInvalidKeys($event)"
                               />
                             </mat-form-field>
@@ -1140,39 +1140,42 @@
                   />
                 </div>
 
-                <span
-                  *ngIf="coverLetter?.valid"
-                  style="margin: 10px 0px"
-                  [style.visibility]="coverLetter?.value ? 'visible' : 'hidden'"
-                >
+                <div style="margin: 10px 0px">
                   <span
-                    style="
-                      display: flex;
-                      justify-content: space-around;
-                      align-items: center;
+                    *ngIf="coverLetter?.valid"
+                    [style.visibility]="
+                      coverLetter?.value ? 'visible' : 'hidden'
                     "
                   >
-                    <span style="color: black"
-                      >{{ selectedCoverLetterFile | slice : 0 : 20 }}...</span
+                    <span
+                      style="
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                      "
                     >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
-                      style="width: 20px; height: 20px"
-                      (click)="handleRemoveCoverLetter()"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
+                      <span style="color: black"
+                        >{{ selectedCoverLetterFile | slice : 0 : 20 }}...</span
+                      >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                        style="width: 20px; height: 20px"
+                        (click)="handleRemoveCoverLetter()"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </span>
                   </span>
-                </span>
+                </div>
 
                 <div *ngIf="coverLetter?.invalid && submitted">
                   <small *ngIf="coverLetter?.errors?.['required']"
@@ -1197,14 +1200,56 @@
                   *ngFor="let item of questionData?.questionOptions"
                   class="group"
                 >
-                  <label for="question">{{ item.description }}</label>
-                  <div>
+                  <ng-container
+                    *ngIf="
+                      item.questionType === 'TEXT' && !item.isQualifyQuestion
+                    "
+                  >
+                    <label for="question">{{ item.description }}</label>
                     <mat-form-field *ngIf="item.questionType === 'TEXT'">
                       <input [formControlName]="item.id" matInput />
                     </mat-form-field>
-                  </div>
-                  <div>
-                    <mat-form-field *ngIf="item.questionType === 'DATE'">
+
+                    <div
+                      *ngIf="
+                        questionsFormGroup?.get(item.id)?.invalid &&
+                        questionsFormGroup?.get(item.id)?.touched
+                      "
+                    >
+                      <small>This field is required</small>
+                    </div>
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="
+                      item.questionType === 'TEXT' && item.isQualifyQuestion
+                    "
+                  >
+                    <label for="question">{{ item.description }}</label>
+                    <mat-form-field>
+                      <input
+                        [formControlName]="item.id"
+                        matInput
+                        type="number"
+                        inputmode="numeric"
+                        min="1"
+                        (keydown)="preventInvalidKey($event)"
+                      />
+                    </mat-form-field>
+
+                    <div
+                      *ngIf="
+                        questionsFormGroup?.get(item.id)?.invalid &&
+                        questionsFormGroup?.get(item.id)?.touched
+                      "
+                    >
+                      <small>This field is required</small>
+                    </div>
+                  </ng-container>
+
+                  <div *ngIf="item.questionType === 'DATE'">
+                    <label for="question">{{ item.description }}</label>
+                    <mat-form-field>
                       <input
                         matInput
                         [formControlName]="item.id"
@@ -1217,10 +1262,20 @@
                       ></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
+
+                    <div
+                      *ngIf="
+                        questionsFormGroup?.get(item.id)?.invalid &&
+                        questionsFormGroup?.get(item.id)?.touched
+                      "
+                    >
+                      <small>This field is required</small>
+                    </div>
                   </div>
 
-                  <div>
-                    <mat-form-field *ngIf="item.questionType === 'DROPDOWN'">
+                  <div *ngIf="item.questionType === 'DROPDOWN'">
+                    <label for="question">{{ item.description }}</label>
+                    <mat-form-field>
                       <mat-select [formControlName]="item.id">
                         <mat-option
                           *ngFor="let option of item.options"
@@ -1230,15 +1285,15 @@
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </div>
 
-                  <div
-                    *ngIf="
-                      questionsFormGroup?.get(item.id)?.invalid &&
-                      questionsFormGroup?.get(item.id)?.touched
-                    "
-                  >
-                    <small>This field is required</small>
+                    <div
+                      *ngIf="
+                        questionsFormGroup?.get(item.id)?.invalid &&
+                        questionsFormGroup?.get(item.id)?.touched
+                      "
+                    >
+                      <small>This field is required</small>
+                    </div>
                   </div>
                 </div>
               </form>

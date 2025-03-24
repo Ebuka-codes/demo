@@ -121,33 +121,11 @@
         </span>
       </div>
       <div class="candidate-info">
-        <div class="list">
-          <div class="bullet1"></div>
+        <div class="list" *ngFor="let item of candidate; let i = index">
+          <div [ngClass]="'bullet' + i"></div>
           <div class="item">
-            <span>100</span>
-            <span>Pending</span>
-          </div>
-        </div>
-
-        <div class="list">
-          <div class="bullet2"></div>
-          <div class="item">
-            <span>100</span>
-            <span>Interview</span>
-          </div>
-        </div>
-        <div class="list">
-          <div class="bullet3"></div>
-          <div class="item">
-            <span>100</span>
-            <span>Hired</span>
-          </div>
-        </div>
-        <div class="list">
-          <div class="bullet4"></div>
-          <div class="item">
-            <span>100</span>
-            <span>Rejected</span>
+            <span>{{ item.nested.value }}</span>
+            <span>{{ item.id }}</span>
           </div>
         </div>
       </div>

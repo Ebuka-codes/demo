@@ -18,6 +18,7 @@ import { JobViewComponent } from './job-view/job-view.component';
 import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDeleteComponent } from './job-delete/job-delete.component';
 import { JobFilterComponent } from './job-filter/job-filter.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { JobFilterComponent } from './job-filter/job-filter.component';
     CommonModule,
     JobRoutingModule,
     FormsModule,
+    MatButtonToggleModule,
   ],
 })
 export class JobModule {}

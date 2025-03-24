@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -24,6 +23,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { StatsComponent } from './components/ui/stats/stats.component';
 import { JobListingComponent } from './components/ui/job-listing/job-listing.component';
 import { InterviewsComponent } from './components/ui/interviews/interviews.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -54,6 +54,7 @@ import { InterviewsComponent } from './components/ui/interviews/interviews.compo
     CommonModule,
     CandidateModule,
     CorporateModule,
+    MatProgressBarModule,
   ],
 })
 export class DashboardModule {}

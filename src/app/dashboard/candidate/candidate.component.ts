@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { Candidate } from './shared/candidate';
+import { Candidate, QuestionData } from './shared/candidate';
 import { CandidateService } from './shared/candidate.service';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
+import { MatSelect } from '@angular/material/select';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-candidate',
@@ -15,13 +17,26 @@ import { Modal } from 'bootstrap';
 export class CandidateComponent implements OnInit {
   @ViewChild('viewCandidateModal') firstModal!: ElementRef;
   @ViewChild('scheduleDateModal') secondModal!: ElementRef;
+  @ViewChild('matSelect') matSelect!: MatSelect;
   candidateData!: Array<Candidate>;
+  filteredCandidate!: Array<Candidate>;
   isLoading!: Observable<boolean>;
-  filteredData: Array<Candidate> = [];
   candidateViewData: any;
   searchText!: string;
   candidateId!: string;
   scheduleModalOpen: boolean = false;
+  job: any;
+  qualifiedQuestionData!: Array<QuestionData>;
+  selectedJob!: string;
+  selectedAllChecked: boolean = false;
+  selectedIds: string[] = [];
+  tabs: string[] = ['Candidate', 'Shortlisted', 'Interview'];
+  activeTag = 'Candidate';
+  shortListedData!: Array<Candidate>;
+  interviewData!: Array<Candidate>;
+  qualifiedQuestion = new FormControl();
+  selectedJobValue!: string;
+  isCandidateEmpty: boolean = false;
 
   constructor(
     private toastService: ToastService,
@@ -30,41 +45,158 @@ export class CandidateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getCandidate();
+    this.getAllJob();
   }
-  handleSearch() {
-    if (this.searchText.trim() === '') {
-      this.filteredData = [...this.candidateData];
-    } else {
-      this.filteredData = this.candidateData.filter((item: any) =>
-        item.jobDetail?.jobTitle
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase())
+  handleSelectedJob() {
+    this.selectedJobValue = this.matSelect.value.id;
+    this.getCandidateByJobId(this.selectedJobValue);
+    this.getQualifiedQuestion(this.selectedJobValue);
+  }
+
+  toggletabs(tab: string) {
+    this.activeTag = tab;
+    if (this.activeTag === 'Shortlisted') {
+      this.filteredCandidate = this.candidateData.filter(
+        (item) => item.status === 'SHORTLIST'
       );
+    } else if (this.activeTag === 'Interview') {
+      this.filteredCandidate = this.candidateData.filter(
+        (item) => item.status === 'INTERVIEW_SCHEDULED'
+      );
+    } else {
+      this.filteredCandidate = this.candidateData;
     }
   }
-  getCandidate() {
+
+  toggleAllCheckbox() {
+    this.selectedAllChecked = !this.selectedAllChecked;
+    if (this.selectedAllChecked) {
+      this.selectedIds = this.filteredCandidate.map((item) => item.id);
+    } else {
+      this.selectedIds = [];
+    }
+  }
+  toggleSelection(id: string) {
+    if (this.selectedIds.includes(id)) {
+      this.selectedIds = this.selectedIds.filter((itemId) => itemId !== id);
+    } else {
+      this.selectedIds.push(id);
+    }
+    this.selectedAllChecked =
+      this.selectedIds.length === this.filteredCandidate.length;
+  }
+  getAllJob() {
     this.loaderService.setLoading(true);
-    this.isLoading = this.loaderService.isLoading$;
-    this.candidateService?.getCandidate().subscribe({
+    this.candidateService.getAllJobs().subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
-          this.candidateData = response.data;
-          this.filteredData = this.candidateData.sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
+          this.job = response.data;
           this.loaderService.setLoading(false);
         }
       },
       error: () => {
-        this.toastService.error('Error occur');
+        this.toastService.error('Error while getting job details');
         this.loaderService.setLoading(false);
-        this.isLoading = this.loaderService.isLoading$;
+      },
+      complete: () => {
+        console.log('All jobs fetched');
+      },
+    });
+  }
+  getCandidateByJobId(jobId: string) {
+    this.loaderService.setLoading(true);
+    this.candidateService.getCandidateByJobId(jobId).subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.candidateData = response.data;
+          this.filteredCandidate = this.candidateData;
+          console.log(this.filteredCandidate, 'me');
+          this.loaderService.setLoading(false);
+          this.isCandidateEmpty = true;
+        }
+      },
+      error: () => {
+        this.toastService.error('Error while getting candidate data');
+        this.loaderService.setLoading(false);
+        this.isCandidateEmpty = false;
       },
       complete: () => {
         console.log('Candidate data fetched');
+        this.loaderService.setLoading(false);
       },
     });
+  }
+
+  onShorListCandidate() {
+    const data = {
+      ids: this.selectedIds,
+    };
+    if (data.ids.length > 0) {
+      this.loaderService.setLoading(true);
+      this.candidateService.shorListCandidate(data).subscribe({
+        next: (response: any) => {
+          this.shortListedData = response.data;
+          this.loaderService.setLoading(false);
+          this.toastService.success('Shortlisted successfully');
+          this.selectedIds = [];
+          this.getCandidateByJobId(this.selectedJobValue);
+        },
+        error: (err) => {
+          console.log(err);
+          this.loaderService.setLoading(false);
+        },
+      });
+    }
+  }
+
+  handleQualifiedQuestion() {
+    if (this.qualifiedQuestion.value) {
+      const data = {
+        ids: this.qualifiedQuestion.value,
+      };
+      this.loaderService.setLoading(true);
+      this.candidateService.filterCandidateByQualifiedQuestion(data).subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.filteredCandidate = response.data;
+            this.loaderService.setLoading(false);
+            this.toastService.success('Filtered successfully');
+            this.qualifiedQuestion.reset();
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          this.loaderService.setLoading(false);
+          this.toastService.error('Errror occurred');
+          this.qualifiedQuestion.reset();
+        },
+      });
+    }
+  }
+  getQualifiedQuestion(jobId: string | undefined) {
+    console.log(jobId);
+    this.loaderService.setLoading(true);
+    this.candidateService.getQualifiedQuestion(jobId).subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.qualifiedQuestionData = response.data;
+          setTimeout(() => {
+            this.loaderService.setLoading(false);
+          }, 4000);
+        }
+      },
+      error: () => {
+        this.toastService.error('Error while getting qualified question');
+        this.loaderService.setLoading(false);
+      },
+      complete: () => {
+        console.log('Qualified question fetched');
+      },
+    });
+  }
+
+  getCandidates() {
+    this.getCandidateByJobId(this.selectedJobValue);
   }
 
   openScheduleModal(id: string) {
@@ -86,7 +218,7 @@ export class CandidateComponent implements OnInit {
     modal?.show();
   }
   updateCandidateData(data: Candidate[]) {
-    this.filteredData = data;
+    this.candidateData = data;
   }
 
   closModal(modalId: string) {
@@ -108,7 +240,7 @@ export class CandidateComponent implements OnInit {
 
   handleViewCandidate(id: string) {
     if (id) {
-      this.candidateViewData = this.filteredData.find(
+      this.candidateViewData = this.filteredCandidate.find(
         (candidate: any) => candidate.id === id
       );
       const viewCandidateModal =

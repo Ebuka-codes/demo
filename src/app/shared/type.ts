@@ -25,6 +25,7 @@ export interface optionType {
       description: string;
     }
   ];
+  isQualifyQuestion: boolean;
 }
 
 export interface DetailsType {

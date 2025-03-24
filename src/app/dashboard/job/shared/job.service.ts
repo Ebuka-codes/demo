@@ -104,6 +104,19 @@ export class JobService {
       headers,
     });
   }
+
+  getOperator() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.get(
+      this.baseUrl + `question-options/get-all-operator`,
+      {
+        headers,
+      }
+    );
+  }
+
   getQueryDetailsByType() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

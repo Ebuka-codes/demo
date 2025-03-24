@@ -635,15 +635,8 @@
                 [value]="question.id"
               >
                 <span>
-                  {{
-                    question.description.charAt(0).toUpperCase() +
-                      question.description.slice(1)
-                  }}
+                  {{ question?.description }}
                 </span>
-              </mat-option>
-
-              <mat-option *ngIf="!questionTypeDropdown.length">
-                No question
               </mat-option>
             </mat-select>
           </mat-form-field>

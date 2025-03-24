@@ -31,11 +31,10 @@
         <form [formGroup]="questionForm" (ngSubmit)="onSubmitQuestion()">
           <div class="form-group">
             <label for="desc">Description *</label>
-            <input
-              type="text"
+            <textarea
               formControlName="description"
               style="height: 100px"
-            />
+            ></textarea>
             <div *ngIf="description?.invalid && isSubmittedQuestion">
               <small *ngIf="description?.errors?.['required']">
                 Description field is required
@@ -83,11 +82,67 @@
             <div *ngIf="questionTypes?.value === 'DROPDOWN'">
               <div>
                 <label for="option">Option*</label>
-                <div class="form-group">
+                <mat-form-field>
                   <input matInput formControlName="optionsDescription" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div *ngIf="shortListing && questionTypes?.value === 'TEXT'">
+              <div>
+                <label for="option">Operator</label>
+                <mat-form-field>
+                  <mat-select formControlName="operator">
+                    <mat-option
+                      *ngFor="let operator of operatorData"
+                      [value]="operator"
+                    >
+                      {{ operator | titlecase }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <label for="option">Qualified Value</label>
+                <mat-form-field style="margin-bottom: 4px">
+                  <input
+                    matInput
+                    formControlName="qualifyValue"
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    (keydown)="preventInvalidKey($event)"
+                  />
+                </mat-form-field>
+                <div *ngIf="qualifyValue?.invalid && isSubmittedQuestion">
+                  <small *ngIf="qualifyValue?.errors?.['required']"
+                    >Qualified value is required</small
+                  >
                 </div>
               </div>
             </div>
+
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+              *ngIf="questionForm.get('questionType')?.value === 'TEXT'"
+            >
+              <span>Is it a qualified question?</span>
+
+              <mat-button-toggle-group
+                name="fontStyle"
+                aria-label="Font Style"
+                (change)="onToggle($event)"
+              >
+                <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                <mat-button-toggle value="No">No</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+
             <button
               *ngIf="questionForm.get('questionType')?.value === 'DROPDOWN'"
               type="button"

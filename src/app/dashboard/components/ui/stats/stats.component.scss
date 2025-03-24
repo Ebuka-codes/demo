@@ -4,11 +4,11 @@
   padding-left: 20px;
   padding-right: 15px;
   border-radius: 10px;
-  width: 700px;
   .stat {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
+    grid-auto-rows: auto;
   }
   .card-info {
     display: flex;
@@ -18,14 +18,14 @@
     border-radius: 15px;
     padding: 15px 15px;
     min-width: 320px;
-    height: 100%;
-    align-items: stretch;
+    height: auto;
+    min-height: auto;
+    align-self: start;
 
     .card-header {
       display: flex;
       flex-direction: column;
       gap: 3px;
-
       .card-title {
         color: #899bb1;
         font-weight: 400;
@@ -119,28 +119,28 @@
         .list {
           border-right: 1px solid #899bb159;
           padding-right: 13px;
-          .bullet1 {
+          .bullet0 {
             width: 5px;
             height: 5px;
             background-color: #fbc784;
             border-radius: 50%;
             margin-bottom: 4px;
           }
-          .bullet2 {
+          .bullet1 {
             background-color: #2e78ee;
             width: 5px;
             height: 5px;
             margin-bottom: 4px;
             border-radius: 50%;
           }
-          .bullet3 {
+          .bullet2 {
             background-color: #28a745;
             width: 5px;
             height: 5px;
             border-radius: 50%;
             margin-bottom: 4px;
           }
-          .bullet4 {
+          .bullet3 {
             background-color: #e50c20;
             width: 5px;
             height: 5px;

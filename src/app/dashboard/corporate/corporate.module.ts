@@ -13,6 +13,7 @@ import { CorporateRoutingModule } from './corporate.routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CorporateViewComponent } from './corporate-view/corporate-view.component';
 import { CorporateDeleteComponent } from './corporate-delete/corporate-delete.component';
+
 @NgModule({
   declarations: [
     CorporateEditComponent,

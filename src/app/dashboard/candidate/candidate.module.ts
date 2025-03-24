@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { CandidateRejectComponent } from './candidate-reject/candidate-reject.component';
 import { CandidateFilterComponent } from './candidate-filter/candidate-filter.component';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { EmptyDataComponent } from '../components/ui/empty-data/empty-data.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
     CandidateScheduleDateComponent,
     CandidateRejectComponent,
     CandidateFilterComponent,
+    EmptyDataComponent,
   ],
   imports: [
     FormsModule,
@@ -29,6 +32,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
+    MatCheckboxModule,
   ],
 })
 export class CandidateModule {}

@@ -546,11 +546,13 @@ export class ApplyComponent implements OnInit {
 
   preventInvalidKeys(event: KeyboardEvent) {
     if (
+      event.key === '0' ||
       event.key === 'e' ||
       event.key === 'E' ||
       event.key === '+' ||
       event.key === '-'
     ) {
+      event.preventDefault();
       event.preventDefault();
     }
   }
@@ -664,6 +666,18 @@ export class ApplyComponent implements OnInit {
       }
     });
   }
+  preventInvalidKey(event: KeyboardEvent) {
+    if (
+      event.key === '0' ||
+      event.key === 'e' ||
+      event.key === 'E' ||
+      event.key === '+' ||
+      event.key === '-'
+    ) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
     this.jobService.setLoading(true);
@@ -687,9 +701,7 @@ export class ApplyComponent implements OnInit {
         this.isLoading = this.jobService.getLoading();
         this.toastService.success('Submitted successfully!');
         setTimeout(() => {
-          this.routes.navigateByUrl(
-            `/apply/${localStorage.getItem('corp-key')}`
-          );
+          this.location.back();
         }, 3000);
       },
       error: () => {
@@ -706,7 +718,7 @@ export class ApplyComponent implements OnInit {
     if (formValues) {
       questionOption = Object.keys(formValues).map((key) => ({
         questionOptionId: key,
-        answer: formValues[key],
+        answer: String(formValues[key]),
       }));
     }
 

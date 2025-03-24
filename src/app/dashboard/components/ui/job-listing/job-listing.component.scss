@@ -1,9 +1,6 @@
 .list-container {
   padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 15px;
   margin-top: 10px;
-  width: 100%;
   .list-header {
     display: flex;
     justify-content: space-between;
@@ -38,6 +35,10 @@
       svg {
         width: 20px;
         color: #28a745;
+      }
+      a {
+        color: rgb(36 31 31 / 79%);
+        text-decoration: none;
       }
     }
   }
@@ -204,5 +205,3 @@
     }
   }
 }
-
-

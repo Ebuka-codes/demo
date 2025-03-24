@@ -20,7 +20,19 @@ export class CandidateService {
       headers,
     });
   }
+  getCandidateByJobId(jobId: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
 
+    return this.httpClient.get<Candidate[]>(
+      this.baseUrl + `candidates/by-job-detail/${jobId}`,
+      {
+        headers,
+      }
+    );
+  }
   deleteCandidateById(id: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -78,5 +90,45 @@ export class CandidateService {
       'corp-key': 'true',
     });
     return this.httpClient.get<job>(this.baseUrl + 'job-details', { headers });
+  }
+
+  getQualifiedQuestion(id: string | undefined) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.get(
+      this.baseUrl + `job-details/get-all-qualifying-question/${id}`,
+      {
+        headers,
+      }
+    );
+  }
+  shorListCandidate(data: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.put(
+      this.baseUrl + `candidates/shortlist-candidates`,
+      data,
+      {
+        headers,
+      }
+    );
+  }
+
+  filterCandidateByQualifiedQuestion(data: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.put(
+      this.baseUrl + `candidates/filter-candidates-by-qualify-questions`,
+      data,
+      {
+        headers,
+      }
+    );
   }
 }

@@ -67,7 +67,11 @@ export class CandidateFilterComponent {
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
           this.jobTitle = new Set(reponse.data.map((job: job) => job.jobTitle));
+          this.loaderService.setLoading(false);
         }
+      },
+      error: () => {
+        this.loaderService.setLoading(false);
       },
     });
   }
