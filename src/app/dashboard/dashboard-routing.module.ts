@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CandidateComponent } from './candidate/candidate.component';
 import { JobComponent } from './job/job.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { InterviewerComponent } from './interviewer/interviewer.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: 'job',
         loadChildren: () => import('./job/job.module').then((m) => m.JobModule),
+      },
+      {
+        path: 'interviewer',
+        component: InterviewerComponent,
       },
     ],
   },

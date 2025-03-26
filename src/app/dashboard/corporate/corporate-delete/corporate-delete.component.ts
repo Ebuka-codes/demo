@@ -42,11 +42,11 @@ export class CorporateDeleteComponent {
         this.modalInstance.hide();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
-        this.toastServie.success('Corporate removed');
         this.corporateDeleted.emit();
+        this.toastServie.success('Corporate deleted successfully');
       },
-      error: () => {
-        this.toastServie.error('Failed to delete corporate');
+      error: (error) => {
+        this.toastServie.error(error.message);
         this.modalInstance.hide();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();

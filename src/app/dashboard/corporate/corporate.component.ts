@@ -77,7 +77,7 @@ export class CorporateComponent {
   }
 
   handleGetCorpKey() {
-    if (this.corpkey) {
+    if (this.corpkey.value) {
       this.loaderService.setLoading(true);
       setTimeout(() => {
         localStorage.setItem('corp-key', this.corpkey.value);
@@ -100,14 +100,13 @@ export class CorporateComponent {
         }
       },
 
-      error: () => {
+      error: (error) => {
         this.submitLoading = false;
         this.loaderService.setLoading(false);
-        this.toastService.error('Network Connection Error!');
+        this.toastService.error(error.message);
       },
     });
   }
-
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -153,7 +152,7 @@ export class CorporateComponent {
           }
         },
         error: (err) => {
-          this.toastService.error('Network Connection Error!');
+          this.toastService.error(err.message);
           this.loaderService.setLoading(false);
           this.isLoadingLogo = false;
         },

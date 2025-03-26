@@ -68,7 +68,7 @@
       </li>
       <li [ngClass]="isJobActive ? 'side-link active' : 'side-link'">
         <a
-          [routerLink]="['/dashboard/job']"
+          routerLink="/dashboard/job"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -117,6 +117,46 @@
             </svg>
 
             <span>Candidate</span>
+          </span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          class="side-link"
+          routerLink="/dashboard/interviewer"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span class="sidebar-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <circle
+                cx="12"
+                cy="6"
+                r="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M4 21v-1a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M19 7h2m-1-1v2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+
+            <span>Interviewer</span>
           </span>
         </a>
       </li>

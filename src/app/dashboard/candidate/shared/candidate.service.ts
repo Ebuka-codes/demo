@@ -61,18 +61,14 @@ export class CandidateService {
     });
   }
 
-  scheduleCandidateById(id: string, data: string) {
+  scheduleCandidateById(data: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put(
-      this.baseUrl + `candidates/schedule/${id}?scheduledDate=${data}`,
-      data,
-      {
-        headers,
-      }
-    );
+    return this.httpClient.put(this.baseUrl + `candidates/schedule`, data, {
+      headers,
+    });
   }
   filterCandidate(data: {}) {
     const headers = new HttpHeaders({
@@ -130,5 +126,15 @@ export class CandidateService {
         headers,
       }
     );
+  }
+
+  getInterviewer() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.get<any>(this.baseUrl + `interview-invitees`, {
+      headers,
+    });
   }
 }

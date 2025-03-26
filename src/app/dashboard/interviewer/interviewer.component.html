@@ -1,0 +1,133 @@
+<section class="interviewer">
+  <div class="interviewer-header">
+    <h2>Interviewer</h2>
+    <button
+      type="button"
+      data-bs-target="#createInterviewer"
+      data-bs-toggle="modal"
+    >
+      Add New
+    </button>
+  </div>
+  <div class="create-interviewer">
+    <div
+      #myModal
+      class="modal fade"
+      id="createInterviewer"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+      (hidden.bs.modal)="resetForm()"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Create Interviewer
+            </h5>
+            <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-6"
+                style="width: 20px"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <div class="modal-body">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input id="name" type="text" formControlName="name" />
+                <small
+                  *ngIf="
+                    form.controls['name'].invalid &&
+                    form.controls['name'].touched
+                  "
+                  class="text-danger"
+                >
+                  Name is required.
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input id="email" type="email" formControlName="email" />
+
+                <div
+                  *ngIf="
+                    form.controls['email'].invalid &&
+                    form.controls['email'].touched
+                  "
+                ></div>
+                <small
+                  *ngIf="form.controls['email'].touched &&
+                    form.controls['email'].errors?.['required'] "
+                  class="text-danger"
+                >
+                  Email is required
+                </small>
+
+                <small
+                  *ngIf="
+                  form.controls['email'].errors?.['email'] "
+                  class="text-danger"
+                >
+                  Email is invaild
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone *</label>
+                <input id="phone" type="tel" formControlName="phone" />
+                <div
+                  *ngIf="
+                    form.controls['phone'].invalid &&
+                    form.controls['phone'].touched
+                  "
+                ></div>
+                <small
+                  *ngIf="form.controls['phone'].touched  &&
+                    form.controls['phone']?.errors?.['required']"
+                  class="text-danger"
+                >
+                  Phone number is required.
+                </small>
+
+                <small
+                  *ngIf="!form.controls['phone']?.errors?.['required'] &&
+                  form.controls['phone']?.errors?.['invalidPhone']"
+                  class="text-danger"
+                >
+                  Phone number is invalid.
+                </small>
+              </div>
+
+              <div class="btn-action">
+                <button type="button" class="close-btn" data-bs-dismiss="modal">
+                  <span>Cancel</span>
+                </button>
+                <button type="submit" class="submit-btn" [disabled]="isLoading">
+                  <ng-container *ngIf="isLoading; else showLoader">
+                    <span class="mini-loader-spinner"></span>
+                  </ng-container>
+                  <ng-template #showLoader>
+                    <span>Submit</span>
+                  </ng-template>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

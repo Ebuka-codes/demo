@@ -70,8 +70,9 @@ export class CandidateFilterComponent {
           this.loaderService.setLoading(false);
         }
       },
-      error: () => {
+      error: (error) => {
         this.loaderService.setLoading(false);
+        this.toastService.error(error.message);
       },
     });
   }
@@ -86,37 +87,37 @@ export class CandidateFilterComponent {
   resetFilterCandidateForm() {
     this.filterForm.reset();
   }
-
   onSubmit() {
-    this.loaderService.setLoading(true);
-    this.isLoading$ = this.loaderService.isLoading$;
     const data = {
       jobTitle: this.filterForm.get('jobTitle')?.value,
       status: this.filterForm.get('status')?.value,
     };
-    this.filterForm.disable();
-    this.candidateService.filterCandidate(data).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
+    if (
+      this.filterForm.get('jobTitle')?.value ||
+      this.filterForm.get('status')?.value
+    ) {
+      this.loaderService.setLoading(true);
+      this.isLoading$ = this.loaderService.isLoading$;
+      this.candidateService.filterCandidate(data).subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.loaderService.setLoading(false);
+            this.isLoading$ = this.loaderService.isLoading$;
+            this.closeModal();
+            this.updateCandidateData.emit(response.data);
+            this.toastService.success(response.message);
+          } else {
+            this.loaderService.setLoading(false);
+            this.isLoading$ = this.loaderService.isLoading$;
+          }
+        },
+        error: (error) => {
           this.loaderService.setLoading(false);
           this.isLoading$ = this.loaderService.isLoading$;
           this.closeModal();
-          this.filterForm.enable();
-          this.updateCandidateData.emit(response.data);
-        } else {
-          this.loaderService.setLoading(false);
-          this.isLoading$ = this.loaderService.isLoading$;
-          this.toastService.error('Error occurred while filtering');
-          this.filterForm.enable();
-        }
-      },
-      error: () => {
-        this.loaderService.setLoading(false);
-        this.isLoading$ = this.loaderService.isLoading$;
-        this.toastService.error('Error occurred while filtering');
-        this.filterForm.enable();
-        this.closeModal();
-      },
-    });
+          this.toastService.error(error.message);
+        },
+      });
+    }
   }
 }

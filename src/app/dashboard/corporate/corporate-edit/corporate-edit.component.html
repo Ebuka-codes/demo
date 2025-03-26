@@ -90,11 +90,7 @@
             <div class="file-wrapper">
               <label>Logo </label>
               <div
-                [ngClass]="
-                  submitLoading
-                    ? 'file-wrapper_content loader-bg'
-                    : ' file-wrapper_content'
-                "
+                class="file-wrapper_content"
                 (click)="!file ? triggerInput() : null"
                 [style.cursor]="file ? 'not-allowed' : 'pointer'"
                 (dragover)="onDragOver($event)"

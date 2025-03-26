@@ -153,8 +153,8 @@ export class CorporateEditComponent {
             this.loaderService.setLoading(false);
           }
         },
-        error: () => {
-          this.toastService.error('Network Connection Error!');
+        error: (error) => {
+          this.toastService.error(error.message);
           this.loaderService.setLoading(false);
           this.isLoadingLogo = false;
         },
@@ -170,25 +170,23 @@ export class CorporateEditComponent {
   editCorporate(id: string, data: Corporate) {
     this.submitLoading = true;
     this.loaderService.setLoading(true);
-    this.form.disable();
+
     this.corporateService.editCorporate(id, data).subscribe({
       next: () => {
         this.submitLoading = false;
         this.modalInstance.hide();
-        this.form.enable();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
         this.corporateEdited.emit();
-        this.toastService.success('Corporate Updated Successfully');
+        this.toastService.success('Corporate updated successfully');
         this.loaderService.setLoading(false);
       },
 
       error: (err) => {
         this.submitLoading = false;
-        this.toastService.error('Network Connection Error!');
+        this.toastService.error(err.message);
         this.loaderService.setLoading(false);
         this.modalInstance.hide();
-        this.form.enable();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
       },

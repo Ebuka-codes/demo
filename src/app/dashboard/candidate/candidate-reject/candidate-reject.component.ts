@@ -47,8 +47,8 @@ export class CandidateRejectComponent {
           backdrop?.remove();
           this.candidateUpdate.emit();
         },
-        error: () => {
-          this.toastService.error('Error rejecting Candidate!');
+        error: (error) => {
+          this.toastService.error(error.message);
           this.modalInstance.hide();
           const backdrop = document.querySelector('.modal-backdrop');
           backdrop?.remove();

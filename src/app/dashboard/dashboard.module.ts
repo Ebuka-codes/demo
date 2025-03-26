@@ -23,7 +23,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { StatsComponent } from './components/ui/stats/stats.component';
 import { JobListingComponent } from './components/ui/job-listing/job-listing.component';
 import { InterviewsComponent } from './components/ui/interviews/interviews.component';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { InterviewerComponent } from './interviewer/interviewer.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +35,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     StatsComponent,
     JobListingComponent,
     InterviewsComponent,
+    InterviewerComponent,
   ],
   imports: [
     FormsModule,
@@ -54,7 +55,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     CommonModule,
     CandidateModule,
     CorporateModule,
-    MatProgressBarModule,
   ],
 })
 export class DashboardModule {}

@@ -36,7 +36,6 @@ export class CandidateComponent implements OnInit {
   interviewData!: Array<Candidate>;
   qualifiedQuestion = new FormControl();
   selectedJobValue!: string;
-  isCandidateEmpty: boolean = false;
 
   constructor(
     private toastService: ToastService,
@@ -94,8 +93,8 @@ export class CandidateComponent implements OnInit {
           this.loaderService.setLoading(false);
         }
       },
-      error: () => {
-        this.toastService.error('Error while getting job details');
+      error: (error) => {
+        this.toastService.error(error.error.message);
         this.loaderService.setLoading(false);
       },
       complete: () => {
@@ -111,16 +110,13 @@ export class CandidateComponent implements OnInit {
           this.candidateData = response.data;
           this.filteredCandidate = this.candidateData;
           this.loaderService.setLoading(false);
-          this.isCandidateEmpty = true;
         }
       },
-      error: () => {
-        this.toastService.error('Error while getting candidate data');
+      error: (error) => {
+        this.toastService.error(error.message);
         this.loaderService.setLoading(false);
-        this.isCandidateEmpty = false;
       },
       complete: () => {
-        console.log('Candidate data fetched');
         this.loaderService.setLoading(false);
       },
     });
@@ -143,6 +139,7 @@ export class CandidateComponent implements OnInit {
         error: (err) => {
           console.log(err);
           this.loaderService.setLoading(false);
+          this.toastService.error(err.message);
         },
       });
     }
@@ -159,14 +156,13 @@ export class CandidateComponent implements OnInit {
           if (response.valid && response.data) {
             this.filteredCandidate = response.data;
             this.loaderService.setLoading(false);
-            this.toastService.success('Filtered successfully');
+            this.toastService.success(response.message);
             this.qualifiedQuestion.reset();
           }
         },
         error: (err) => {
-          console.log(err);
           this.loaderService.setLoading(false);
-          this.toastService.error('Errror occurred');
+          this.toastService.error(err.message);
           this.qualifiedQuestion.reset();
         },
       });
@@ -184,8 +180,8 @@ export class CandidateComponent implements OnInit {
           }, 4000);
         }
       },
-      error: () => {
-        this.toastService.error('Error while getting qualified question');
+      error: (error) => {
+        this.toastService.error(error.message);
         this.loaderService.setLoading(false);
       },
       complete: () => {

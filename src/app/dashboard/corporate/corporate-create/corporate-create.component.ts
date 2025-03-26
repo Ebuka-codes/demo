@@ -136,8 +136,8 @@ export class CorporateCreateComponent {
             this.loaderService.setLoading(false);
           }
         },
-        () => {
-          this.toastService.error('Netwok connection error');
+        (error) => {
+          this.toastService.error(error.message);
           this.loaderService.setLoading(false);
           this.isLoadingLogo = false;
         }
@@ -152,42 +152,36 @@ export class CorporateCreateComponent {
   createCorporate(corporate: Corporate) {
     this.submitLoading = true;
     this.loaderService.setLoading(true);
-    this.form.disable();
+
     this.corporateService.createCorporate(corporate).subscribe({
-      next: () => {
+      next: (response: any) => {
         this.submitLoading = false;
         this.form.reset();
-        this.form.enable();
         this.isSubmitted = false;
         this.loaderService.setLoading(false);
         this.modalInstance.hide();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
-        this.toastService.success('Corporate added successfully!');
+        this.toastService.success('Corporate created successfully');
         this.corporateCreated.emit();
       },
-      error: () => {
+      error: (error) => {
         this.submitLoading = false;
-        this.form.enable();
         this.form.reset();
-        this.toastService.error('Error occur!');
+        this.toastService.error(error.message);
         this.loaderService.setLoading(false);
       },
     });
   }
   onSubmit() {
-    this.isSubmitted = true;
-    console.log(this.form.value);
-    if (this.form.invalid) {
-      return;
-    } else {
+    if (this.form.valid) {
       this.createCorporate({ ...this.form.value, logo: this.logoUrl });
-      this.isSubmitted = false;
+    } else {
+      this.form.markAllAsTouched();
     }
   }
   resetForm() {
     this.form.reset();
     this.file = '';
-    this.isSubmitted = false;
   }
 }

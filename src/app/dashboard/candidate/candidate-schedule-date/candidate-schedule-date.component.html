@@ -29,36 +29,90 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="scheduledDateForm" (ngSubmit)="onSubmit()">
-          <label for="schedule-date">Select Date * </label>
-          <mat-form-field>
-            <input
-              matInput
-              [matDatepicker]="scheduleDatePicker"
-              formControlName="scheduledDate"
-              [readonly]="true"
-            />
-            <mat-datepicker-toggle matIconSuffix [for]="scheduleDatePicker">
-              <mat-datepicker #scheduleDatePicker></mat-datepicker>
-            </mat-datepicker-toggle>
-          </mat-form-field>
-          <div *ngIf="scheduledDate?.invalid && submitted">
-            <small *ngIf="scheduledDate?.errors?.['required']"
-              >Schedule date is required</small
-            >
+          <div>
+            <label for="schedule-date">Select Date * </label>
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="scheduleDatePicker"
+                formControlName="scheduledDate"
+                [readonly]="true"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="scheduleDatePicker">
+                <mat-datepicker #scheduleDatePicker></mat-datepicker>
+              </mat-datepicker-toggle>
+            </mat-form-field>
+            <div *ngIf="scheduledDate?.invalid && scheduledDate?.touched">
+              <small *ngIf="scheduledDate?.errors?.['required']"
+                >Schedule date is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="time">Select time *</label>
+            <input [ngxTimepicker]="picker" formControlName="scheduledTime" />
+            <ngx-material-timepicker #picker></ngx-material-timepicker>
+
+            <div *ngIf="scheduledTime?.invalid && scheduledTime?.touched">
+              <small *ngIf="scheduledTime?.errors?.['required']"
+                >Schedule time is required</small
+              >
+            </div>
           </div>
 
-          <button
-            type="submit"
-            class="submit-btn"
-            [disabled]="isLoading$ | async"
-          >
-            <ng-container *ngIf="isLoading$ | async; else showLoader">
-              <span class="mini-loader-spinner"></span>
-            </ng-container>
-            <ng-template #showLoader>
-              <span>Submit</span>
-            </ng-template>
-          </button>
+          <div class="form-group">
+            <label for="interviewers">Interviewers *</label>
+            <mat-form-field>
+              <mat-select
+                formControlName="interviewers"
+                disableRipple
+                required
+                multiple
+              >
+                <mat-option *ngFor="let item of interviewer" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="interviewers?.invalid && interviewers?.touched">
+              <small *ngIf="interviewers?.errors?.['required']"
+                >Interviewers is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              formControlName="scheduledDescription"
+              rows="5"
+              required
+            ></textarea>
+            <div *ngIf="description?.invalid && description?.touched">
+              <small *ngIf="description?.errors?.['required']"
+                >description is required</small
+              >
+            </div>
+          </div>
+          <div class="btn-action">
+            <button type="button" class="close-btn" data-bs-dismiss="modal">
+              <span>Cancel</span>
+            </button>
+
+            <button
+              type="submit"
+              class="submit-btn"
+              [disabled]="isLoading$ | async"
+            >
+              <ng-container *ngIf="isLoading$ | async; else showLoader">
+                <span class="mini-loader-spinner"></span>
+              </ng-container>
+              <ng-template #showLoader>
+                <span>Submit</span>
+              </ng-template>
+            </button>
+          </div>
         </form>
       </div>
     </div>

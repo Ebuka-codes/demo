@@ -1,0 +1,163 @@
+.interviewer {
+  .interviewer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+      font-weight: 600;
+      font-size: 24px;
+    }
+
+    button {
+      padding: 11px;
+      width: 100px;
+      background-color: #28a745;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      border: none;
+    }
+  }
+
+  .create-interviewer {
+    .modal-header {
+      .close-icon {
+        cursor: pointer;
+        font-size: 12px;
+        background-color: #28a745;
+        border-radius: 100%;
+        color: white;
+        cursor: pointer;
+        margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+        padding: 2px;
+      }
+    }
+    .modal-body {
+      form {
+        .form-group {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 10px;
+          margin: 15px 0px;
+          label {
+            font-size: 13px;
+            color: #484747;
+          }
+          input {
+            color: #6d6d6d;
+            padding: 10px 10px;
+            height: 50px;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            font-weight: 400;
+            outline: none;
+            border: 1px solid #dddd;
+            border-radius: 5px;
+            margin-top: 3px;
+          }
+        }
+        /* Green theme for the time picker */
+        .custom-theme .flatpickr-time {
+          background: #28a745; /* Primary green */
+          color: white;
+          border-radius: 5px;
+        }
+
+        /* Customize hour, minute, and AM/PM sections */
+        .custom-theme .flatpickr-time .numInputWrapper {
+          background: #218838; /* Darker green */
+          color: white;
+          border-radius: 5px;
+          padding: 5px;
+        }
+
+        .custom-theme .flatpickr-time .flatpickr-am-pm {
+          background: #1e7e34; /* Slightly darker for AM/PM */
+          color: white;
+          border-radius: 5px;
+          padding: 5px;
+        }
+
+        /* Hover effect */
+        .custom-theme .flatpickr-time .numInputWrapper:hover,
+        .custom-theme .flatpickr-time .flatpickr-am-pm:hover {
+          background: #1a662b;
+        }
+      }
+    }
+    .btn-action {
+      display: flex;
+      float: left;
+      button {
+        border-radius: 25px;
+        box-shadow: none;
+        cursor: pointer;
+        flex-shrink: 0;
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        min-width: 100px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+        border: none;
+        margin-right: 20px;
+        margin-bottom: 10px;
+
+        .mini-loader-spinner {
+          border: 3px solid white;
+          border-color: white transparent white white;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          margin: 0px auto;
+          animation: spin 0.5s linear infinite;
+          cursor: not-allowed;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+      .submit-btn {
+        background-color: #28a745;
+        color: #fff;
+        color: white;
+        &:hover,
+        :focus {
+          box-shadow: #0000004d 0 2px 6px;
+          background-color: #28a745;
+          color: white;
+          outline: none;
+        }
+      }
+      .close-btn {
+        background-color: #eeee;
+        color: #484747;
+
+        &:hover,
+        :focus {
+          box-shadow: #0000004d 0 2px 6px;
+          background-color: #f1f1f1;
+          color: black;
+          outline: none;
+        }
+      }
+
+      .btn-cancel {
+        background-color: #eeee;
+      }
+    }
+  }
+}

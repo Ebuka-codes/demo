@@ -13,6 +13,7 @@ import { CandidateFilterComponent } from './candidate-filter/candidate-filter.co
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { EmptyDataComponent } from '../components/ui/empty-data/empty-data.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { EmptyDataComponent } from '../components/ui/empty-data/empty-data.compo
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
+    NgxMaterialTimepickerModule,
   ],
 })
 export class CandidateModule {}

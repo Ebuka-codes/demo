@@ -350,3 +350,23 @@ input[type="checkbox"] {
 .mat-mdc-select-value-text {
   font-weight: 400 !important;
 }
+
+.timepicker-overlay {
+  z-index: 10000000 !important;
+}
+.timepicker-backdrop-overlay {
+  z-index: 10000000 !important;
+}
+.timepicker__header {
+  background-color: #28a745 !important;
+}
+
+.timepicker-button {
+  color: #28a745 !important;
+}
+.clock-face__number > span.active {
+  background-color: #28a745 !important;
+}
+.clock-face__clock-hand {
+  background-color: #28a745 !important;
+}

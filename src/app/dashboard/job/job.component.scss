@@ -83,20 +83,13 @@
       }
 
       button {
-        padding: 11px;
+        padding: 10px;
         width: 100px;
         background-color: transparent;
         border-radius: 25px;
         font-size: 14px;
         font-weight: 600;
-        color: #28a745;
-        border: 1px solid #28a745;
-        transition: all 0.2s ease-in-out;
-
-        &:hover {
-          background-color: #23863a;
-          color: white;
-        }
+        border: 1px solid #dddd;
       }
     }
 
