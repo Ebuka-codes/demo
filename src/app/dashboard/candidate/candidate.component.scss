@@ -168,12 +168,66 @@
       transition: all 0.2s ease-in-out;
     }
   }
-  .candidate-table {
+  .candidate-content {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 70px;
 
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+
+      h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .divider {
+        border-bottom: 1px solid #ccc;
+        margin-top: 16px;
+      }
+      label {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      input {
+        padding: 10px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        height: 50px;
+        width: 100%;
+
+        ::placeholder {
+          font-size: 14px;
+        }
+      }
+      button {
+        padding: 9px;
+        width: 100px;
+        background-color: #28a745;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        flex-direction: column;
+        justify-content: center;
+        padding: 11px 40px;
+        align-items: center;
+        text-align: center;
+        display: flex;
+        border: none;
+      }
+      button:hover {
+        background: #218838;
+      }
+    }
+  }
+
+  .candidate-table {
     table {
       width: 100%;
       border-collapse: collapse;

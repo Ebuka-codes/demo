@@ -2,12 +2,17 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { Candidate, QuestionData } from './shared/candidate';
-import { CandidateService } from './shared/candidate.service';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
-import { MatSelect } from '@angular/material/select';
-import { FormControl } from '@angular/forms';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { CandidateService } from './shared/candidate.service';
 
 @Component({
   selector: 'app-candidate',
@@ -18,6 +23,8 @@ export class CandidateComponent implements OnInit {
   @ViewChild('viewCandidateModal') firstModal!: ElementRef;
   @ViewChild('scheduleDateModal') secondModal!: ElementRef;
   @ViewChild('matSelect') matSelect!: MatSelect;
+  @ViewChild('matSelectOperand') matSelectOperand!: MatSelect;
+
   candidateData!: Array<Candidate>;
   filteredCandidate!: Array<Candidate>;
   isLoading!: Observable<boolean>;
@@ -36,16 +43,70 @@ export class CandidateComponent implements OnInit {
   interviewData!: Array<Candidate>;
   qualifiedQuestion = new FormControl();
   selectedJobValue!: string;
-
+  candidateOperand!: string[];
+  operand1: boolean = false;
+  operand2: boolean = false;
+  operand3: boolean = false;
+  searchForm!: FormGroup;
   constructor(
     private toastService: ToastService,
     private loaderService: LoaderService,
-    private candidateService: CandidateService
-  ) {}
+    private candidateService: CandidateService,
+    private fb: FormBuilder
+  ) {
+    this.searchForm = this.fb.group({
+      educationalSearchDTO: this.fb.group({
+        educationLevel: [''],
+        degree: [''],
+        fieldOfStudy: [''],
+        searchOperand: [''],
+        searchTerm: [''],
+        from: [''],
+        to: [''],
+      }),
+      workHistorySearchDTO: this.fb.group({
+        jobTitle: [''],
+        jobDescription: [''],
+        searchOperand: [''],
+        searchTerm: [''],
+        from: [''],
+        to: [''],
+      }),
+      skillSearchDTO: this.fb.group({
+        skillName: [''],
+        proficiencyLevel: [''],
+        noOfYears: [0],
+        searchOperand: [''],
+        searchTerm: [''],
+        from: [''],
+        to: [''],
+      }),
+    });
+  }
 
   ngOnInit() {
     this.getAllJob();
+    this.getCandidateOperand();
   }
+
+  onEducationOperandChange(event: MatSelectChange) {
+    if (event.value === 'LIKE') {
+      this.operand1 = true;
+    }
+  }
+
+  onWorkOperandChange(event: MatSelectChange) {
+    if (event.value === 'LIKE') {
+      this.operand2 = true;
+    }
+  }
+
+  onSkillOperandChange(event: MatSelectChange) {
+    if (event.value === 'LIKE') {
+      this.operand3 = true;
+    }
+  }
+
   handleSelectedJob() {
     this.selectedJobValue = this.matSelect.value.id;
     this.getCandidateByJobId(this.selectedJobValue);
@@ -262,5 +323,20 @@ export class CandidateComponent implements OnInit {
 
   handleReject(id: string) {
     this.candidateId = id;
+  }
+  getCandidateOperand() {
+    this.candidateService.getCandidateOperand().subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.candidateOperand = response.data;
+        }
+      },
+      error: (error) => {
+        this.toastService.error(error.message);
+      },
+      complete: () => {
+        console.log('Candidate operand fetched');
+      },
+    });
   }
 }

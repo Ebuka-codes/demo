@@ -137,4 +137,17 @@ export class CandidateService {
       headers,
     });
   }
+
+  getCandidateOperand() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.get<any>(
+      this.baseUrl + `candidates/search-operand`,
+      {
+        headers,
+      }
+    );
+  }
 }
