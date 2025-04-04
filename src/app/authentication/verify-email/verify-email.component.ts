@@ -16,7 +16,6 @@ export class VerifyEmailComponent implements OnInit {
   isLoading: boolean = false;
   userData: any;
   otp!: string;
-
   constructor(
     private fb: FormBuilder,
     private route: Router,
@@ -43,15 +42,7 @@ export class VerifyEmailComponent implements OnInit {
                 setTimeout(() => {
                   this.isLoading = false;
                 }, 500);
-
-                const value = response?.data.split('');
-                value.forEach((char: string, index: number) => {
-                  if (this.otpForm.at(index))
-                    this.otpForm.at(index).setValue(char);
-                });
-
-                this.checkComplete();
-                console.log(response, response.data);
+                console.log(`otp code - ${response.data}`);
               }
             },
             error: (err) => {
@@ -72,7 +63,6 @@ export class VerifyEmailComponent implements OnInit {
 
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
-    console.log(event);
     const pastedData = event.clipboardData?.getData('text')?.trim() || '';
     console.log(pastedData.length);
     if (pastedData.length === 6) {
@@ -83,7 +73,6 @@ export class VerifyEmailComponent implements OnInit {
       this.checkComplete();
     }
   }
-
   checkComplete() {
     this.isVerifyEnabled = this.otpForm.value.every(
       (value: string | null) => value?.length === 1

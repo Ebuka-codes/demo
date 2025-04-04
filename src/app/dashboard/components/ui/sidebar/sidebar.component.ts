@@ -12,6 +12,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 export class SidebarComponent {
   isJobActive: boolean = false;
   userProfile!: UserProfile;
+  isLoading = true;
   constructor(
     private route: Router,
     private cdr: ChangeDetectorRef,
@@ -27,7 +28,6 @@ export class SidebarComponent {
     this.dashboardService.getUserProfile().subscribe((user) => {
       if (user) {
         this.userProfile = user;
-        console.log(this.userProfile);
         this.cdr.detectChanges();
       }
     });
