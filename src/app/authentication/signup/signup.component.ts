@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   form!: FormGroup;
   isLoading: boolean = false;
   isPassword: boolean = false;
@@ -28,7 +28,7 @@ export class SignupComponent {
     private route: Router
   ) {
     this.form = this.fb.group({
-      userType: ['', Validators.required],
+      // userType: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required, this.phoneNumberValidator()]],
@@ -45,9 +45,9 @@ export class SignupComponent {
       confirmPassword: ['', [Validators.required, this.checkPassword()]],
     });
   }
-  get userType() {
-    return this.form.get('userType');
-  }
+  // get userType() {
+  //   return this.form.get('userType');
+  // }
   get name() {
     return this.form.get('name');
   }
@@ -68,6 +68,7 @@ export class SignupComponent {
     return this.form.get('confirmPassword');
   }
 
+  ngOnInit(): void {}
   checkIdentification(): ValidationErrors | null {
     return (control: AbstractControl) => {
       if (!control.parent) {
@@ -119,7 +120,7 @@ export class SignupComponent {
       if (!control.parent) {
         return null;
       }
-      return control.value.trim() === this.form.get('password')?.value.trim()
+      return control?.value.trim() === this.password?.value.trim()
         ? null
         : { invalidPassword: true };
     };
@@ -138,7 +139,6 @@ export class SignupComponent {
           .padStart(11, '0'),
       };
       this.authService.setUserData(userData);
-      this.form.reset();
       this.route.navigateByUrl('/verify-email');
     } else if (
       this.form.valid &&

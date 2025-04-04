@@ -7,9 +7,9 @@
       <div class="image-wrapper">
         <img src="../../../assets//image/Frame 1321315997.png" alt="" />
       </div>
-      <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
         <h2>Attract quality candidates without hassle</h2>
-        <div class="check-group mt-2">
+        <!-- <div class="check-group mt-2">
           <span>Sign up as </span>
           <input
             type="radio"
@@ -19,10 +19,10 @@
           <span>Freelancer Agency</span>
           <input type="radio" formControlName="userType" value="corporate" />
           <span>Corporate</span>
-        </div>
-        <div class="text-danger" *ngIf="userType?.invalid && userType?.touched">
+        </div> -->
+        <!-- <div class="text-danger" *ngIf="userType?.invalid && userType?.touched">
           <small> Select identification</small>
-        </div>
+        </div> -->
         <div class="form-group mt-4">
           <input
             type="text"
@@ -47,9 +47,10 @@
           <input
             type="email"
             formControlName="email"
-            required
             placeholder="Company Email"
             [class.error]="email?.invalid && email?.touched"
+            name="signup_user_email_123"
+            autocomplete="off"
           />
           <div *ngIf="email?.invalid && email?.touched">
             <small *ngIf="email?.errors?.['required']">
@@ -118,9 +119,9 @@
             [type]="isPassword ? 'text' : 'password'"
             id="name"
             name="password"
-            formControlName="password"
-            required
+            autocomplete="new-password"
             placeholder="Password"
+            formControlName="password"
             [class.error]="password?.invalid && password?.touched"
           />
 
@@ -245,22 +246,7 @@
           </div>
         </div>
 
-        <div class="check-group">
-          <input type="checkbox" />
-          <span>Want 15 days demo?</span>
-        </div>
         <button type="submit" class="submit-btn">Sign Up</button>
-
-        <div class="signUp-option">
-          <span>Or sign up using</span>
-          <div class="option-image">
-            <img src="../../../assets/image/google.png" alt="google-image" />
-            <img
-              src="../../../assets/image/linkedin.png"
-              alt="linkedin-image"
-            />
-          </div>
-        </div>
       </form>
     </div>
   </div>

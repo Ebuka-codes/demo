@@ -144,28 +144,6 @@
           box-shadow: #0000004d 0 2px 6px;
         }
       }
-      .signUp-option {
-        margin: 10px 0px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        span {
-          font-size: 14px;
-          color: #fbfbfb;
-        }
-        .option-image {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          cursor: pointer;
-          img {
-            width: 25px;
-            height: 25px;
-            border-radius: 5px;
-            cursor: pointer;
-          }
-        }
-      }
     }
   }
 }

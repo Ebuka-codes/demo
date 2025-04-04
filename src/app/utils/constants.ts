@@ -3,12 +3,12 @@ const BASE_URL = enviroments.API_URL;
 export const Constants = {
   AUTH_URL: {
     LOGIN: `${BASE_URL}/auth/login`,
-    SIGNUP: `${BASE_URL}/corporation/create`,
+    SIGNUP: `${BASE_URL}/auth/corporate/create`,
     MICROSOFT_LOGIN: '',
     GOOGLE_LOGIN: '',
     FORGOT_PASSWORD: `${BASE_URL}/auth/forgot-password`,
     RESET_PASSWORD: `${BASE_URL}/auth/reset-password`,
-    VERIFICATION_OTP: `${BASE_URL}/auth/sendOtp`,
+    VERIFICATION_OTP: `${BASE_URL}/auth/otp/sendotp`,
     LOGOUT: `${BASE_URL}/auth/logout`,
     REFRESH_TOKEN: `${BASE_URL}/auth/getnewtoken`,
   },
