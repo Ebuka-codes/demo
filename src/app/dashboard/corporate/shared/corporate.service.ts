@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Corporate, file } from './corporate';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { enviroments } from 'src/environments/enviorments';
+import { Constants } from 'src/app/utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class CorporateService {
       'corp-key': 'true',
     });
     return this.httpClient.post<Corporate>(
-      this.baseUrl + `corporates`,
+      Constants.CORPORATE_URL.CORPORATE,
       corporate,
       {
         headers,
@@ -24,13 +25,7 @@ export class CorporateService {
     );
   }
   getCorporate() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get<any>(this.baseUrl + `corporates`, {
-      headers,
-    });
+    return this.httpClient.get<any>(Constants.CORPORATE_URL.CORPORATE);
   }
   editCorporate(id: string, data: Corporate) {
     const headers = new HttpHeaders({
@@ -38,7 +33,7 @@ export class CorporateService {
       'corp-key': 'true',
     });
     return this.httpClient.put<Corporate>(
-      this.baseUrl + `corporates/${id}`,
+      Constants.CORPORATE_URL.CORPORATE + `/${id}`,
       data,
       {
         headers,
@@ -51,9 +46,12 @@ export class CorporateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.delete(this.baseUrl + `corporates/${id}`, {
-      headers,
-    });
+    return this.httpClient.delete(
+      Constants.CORPORATE_URL.CORPORATE + `/${id}`,
+      {
+        headers,
+      }
+    );
   }
 
   convertFileToBase64(file: file) {

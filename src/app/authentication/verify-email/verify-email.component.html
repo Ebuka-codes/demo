@@ -1,0 +1,44 @@
+<ng-container *ngIf="!isLoading; else showLoader">
+  <div class="otp-container">
+    <div class="logo">
+      <img src="../../../assets/image/logo.svg" alt="" />
+    </div>
+    <div class="content">
+      <img src="../../../assets/image/logo-2.PNG" alt="" />
+      <div class="info">
+        <h4>Please check your email</h4>
+        <span>We've sent code to email address</span>
+        <form>
+          <div>
+            <input
+              *ngFor="let control of otpForm.controls; let i = index"
+              type="text"
+              maxlength="1"
+              [formControl]="control"
+              (input)="onInput(i, $event)"
+              (paste)="onPaste($event)"
+              #otpInputs
+              inputmode="numeric"
+              required
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+          </div>
+          <button
+            [disabled]="!isVerifyEnabled"
+            type="submit"
+            class="submit-btn"
+            (click)="onVerify()"
+          >
+            Verify
+          </button>
+        </form>
+
+        <div style="margin: 10px 0px; font-size: 14px; color: #cacaca">
+          Dont recieved a code ?
+          <strong style="color: #28a745; cursor: pointer">Resend</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #showLoader><app-full-page-loader-spinner /> </ng-template>

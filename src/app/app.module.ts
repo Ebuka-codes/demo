@@ -16,22 +16,34 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderSpinnerComponent } from './ui/loader-spinner/loader-spinner.component';
-import { HomeComponent } from './pages/home/home.component';
 import { ApplyComponent } from './pages/apply/apply.component';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
-import { LoginComponent } from './pages/authentication/login/login.component';
 import { monthYearFormatDirective } from './shared/directives/month-date-format.directive';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { JobComponent } from './pages/job/job.component';
+import { CandidateLoginComponent } from './pages/authentication/candidate-login/candidate-login.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { HomeComponent } from './home/home.component';
+import { SignupComponent } from './authentication/signup/signup.component';
+import { FullPageLoaderSpinnerComponent } from './ui/full-page-loader-spinner/full-page-loader-spinner.component';
+import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
+import { CreatePasswordComponent } from './authentication/create-password/create-password.component';
+import { AuthInterceptor } from './authentication/shared/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     LoaderSpinnerComponent,
     ApplyComponent,
     JobDetailsComponent,
-    LoginComponent,
+    CandidateLoginComponent,
     monthYearFormatDirective,
+    JobComponent,
+    LoginComponent,
+    HomeComponent,
+    SignupComponent,
+    FullPageLoaderSpinnerComponent,
+    VerifyEmailComponent,
+    CreatePasswordComponent,
   ],
   imports: [
     BrowserModule,

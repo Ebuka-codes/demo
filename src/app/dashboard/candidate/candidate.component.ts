@@ -151,6 +151,7 @@ export class CandidateComponent implements OnInit {
       next: (response: any) => {
         if (response.valid && response.data) {
           this.job = response.data;
+          console.log(this.job);
           this.loaderService.setLoading(false);
         }
       },

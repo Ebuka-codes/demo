@@ -80,7 +80,7 @@ export class CandidateScheduleDateComponent implements OnInit {
   }
   getInterviewers() {
     return this.candidateService.getInterviewer().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response.valid && response.data) {
           this.interviewer = response.data;
         }

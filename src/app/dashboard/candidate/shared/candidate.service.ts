@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { enviroments } from 'src/environments/enviorments';
 import { Candidate } from './candidate';
 import { job } from '../../job/shared/job';
+import { Constants } from 'src/app/utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,7 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-
-    return this.httpClient.get<Candidate>(this.baseUrl + `candidates`, {
+    return this.httpClient.get<Candidate>(Constants.CANDIDATE_URL.CANDIDATES, {
       headers,
     });
   }
@@ -25,9 +25,8 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-
-    return this.httpClient.get<Candidate[]>(
-      this.baseUrl + `candidates/by-job-detail/${jobId}`,
+    return this.httpClient.get<Candidate>(
+      Constants.CANDIDATE_URL.CANDIDATES + `by-job-detail/${jobId}`,
       {
         headers,
       }
@@ -38,27 +37,38 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.delete(this.baseUrl + `candidates/${id}`, {
-      headers,
-    });
+    return this.httpClient.delete(
+      Constants.CANDIDATE_URL.CANDIDATES + `/${id}`,
+      {
+        headers,
+      }
+    );
   }
   hireCandidateById(id: string, data: {}) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put(this.baseUrl + `candidates/hire/${id}`, data, {
-      headers,
-    });
+    return this.httpClient.put(
+      Constants.CANDIDATE_URL.CANDIDATES + `/hire/${id}`,
+      data,
+      {
+        headers,
+      }
+    );
   }
   rejectCandidateById(id: string, data: {}) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put(this.baseUrl + `candidates/reject/${id}`, data, {
-      headers,
-    });
+    return this.httpClient.put(
+      Constants.CANDIDATE_URL.CANDIDATES + `/reject/${id}`,
+      data,
+      {
+        headers,
+      }
+    );
   }
 
   scheduleCandidateById(data: string) {
@@ -66,7 +76,7 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put(this.baseUrl + `candidates/schedule`, data, {
+    return this.httpClient.put(Constants.CANDIDATE_URL + '/schedule', data, {
       headers,
     });
   }
@@ -75,26 +85,26 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.post(this.baseUrl + `filter/candidate`, data, {
+    return this.httpClient.put(Constants.FILTER_URL.FILTER_CANDIDATE, data, {
       headers,
     });
   }
-
   getAllJobs() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get<job>(this.baseUrl + 'job-details', { headers });
+    return this.httpClient.get<job>(Constants.JOB_URL.JOB, {
+      headers,
+    });
   }
-
   getQualifiedQuestion(id: string | undefined) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
     return this.httpClient.get(
-      this.baseUrl + `job-details/get-all-qualifying-question/${id}`,
+      Constants.JOB_URL.JOB + `/get-all-qualifying-question/${id}`,
       {
         headers,
       }
@@ -105,13 +115,9 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put(
-      this.baseUrl + `candidates/shortlist-candidates`,
-      data,
-      {
-        headers,
-      }
-    );
+    return this.httpClient.put(Constants.CANDIDATE_URL.SHORTLIST, data, {
+      headers,
+    });
   }
 
   filterCandidateByQualifiedQuestion(data: any) {
@@ -120,7 +126,7 @@ export class CandidateService {
       'corp-key': 'true',
     });
     return this.httpClient.put(
-      this.baseUrl + `candidates/filter-candidates-by-qualify-questions`,
+      Constants.CANDIDATE_URL.FILTER_BY_QUALIFIED_QUESTION,
       data,
       {
         headers,
@@ -133,7 +139,7 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get<any>(this.baseUrl + `interview-invitees`, {
+    return this.httpClient.get(Constants.INTERVIEW_URL.GET_INTERVIEWERS, {
       headers,
     });
   }
@@ -143,11 +149,8 @@ export class CandidateService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get<any>(
-      this.baseUrl + `candidates/search-operand`,
-      {
-        headers,
-      }
-    );
+    return this.httpClient.get(Constants.CANDIDATE_URL.SEARCH_OPERAND, {
+      headers,
+    });
   }
 }

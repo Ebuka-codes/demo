@@ -1,10 +1,15 @@
-<section class="dashboard-container">
-  <h1>Hello, Admin</h1>
-  <div class="content">
-    <div style="width: 100%">
-      <app-stats />
-      <app-job-listing />
+<ng-container *ngIf="!(isLoading$ | async); else elseTemplate">
+  <section class="dashboard-container">
+    <h1>Hello, {{ userProfile.personalDetail.firstName }}</h1>
+    <div class="content">
+      <div style="width: 100%">
+        <app-stats />
+        <app-job-listing />
+      </div>
+      <app-interviews />
     </div>
-    <app-interviews />
-  </div>
-</section>
+  </section>
+</ng-container>
+<ng-template #elseTemplate>
+  <div class="fullpage_spinner"></div>
+</ng-template>

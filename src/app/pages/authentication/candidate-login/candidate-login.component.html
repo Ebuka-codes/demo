@@ -1,0 +1,51 @@
+<div *ngIf="isLoading | async" class="progress-bar"></div>
+<section class="login-container">
+  <div style="margin-bottom: 40px">
+    <p>
+      Get started right away by simply using your email, your profile will be
+      created and kept up to data automatically as you enter details for each of
+      your job applications
+    </p>
+  </div>
+  <form action="" [formGroup]="form">
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email" formControlName="email" />
+      <div *ngIf="email?.invalid && email?.touched">
+        <small *ngIf="email?.errors?.['required']"
+          >Email Address field is required</small
+        >
+        <small
+          *ngIf="!email?.errors?.['required'] && email?.errors?.['invalidEmail']"
+          >Invalid email format</small
+        >
+      </div>
+    </div>
+    <div>
+      <input type="checkbox" value="" formControlName="term" />
+      <span style="padding-left: 5px; font-size: 15px">
+        I agree with the <strong>TERM AND CONDITIONS</strong></span
+      >
+
+      <div *ngIf="term?.invalid && term?.touched">
+        <small *ngIf="term?.errors?.['required']">Term field is required</small>
+      </div>
+    </div>
+    <div class="btn-content">
+      <button
+        class="btn-cancel"
+        type="button"
+        (click)="handleBack()"
+        [disabled]="isLoading | async"
+      >
+        Back
+      </button>
+      <button type="submit" class="btn-next" (click)="onSubmit()">
+        <ng-container *ngIf="isLoading | async; else showText">
+          <div class="mini-loader-spinner"></div>
+        </ng-container>
+        <ng-template #showText> Next</ng-template>
+      </button>
+    </div>
+  </form>
+</section>

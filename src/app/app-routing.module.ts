@@ -1,14 +1,36 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
-import { LoginComponent } from './pages/authentication/login/login.component';
+import { CandidateLoginComponent } from './pages/authentication/candidate-login/candidate-login.component';
 import { ApplyComponent } from './pages/apply/apply.component';
+import { JobComponent } from './pages/job/job.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { HomeComponent } from './home/home.component';
+import { SignupComponent } from './authentication/signup/signup.component';
+import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
+import { CreatePasswordComponent } from './authentication/create-password/create-password.component';
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {
-    path: 'auth/login',
+    path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
+  },
+  {
+    path: 'verify-email',
+    component: VerifyEmailComponent,
+  },
+  {
+    path: 'create-password',
+    component: CreatePasswordComponent,
+  },
+  {
+    path: 'candidate/login',
+    component: CandidateLoginComponent,
   },
   {
     path: 'job-details/:id',
@@ -22,10 +44,9 @@ const routes: Routes = [
     path: 'job/apply',
     component: ApplyComponent,
   },
-
   {
     path: 'apply/:id',
-    component: HomeComponent,
+    component: JobComponent,
   },
 
   {

@@ -1,0 +1,79 @@
+.otp-container {
+  background-image: url("../../../assets/image/Desktop-bg.png");
+  background-color: #299345;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  .logo {
+    padding: 20px 130px;
+    img {
+      width: 120px;
+    }
+  }
+  .content {
+    background-color: white;
+    max-width: 450px;
+    width: 100%;
+    border-radius: 10px;
+    padding: 30px 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    img {
+      width: 130px;
+    }
+    .info {
+      margin: 40px auto;
+      text-align: center;
+      line-height: 1;
+
+      h4 {
+        font-size: 20px;
+      }
+      span {
+        font-size: 14px;
+      }
+      form {
+        text-align: center;
+        margin-top: 20px;
+        input {
+          gap: 10px;
+          display: inline-block;
+          margin: 0px 5px;
+          width: 35px;
+          height: 35px;
+          text-align: center;
+          outline: none;
+          color: #474747;
+          border-radius: 5px;
+          border: 1px solid #47474799;
+        }
+        .submit-btn {
+          border-radius: 50px;
+          border: none;
+          color: white;
+          background-color: #299345;
+          padding: 15px;
+          text-align: center;
+          font-weight: 400;
+          margin-top: 30px;
+          width: 100%;
+
+          &:hover,
+          &:focus {
+            box-shadow: #0000004d 0 2px 6px;
+          }
+          &:disabled {
+            background-color: #eee;
+            color: #474747;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

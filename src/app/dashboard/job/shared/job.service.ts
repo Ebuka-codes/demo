@@ -3,6 +3,7 @@ import { job } from './job';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { enviroments } from 'src/environments/enviorments';
 import { BehaviorSubject } from 'rxjs';
+import { Constants } from 'src/app/utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.post<job>(this.baseUrl + 'job-details', newJob, {
+    return this.httpClient.post<job>(Constants.JOB_URL.JOB, newJob, {
       headers,
     });
   }
@@ -29,13 +30,9 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put<job>(
-      this.baseUrl + `job-details/${id}`,
-      newJob,
-      {
-        headers,
-      }
-    );
+    return this.httpClient.put<job>(Constants.JOB_URL.JOB + `/${id}`, newJob, {
+      headers,
+    });
   }
 
   deleteJob(id: string) {
@@ -43,7 +40,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.delete(this.baseUrl + `job-details/${id}`, {
+    return this.httpClient.delete(Constants.JOB_URL.JOB + `/${id}`, {
       headers,
     });
   }
@@ -52,7 +49,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get<job>(this.baseUrl + `job-details/${id}`, {
+    return this.httpClient.get<job>(Constants.JOB_URL.JOB + `/${id}`, {
       headers,
     });
   }
@@ -61,7 +58,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get<job>(this.baseUrl + 'job-details', { headers });
+    return this.httpClient.get<job>(Constants.JOB_URL.JOB, { headers });
   }
 
   editQueryDetails(id: string, value: any) {
@@ -69,9 +66,13 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put(this.baseUrl + `query-details/${id}`, value, {
-      headers,
-    });
+    return this.httpClient.put(
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`,
+      value,
+      {
+        headers,
+      }
+    );
   }
   deleteQueryDetails(id: string) {
     const headers = new HttpHeaders({
@@ -79,8 +80,7 @@ export class JobService {
       'corp-key': 'true',
     });
     return this.httpClient.delete(
-      this.baseUrl + `query-details/${id}`,
-
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`,
       {
         headers,
       }
@@ -91,16 +91,20 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.post(this.baseUrl + `question-options`, question, {
-      headers,
-    });
+    return this.httpClient.post(
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS,
+      question,
+      {
+        headers,
+      }
+    );
   }
   getAllQuestions() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get(this.baseUrl + `question-options`, {
+    return this.httpClient.get(Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS, {
       headers,
     });
   }
@@ -110,7 +114,7 @@ export class JobService {
       'Content-Type': 'application/json',
     });
     return this.httpClient.get(
-      this.baseUrl + `question-options/get-all-operator`,
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/get-all-operator`,
       {
         headers,
       }
@@ -122,7 +126,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get(this.baseUrl + `query-details`, {
+    return this.httpClient.get(Constants.QUERY_DETAILS_URL.QUERY_DETAILS, {
       headers,
     });
   }
@@ -131,9 +135,12 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.delete(this.baseUrl + `question-options/${id}`, {
-      headers,
-    });
+    return this.httpClient.delete(
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`,
+      {
+        headers,
+      }
+    );
   }
 
   createQueryDetails(data: any) {
@@ -141,18 +148,25 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.post<any>(this.baseUrl + `query-details`, data, {
-      headers,
-    });
+    return this.httpClient.post<any>(
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
+      data,
+      {
+        headers,
+      }
+    );
   }
   getQuestionsById(id: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get(this.baseUrl + `question-options/${id}`, {
-      headers,
-    });
+    return this.httpClient.get(
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`,
+      {
+        headers,
+      }
+    );
   }
 
   searchjob(data: string) {
@@ -161,7 +175,7 @@ export class JobService {
       'corp-key': 'true',
     });
     return this.httpClient.get(
-      this.baseUrl + `job-details/search?keyword=${data}`,
+      Constants.JOB_URL.JOB + `/search?keyword=${data}`,
       {
         headers,
       }
@@ -172,7 +186,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.get<any>(this.baseUrl + 'job-details/jobtype', {
+    return this.httpClient.get(Constants.JOB_URL.JOB + '/jobtype', {
       headers,
     });
   }
@@ -182,7 +196,7 @@ export class JobService {
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.post<any>(this.baseUrl + 'filter/job', data, {
+    return this.httpClient.post(Constants.FILTER_URL.FILTER_JOB, data, {
       headers,
     });
   }

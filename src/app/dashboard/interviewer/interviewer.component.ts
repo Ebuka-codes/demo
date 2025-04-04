@@ -20,7 +20,7 @@ import { Modal } from 'bootstrap';
   styleUrls: ['./interviewer.component.scss'],
 })
 export class InterviewerComponent {
-  form: FormGroup;
+  form!: FormGroup;
   isLoading: boolean = false;
   @ViewChild('myModal') modalElement!: ElementRef;
   modalInstance!: Modal;
