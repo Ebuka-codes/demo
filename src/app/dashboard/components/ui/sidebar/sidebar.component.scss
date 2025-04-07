@@ -85,6 +85,10 @@
   .side_one {
     height: 100vh;
     padding: 0px 20px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+    overflow-y: hidden;
 
     &:hover {
       overflow-y: auto;
