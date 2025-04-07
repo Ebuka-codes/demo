@@ -7,10 +7,10 @@ import { job } from 'src/app/shared/type';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './job.component.html',
-  styleUrls: ['./job.component.scss'],
+  templateUrl: './job-listing.component.html',
+  styleUrls: ['./job-listing.component.scss'],
 })
-export class JobComponent implements OnInit {
+export class JobListingComponent implements OnInit {
   jobList!: Array<job>;
   jobCategory!: any[];
   isLoading!: Observable<boolean>;
@@ -21,6 +21,8 @@ export class JobComponent implements OnInit {
   selectedJobTypes: string[] = [];
   minData: number = 0;
   maxData: number = 8;
+
+  job = new Array(6);
 
   constructor(private _jobService: JobRecruitService) {}
   ngOnInit(): void {

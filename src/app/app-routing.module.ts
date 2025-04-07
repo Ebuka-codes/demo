@@ -3,13 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
 import { CandidateLoginComponent } from './pages/authentication/candidate-login/candidate-login.component';
 import { ApplyComponent } from './pages/apply/apply.component';
-import { JobComponent } from './pages/job/job.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
-import { CreatePasswordComponent } from './authentication/create-password/create-password.component';
-
+import { AuthGuard } from './authentication/shared/auth-guard.service';
+import { JobListingComponent } from './pages/job-listing/job-listing.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {
@@ -23,10 +22,6 @@ const routes: Routes = [
   {
     path: 'verify-email',
     component: VerifyEmailComponent,
-  },
-  {
-    path: 'create-password',
-    component: CreatePasswordComponent,
   },
   {
     path: 'candidate/login',
@@ -46,11 +41,11 @@ const routes: Routes = [
   },
   {
     path: 'apply/:id',
-    component: JobComponent,
+    component: JobListingComponent,
   },
-
   {
     path: '',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },

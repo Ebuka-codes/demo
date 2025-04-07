@@ -3,11 +3,12 @@
   flex-direction: column;
   gap: 1rem;
   padding-top: 1.5rem;
-  overflow-y: auto;
   position: fixed;
   width: 252px;
+  height: 100vh;
   background-color: white;
   border-right: 1px solid #e5e3e3;
+
   .header {
     line-height: 1.4;
     .logo {
@@ -26,14 +27,16 @@
       margin-left: 10px;
 
       img {
-        width: 35px;
-        height: 35px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         object-fit: cover;
       }
       .user-info {
         display: flex;
         flex-direction: column;
+        position: relative;
+        top: 7px;
 
         .role {
           font-size: 12px;
@@ -82,13 +85,18 @@
   .side_one {
     height: 100vh;
     padding: 0px 20px;
+
+    &:hover {
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
   }
 
   .divider {
     border-bottom: 1px solid #899bb13b;
   }
   ul {
-    padding: 2px 0;
+    padding: 0px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -111,13 +119,14 @@
     }
   }
   .side-link {
-    padding: 0.85rem 1.3rem;
+    padding: 0.55rem 1.3rem;
     display: flex;
     gap: 0.3rem;
     justify-content: space-between;
     width: 100%;
     border-radius: 25px;
     position: relative;
+    font-size: 13px;
   }
 
   .side-link.active {
@@ -167,10 +176,15 @@
     color: #899bb1;
   }
   .settings {
+    margin-top: 40px;
     h3 {
       font-size: 12px;
       color: #6c757d;
-      margin-left: 24px;
+      margin-left: 25px;
+    }
+    .divider {
+      border-bottom: 1px solid #899bb13b;
+      width: 100%;
       margin-top: 10px;
     }
   }

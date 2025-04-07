@@ -1,0 +1,118 @@
+footer {
+  width: 100%;
+  background-color: #144721;
+  min-height: 100vh;
+  .info {
+    max-width: 550px;
+    padding: 20px 40px;
+  }
+  .contact {
+    background-color: #97c93c;
+    margin: 30px auto;
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    border-radius: 16px;
+    position: relative;
+    top: 40px;
+    h3 {
+      color: #232323;
+      font-size: 28px;
+      line-height: 120%;
+    }
+    p {
+      font-size: 14px;
+    }
+    .contact-link {
+      background-color: #299345;
+      border-top-left-radius: 100px;
+      border-bottom-left-radius: 100px;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      width: 30%;
+      padding: 30px 20px;
+      justify-content: center;
+      svg {
+        width: 15px;
+      }
+    }
+  }
+  .footer-link {
+    display: flex;
+    gap: 40px;
+    justify-content: space-around;
+    margin-top: 150px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    h3 {
+      color: #fafafa;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .item-1 {
+      img {
+        width: 120px;
+      }
+      .social-link {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-top: 20px;
+        cursor: pointer;
+      }
+    }
+    .item-2 {
+      width: 100%;
+      .useful-link {
+        display: flex;
+        gap: 20px;
+        justify-content: space-evenly;
+        h3 {
+          margin-left: 30px;
+        }
+
+        ul {
+          color: #fafafa;
+          margin-top: 10px;
+          li {
+            font-weight: 400;
+            font-size: 18px;
+            padding: 10px 0px;
+            display: flex;
+            font-size: 16px;
+            gap: 5px;
+            align-items: center;
+            svg {
+              width: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .divider {
+    border-bottom: 1px solid #d9dbe9;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+  }
+  .terms {
+    color: #fafafa;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 100px;
+  }
+}

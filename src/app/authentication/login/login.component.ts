@@ -5,6 +5,7 @@ import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoginType } from '../shared/auth';
 import { Router } from '@angular/router';
 import { USER_TOKEN_KEY } from '../shared/credential';
+import { TokenService } from 'src/app/shared/service/token.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private toastService: ToastService,
-    private route: Router
+    private route: Router,
+    private tokenService: TokenService
   ) {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
@@ -46,7 +48,7 @@ export class LoginComponent {
       next: (response: any) => {
         if (response.valid) {
           this.isLoading = false;
-          localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.data));
+          this.tokenService.setToken(response.data);
           this.route.navigateByUrl('/dashboard');
         } else {
           this.isLoading = false;

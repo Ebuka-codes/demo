@@ -19,15 +19,15 @@ import { LoaderSpinnerComponent } from './ui/loader-spinner/loader-spinner.compo
 import { ApplyComponent } from './pages/apply/apply.component';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
 import { monthYearFormatDirective } from './shared/directives/month-date-format.directive';
-import { JobComponent } from './pages/job/job.component';
 import { CandidateLoginComponent } from './pages/authentication/candidate-login/candidate-login.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { FullPageLoaderSpinnerComponent } from './ui/full-page-loader-spinner/full-page-loader-spinner.component';
 import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
-import { CreatePasswordComponent } from './authentication/create-password/create-password.component';
 import { AuthInterceptor } from './authentication/shared/auth.interceptor';
+import { JobListingComponent } from './pages/job-listing/job-listing.component';
+import { FooterComponent } from './ui/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -37,13 +37,13 @@ import { AuthInterceptor } from './authentication/shared/auth.interceptor';
     JobDetailsComponent,
     CandidateLoginComponent,
     monthYearFormatDirective,
-    JobComponent,
     LoginComponent,
     HomeComponent,
     SignupComponent,
     FullPageLoaderSpinnerComponent,
     VerifyEmailComponent,
-    CreatePasswordComponent,
+    JobListingComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

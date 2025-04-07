@@ -7,7 +7,6 @@ export const MONTH_YEAR_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
 export const months: string[] = [
   'Jan',
   'Feb',

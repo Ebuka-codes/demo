@@ -1,19 +1,17 @@
 import {
-  HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
+import { TokenService } from 'src/app/shared/service/token.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private tokenService: TokenService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    let token = this.authService.getToken();
+    let token = this.tokenService.getToken();
     let access_token = '';
-
     try {
       const parsedToken = token ? JSON.parse(token) : null;
       access_token = parsedToken?.access_token || '';
@@ -21,6 +19,11 @@ export class AuthInterceptor implements HttpInterceptor {
       console.error('Error parsing token:', error);
     }
     const corpValue = localStorage.getItem('corp-key') || '';
+
+    if (req.url.includes('/login')) {
+      return next.handle(req);
+    }
+
     if (token) {
       const modifiedReq = req.clone({
         setHeaders: {

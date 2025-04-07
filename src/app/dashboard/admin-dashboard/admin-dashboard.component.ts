@@ -25,6 +25,9 @@ export class AdminDashboardComponent {
         this.cdr.detectChanges();
         this.dashboardService.setLoading(false);
         this.isLoading$ = this.dashboardService.isLoading$;
+      } else {
+        // this.dashboardService.setLoading(false);
+        // this.isLoading$ = this.dashboardService.isLoading$;
       }
     });
   }

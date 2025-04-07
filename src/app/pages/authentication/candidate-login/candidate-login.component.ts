@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable, take } from 'rxjs';
-import { AuthService } from '../auth.service';
+import { CandidateService } from '../candidate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class CandidateLoginComponent {
   constructor(
     private fb: FormBuilder,
     private route: Router,
-    private authService: AuthService,
+    private candidateService: CandidateService,
     private location: Location,
     private loaderService: LoaderService
   ) {
@@ -53,7 +53,7 @@ export class CandidateLoginComponent {
     this.location.back();
   }
   getUserData(email: string) {
-    this.authService
+    this.candidateService
       .getLoggedInUserData(email)
       .pipe(take(1))
       .subscribe({
@@ -71,7 +71,7 @@ export class CandidateLoginComponent {
     if (this.form.valid) {
       this.loaderService.setLoading(true);
       this.isLoading = this.loaderService.isLoading$;
-      this.authService.login(this.form.get('email')?.value).subscribe({
+      this.candidateService.login(this.form.get('email')?.value).subscribe({
         next: (response: any) => {
           if (response.data === true) {
             this.getUserData(this.form.get('email')?.value);

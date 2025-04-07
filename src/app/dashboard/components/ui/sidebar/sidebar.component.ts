@@ -1,8 +1,15 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
-import { UserProfile } from 'src/app/authentication/shared/credential';
+import { AuthService } from 'src/app/authentication/shared/auth.service';
+import {
+  UserProfile,
+  UserToken,
+} from 'src/app/authentication/shared/credential';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/shared/service/toast.service';
+import { TokenService } from 'src/app/shared/service/token.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,7 +23,11 @@ export class SidebarComponent {
   constructor(
     private route: Router,
     private cdr: ChangeDetectorRef,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) {
     this.route.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -29,6 +40,23 @@ export class SidebarComponent {
       if (user) {
         this.userProfile = user;
         this.cdr.detectChanges();
+      }
+    });
+  }
+  onLogout() {
+    const token: UserToken = JSON.parse(this.tokenService.getToken() || '{}');
+    const refreshToken = token.refresh_token?.toString();
+    this.loaderService.setLoading(true);
+    this.authService.logout(refreshToken).subscribe((response: any) => {
+      if (response.valid) {
+        console.log('Log out successful');
+        this.tokenService.removeToken();
+        this.loaderService.setLoading(false);
+        this.route.navigate(['/login']);
+        setTimeout(() => {}, 3000);
+      } else {
+        this.loaderService.setLoading(false);
+        this.toastService.error(response.message);
       }
     });
   }

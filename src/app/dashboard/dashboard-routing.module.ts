@@ -15,14 +15,12 @@ const routes: Routes = [
       { path: '', component: AdminDashboardComponent },
 
       { path: 'candidate', component: CandidateComponent },
-
       {
         path: 'job',
         component: JobComponent,
       },
       {
         path: 'corporate',
-
         loadChildren: () =>
           import('./corporate/corporate.module').then((m) => m.CorporateModule),
       },
@@ -34,6 +32,10 @@ const routes: Routes = [
         path: 'interviewer',
         component: InterviewerComponent,
       },
+      // {
+      //   path: 'profile',
+      //   component: InterviewerComponent,
+      // },
     ],
   },
 ];

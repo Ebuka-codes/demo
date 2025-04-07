@@ -24,9 +24,6 @@ import { StatsComponent } from './components/ui/stats/stats.component';
 import { JobListingComponent } from './components/ui/job-listing/job-listing.component';
 import { InterviewsComponent } from './components/ui/interviews/interviews.component';
 import { InterviewerComponent } from './interviewer/interviewer.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from '../authentication/shared/auth.interceptor';
-
 @NgModule({
   declarations: [
     DashboardComponent,

@@ -1,0 +1,33 @@
+import { Injectable } from '@angular/core';
+import {
+  USER_TOKEN_KEY,
+  UserToken,
+} from 'src/app/authentication/shared/credential';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TokenService {
+  constructor() {}
+
+  setToken(token: UserToken) {
+    localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(token));
+  }
+  getToken() {
+    return localStorage.getItem(USER_TOKEN_KEY);
+  }
+  removeToken() {
+    localStorage.removeItem(USER_TOKEN_KEY);
+  }
+  isTokenExpired(): boolean {
+    const token = JSON.stringify(this.getToken());
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log(payload);
+      const now = Date.now() / 1000;
+      return payload.exp < now;
+    } catch (e) {
+      return true;
+    }
+  }
+}

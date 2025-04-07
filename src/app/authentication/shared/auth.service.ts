@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CorporateDto, LoginType } from './auth';
 import { Constants } from 'src/app/utils/constants';
-import { USER_TOKEN_KEY } from './credential';
+import { USER_TOKEN_KEY, UserToken } from './credential';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,6 @@ export class AuthService {
   userDataSubject$ = new BehaviorSubject<any>(null);
   data$ = this.userDataSubject$.asObservable();
   constructor(private httpClient: HttpClient) {}
-
   setUserData(data: any) {
     this.userDataSubject$.next(data);
   }
@@ -28,7 +27,10 @@ export class AuthService {
   login(data: LoginType) {
     return this.httpClient.post(Constants.AUTH_URL.LOGIN, data);
   }
-  getToken() {
-    return localStorage.getItem(USER_TOKEN_KEY);
+
+  logout(refreshToken: string | undefined) {
+    return this.httpClient.post(Constants.AUTH_URL.LOGOUT, {
+      refresh_token: refreshToken,
+    });
   }
 }
