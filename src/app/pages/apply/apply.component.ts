@@ -17,7 +17,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { JobRecruitService } from 'src/app/shared/job-recruit.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
@@ -32,6 +31,7 @@ import {
 import { Location } from '@angular/common';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { Modal } from 'bootstrap';
+import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 
 @Component({
   selector: 'app-apply',

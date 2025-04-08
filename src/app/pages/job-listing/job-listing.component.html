@@ -30,201 +30,260 @@
       </svg>
     </div>
   </header>
+  <section class="hero-section">
+    <div class="content">
+      <div class="info">
+        <h1>Unlock Your Career Potential</h1>
+        <p>
+          Discover your dream job, get noticed by top employers, and take your
+          career to the next level.
+        </p>
+        <p>
+          Explore latest job openings apply now, and start you journey to
+          success!
+        </p>
+      </div>
 
-  <section class="hero-section"></section>
-  <div class="search">
-    <span>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="size-4"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-        />
-      </svg>
-    </span>
-    <input
-      #input
-      type="text"
-      placeholder=" Search"
-      [(ngModel)]="searchInput"
-      (keydown.enter)="handleEnter(input.value)"
-    />
-    <button type="submit" (click)="searchJob()">Find jobs</button>
-  </div>
-  <div class="category">
-    <span class="icon">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-sliders2-vertical"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M0 10.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1H3V1.5a.5.5 0 0 0-1 0V10H.5a.5.5 0 0 0-.5.5M2.5 12a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5m3-6.5A.5.5 0 0 0 6 6h1.5v8.5a.5.5 0 0 0 1 0V6H10a.5.5 0 0 0 0-1H6a.5.5 0 0 0-.5.5M8 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2A.5.5 0 0 0 8 1m3 9.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1H14V1.5a.5.5 0 0 0-1 0V10h-1.5a.5.5 0 0 0-.5.5m2.5 1.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5"
-        />
-      </svg>
-    </span>
-
-    <span class="total-job">10 OPEN JOBS</span>
-    <div class="category-btn">
-      <div ngbDropdown class="d-inline-block">
-        <button
-          type="button"
-          class="btn btn-outline-primary"
-          id="dropdownBasic1"
-          ngbDropdownToggle
-        >
-          Location
-        </button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem>Lagos</button>
-          <button ngbDropdownItem>Abuja</button>
-          <button ngbDropdownItem>Porthourt</button>
-        </div>
-      </div>
-      <div ngbDropdown class="d-inline-block">
-        <button
-          type="button"
-          class="btn btn-outline-primary"
-          id="dropdownBasic1"
-          ngbDropdownToggle
-        >
-          Category
-        </button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem>Action - 1</button>
-          <button ngbDropdownItem>Another Action</button>
-          <button ngbDropdownItem>Something else is here</button>
-        </div>
-      </div>
-      <div ngbDropdown class="d-inline-block">
-        <button
-          type="button"
-          class="btn btn-outline-primary"
-          id="dropdownBasic1"
-          ngbDropdownToggle
-        >
-          Posted date
-        </button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem>Action - 1</button>
-          <button ngbDropdownItem>Another Action</button>
-          <button ngbDropdownItem>Something else is here</button>
-        </div>
-      </div>
+      <img src="../../../assets/image/search-image.png" alt="" />
     </div>
-  </div>
+  </section>
 
-  <div class="job-listing">
-    <h3>Lastest <span style="color: #299345">jobs opening</span></h3>
-    <div class="content-container">
-      <div class="content" *ngFor="let item of job">
-        <div class="info">
-          <h2 class="job-title">Manager-Maketing and Communication</h2>
-          <div class="location-date">
-            <span
-              style="
-                width: 5px;
-                height: 5px;
-                border-radius: 50%;
-                border: 1px solid black;
-                background-color: black;
-              "
-            ></span>
-            <span class="location">Lagos, Nigeria</span>
-            <span
-              style="
-                width: 5px;
-                height: 5px;
-                border-radius: 50%;
-                border: 1px solid black;
-                background-color: black;
-              "
-            ></span>
-            <div class="date">Posted on 10/10/2020</div>
-          </div>
-
-          <div class="tags">
-            <span class="job-type">Full-time</span>
-            <span class="work-mode">Remote</span>
-            <span class="employment-type">Permanent</span>
-          </div>
-        </div>
-        <div class="action">
+  <div style="width: 60%; margin: auto">
+    <div class="search">
+      <div style="position: relative; width: 100%">
+        <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6"
+            class="size-4"
           >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-            />
-          </svg>
-
-          <button type="button">View details</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="pagination">
-      <span>Page 1</span>
-      <div class="item">
-        <span class="prev"
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.75 19.5 8.25 12l7.5-7.5"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
             />
           </svg>
         </span>
-        <div class="page-btn">
-          <button class="active">1</button>
-          <button>2</button>
-          <button>3</button>
-        </div>
+        <input
+          #input
+          type="text"
+          placeholder=" Search"
+          [(ngModel)]="searchValue"
+          (keydown.enter)="onSearchEnter(input.value)"
+        />
+      </div>
 
-        <div class="next">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
+      <button type="submit" (click)="searchJob()">Find jobs</button>
+    </div>
+  </div>
+  <ng-container *ngIf="!(isLoadingData$ | async); else showLoading">
+    <div class="category">
+      <span class="icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-sliders2-vertical"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M0 10.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1H3V1.5a.5.5 0 0 0-1 0V10H.5a.5.5 0 0 0-.5.5M2.5 12a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5m3-6.5A.5.5 0 0 0 6 6h1.5v8.5a.5.5 0 0 0 1 0V6H10a.5.5 0 0 0 0-1H6a.5.5 0 0 0-.5.5M8 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2A.5.5 0 0 0 8 1m3 9.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1H14V1.5a.5.5 0 0 0-1 0V10h-1.5a.5.5 0 0 0-.5.5m2.5 1.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5"
+          />
+        </svg>
+      </span>
+
+      <span class="total-job">{{ jobList?.length }} OPEN JOBS</span>
+      <div class="category-btn">
+        <div ngbDropdown class="d-inline-block">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            id="dropdownBasic1"
+            ngbDropdownToggle
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m8.25 4.5 7.5 7.5-7.5 7.5"
-            />
-          </svg>
+            Job Type
+            <span
+              class="search-filter__pill-counter"
+              *ngIf="selectedJobTypes?.length !== 0"
+              >{{ selectedJobTypes.length }}</span
+            >
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button
+              ngbDropdownItem
+              *ngFor="let type of jobType"
+              (click)="toggleJobType(type)"
+              [ngClass]="{ selected: selectedJobTypes.includes(type) }"
+            >
+              {{ type }}
+            </button>
+          </div>
+        </div>
+        <div ngbDropdown class="d-inline-block">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            Posted date
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem>Last 24hours</button>
+            <button ngbDropdownItem>Last 3 days</button>
+            <button ngbDropdownItem>Last 7 days</button>
+            <button ngbDropdownItem>Last 14 days</button>
+          </div>
+        </div>
+        <div ngbDropdown class="d-inline-block">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            Location
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem *ngFor="let location of jobLocation">
+              {{ location }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="clear-filter" *ngIf="selectedJobTypes.length">
+      <button
+        type="button"
+        class="search-jobs__clear-filters"
+        (click)="onClearSearchFilter()"
+      >
+        Clear filter
+      </button>
+    </div>
+    <ng-container
+      *ngIf="!isLoadingSearch && jobList.length; else showListLoader"
+    >
+      <div class="job-listing">
+        <h3>Lastest <span style="color: #299345">jobs openings</span></h3>
+        <div class="content-container">
+          <div class="content" *ngFor="let job of jobList">
+            <div class="info">
+              <h2 class="job-title">{{ job.jobTitle | titlecase }}</h2>
+              <div class="location-date">
+                <span
+                  style="
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    border: 1px solid black;
+                    background-color: black;
+                  "
+                ></span>
+                <span class="location"
+                  >{{ job.jobLocation | titlecase }}, Nigeria</span
+                >
+                <span
+                  style="
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    border: 1px solid black;
+                    background-color: black;
+                  "
+                ></span>
+                <div class="date">
+                  Posted on {{ job.startDate.toString().replaceAll("-", "/") }}
+                </div>
+              </div>
+
+              <div class="tags">
+                <span class="job-type">{{ job.jobType }}</span>
+                <span class="work-mode">{{ job.workMode | titlecase }}</span>
+                <span class="employment-type">{{
+                  job.employmentType | titlecase
+                }}</span>
+              </div>
+            </div>
+            <div class="action">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                />
+              </svg>
+
+              <button type="button" [routerLink]="['/job-details/' + job.id]">
+                View details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <span>Page 1</span>
+          <div class="item">
+            <span class="prev"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                />
+              </svg>
+            </span>
+            <div class="page-btn">
+              <button class="active">1</button>
+              <button>2</button>
+              <button>3</button>
+            </div>
+
+            <div class="next">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </ng-container>
+    <ng-template #showListLoader>
+      <app-loader-spinner />
+    </ng-template>
+  </ng-container>
+  <ng-template #showLoading> <app-loader-spinner /> </ng-template>
 
   <app-footer />
 </section>

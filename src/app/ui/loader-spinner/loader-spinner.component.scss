@@ -1,6 +1,6 @@
 .loader {
-  border: 2px solid #28a745;
-  border-color: #28a745 transparent #28a745 #28a745;
+  border: 3px solid #299345;
+  border-color: #299345 transparent #299345 #299345;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -8,7 +8,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin: 100px auto;
+  margin: 70px auto;
   animation: spin 0.5s linear infinite;
 }
 @keyframes spin {

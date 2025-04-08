@@ -43,6 +43,7 @@ const routes: Routes = [
     path: 'apply/:id',
     component: JobListingComponent,
   },
+
   {
     path: '',
     canActivate: [AuthGuard],

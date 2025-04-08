@@ -16,97 +16,42 @@ export class JobService {
   constructor(private httpClient: HttpClient) {}
 
   createJob(newJob: job) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.post<job>(Constants.JOB_URL.JOB, newJob, {
-      headers,
-    });
+    return this.httpClient.post<job>(Constants.JOB_URL.JOB, newJob);
   }
 
   editJob(id: string | null, newJob: job) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.put<job>(Constants.JOB_URL.JOB + `/${id}`, newJob, {
-      headers,
-    });
+    return this.httpClient.put<job>(Constants.JOB_URL.JOB + `/${id}`, newJob);
   }
 
   deleteJob(id: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.delete(Constants.JOB_URL.JOB + `/${id}`, {
-      headers,
-    });
+    return this.httpClient.delete(Constants.JOB_URL.JOB + `/${id}`);
   }
   getJobById(id: string | null) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get<job>(Constants.JOB_URL.JOB + `/${id}`, {
-      headers,
-    });
+    return this.httpClient.get<job>(Constants.JOB_URL.JOB + `/${id}`);
   }
   getAllJobs() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get<job>(Constants.JOB_URL.JOB, { headers });
+    return this.httpClient.get<job>(Constants.JOB_URL.JOB);
   }
 
   editQueryDetails(id: string, value: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.put(
       Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`,
-      value,
-      {
-        headers,
-      }
+      value
     );
   }
   deleteQueryDetails(id: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.delete(
-      Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`,
-      {
-        headers,
-      }
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`
     );
   }
   createQuestion(question: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.post(
       Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS,
-      question,
-      {
-        headers,
-      }
+      question
     );
   }
   getAllQuestions() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get(Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS, {
-      headers,
-    });
+    return this.httpClient.get(Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS);
   }
 
   getOperator() {
@@ -114,90 +59,41 @@ export class JobService {
       'Content-Type': 'application/json',
     });
     return this.httpClient.get(
-      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/get-all-operator`,
-      {
-        headers,
-      }
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/get-all-operator`
     );
   }
 
   getQueryDetailsByType() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get(Constants.QUERY_DETAILS_URL.QUERY_DETAILS, {
-      headers,
-    });
+    return this.httpClient.get(Constants.QUERY_DETAILS_URL.QUERY_DETAILS);
   }
   deleteQuestionsById(id: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.delete(
-      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`,
-      {
-        headers,
-      }
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`
     );
   }
 
   createQueryDetails(data: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.post<any>(
       Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
-      data,
-      {
-        headers,
-      }
+      data
     );
   }
   getQuestionsById(id: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.get(
-      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`,
-      {
-        headers,
-      }
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`
     );
   }
 
   searchjob(data: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.get(
-      Constants.JOB_URL.JOB + `/search?keyword=${data}`,
-      {
-        headers,
-      }
+      Constants.JOB_URL.JOB + `/search?keyword=${data}`
     );
   }
   getJobType() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get(Constants.JOB_URL.JOB + '/jobtype', {
-      headers,
-    });
+    return this.httpClient.get(Constants.JOB_URL.JOB + '/jobtype');
   }
 
   filterJob(data: {}) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.post(Constants.FILTER_URL.FILTER_JOB, data, {
-      headers,
-    });
+    return this.httpClient.post(Constants.FILTER_URL.FILTER_JOB, data);
   }
 }

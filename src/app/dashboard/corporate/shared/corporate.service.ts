@@ -59,7 +59,7 @@ export class CorporateService {
       'Content-Type': 'application/json',
     });
     return this.httpClient.post<file>(
-      this.baseUrl + 'document/upload-base64',
+      this.baseUrl + '/api/document/upload-base64',
       file,
       {
         headers,

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
-import { DetailsType, job, JobApplication } from './type';
 import { enviroments } from 'src/environments/enviorments';
 import { NavigationEnd, Router } from '@angular/router';
+import { DetailsType, job, JobApplication } from '../type';
+import { Constants } from 'src/app/utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -43,17 +44,10 @@ export class JobRecruitService {
   }
 
   getJobList(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-
     if (!this.jobListSubject$.value) {
       this.isLoadingSubject.next(true);
       this.httpClient
-        .get<any>(this.baseUrl + 'job-details', {
-          headers,
-        })
+        .get<any>(Constants.JOB_URL.JOB)
         .pipe(
           tap((response) => {
             if (response.valid && response.data) {
@@ -73,45 +67,25 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
-    return this.httpClient.get(this.baseUrl + `job-details/${id}`, {
+    return this.httpClient.get(Constants.JOB_URL.JOB + `/${id}`, {
       headers,
     });
   }
   searchJobs(params: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.get<any>(
-      this.baseUrl + `job-details/search?keyword=${params}`,
-      {
-        headers,
-      }
+      Constants.JOB_URL.JOB + `/search?keyword=${params}`
     );
   }
 
   filterJobs(params: string[]): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.get<any>(
-      this.baseUrl + `job-details/search-job-type?types=${params.join(',')}`,
-      {
-        headers,
-      }
+      Constants.JOB_URL.JOB + `/search-job-type?types=${params.join(',')}`
     );
   }
 
   getJobType() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     this.httpClient
-      .get<any>(this.baseUrl + 'job-details/jobtype', {
-        headers,
-      })
+      .get<any>(Constants.JOB_URL.JOB + '/jobtype')
       .pipe(
         tap((response) => {
           if (response.valid && response.data) {
@@ -128,7 +102,7 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
-    return this.httpClient.get(this.baseUrl + `candidates/${id}`, {
+    return this.httpClient.get(Constants.CANDIDATE_URL.CANDIDATES + `/${id}`, {
       headers,
     });
   }
@@ -139,7 +113,7 @@ export class JobRecruitService {
       'corp-key': this.encodedValue,
     });
     return this.httpClient.get<JobApplication>(
-      this.baseUrl + `job-details/${id}`,
+      Constants.JOB_URL.JOB + `/${id}`,
       {
         headers,
       }
@@ -151,7 +125,7 @@ export class JobRecruitService {
       'corp-key': this.encodedValue,
     });
     return this.httpClient.post<JobApplication>(
-      this.baseUrl + `candidates`,
+      Constants.CANDIDATE_URL.CANDIDATES,
       application,
       {
         headers,
@@ -164,9 +138,12 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
       'corp-key': this.encodedValue,
     });
-    return this.httpClient.get<DetailsType>(this.baseUrl + `query-details`, {
-      headers,
-    });
+    return this.httpClient.get<DetailsType>(
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
+      {
+        headers,
+      }
+    );
   }
 
   createQueryDetails(data: DetailsType) {
@@ -175,7 +152,7 @@ export class JobRecruitService {
       'corp-key': this.encodedValue,
     });
     return this.httpClient.post<DetailsType>(
-      this.baseUrl + `query-details`,
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
       data,
       {
         headers,
@@ -188,7 +165,7 @@ export class JobRecruitService {
       'corp-key': this.encodedValue,
     });
     return this.httpClient.get<JobApplication>(
-      this.baseUrl + `job-lists/${title}`,
+      this.baseUrl + `/api/job-lists/${title}`,
       {
         headers,
       }
@@ -199,7 +176,7 @@ export class JobRecruitService {
       'Content-Type': 'application/json',
     });
     return this.httpClient.post<any>(
-      this.baseUrl + 'document/upload-base64',
+      this.baseUrl + '/api/document/upload-base64',
       file,
       {
         headers,
@@ -214,8 +191,8 @@ export class JobRecruitService {
     return this.jobDetailsId;
   }
 
-  setLoading(loading: boolean) {
-    this.isLoadingSubject.next(loading);
+  setLoading(value: boolean) {
+    this.isLoadingSubject.next(value);
   }
   getLoading() {
     return this.isLoading$;

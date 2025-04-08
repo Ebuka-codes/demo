@@ -139,7 +139,7 @@ export class JobQuestionCreateComponent {
       questionType: this.questionForm.get('questionType')?.value,
       options: this.questionTypeOptions,
       operator:
-        this.operator?.value === null ? 'GREATER' : this.operator?.value,
+        this.operator?.value === '' || null ? 'GREATER' : this.operator?.value,
       qualifyValue:
         this.qualifyValue?.value === null ? '' : this.qualifyValue?.value,
       isQualifyQuestion:

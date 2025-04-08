@@ -1,9 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -86,14 +81,10 @@ export class JobCreateComponent {
     private jobService: JobService,
     private loaderService: LoaderService,
     private toastService: ToastService,
-    private route: Router,
-    private cdr: ChangeDetectorRef
+    private route: Router
   ) {
     this.form = this.fb.group({
-      jobTitle: [
-        '',
-        [Validators.required, Validators.minLength(3), this.nameValidator()],
-      ],
+      jobTitle: ['', [Validators.required, Validators.minLength(3)]],
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
@@ -197,22 +188,11 @@ export class JobCreateComponent {
     return this.form.get('questionOptions');
   }
 
-  nameValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const value = control.value;
-      const valid = /^[a-zA-Z\s]*$/.test(value);
-      return valid ? null : { invalidName: { value: control.value } };
-    };
-  }
   amountValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
-
-      if (value == '') {
-        return null;
-      }
-      const valid = /^\d+$/.test(value);
-      return valid ? null : { invalidAmount: { value: control.value } };
+      const isValid = /^\d+$/.test(value);
+      return isValid ? null : { invalidAmount: true };
     };
   }
   formatAmount(amount: Event) {
@@ -458,7 +438,6 @@ export class JobCreateComponent {
           this.toastService.success('Job created successfully!');
           this.route.navigate(['/dashboard/job']);
         } else {
-          console.log('Invalid Response:', response);
           this.loading = false;
           this.loaderService.setLoading(false);
           this.toastService.error('Error occur!');
@@ -477,33 +456,45 @@ export class JobCreateComponent {
       },
     });
   }
-
   onSubmit(): void {
     const startDateValue = this.form.get('startDate')?.value;
     const endDateValue = this.form.get('endDate')?.value;
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
 
+    const data = {
+      ...this.form.value,
+      startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      employmentType: this.form.get('employmentType')?.value.toUpperCase(),
+      jobType: this.form.get('jobType')?.value,
+      jobSalary: Number(this.form.get('jobSalary')?.value),
+      requiredSkills: [],
+    };
+
     if (this.form.valid) {
-      this.createNewJob({
-        ...this.form.value,
-        startDate: `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
-          .toString()
-          .padStart(2, '0')}-${startDate
-          .getDate()
-          .toString()
-          .padStart(2, '0')}`,
-        endDate: `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
-          .toString()
-          .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-        requiredSkills: [],
-        employmentType: this.form.get('employmentType')?.value.toUpperCase(),
-        jobType: this.form.get('jobType')?.value,
-        jobSalary: Number(this.form.get('jobSalary')?.value),
-      });
+      this.createNewJob(data);
       this.form.get('jobDescription')?.setValue(' ');
     } else {
       this.isSubmitted = true;
+      console.log(
+        'not valid',
+        this.jobTitle?.valid,
+        this.jobSalary?.valid,
+        this.jobDescription?.valid,
+        this.jobLocation?.valid,
+        this.companyName?.valid,
+        this.jobType?.valid,
+        this.jobEmploymentData?.valid,
+        this.workMode?.valid,
+        this.jobEndDate?.valid,
+        this.jobStartDate?.valid,
+        this.requiredSkills?.valid
+      );
     }
   }
 

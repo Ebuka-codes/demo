@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Constants } from 'src/app/utils/constants';
 import { enviroments } from 'src/environments/enviorments';
 
 @Injectable({
@@ -12,9 +13,12 @@ export class CandidateService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.httpClient.get(this.baseUrl + `candidates/exists/${email}`, {
-      headers,
-    });
+    return this.httpClient.get(
+      Constants.CANDIDATE_URL.CANDIDATES + `/exists/${email}`,
+      {
+        headers,
+      }
+    );
   }
   getLoggedInUserData(email: string) {
     const headers = new HttpHeaders({
@@ -22,7 +26,7 @@ export class CandidateService {
       'corp-key': 'true',
     });
     return this.httpClient.get(
-      this.baseUrl + `candidates/get-candidate-by-email/${email}`,
+      Constants.CANDIDATE_URL.CANDIDATES + `/get-candidate-by-email/${email}`,
       {
         headers,
       }

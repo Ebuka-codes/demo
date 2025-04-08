@@ -4,11 +4,12 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { TokenService } from 'src/app/shared/service/token.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: TokenService, private router: Router) {}
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     let token = this.tokenService.getToken();
     let access_token = '';
@@ -20,7 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     const corpValue = localStorage.getItem('corp-key') || '';
 
-    if (req.url.includes('/login')) {
+    if (req.url.includes('/login') || req.url.includes('/verify-email')) {
       return next.handle(req);
     }
 

@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { JobRecruitService } from '../../shared/job-recruit.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { job } from 'src/app/shared/type';
+import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 
 @Component({
   selector: 'app-job-details',
@@ -49,7 +49,7 @@ export class JobDetailsComponent implements OnInit {
   }
   handleApplyJob() {
     localStorage.setItem('JobId', this.data?.id);
-    this.navigateRoute.navigateByUrl('/auth/login', { replaceUrl: true });
+    this.navigateRoute.navigateByUrl('candidate/login', { replaceUrl: true });
   }
   handleBack() {
     this.loaction.back();

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Notyf } from 'notyf';
 import { Observable } from 'rxjs';
 import { months } from 'src/app/shared/constants';
-import { JobRecruitService } from 'src/app/shared/job-recruit.service';
+import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
+import { ToastService } from 'src/app/shared/service/toast.service';
 import { job } from 'src/app/shared/type';
 
 @Component({
@@ -12,57 +13,148 @@ import { job } from 'src/app/shared/type';
 })
 export class JobListingComponent implements OnInit {
   jobList!: Array<job>;
-  jobCategory!: any[];
-  isLoading!: Observable<boolean>;
+  jobSearchFilterData!: any[];
+  jobType!: any[];
+  jobLocation!: any[];
+  // isLoadingSearchFilter$!: Observable<boolean>;
+  // isLoadingJobList$!: Observable<boolean>;
+  isLoadingData$!: Observable<boolean>;
   isLoadingSearch: boolean = false;
   error$!: Observable<any>;
-  searchInput: string = '';
+  searchValue: string = '';
   private notyf = new Notyf();
   selectedJobTypes: string[] = [];
   minData: number = 0;
   maxData: number = 8;
+  jobTypeCounter!: any[];
 
-  job = new Array(6);
-
-  constructor(private _jobService: JobRecruitService) {}
-  ngOnInit(): void {
-    this._jobService.getJobList().subscribe((data) => {
+  constructor(
+    private jobService: JobRecruitService,
+    private toastService: ToastService
+  ) {}
+  ngOnInit() {
+    this.jobService.getJobList().subscribe((data) => {
       this.jobList = data;
-      this.jobCategory = Array.from(
+      this.jobType = Array.from(
         new Set(
           this.jobList
             ?.filter((job: any) => job.jobType)
             .map((job: any) => job.jobType)
         )
       );
+      this.jobLocation = Array.from(
+        new Set(
+          this.jobList
+            ?.filter((job: any) => job.jobLocation)
+            .map((job: any) => job.jobLocation)
+        )
+      );
     });
-    this.isLoading = this._jobService.isLoading$;
-  }
+    this.isLoadingData$ = this.jobService.isLoading$;
 
+    // this.jobService.getJobList().subscribe({
+    //   next: (response: any) => {
+    //     if (response) {
+    //       this.jobList = response.data;
+    //       this.jobType = Array.from(
+    //         new Set(
+    //           this.jobSearchFilterData
+    //             ?.filter((job: any) => job.jobType)
+    //             .map((job: any) => job.jobType)
+    //         )
+    //       );
+    //       this.jobLocation = Array.from(
+    //         new Set(
+    //           this.jobSearchFilterData
+    //             ?.filter((job: any) => job.jobLocation)
+    //             .map((job: any) => job.jobLocation)
+    //         )
+    //       );
+    //       this.jobService.setLoading(false);
+    //       this.isLoadingData$ = this.jobService.isLoading$;
+    //     }
+    //   },
+    //   error: (err) => {
+    //     this.jobService.setLoading(false);
+    //     this.isLoadingData$ = this.jobService.isLoading$;
+    //     this.toastService.error(err.message);
+    //   },
+    // });
+
+    // this.getSearchFilter();
+    // this.getJobList();
+  }
+  // getSearchFilter() {
+  //   this.jobService.setLoading(true);
+  //   this.isLoadingSearchFilter$ = this.jobService.isLoading$;
+  //   this.jobService.getJobList().subscribe({
+  //     next: (response: any) => {
+  //       if (response.valid && response.data) {
+  //         this.jobSearchFilterData = response.data;
+  //         this.jobType = Array.from(
+  //           new Set(
+  //             this.jobSearchFilterData
+  //               ?.filter((job: any) => job.jobType)
+  //               .map((job: any) => job.jobType)
+  //           )
+  //         );
+  //         this.jobLocation = Array.from(
+  //           new Set(
+  //             this.jobSearchFilterData
+  //               ?.filter((job: any) => job.jobLocation)
+  //               .map((job: any) => job.jobLocation)
+  //           )
+  //         );
+  //         this.jobService.setLoading(false);
+  //         this.isLoadingSearchFilter$ = this.jobService.isLoading$;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.jobService.setLoading(false);
+  //       this.isLoadingSearchFilter$ = this.jobService.isLoading$;
+  //       this.toastService.error(err.message);
+  //     },
+  //   });
+  // }
+
+  // getJobList() {
+  //   this.jobService.setLoading(true);
+  //   this.isLoadingJobList$ = this.jobService.isLoading$;
+  //   this.jobService.getJobList().subscribe({
+  //     next: (response: any) => {
+  //       if (response.valid && response.data) {
+  //         this.jobList = response.data;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.jobService.setLoading(false);
+  //       this.isLoadingJobList$ = this.jobService.isLoading$;
+  //       this.toastService.error(err.message);
+  //     },
+  //   });
+  // }
   searchJob() {
-    if (this.searchInput) {
-      this.onSearchInput(this.searchInput);
+    if (this.searchValue) {
+      console.log(this.searchValue);
+      this.onSearchInput(this.searchValue);
     }
   }
-
-  handleEnter(value: any) {
-    if (this.searchInput) {
-      this.searchInput = value;
-      this.onSearchInput(this.searchInput);
-    }
+  onSearchEnter(value: any) {
+    this.searchValue = value;
+    this.onSearchInput(this.searchValue);
   }
   onSearchInput(value: any) {
-    this.searchInput = value;
+    this.searchValue = value;
     this.isLoadingSearch = true;
-    this._jobService
-      .searchJobs(this.searchInput.trim())
+
+    this.jobService
+      .searchJobs(this.searchValue.trim())
       .subscribe((response) => {
         if (response.valid && response.data) {
           this.jobList = response.data;
-          this.jobCategory = this.jobList?.filter((job: any) => job.jobType);
           this.isLoadingSearch = false;
         } else {
-          this.notyf.error('No Jobs Found');
+          this.toastService.error('No Jobs Found');
           this.jobList = [];
         }
       });
@@ -70,13 +162,13 @@ export class JobListingComponent implements OnInit {
   onFilterChange(selectedJobTypes: string[]) {
     this.isLoadingSearch = true;
     if (selectedJobTypes.length === 0) {
-      this._jobService.getJobList().subscribe((data) => {
+      this.jobService.getJobList().subscribe((data) => {
         this.jobList = data;
         this.isLoadingSearch = false;
       });
       return;
     }
-    this._jobService.filterJobs(selectedJobTypes).subscribe((response) => {
+    this.jobService.filterJobs(selectedJobTypes).subscribe((response) => {
       if (response.valid && response.data) {
         this.jobList = response.data;
         this.isLoadingSearch = false;
@@ -87,15 +179,31 @@ export class JobListingComponent implements OnInit {
       }
     });
   }
-
   toggleJobType(type: string) {
     const index = this.selectedJobTypes.indexOf(type);
     if (index !== -1) {
       this.selectedJobTypes.splice(index, 1);
+      this.jobTypeCounter = this.selectedJobTypes;
     } else {
       this.selectedJobTypes.push(type);
+      this.jobTypeCounter = this.selectedJobTypes;
     }
     this.onFilterChange([...this.selectedJobTypes]);
+  }
+  onClearSearchFilter() {
+    this.isLoadingSearch = true;
+    this.selectedJobTypes = [];
+    this.jobService
+      .searchJobs(this.searchValue.trim())
+      .subscribe((response) => {
+        if (response.valid && response.data) {
+          this.jobList = response.data;
+          this.isLoadingSearch = false;
+        } else {
+          this.toastService.error('No Jobs Found');
+          this.jobList = [];
+        }
+      });
   }
   showJobList() {
     this.maxData = this.maxData += 8;

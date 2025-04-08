@@ -15,6 +15,7 @@ export class AuthGuard {
     if (!token || isTokenExpired) {
       this.tokenService.removeToken();
       this.router.navigate(['/login']);
+      console.log('token has expired');
       return false;
     }
     return true;

@@ -20,10 +20,10 @@ export class TokenService {
     localStorage.removeItem(USER_TOKEN_KEY);
   }
   isTokenExpired(): boolean {
-    const token = JSON.stringify(this.getToken());
+    const token = this.getToken();
+    if (!token) return true;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log(payload);
       const now = Date.now() / 1000;
       return payload.exp < now;
     } catch (e) {
