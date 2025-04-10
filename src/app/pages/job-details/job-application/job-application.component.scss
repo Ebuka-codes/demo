@@ -1,4 +1,31 @@
-.apply-container {
+.job-application_container {
+  position: relative;
+  top: -170px;
+  width: 85%;
+  margin: 0px auto;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  .detail-header {
+    .info {
+      .info-title {
+        font-size: 26px;
+        font-weight: 600;
+      }
+      .info-sub {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 10px 0px;
+        font-size: 17px;
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
   ::ng-deep .mat-stepper-horizontal {
     width: 70%;
     margin: 0px auto;
@@ -17,8 +44,8 @@
       padding-bottom: 30px;
       .apply-flow-block__title {
         font-style: normal;
-        font-weight: 700;
-        font-size: 28px;
+        font-weight: 600;
+        font-size: 24px;
         text-transform: inherit;
         line-height: 115%;
         display: flex;
@@ -29,10 +56,15 @@
     .apply-flow-profile-import__awli-content {
       text-align: center;
       background-color: #f1f1f145;
-      border: 1px solid #dddd;
+      border: 2px dotted #dddd;
       border-radius: 5px;
       padding-bottom: 30px;
       border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 30px;
       .linkedin-btn {
         padding: 0.5rem 2rem;
         border-radius: 50px;
@@ -44,7 +76,6 @@
         gap: 5px;
         display: flex;
         align-items: center;
-        margin: 20px auto;
         border: none;
         font-weight: 600;
         cursor: pointer;
@@ -52,13 +83,29 @@
         color: #ffffff;
         outline: none;
       }
+
+      .resume-btn {
+        padding: 0.5rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        line-height: 1.5rem;
+        max-width: 100%;
+        font-size: 1rem;
+        text-align: center;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        background-color: #333333;
+        color: #ffffff;
+        outline: none;
+      }
     }
-    .contact-info__header {
+    .bio-data__header {
       padding-bottom: 5px;
-      .contact-info-header__title {
+      .bio-data-header__title {
         font-style: normal;
-        font-weight: 700;
-        font-size: 28px;
+        font-weight: 600;
+        font-size: 24px;
         text-transform: inherit;
         line-height: 115%;
         display: flex;
@@ -66,18 +113,17 @@
         color: #202020;
       }
     }
-    .address-info-header {
+    .address-info__header {
       padding-bottom: 5px;
       padding-top: 10px;
       .address-info-header__title {
         font-style: normal;
-        font-weight: 700;
-        font-size: 28px;
+        font-weight: 600;
+        font-size: 24px;
         text-transform: inherit;
         line-height: 115%;
         display: flex;
         align-items: center;
-
         color: #202020;
       }
     }
@@ -157,8 +203,8 @@
         margin-top: 10px;
         .work-info-header__title {
           font-style: normal;
-          font-weight: 700;
-          font-size: 28px;
+          font-weight: 600;
+          font-size: 24px;
           text-transform: inherit;
           line-height: 115%;
           color: #202020;
@@ -203,11 +249,11 @@
       .work-history-btn {
         cursor: pointer;
         margin: 20px 0px;
-        border: 1px solid #28a745;
-        border-radius: 25px;
+        border: 1px solid rgb(137 133 133 / 21%);
+        border-radius: 10px;
         padding: 10px 15px;
         background: transparent;
-        color: #28a745;
+        color: rgb(1, 1, 146);
         &:hover,
         :focus {
           box-shadow: #0000004d 0 2px 6px;
@@ -258,11 +304,11 @@
       .education-history-btn {
         cursor: pointer;
         margin: 20px 0px;
-        border: 1px solid #28a745;
-        border-radius: 25px;
+        border: 1px solid rgb(137 133 133 / 21%);
+        border-radius: 10px;
         padding: 10px 15px;
         background: transparent;
-        color: #28a745;
+        color: rgb(1, 1, 146);
         &:hover,
         :focus {
           box-shadow: #0000004d 0 2px 6px;
@@ -311,15 +357,14 @@
             }
           }
         }
-
         .skills-btn {
           cursor: pointer;
           margin: 20px 0px;
-          border: 1px solid #28a745;
-          border-radius: 25px;
+          border: 1px solid rgb(137 133 133 / 21%);
+          border-radius: 10px;
           padding: 10px 15px;
           background: transparent;
-          color: #28a745;
+          color: rgb(1, 1, 146);
           &:hover,
           :focus {
             box-shadow: #0000004d 0 2px 6px;
@@ -334,8 +379,8 @@
         margin-top: 10px;
         .supporting-doc__title {
           font-style: normal;
-          font-weight: 700;
-          font-size: 28px;
+          font-weight: 600;
+          font-size: 24px;
           text-transform: inherit;
           line-height: 115%;
           color: #202020;
@@ -385,7 +430,6 @@
           width: fit-content;
           padding: 10px;
           background-color: white;
-          color: #28a745;
           border-radius: 5px;
           box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
           border: none;
@@ -397,7 +441,6 @@
           svg {
             width: 50px;
             height: 50px;
-            color: #28a745;
           }
           &:hover,
           :focus {
@@ -408,7 +451,7 @@
     }
     .job-divider {
       border: 0;
-      border-bottom: 1px solid #c9c8c8;
+      border-bottom: 1px solid rgb(137 133 133 / 21%);
       margin-top: 10px;
     }
 
@@ -421,14 +464,12 @@
         border: none;
         outline: none;
         padding: 0.8rem 2rem;
-        border-radius: 50px;
-        text-decoration: none;
+        border-radius: 25px;
         line-height: 1.5rem;
-        max-width: 100%;
+        width: 150px;
+        text-decoration: none;
         font-size: 1rem;
         text-align: center;
-        margin: 20px auto;
-        border: none;
         font-weight: 600;
         cursor: pointer;
         background-color: #eeeeee;
@@ -452,7 +493,6 @@
         line-height: 1.5rem;
         font-size: 1rem;
         text-align: center;
-        margin: 20px auto;
         border: none;
         font-weight: 600;
         cursor: pointer;
@@ -471,14 +511,12 @@
         border: none;
         outline: none;
         padding: 0.8rem 2rem;
-        border-radius: 50px;
-        text-decoration: none;
+        border-radius: 25px;
         line-height: 1.5rem;
-        max-width: 100%;
+        width: 150px;
+        text-decoration: none;
         font-size: 1rem;
         text-align: center;
-        margin: 20px auto;
-        border: none;
         font-weight: 600;
         cursor: pointer;
         background-color: #eeeeee;
@@ -493,13 +531,11 @@
         border: none;
         outline: none;
         padding: 0.8rem 2rem;
-        border-radius: 50px;
-        text-decoration: none;
+        border-radius: 25px;
         line-height: 1.5rem;
-        max-width: 100%;
+        width: 150px;
         font-size: 1rem;
         text-align: center;
-        margin: 20px auto;
         border: none;
         font-weight: 600;
         cursor: pointer;
@@ -524,8 +560,6 @@
         max-width: 300px;
         width: 100%;
         .secondary-button button {
-          color: #28a745;
-          border: 1px solid #28a745;
           background-color: transparent;
           width: 100%;
           max-width: 300px;
@@ -560,10 +594,10 @@
       font-size: 1rem;
       text-align: center;
       cursor: pointer;
-      color: black;
       font-weight: 500;
+      cursor: pointer;
+      color: black;
       border: none;
-
       &:hover,
       :focus {
         box-shadow: #0000004d 0 2px 6px;
@@ -652,29 +686,19 @@
   margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
   padding: 2px;
 }
-.progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  border-bottom: 4px solid #28a745;
-  animation: load 1.5s infinite ease-in-out;
-  z-index: 20000;
-}
 
-@keyframes load {
-  0% {
-    width: 0;
-  }
-  50% {
-    width: 50%;
-  }
-  100% {
-    width: 100%;
-    opacity: 1;
-  }
-}
 .mat-mdc-form-field-flex:has(.text) {
   height: 150px;
+}
+.mat-mdc-form-field-infix {
+  // background-color: #f1f1f145 !important;
+  padding: 0px 16px;
+}
+
+.mat-mdc-text-field-wrapper {
+  padding: 0px !important;
+}
+.force-scroll-reset {
+  overflow: auto !important;
+  padding: 0px !important;
 }

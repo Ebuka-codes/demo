@@ -11,7 +11,7 @@ export class ToastService {
   success(message: string) {
     return this.notfy.success({
       message: message,
-      duration: 2000,
+      duration: 3000,
       position: { x: 'right', y: 'top' },
     });
   }

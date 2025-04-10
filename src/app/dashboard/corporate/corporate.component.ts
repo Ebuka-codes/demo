@@ -90,7 +90,7 @@ export class CorporateComponent {
   getCorporate() {
     this.loaderService.setLoading(true);
     this.submitLoading = true;
-    this.corporateService.getCorporate().subscribe({
+    this.corporateService.getAllCorporate().subscribe({
       next: (response: any) => {
         if (Array.isArray(response)) {
           this.data = response;

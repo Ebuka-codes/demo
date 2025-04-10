@@ -24,6 +24,8 @@ export class JobRecruitService {
   private jobDetailsId: string | null = null;
   encodedValue: any;
   isLoading: boolean = false;
+  private jobDetailDataSubject = new BehaviorSubject<any>(null);
+  jobDetailData$ = this.jobDetailDataSubject.asObservable();
 
   constructor(private httpClient: HttpClient, private router: Router) {
     this.updateLastPath();
@@ -76,7 +78,6 @@ export class JobRecruitService {
       Constants.JOB_URL.JOB + `/search?keyword=${params}`
     );
   }
-
   filterJobs(params: string[]): Observable<any> {
     return this.httpClient.get<any>(
       Constants.JOB_URL.JOB + `/search-job-type?types=${params.join(',')}`
@@ -95,16 +96,6 @@ export class JobRecruitService {
       )
       .subscribe();
     return this.category$;
-  }
-
-  getCandidatesInfo(id: string | null) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    return this.httpClient.get(Constants.CANDIDATE_URL.CANDIDATES + `/${id}`, {
-      headers,
-    });
   }
 
   getJobDetails(id: string | null) {
@@ -132,7 +123,6 @@ export class JobRecruitService {
       }
     );
   }
-
   getQueryDetailsByType() {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -183,7 +173,6 @@ export class JobRecruitService {
       }
     );
   }
-
   setJobDetailId(id: string) {
     this.jobDetailsId = id;
   }
@@ -196,5 +185,9 @@ export class JobRecruitService {
   }
   getLoading() {
     return this.isLoading$;
+  }
+
+  setJobDetailData(data: any) {
+    this.jobDetailDataSubject.next(data);
   }
 }

@@ -24,8 +24,13 @@ export class CorporateService {
       }
     );
   }
-  getCorporate() {
+  getAllCorporate() {
     return this.httpClient.get<any>(Constants.CORPORATE_URL.CORPORATE);
+  }
+  getUserCorporate() {
+    return this.httpClient.get<any>(
+      Constants.CORPORATE_URL.CORPORATE + '/get-user-corporate'
+    );
   }
   editCorporate(id: string, data: Corporate) {
     const headers = new HttpHeaders({

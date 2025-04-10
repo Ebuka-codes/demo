@@ -15,15 +15,7 @@ export class DashboardService {
   constructor(private httpClient: HttpClient) {}
   ngOnInit(): void {}
 
-  loadUserProfile() {
-    return this.httpClient.get(Constants.USER_URL.PROFILE);
-  }
-  setUserProfile(user: any) {
-    this.userSubject$.next(user);
-  }
-  getUserProfile() {
-    return this.user$;
-  }
+  
 
   setLoading(loading: boolean) {
     this.isLoadingSubject.next(loading);

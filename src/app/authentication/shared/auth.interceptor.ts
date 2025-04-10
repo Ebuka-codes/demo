@@ -2,15 +2,23 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HttpEvent,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/shared/service/token.service';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private tokenService: TokenService, private router: Router) {}
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     let token = this.tokenService.getToken();
     let access_token = '';
     try {
@@ -19,14 +27,18 @@ export class AuthInterceptor implements HttpInterceptor {
     } catch (error) {
       console.error('Error parsing token:', error);
     }
+
     const corpValue = localStorage.getItem('corp-key') || '';
 
+    // Skip interceptor for login or verify-email routes
     if (req.url.includes('/login') || req.url.includes('/verify-email')) {
       return next.handle(req);
     }
 
-    if (token) {
-      const modifiedReq = req.clone({
+    let modifiedReq = req;
+
+    if (access_token) {
+      modifiedReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${access_token}`,
           'corp-key': btoa(corpValue),
@@ -34,10 +46,18 @@ export class AuthInterceptor implements HttpInterceptor {
         },
         headers: req.headers.delete('corp-key'),
       });
-      console.log('Request Headers:', req.headers);
-      return next.handle(modifiedReq);
-    } else {
-      return next.handle(req);
     }
+
+    return next.handle(modifiedReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          // Handle expired or invalid token
+          this.tokenService.removeToken();
+          this.router.navigate(['/session']); // or '/login'
+          console.warn('Session expired, redirecting to session page.');
+        }
+        return throwError(() => error);
+      })
+    );
   }
 }

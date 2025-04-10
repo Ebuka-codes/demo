@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   ViewEncapsulation,
   ChangeDetectorRef,
+  Input,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -17,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
 import { Moment } from 'moment';
@@ -32,16 +33,17 @@ import { Location } from '@angular/common';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { Modal } from 'bootstrap';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
-
+import { CandidateService } from 'src/app/shared/service/candidate.service';
+import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
 @Component({
-  selector: 'app-apply',
-  templateUrl: './apply.component.html',
-  styleUrls: ['./apply.component.scss'],
+  selector: 'app-job-application',
+  templateUrl: './job-application.component.html',
+  styleUrls: ['./job-application.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [],
 })
-export class ApplyComponent implements OnInit {
+export class JobApplicationComponent implements OnInit {
   @ViewChild('resumeInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('coverInput') coverInput!: ElementRef<HTMLInputElement>;
   @ViewChild('stepper') stepper!: MatStepper;
@@ -51,8 +53,8 @@ export class ApplyComponent implements OnInit {
   @ViewChild('modal1', { static: false }) modal1Element!: ElementRef;
   @ViewChild('modal2', { static: false }) modal2Element!: ElementRef;
   @ViewChild('modal3', { static: false }) modal3Element!: ElementRef;
+  @Input() jobData!: any;
   private modals: { [key: number]: Modal } = {};
-
   personalFormGroup!: FormGroup;
   questionsFormGroup!: FormGroup;
   educationFormGroup!: FormGroup;
@@ -69,7 +71,7 @@ export class ApplyComponent implements OnInit {
   editId!: number;
   candidateEmail: string | null = '';
   workHistories: any[] = [];
-  educationHistories: any[] = [];
+  educationHistories = new Array(4);
   skillHisories: any[] = [];
   selectedYear: number | null = null;
   formControls: any = {};
@@ -83,16 +85,17 @@ export class ApplyComponent implements OnInit {
   submitted: boolean = false;
   questionData!: job;
   jobId: string | null = localStorage.getItem('JobId');
+  candidateData!: Candidate;
 
   constructor(
     private fb: FormBuilder,
     private jobService: JobRecruitService,
+    private candidateService: CandidateService,
     private route: ActivatedRoute,
     private dateFormatPicker: DateFormatService,
     private location: Location,
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef,
-    private routes: Router
+    private cdr: ChangeDetectorRef
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -145,7 +148,10 @@ export class ApplyComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCandidateInfo();
-    this.getQuestionsByJobDetail(this.jobId);
+    this.jobService.jobDetailData$.subscribe((job) => {
+      this.jobData = job;
+      this.getQuestionsByJobDetail(job.id);
+    });
   }
 
   ngAfterViewInit() {
@@ -155,40 +161,46 @@ export class ApplyComponent implements OnInit {
   }
 
   getCandidateInfo() {
-    if (this.route.snapshot.paramMap.get('id')) {
+    if (this.route.snapshot.paramMap.get('candidateId')) {
       this.jobService.setLoading(true);
       this.isLoading = this.jobService.isLoading$;
-      this.jobService
-        .getCandidatesInfo(this.route.snapshot.paramMap.get('id'))
+      this.candidateService
+        .getCandidatesInfo(this.route.snapshot.paramMap.get('candidateId'))
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
-              const { name, email, phone, countryName, state, address, city } =
-                response.data;
-              this.personalFormGroup.patchValue({
-                firstName: name?.split(' ')[0] || '',
-                lastName: name?.split(' ')[1] || '',
-                email,
-                phone,
-                countryName,
-                state,
-                address,
-                city,
-              });
+              this.prefillCandidateForm(response.data);
+              this.candidateService.setCandidateData(response?.data);
+              this.jobService.setLoading(false);
+              this.isLoading = this.jobService.isLoading$;
+              this.cdr.detectChanges();
+            } else {
+              this.jobService.setLoading(false);
             }
-            this.jobService.setLoading(false);
-            this.isLoading = this.jobService.isLoading$;
-
-            this.personalFormGroup.updateValueAndValidity();
-            this.cdr.detectChanges();
           },
-          error: () => {
-            this.toastService.error('Error occur');
+          error: (error) => {
+            this.toastService.error(error.message);
             this.jobService.setLoading(false);
             this.isLoading = this.jobService.isLoading$;
           },
         });
+    } else {
+      const existingData = this.candidateService.getCandidateData();
+      if (existingData) {
+        this.prefillCandidateForm(existingData);
+      }
     }
+  }
+
+  prefillCandidateForm(data: Candidate) {
+    const { name, email, phone, countryName, state, address, city } = data;
+    //prettier-ignore
+    this.personalFormGroup.patchValue({firstName: name?.split(' ')[0] || '',lastName: name?.split(' ')[1] || '',email, phone,countryName, state,address,city,});
+    this.workHistories = data.workHistories;
+    this.educationHistories = data.educationHistories;
+    this.skillHisories = data.skills;
+    this.personalFormGroup.updateValueAndValidity();
+    // this.workEducationAndSkill.updateValueAndValidity();
   }
 
   get firstName() {
@@ -372,6 +384,7 @@ export class ApplyComponent implements OnInit {
 
   openModal(modalNumber: number) {
     this.modals[modalNumber].show();
+    document.body.classList.remove('force-scroll-reset');
   }
   closeModal(modalNumber: number) {
     this.modals[modalNumber].hide();
@@ -383,6 +396,7 @@ export class ApplyComponent implements OnInit {
     this.workFormGroup.markAsUntouched();
     this.educationFormGroup.markAsUntouched();
     this.skillFormGroup.markAsUntouched();
+    document.body.classList.add('force-scroll-reset');
   }
   removeBackdrop() {
     setTimeout(() => {
@@ -391,6 +405,10 @@ export class ApplyComponent implements OnInit {
     }, 300);
   }
   addWorkHistory(id: number) {
+    console.log(
+      this.workFormGroup.get('startDate')?.value,
+      this.workFormGroup.get('endDate')?.value
+    );
     const startDateValue = this.workFormGroup.get('startDate')?.value;
     const endDateValue = this.workFormGroup.get('endDate')?.value;
     const startDate = new Date(startDateValue);
@@ -434,6 +452,7 @@ export class ApplyComponent implements OnInit {
   }
 
   handleEditWorkHistory(modalId: number, id: number) {
+    console.log(modalId, id);
     if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
       this.editId = id;
       const workHistory = this.workHistories[id];
@@ -486,7 +505,6 @@ export class ApplyComponent implements OnInit {
     this.educationHistories.splice(index, 1);
     this.workEducationAndSkill.get('stepCheck')?.updateValueAndValidity();
   }
-
   handleEditEducation(modalId: number, id: number) {
     if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
       this.editId = id;

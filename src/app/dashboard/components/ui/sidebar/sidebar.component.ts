@@ -7,6 +7,7 @@ import {
   UserToken,
 } from 'src/app/authentication/shared/credential';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { UserService } from 'src/app/dashboard/user/user.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/shared/service/toast.service';
 import { TokenService } from 'src/app/shared/service/token.service';
@@ -23,11 +24,11 @@ export class SidebarComponent {
   constructor(
     private route: Router,
     private cdr: ChangeDetectorRef,
-    private dashboardService: DashboardService,
     private authService: AuthService,
     private tokenService: TokenService,
     private loaderService: LoaderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService
   ) {
     this.route.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -36,7 +37,7 @@ export class SidebarComponent {
         this.cdr.detectChanges();
       });
 
-    this.dashboardService.getUserProfile().subscribe((user) => {
+    this.userService.getUserProfile().subscribe((user) => {
       if (user) {
         this.userProfile = user;
         this.cdr.detectChanges();

@@ -5,6 +5,9 @@ import { CandidateComponent } from './candidate/candidate.component';
 import { JobComponent } from './job/job.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { InterviewerComponent } from './interviewer/interviewer.component';
+import { UserComponent } from './user/user.component';
+import { RoleComponent } from './role/role.component';
+import { UserCorporateComponent } from './user-corporate/user-corporate.component';
 
 const routes: Routes = [
   {
@@ -32,10 +35,19 @@ const routes: Routes = [
         path: 'interviewer',
         component: InterviewerComponent,
       },
-      // {
-      //   path: 'profile',
-      //   component: InterviewerComponent,
-      // },
+      {
+        path: 'user/corporate',
+        component: UserCorporateComponent,
+      },
+
+      {
+        path: 'user',
+        component: UserComponent,
+      },
+      {
+        path: 'user/role',
+        component: RoleComponent,
+      },
     ],
   },
 ];

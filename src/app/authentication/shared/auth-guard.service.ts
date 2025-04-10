@@ -11,7 +11,7 @@ export class AuthGuard {
   canActivate(): boolean {
     const token = this.tokenService.getToken();
     const isTokenExpired = this.tokenService.isTokenExpired();
-    console.log(token);
+    console.log(isTokenExpired);
     if (!token || isTokenExpired) {
       this.tokenService.removeToken();
       this.router.navigate(['/login']);

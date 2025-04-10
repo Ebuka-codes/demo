@@ -8,9 +8,9 @@ html {
   scrollbar-width: thin;
 }
 body {
-  scroll-behavior: smooth;
   font-family: "Inter", sans-serif;
   height: 100%;
+  overflow-x: hidden;
 }
 
 img {

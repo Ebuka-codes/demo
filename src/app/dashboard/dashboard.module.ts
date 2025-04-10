@@ -24,6 +24,10 @@ import { StatsComponent } from './components/ui/stats/stats.component';
 import { JobListingComponent } from './components/ui/job-listing/job-listing.component';
 import { InterviewsComponent } from './components/ui/interviews/interviews.component';
 import { InterviewerComponent } from './interviewer/interviewer.component';
+import { UserComponent } from './user/user.component';
+import { RoleComponent } from './role/role.component';
+import { SessionComponent } from './components/ui/session/session.component';
+import { UserCorporateComponent } from './user-corporate/user-corporate.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -35,6 +39,10 @@ import { InterviewerComponent } from './interviewer/interviewer.component';
     JobListingComponent,
     InterviewsComponent,
     InterviewerComponent,
+    UserComponent,
+    RoleComponent,
+    SessionComponent,
+    UserCorporateComponent,
   ],
   imports: [
     FormsModule,

@@ -1,5 +1,29 @@
 <div *ngIf="isLoading | async" class="progress-bar"></div>
-<div class="apply-container">
+<div class="job-application_container">
+  <div class="detail-header">
+    <div class="info">
+      <h4 class="info-title">{{ jobData.jobTitle }}</h4>
+      <div class="info-sub">
+        <span> {{ jobData.jobType }}</span>
+
+        <span
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-send-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
+            /></svg
+        ></span>
+        <span class="info-location">{{ jobData.jobLocation }}</span>
+      </div>
+    </div>
+  </div>
+
   <form>
     <mat-horizontal-stepper #stepper [linear]="true">
       <!-- personal-information -->
@@ -7,7 +31,7 @@
         <form action="" [formGroup]="personalFormGroup">
           <div class="apply-flow-block__header">
             <h2 class="apply-flow-block__title">Import your profile</h2>
-            <p>You can import your information.</p>
+            <p>You can import your information</p>
             <div class="apply-flow-profile-import__awli-content">
               <button class="linkedin-btn">
                 <svg
@@ -25,13 +49,16 @@
                 </svg>
                 <span>Apply With LinkedIn</span>
               </button>
+              <button class="resume-btn">
+                <span>Upload Resume</span>
+              </button>
             </div>
           </div>
 
           <div class="contact-info">
-            <div class="contact-info__header">
-              <h2 class="contact-info-header__title">Contact Information</h2>
-              <p>Please enter your contact information.</p>
+            <div class="bio-data__header">
+              <h2 class="bio-data-header__title">Bio-Data</h2>
+              <p>Please enter your personal information.</p>
             </div>
             <div class="form-group">
               <label for="firstName">First name</label>
@@ -112,7 +139,7 @@
           </div>
 
           <div class="address-info">
-            <div class="address-info-header">
+            <div class="address-info__header">
               <h2 class="address-info-header__title">Address</h2>
               <p>Please enter your home address.</p>
             </div>
@@ -211,7 +238,9 @@
       <mat-step [stepControl]="workEducationAndSkill">
         <div class="work-info">
           <div class="work-info__header">
-            <h2 class="work-info-header__title">Work and Education History</h2>
+            <h2 class="work-info-header__title">
+              Work and Educational Details
+            </h2>
             <p>
               Please enter details about your work experience,education and
               skill.
@@ -220,7 +249,7 @@
           <div class="content">
             <form action="" [formGroup]="workFormGroup">
               <div class="work-history">
-                <h4 class="fs-5">Work history</h4>
+                <h4 class="fs-5">Work Experience</h4>
                 <div class="job-divider"></div>
                 <div
                   style="
@@ -288,7 +317,7 @@
                   </ul>
                 </div>
                 <button class="work-history-btn mb-3" (click)="openModal(1)">
-                  + Add Work History
+                  + Add Experience
                 </button>
 
                 <div
@@ -308,10 +337,10 @@
                             <ng-container
                               *ngIf="isEditModalOpen; else showText"
                             >
-                              Edit Work History
+                              Edit Work Experience
                             </ng-container>
                             <ng-template #showText>
-                              Add Work History
+                              Add Work Experience
                             </ng-template>
                           </h5>
                         </span>
@@ -497,7 +526,7 @@
 
             <form [formGroup]="educationFormGroup">
               <div class="education-history">
-                <h4 class="fs-5">Education history</h4>
+                <h4 class="fs-5">Education Details</h4>
                 <div class="job-divider"></div>
                 <div
                   style="
@@ -526,11 +555,9 @@
                       (click)="handleEditEducation(2, i)"
                     >
                       <span>
-                        <strong>{{ education.educationLevel }}</strong> at
-                        {{ education.institutionName }} ({{
-                          formatDate(education.startDate)
-                        }}
-                        - {{ formatDate(education.endDate) }})
+                        <strong>{{ "Bachelor degree" }}</strong> at
+                        {{ "University of lagos" }} {{ " From: 2020-10-10" }} -
+                        {{ "To: 2020-10-10" }}
                       </span>
                       <span
                         style="display: flex; gap: 10px; align-items: center"
@@ -1054,7 +1081,7 @@
         <form action="" [formGroup]="supportingFormGroup">
           <div class="supporting-doc">
             <div class="supporting-doc__header">
-              <h2 class="supporting-doc__title">Supporting Documents</h2>
+              <h2 class="supporting-doc__title">Attachment Documents</h2>
               <p>Please add any additional documents</p>
             </div>
             <div class="supporting-doc__content">
@@ -1320,10 +1347,10 @@
             (click)="onSubmit()"
           >
             <ng-container *ngIf="isSubmitting; else showLoader">
-              <span>Processing...</span>
+              <span class="loader"></span>
             </ng-container>
             <ng-template #showLoader>
-              <span>Submit</span>
+              <span>Submit Application</span>
             </ng-template>
           </button>
         </div>

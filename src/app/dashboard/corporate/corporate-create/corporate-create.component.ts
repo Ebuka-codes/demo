@@ -152,7 +152,6 @@ export class CorporateCreateComponent {
   createCorporate(corporate: Corporate) {
     this.submitLoading = true;
     this.loaderService.setLoading(true);
-
     this.corporateService.createCorporate(corporate).subscribe({
       next: (response: any) => {
         this.submitLoading = false;

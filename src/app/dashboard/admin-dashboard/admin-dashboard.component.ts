@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 import { UserProfile } from 'src/app/authentication/shared/credential';
 import { Observable } from 'rxjs';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,13 +14,14 @@ export class AdminDashboardComponent {
   isLoading$!: Observable<boolean>;
   constructor(
     private cdr: ChangeDetectorRef,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private userService: UserService
   ) {}
   ngOnInit(): void {
     window.scrollTo({ top: 0 });
     this.dashboardService.setLoading(true);
     this.isLoading$ = this.dashboardService.isLoading$;
-    this.dashboardService.getUserProfile().subscribe((user) => {
+    this.userService.getUserProfile().subscribe((user: any) => {
       if (user) {
         this.userProfile = user;
         this.cdr.detectChanges();

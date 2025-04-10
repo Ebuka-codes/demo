@@ -1,0 +1,23 @@
+header {
+  background-color: #299345;
+  padding: 20px 90px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .logo {
+    img {
+      width: 120px;
+    }
+  }
+  .action {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    svg {
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}
