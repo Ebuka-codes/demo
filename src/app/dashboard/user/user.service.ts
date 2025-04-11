@@ -11,14 +11,17 @@ export class UserService {
   user$ = this.userSubject$.asObservable();
   constructor(private httpClient: HttpClient) {}
   createUser(data: any) {
-    return this.httpClient.post(Constants.USER_URL.USER, data);
+    return this.httpClient.post(Constants.USER_URL.USER + '/register', data);
   }
   getUserRole() {
     return this.httpClient.get(Constants.USER_URL.USER_ROLE);
   }
+  getAllUsers() {
+    return this.httpClient.get(Constants.USER_URL.USER + '/find');
+  }
 
   loadUserProfile() {
-    return this.httpClient.get(Constants.USER_URL.PROFILE);
+    return this.httpClient.get(Constants.USER_URL.USER + '/profile');
   }
   setUserProfile(user: any) {
     this.userSubject$.next(user);

@@ -64,15 +64,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>No record found</td>
-        </tr>
-        <!-- <tr>
-          <td>John</td>
-          <td>mark</td>
-          <td>{{ "johnmark@yahoo.com" }}</td>
-          <td>09126576061</td>
-          <td>Administrator</td>
+        <tr *ngFor="let item of userData">
+          <td>{{ item.firstName }}</td>
+          <td>{{ item.lastName }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.phoneNumber }}</td>
+          <td>{{ item.role }}</td>
           <td>
             <div class="action">
               <div class="action-icon">
@@ -138,7 +135,10 @@
               </div>
             </div>
           </td>
-        </tr> -->
+        </tr>
+        <tr *ngIf="!userData?.length">
+          <td>No record found</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -223,7 +223,6 @@
                 >
               </div>
             </div>
-
             <div class="form-group">
               <label for="phoneNumber">Phone Number</label>
               <input
@@ -268,7 +267,14 @@
               <button type="button" class="close-btn" data-bs-dismiss="modal">
                 <span>Cancel</span>
               </button>
-              <button type="submit" class="submit-btn">Submit</button>
+              <button type="submit" class="submit-btn">
+                <ng-container *ngIf="!submitLoading; else showLoader">
+                  Submit
+                </ng-container>
+                <ng-template #showLoader>
+                  <span class="mini-loader-spinner"></span>
+                </ng-template>
+              </button>
             </div>
           </form>
         </div>

@@ -201,11 +201,11 @@
             </div>
             <div class="btn-action">
               <button type="submit" class="submit-btn">
-                <ng-container *ngIf="submitLoading; else showLoader">
-                  <span class="mini-loader-spinner"></span>
+                <ng-container *ngIf="!submitLoading; else showLoader">
+                  Submit
                 </ng-container>
                 <ng-template #showLoader>
-                  <span>Submit</span>
+                  <span class="mini-loader-spinner"></span>
                 </ng-template>
               </button>
             </div>

@@ -13,8 +13,7 @@ export const Constants = {
     REFRESH_TOKEN: `${BASE_URL}/auth/getnewtoken`,
   },
   USER_URL: {
-    USER: `${BASE_URL}/user/register`,
-    PROFILE: `${BASE_URL}/user/profile`,
+    USER: `${BASE_URL}/user`,
     USER_ROLE: `${BASE_URL}/api/user-roles`,
   },
 

@@ -17,6 +17,7 @@ export class UserComponent {
   modalInstance!: Modal;
   submitLoading!: boolean;
   userRoleData!: any[];
+  userData!: any[];
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -65,7 +66,27 @@ export class UserComponent {
         this.loaderService.setLoading(true);
       },
     });
+    this.loadUsers();
   }
+  loadUsers(): void {
+    this.loaderService.setLoading(true);
+    this.userService.getAllUsers().subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.userData = response.data;
+          this.loaderService.setLoading(false);
+        } else {
+          console.log('error');
+          this.loaderService.setLoading(false);
+        }
+      },
+      error: (error: any) => {
+        this.loaderService.setLoading(false);
+        this.toasterService.error(error);
+      },
+    });
+  }
+
   ngAfterViewInit() {
     this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
@@ -82,7 +103,7 @@ export class UserComponent {
         next: (response: any) => {
           if (response.valid && response.data) {
             this.loaderService.setLoading(false);
-            this.toasterService.success(response.message);
+            this.toasterService.success('User created successfully');
             this.closeModal();
             this.submitLoading = false;
           } else {

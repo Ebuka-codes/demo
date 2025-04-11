@@ -21,6 +21,8 @@ export class UserCorporateComponent implements OnInit {
   submitLoading: boolean = false;
   isSubmitted: boolean = false;
   isLoadingLogo: boolean = false;
+  logoUrl!: string;
+  corporateId!: string;
   constructor(
     private fb: FormBuilder,
     private corporateService: CorporateService,
@@ -57,12 +59,17 @@ export class UserCorporateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCorporateData();
+  }
+
+  getCorporateData() {
     this.loaderService.setLoading(true);
     this.corporateService.getUserCorporate().subscribe({
       next: (response: any) => {
         if (response) {
           this.form.patchValue(response);
           this.form.updateValueAndValidity();
+          this.corporateId = response.id;
           this.loaderService.setLoading(false);
         } else {
           this.loaderService.setLoading(false);
@@ -92,7 +99,7 @@ export class UserCorporateComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      // this.file = file.name;
+      this.file = file.name;
       this.convertLogoToBase64(file, file.name);
       input.value = '';
     }
@@ -118,30 +125,62 @@ export class UserCorporateComponent implements OnInit {
   }
 
   convertLogoToBase64(file: File, name: string): void {
-    // this.isLoadingLogo = true;
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file);
-    // this.loaderService.setLoading(true);
-    // reader.onload = () => {
-    //   const data = {
-    //     base64String: reader.result as string,
-    //     fileName: name,
-    //   };
-    //   this.corporateService.convertFileToBase64(data).subscribe(
-    //     (response: any) => {
-    //       if (response.valid && response.data) {
-    //         this.logoUrl = response.data.path;
-    //         this.isLoadingLogo = false;
-    //         this.loaderService.setLoading(false);
-    //       }
-    //     },
-    //     (error) => {
-    //       this.toastService.error(error.message);
-    //       this.loaderService.setLoading(false);
-    //       this.isLoadingLogo = false;
-    //     }
-    //   );
-    // };
+    this.isLoadingLogo = true;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    this.loaderService.setLoading(true);
+    reader.onload = () => {
+      const data = {
+        base64String: reader.result as string,
+        fileName: name,
+      };
+      this.corporateService.convertFileToBase64(data).subscribe(
+        (response: any) => {
+          if (response.valid && response.data) {
+            this.logoUrl = response.data.path;
+            this.isLoadingLogo = false;
+            this.loaderService.setLoading(false);
+          }
+        },
+        (error) => {
+          this.toastService.error(error.message);
+          this.loaderService.setLoading(false);
+          this.isLoadingLogo = false;
+        }
+      );
+    };
   }
-  onSubmit() {}
+  removeFile() {
+    this.file = '';
+    this.logoUrl = '';
+  }
+  onSubmit() {
+    if (this.form.valid) {
+      this.submitLoading = true;
+      this.loaderService.setLoading(true);
+      this.corporateService
+        .editCorporate(this.corporateId, {
+          ...this.form.value,
+          logo: this.logoUrl ? this.logoUrl : this.form.get('logo')?.value,
+        })
+        .subscribe({
+          next: (response: any) => {
+            if (response) {
+              this.loaderService.setLoading(false);
+              this.submitLoading = false;
+              this.toastService.success('Corporate updated successfully');
+            } else {
+              this.toastService.error(response.message);
+              this.loaderService.setLoading(false);
+              this.submitLoading = false;
+            }
+          },
+          error: (error) => {
+            this.toastService.error(error.message);
+            this.loaderService.setLoading(false);
+            this.submitLoading = false;
+          },
+        });
+    }
+  }
 }

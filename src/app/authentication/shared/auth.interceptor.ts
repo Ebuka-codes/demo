@@ -53,7 +53,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           // Handle expired or invalid token
           this.tokenService.removeToken();
-          this.router.navigate(['/session']); // or '/login'
+          this.router.navigate(['/session']);
           console.warn('Session expired, redirecting to session page.');
         }
         return throwError(() => error);

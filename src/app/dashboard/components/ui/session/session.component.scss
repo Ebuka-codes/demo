@@ -1,0 +1,63 @@
+.session-container {
+  .session-header {
+    background-color: #299345;
+    width: 100%;
+    min-height: 100%;
+    padding: 10px 0px;
+    padding-left: 70px;
+    z-index: 999;
+    position: relative;
+    img {
+      width: 120px;
+    }
+  }
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0px auto;
+    img {
+      width: 200px;
+      margin: 0px auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .info {
+      margin-top: 20px;
+      text-align: center;
+      h2 {
+        color: #299345;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      span {
+        line-height: 1.2;
+      }
+      .btn-action {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 10px;
+        button {
+          margin-top: 10px;
+          border: none;
+          background-color: transparent;
+          outline: none;
+          border-radius: 5px;
+          padding: 8px 20px;
+          color: white;
+          text-align: center;
+          font-size: 16px;
+        }
+        .back {
+          background-color: #1b1b1b;
+        }
+        .login {
+          background-color: #299345;
+        }
+      }
+    }
+  }
+}
