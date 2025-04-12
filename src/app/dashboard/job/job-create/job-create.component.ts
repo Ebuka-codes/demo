@@ -16,8 +16,8 @@ import { map, Observable, startWith } from 'rxjs';
 import { job } from '../shared/job';
 import { JobService } from '../shared/job.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-job-create',
@@ -40,7 +40,7 @@ export class JobCreateComponent {
   isLoadingQuestion: boolean = false;
   form: FormGroup;
   questionForm!: FormGroup;
-  formatAmountValue: string = '';
+
   loading: boolean = false;
   froalaEditorInstance: any;
   questions: any;
@@ -85,11 +85,12 @@ export class JobCreateComponent {
   ) {
     this.form = this.fb.group({
       jobTitle: ['', [Validators.required, Validators.minLength(3)]],
+      jobId: ['', Validators.required],
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
       jobType: ['', Validators.required],
-      companyName: ['', Validators.required],
+      companyName: [''],
       workMode: ['', Validators.required],
       requiredSkills: ['', Validators.required],
       startDate: ['', Validators.required],
@@ -151,6 +152,9 @@ export class JobCreateComponent {
   get jobTitle() {
     return this.form.get('jobTitle');
   }
+  get jobId() {
+    return this.form.get('jobId');
+  }
   get jobDescription() {
     return this.form.get('jobDescription');
   }
@@ -194,16 +198,6 @@ export class JobCreateComponent {
       const isValid = /^\d+$/.test(value);
       return isValid ? null : { invalidAmount: true };
     };
-  }
-  formatAmount(amount: Event) {
-    const salary = amount.target as HTMLInputElement;
-    if (amount) {
-      this.formatAmountValue = salary.value
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    } else {
-      this.formatAmountValue = '';
-    }
   }
 
   getAllQuestion() {
@@ -481,20 +475,6 @@ export class JobCreateComponent {
       this.form.get('jobDescription')?.setValue(' ');
     } else {
       this.isSubmitted = true;
-      console.log(
-        'not valid',
-        this.jobTitle?.valid,
-        this.jobSalary?.valid,
-        this.jobDescription?.valid,
-        this.jobLocation?.valid,
-        this.companyName?.valid,
-        this.jobType?.valid,
-        this.jobEmploymentData?.valid,
-        this.workMode?.valid,
-        this.jobEndDate?.valid,
-        this.jobStartDate?.valid,
-        this.requiredSkills?.valid
-      );
     }
   }
 

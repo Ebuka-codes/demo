@@ -1,5 +1,7 @@
 export const MONTH_YEAR_FORMATS = {
-  parse: { dateInput: 'MM/YYYY' },
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
   display: {
     dateInput: 'MM/YYYY',
     monthYearLabel: 'MMM YYYY',

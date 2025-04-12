@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Notyf } from 'notyf';
 import { Observable } from 'rxjs';
+import { ToastService } from 'src/app/core/service/toast.service';
 import { months } from 'src/app/shared/constants';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
+import { NavigationService } from 'src/app/shared/service/navigation-service.service';
 import { job } from 'src/app/shared/type';
 
 @Component({
@@ -16,8 +18,6 @@ export class JobListingComponent implements OnInit {
   jobSearchFilterData!: any[];
   jobType!: any[];
   jobLocation!: any[];
-  // isLoadingSearchFilter$!: Observable<boolean>;
-  // isLoadingJobList$!: Observable<boolean>;
   isLoadingData$!: Observable<boolean>;
   isLoadingSearch!: boolean;
   error$!: Observable<any>;
@@ -30,7 +30,9 @@ export class JobListingComponent implements OnInit {
 
   constructor(
     private jobService: JobRecruitService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private navService: NavigationService,
+    private route: ActivatedRoute
   ) {}
   ngOnInit() {
     this.isLoadingData$ = this.jobService.isLoading$;
@@ -52,36 +54,8 @@ export class JobListingComponent implements OnInit {
       );
     });
 
-    //   next: (response: any) => {
-    //     if (response) {
-    //       this.jobList = response.data;
-    //       this.jobType = Array.from(
-    //         new Set(
-    //           this.jobSearchFilterData
-    //             ?.filter((job: any) => job.jobType)
-    //             .map((job: any) => job.jobType)
-    //         )
-    //       );
-    //       this.jobLocation = Array.from(
-    //         new Set(
-    //           this.jobSearchFilterData
-    //             ?.filter((job: any) => job.jobLocation)
-    //             .map((job: any) => job.jobLocation)
-    //         )
-    //       );
-    //       this.jobService.setLoading(false);
-    //       this.isLoadingData$ = this.jobService.isLoading$;
-    //     }
-    //   },
-    //   error: (err) => {
-    //     this.jobService.setLoading(false);
-    //     this.isLoadingData$ = this.jobService.isLoading$;
-    //     this.toastService.error(err.message);
-    //   },
-    // });
-
-    // this.getSearchFilter();
-    // this.getJobList();
+    const slug = this.route.snapshot.paramMap.get('corpId');
+    this.navService.setReturnUrl(`/apply/${slug}`);
   }
 
   searchJob() {

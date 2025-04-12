@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { CorporateService } from '../corporate/shared/corporate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'app-user-corporate',
   templateUrl: './user-corporate.component.html',

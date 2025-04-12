@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { Candidate, QuestionData } from './shared/candidate';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
@@ -13,6 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CandidateService } from './shared/candidate.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-candidate',

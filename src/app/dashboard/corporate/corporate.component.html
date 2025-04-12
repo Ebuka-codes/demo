@@ -101,7 +101,7 @@
               "
             />
 
-            {{ item?.name ? (item?.name | titlecase) : "N/A" }}
+            {{ item?.name || "N/A" }}
           </td>
           <td>{{ item?.email || "N/A" }}</td>
           <td>{{ item?.phone || "N/A" }}</td>

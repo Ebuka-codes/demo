@@ -4,6 +4,7 @@ import { enviroments } from 'src/environments/enviorments';
 import { Candidate } from './candidate';
 import { job } from '../../job/shared/job';
 import { Constants } from 'src/app/utils/constants';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +12,8 @@ import { Constants } from 'src/app/utils/constants';
 export class CandidateService {
   constructor(private httpClient: HttpClient) {}
   baseUrl = enviroments.API_URL;
-  getCandidate() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get<Candidate>(Constants.CANDIDATE_URL.CANDIDATES, {
-      headers,
-    });
+  getCandidate(): Observable<Candidate[]> {
+    return this.httpClient.get<Candidate[]>(Constants.CANDIDATE_URL.CANDIDATES);
   }
   getCandidateByJobId(jobId: string) {
     const headers = new HttpHeaders({

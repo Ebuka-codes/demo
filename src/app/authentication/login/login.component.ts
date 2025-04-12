@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../shared/auth.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
-import { LoginType } from '../shared/auth';
 import { Router } from '@angular/router';
-import { USER_TOKEN_KEY } from '../shared/credential';
-import { TokenService } from 'src/app/shared/service/token.service';
+import { AuthService } from 'src/app/core/service/auth.service';
+import { LoginType } from 'src/app/core/model/auth';
+import { TokenService } from 'src/app/core/service/token.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-login',

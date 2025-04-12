@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { JobCreateComponent } from './job-create/job-create.component';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -19,6 +19,7 @@ import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDeleteComponent } from './job-delete/job-delete.component';
 import { JobFilterComponent } from './job-filter/job-filter.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { AmountFormatDirective } from 'src/app/shared/directives/amount-format.directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     JobEditComponent,
     JobDeleteComponent,
     JobFilterComponent,
+    AmountFormatDirective,
   ],
   imports: [
     ReactiveFormsModule,

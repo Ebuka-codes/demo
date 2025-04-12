@@ -18,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
 import { Moment } from 'moment';
@@ -29,12 +29,13 @@ import {
   months,
   nigeriaStates,
 } from 'src/app/shared/constants';
-import { Location } from '@angular/common';
-import { ToastService } from 'src/app/shared/service/toast.service';
+
 import { Modal } from 'bootstrap';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
+import { NavigationService } from 'src/app/shared/service/navigation-service.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'app-job-application',
   templateUrl: './job-application.component.html',
@@ -65,13 +66,13 @@ export class JobApplicationComponent implements OnInit {
   isSubmitting: boolean = false;
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
-  isLoading!: Observable<any>;
+  isLoading$!: Observable<any>;
   isLoadingQuestion: boolean = false;
   data!: job;
   editId!: number;
   candidateEmail: string | null = '';
   workHistories: any[] = [];
-  educationHistories = new Array(4);
+  educationHistories: any[] = [];
   skillHisories: any[] = [];
   selectedYear: number | null = null;
   formControls: any = {};
@@ -86,6 +87,9 @@ export class JobApplicationComponent implements OnInit {
   questionData!: job;
   jobId: string | null = localStorage.getItem('JobId');
   candidateData!: Candidate;
+  isResumeData!: boolean;
+  isCoverLetterData!: boolean;
+  private history: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -93,9 +97,10 @@ export class JobApplicationComponent implements OnInit {
     private candidateService: CandidateService,
     private route: ActivatedRoute,
     private dateFormatPicker: DateFormatService,
-    private location: Location,
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private navService: NavigationService
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -136,9 +141,9 @@ export class JobApplicationComponent implements OnInit {
       educationLevel: ['', Validators.required],
     });
     this.skillFormGroup = this.fb.group({
-      skillName: ['', Validators.required],
-      proficiencyLevel: ['', Validators.required],
-      noOfYears: ['', Validators.required],
+      skillName: [''],
+      proficiencyLevel: [''],
+      noOfYears: [''],
     });
     this.supportingFormGroup = this.fb.group({
       resume: ['', Validators.required],
@@ -152,6 +157,13 @@ export class JobApplicationComponent implements OnInit {
       this.jobData = job;
       this.getQuestionsByJobDetail(job.id);
     });
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.history.push(event.urlAfterRedirects);
+        console.log('Updated History:', this.history);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -163,7 +175,7 @@ export class JobApplicationComponent implements OnInit {
   getCandidateInfo() {
     if (this.route.snapshot.paramMap.get('candidateId')) {
       this.jobService.setLoading(true);
-      this.isLoading = this.jobService.isLoading$;
+      this.isLoading$ = this.jobService.isLoading$;
       this.candidateService
         .getCandidatesInfo(this.route.snapshot.paramMap.get('candidateId'))
         .subscribe({
@@ -172,16 +184,12 @@ export class JobApplicationComponent implements OnInit {
               this.prefillCandidateForm(response.data);
               this.candidateService.setCandidateData(response?.data);
               this.jobService.setLoading(false);
-              this.isLoading = this.jobService.isLoading$;
+              this.isLoading$ = this.jobService.isLoading$;
               this.cdr.detectChanges();
             } else {
               this.jobService.setLoading(false);
+              this.isLoading$ = this.jobService.isLoading$;
             }
-          },
-          error: (error) => {
-            this.toastService.error(error.message);
-            this.jobService.setLoading(false);
-            this.isLoading = this.jobService.isLoading$;
           },
         });
     } else {
@@ -193,14 +201,31 @@ export class JobApplicationComponent implements OnInit {
   }
 
   prefillCandidateForm(data: Candidate) {
-    const { name, email, phone, countryName, state, address, city } = data;
+    const {
+      name,
+      email,
+      phone,
+      countryName,
+      state,
+      address,
+      city,
+      resume,
+      coverLetter,
+    } = data;
     //prettier-ignore
     this.personalFormGroup.patchValue({firstName: name?.split(' ')[0] || '',lastName: name?.split(' ')[1] || '',email, phone,countryName, state,address,city,});
     this.workHistories = data.workHistories;
     this.educationHistories = data.educationHistories;
     this.skillHisories = data.skills;
     this.personalFormGroup.updateValueAndValidity();
-    // this.workEducationAndSkill.updateValueAndValidity();
+    this.workEducationAndSkill.get('stepCheck')?.updateValueAndValidity();
+    this.supportingFormGroup.patchValue({
+      resume: resume,
+      coverLetter: coverLetter,
+    });
+    this.supportingFormGroup.updateValueAndValidity();
+    this.isResumeData = true;
+    this.isCoverLetterData = true;
   }
 
   get firstName() {
@@ -368,7 +393,6 @@ export class JobApplicationComponent implements OnInit {
       datePicker
     );
   }
-
   onMonthYearEductionSelect(
     event: Moment,
     formControlName: string,
@@ -405,15 +429,10 @@ export class JobApplicationComponent implements OnInit {
     }, 300);
   }
   addWorkHistory(id: number) {
-    console.log(
-      this.workFormGroup.get('startDate')?.value,
-      this.workFormGroup.get('endDate')?.value
-    );
     const startDateValue = this.workFormGroup.get('startDate')?.value;
     const endDateValue = this.workFormGroup.get('endDate')?.value;
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
-
     if (this.workFormGroup.valid) {
       const data = {
         companyName: this.workFormGroup.get('companyName')?.value,
@@ -450,14 +469,14 @@ export class JobApplicationComponent implements OnInit {
   resetWorkHistoryForm() {
     this.workFormGroup.reset();
   }
-
   handleEditWorkHistory(modalId: number, id: number) {
     console.log(modalId, id);
     if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
       this.editId = id;
+      console.log(this.workHistories[id]);
       const workHistory = this.workHistories[id];
       if (workHistory) {
-        this.workFormGroup.setValue(workHistory);
+        this.workFormGroup.patchValue(workHistory);
       }
       this.isEditModalOpen = true;
     }
@@ -510,7 +529,7 @@ export class JobApplicationComponent implements OnInit {
       this.editId = id;
       const educationHistory = this.educationHistories[id];
       if (educationHistory) {
-        this.educationFormGroup.setValue(educationHistory);
+        this.educationFormGroup.patchValue(educationHistory);
       }
       this.openModal(modalId);
       this.isEditModalOpen = true;
@@ -522,13 +541,16 @@ export class JobApplicationComponent implements OnInit {
   }
 
   addSkillHistory(id: number) {
-    if (this.skillFormGroup.valid) {
+    if (
+      this.skillName?.value &&
+      this.proficiencyLevel?.value &&
+      this.noOfYears?.value
+    ) {
       const data = {
         skillName: this.skillFormGroup.get('skillName')?.value,
         proficiencyLevel: this.skillFormGroup.get('proficiencyLevel')?.value,
         noOfYears: Number(this.skillFormGroup.get('noOfYears')?.value),
       };
-
       if (this.editId >= 0 && this.editId < this.skillHisories.length) {
         this.skillHisories[this.editId] = {
           ...this.skillHisories[this.editId],
@@ -539,16 +561,15 @@ export class JobApplicationComponent implements OnInit {
       }
       this.editId = -1;
       this.closeModal(id);
-    } else {
-      this.skillFormGroup.markAllAsTouched();
     }
+    this.closeModal(id);
   }
   handleEditSkill(modalId: number, id: number) {
     if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
       this.editId = id;
       const skillHistory = this.skillHisories[id];
       if (skillHistory) {
-        this.skillFormGroup.setValue(skillHistory);
+        this.skillFormGroup.patchValue(skillHistory);
       }
       this.isEditModalOpen = true;
       this.openModal(modalId);
@@ -606,7 +627,7 @@ export class JobApplicationComponent implements OnInit {
   }
   convertResumeToBase64(file: File, name: string): void {
     this.jobService.setLoading(true);
-    this.isLoading = this.jobService.isLoading$;
+    this.isLoading$ = this.jobService.isLoading$;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -622,19 +643,21 @@ export class JobApplicationComponent implements OnInit {
               .get('resume')
               ?.setValue(response.data.path);
             this.jobService.setLoading(false);
+            this.isResumeData = false;
           }
         },
         error: (err: any) => {
           this.toastService.error('Error occur');
           this.selectedResumeFile = '';
           this.jobService.setLoading(false);
+          this.isResumeData = false;
         },
       });
     };
   }
   convertCoverLetterFileToBase64(file: File, name: string): void {
     this.jobService.setLoading(true);
-    this.isLoading = this.jobService.isLoading$;
+    this.isLoading$ = this.jobService.isLoading$;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -650,17 +673,19 @@ export class JobApplicationComponent implements OnInit {
               .get('coverLetter')
               ?.setValue(response.data.path);
             this.jobService.setLoading(false);
+            this.isCoverLetterData = false;
           }
         },
         (err) => {
           this.toastService.error('Error occur');
           this.selectedCoverLetterFile = '';
           this.jobService.setLoading(false);
+          this.isCoverLetterData = false;
         }
       );
     };
   }
-  handleRemoveResumeFile(): void {
+  handleRemoveResume(): void {
     this.supportingFormGroup.get('resume')?.setValue('');
     this.selectedResumeFile = '';
   }
@@ -670,11 +695,11 @@ export class JobApplicationComponent implements OnInit {
   }
   getQuestionsByJobDetail(id: string | null) {
     this.jobService.setLoading(true);
-    this.isLoading = this.jobService.isLoading$;
+    this.isLoading$ = this.jobService.isLoading$;
     this.jobService.getJobDetails(id).subscribe((response: any) => {
       if (response.valid && response.data) {
         this.jobService.setLoading(false);
-        this.isLoading = this.jobService.isLoading$;
+        this.isLoading$ = this.jobService.isLoading$;
         this.questionData = response.data;
         let formControl: any = {};
         this.questionData.questionOptions.forEach((question: any) => {
@@ -699,34 +724,23 @@ export class JobApplicationComponent implements OnInit {
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
     this.jobService.setLoading(true);
-    this.isLoading = this.jobService.getLoading();
+    this.isLoading$ = this.jobService.getLoading();
     this.isSubmitting = true;
     this.jobService.submitJobApplication(jobApplication).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.personalFormGroup.reset();
-        this.educationFormGroup.reset();
-        this.workFormGroup.reset();
-        this.skillFormGroup.reset();
-        this.supportingFormGroup.reset();
-        this.questionsFormGroup?.reset();
-        this.skillHisories = [];
-        this.workHistories = [];
-        this.educationHistories = [];
-        this.selectedResumeFile = null;
-        this.selectedCoverLetterFile = null;
         this.jobService.setLoading(false);
-        this.isLoading = this.jobService.getLoading();
+        this.isLoading$ = this.jobService.getLoading();
         this.toastService.success('Submitted successfully!');
         setTimeout(() => {
-          this.location.back();
-        }, 3000);
+          this.navService.goToReturnUrl(this.router);
+        }, 2000);
       },
-      error: () => {
-        this.toastService.error('Error occur');
+      error: (error) => {
+        this.toastService.error(error.message);
         this.isSubmitting = false;
         this.jobService.setLoading(false);
-        this.isLoading = this.jobService.getLoading();
+        this.isLoading$ = this.jobService.getLoading();
       },
     });
   }
@@ -756,7 +770,7 @@ export class JobApplicationComponent implements OnInit {
       questionOptionAnswersDTO: questionOption ? questionOption : [],
       resume: this.supportingFormGroup.get('resume')?.value,
       coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
-      jobDetailId: localStorage.getItem('JobId'),
+      jobDetailId: localStorage.getItem('jobId'),
     };
     if (
       this.personalFormGroup.valid &&
@@ -770,5 +784,19 @@ export class JobApplicationComponent implements OnInit {
       this.submitted = true;
       this.questionsFormGroup.markAllAsTouched();
     }
+  }
+
+  getHistory(): string[] {
+    return this.history;
+  }
+
+  goBack() {
+    window.history.go(-4);
+    // const targetIndex = this.history.length - 1 - steps;
+    // if (targetIndex >= 0) {
+    //   const targetUrl = this.history[targetIndex];
+    //   console.log(targetUrl);
+    //   // this.router.navigateByUrl(targetUrl);
+    // }
   }
 }

@@ -2,9 +2,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from './user.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-user',
@@ -106,6 +106,7 @@ export class UserComponent {
             this.toasterService.success('User created successfully');
             this.closeModal();
             this.submitLoading = false;
+            this.loadUsers();
           } else {
             this.loaderService.setLoading(false);
             this.toasterService.error(response.message);

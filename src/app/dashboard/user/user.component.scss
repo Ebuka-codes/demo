@@ -143,6 +143,12 @@
         }
       }
     }
+    tbody tr:nth-child(even) {
+      background-color: #f8f9fd;
+    }
+    tbody tr:nth-child(odd) {
+      background-color: white !important;
+    }
   }
 
   .modal {

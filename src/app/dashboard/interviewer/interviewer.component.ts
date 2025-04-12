@@ -10,9 +10,9 @@ import {
 import * as bootstrap from 'bootstrap';
 import { InterviewerService } from './shared/interviewer.service';
 import { Interviewer } from './shared/interviewer';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-interviewer',

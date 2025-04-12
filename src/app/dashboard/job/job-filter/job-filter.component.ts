@@ -9,9 +9,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { JobService } from '../shared/job.service';
 import { job, KeyValuePair } from '../shared/job';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { Observable } from 'rxjs';
 import { Modal } from 'bootstrap';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-job-filter',

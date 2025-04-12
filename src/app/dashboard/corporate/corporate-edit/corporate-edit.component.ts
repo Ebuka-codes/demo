@@ -20,8 +20,7 @@ import * as bootstrap from 'bootstrap';
 import { Corporate } from '../shared/corporate';
 import { Observable } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
-
+import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'app-corporate-edit',
   templateUrl: './corporate-edit.component.html',

@@ -12,8 +12,9 @@ import { Observable, take } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Modal } from 'bootstrap';
-import { ToastService } from 'src/app/shared/service/toast.service';
+
 import * as bootstrap from 'bootstrap';
+import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'app-candidate-login',
   templateUrl: './candidate-login.component.html',

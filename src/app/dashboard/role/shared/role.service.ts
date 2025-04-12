@@ -10,4 +10,7 @@ export class RoleService {
   createUserRole(data: any) {
     return this.httpClient.post(Constants.USER_URL.USER_ROLE, data);
   }
+  getUserRole() {
+    return this.httpClient.get(Constants.USER_URL.USER_ROLE);
+  }
 }

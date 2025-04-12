@@ -53,9 +53,23 @@
         }
         .back {
           background-color: #1b1b1b;
+          &:hover,
+          :focus {
+            box-shadow: #0000004d 0 2px 6px;
+            background-color: #1b1b1b;
+            color: white;
+            outline: none;
+          }
         }
         .login {
           background-color: #299345;
+          &:hover,
+          :focus {
+            box-shadow: #0000004d 0 2px 6px;
+            background-color: #299345;
+            color: white;
+            outline: none;
+          }
         }
       }
     }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Constants } from '../utils/constants';
+import { enviroments } from 'src/environments/enviorments';
 
 @Injectable({
   providedIn: 'root',
@@ -11,11 +12,13 @@ export class DashboardService {
   isLoading$ = this.isLoadingSubject.asObservable();
   userSubject$ = new BehaviorSubject<any>(null);
   user$ = this.userSubject$.asObservable();
-
+  baseUrl = enviroments.API_URL;
   constructor(private httpClient: HttpClient) {}
   ngOnInit(): void {}
 
-  
+  getDashboardData() {
+    return this.httpClient.get(this.baseUrl + '/api/dashboard');
+  }
 
   setLoading(loading: boolean) {
     this.isLoadingSubject.next(loading);

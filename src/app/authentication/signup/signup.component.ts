@@ -7,8 +7,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../shared/auth.service';
+
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/service/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -45,9 +46,7 @@ export class SignupComponent implements OnInit {
       confirmPassword: ['', [Validators.required, this.checkPassword()]],
     });
   }
-  // get userType() {
-  //   return this.form.get('userType');
-  // }
+
   get name() {
     return this.form.get('name');
   }

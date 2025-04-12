@@ -1,9 +1,10 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../shared/auth.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
-import { CorporateDto } from '../shared/auth';
+import { CorporateDto } from 'src/app/core/model/auth';
+import { AuthService } from 'src/app/core/service/auth.service';
+import { ToastService } from 'src/app/core/service/toast.service';
+
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',

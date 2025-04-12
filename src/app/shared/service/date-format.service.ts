@@ -8,35 +8,46 @@ import moment, { Moment } from 'moment';
 })
 export class DateFormatService {
   constructor() {}
+
   setMonthAndYear(
     formGroup: FormGroup,
     formControlName: string,
-    normalizedMonthAndYear: any,
+    normalizedMonthAndYear: any, // it's supposed to be a Moment, but let's be safe
     datepicker: MatDatepicker<Moment>
   ) {
-    let ctrlValue = formGroup.get(formControlName)?.value ?? moment();
+    const selected = moment(normalizedMonthAndYear); // force convert
 
-    // If the control value is a moment object, we keep it; otherwise, we default to a new moment object
-    if (!(ctrlValue instanceof moment)) {
-      ctrlValue = moment(ctrlValue);
+    if (!selected.isValid()) {
+      console.error('Invalid monthYear selection:', normalizedMonthAndYear);
+      return;
     }
 
-    const updatedDate = ctrlValue.clone();
-    console.log('Normalized Date:', normalizedMonthAndYear);
-    const momentDate = moment(normalizedMonthAndYear);
-    console.log('Moment Object:', momentDate);
+    let currentVal = formGroup.get(formControlName)?.value;
 
-    updatedDate.month(momentDate.month());
-    updatedDate.year(momentDate.year());
+    if (!moment.isMoment(currentVal)) {
+      currentVal = moment(); // fallback to current date
+    }
 
-    console.log(updatedDate); // Log to verify correct date
+    const updated = currentVal
+      .clone()
+      .month(selected.month())
+      .year(selected.year());
 
-    // If you want to keep it as a moment object:
-    formGroup.get(formControlName)?.setValue(updatedDate); // This should work, but if it doesn't...
+    console.log('Setting value:', updated);
 
-    // If it still doesn't show, convert moment to native JS Date
-    formGroup.get(formControlName)?.setValue(updatedDate.toDate()); // <-- Convert to native JS Date
-
+    formGroup.get(formControlName)?.setValue(updated);
     datepicker.close();
   }
+
+  // const updatedDate = ctrlValue.clone();
+  // console.log('Normalized Date:', normalizedMonthAndYear);
+  // const momentDate = moment(normalizedMonthAndYear);
+  // console.log('Moment Object:', momentDate);
+  // updatedDate.month(momentDate.month());
+  // updatedDate.year(momentDate.year());
+  // console.log(updatedDate, 'me here');
+
+  // console.log(formGroup, formControlName);
+  // formGroup.get(formControlName)?.setValue('03/2020');
+  // formGroup.get(formControlName)?.setValue(updatedDate.toDate());
 }

@@ -11,9 +11,10 @@ import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { KeyValuePair } from '../shared/job';
 import { QuestionTypeOptions } from 'src/app/shared/type';
-import { ToastService } from 'src/app/shared/service/toast.service';
+
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-job-question-create',

@@ -4,9 +4,9 @@ import { LoginComponent } from './authentication/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
-import { AuthGuard } from './authentication/shared/auth-guard.service';
 import { JobListingComponent } from './pages/job-listing/job-listing.component';
 import { SessionComponent } from './dashboard/components/ui/session/session.component';
+import { AuthGuard } from './core/guard/auth-guard.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },

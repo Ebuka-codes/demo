@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { Modal } from 'bootstrap';
 import { Observable } from 'rxjs';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import * as bootstrap from 'bootstrap';
 import { JobService } from '../shared/job.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-job-delete',

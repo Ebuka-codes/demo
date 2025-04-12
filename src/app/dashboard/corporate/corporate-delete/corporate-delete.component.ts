@@ -7,11 +7,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CorporateService } from '../shared/corporate.service';
-import { ToastService } from 'src/app/shared/service/toast.service';
+
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Observable } from 'rxjs';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-corporate-delete',

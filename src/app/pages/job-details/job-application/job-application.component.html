@@ -1,4 +1,4 @@
-<div *ngIf="isLoading | async" class="progress-bar"></div>
+<div *ngIf="isLoading$ | async" class="progress-bar"></div>
 <div class="job-application_container">
   <div class="detail-header">
     <div class="info">
@@ -61,7 +61,7 @@
               <p>Please enter your personal information.</p>
             </div>
             <div class="form-group">
-              <label for="firstName">First name</label>
+              <label for="firstName">First Name</label>
               <mat-form-field>
                 <input
                   matInput
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="lastName">Last name</label>
+              <label for="lastName">Last Name</label>
               <mat-form-field>
                 <input
                   matInput
@@ -105,7 +105,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="email">Email address</label>
+              <label for="email">Email Address</label>
               <mat-form-field>
                 <input matInput type="email" formControlName="email" required />
               </mat-form-field>
@@ -122,7 +122,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="phone">Phone number</label>
+              <label for="phone">Phone Number</label>
               <mat-form-field>
                 <input matInput type="text" formControlName="phone" required />
               </mat-form-field>
@@ -241,10 +241,7 @@
             <h2 class="work-info-header__title">
               Work and Educational Details
             </h2>
-            <p>
-              Please enter details about your work experience,education and
-              skill.
-            </p>
+            <p>Please enter details about your work experience,education</p>
           </div>
           <div class="content">
             <form action="" [formGroup]="workFormGroup">
@@ -337,10 +334,10 @@
                             <ng-container
                               *ngIf="isEditModalOpen; else showText"
                             >
-                              Edit Work Experience
+                              Edit Experience
                             </ng-container>
                             <ng-template #showText>
-                              Add Work Experience
+                              Add Experience
                             </ng-template>
                           </h5>
                         </span>
@@ -363,7 +360,7 @@
                       </div>
                       <div class="modal-body">
                         <div class="form-group">
-                          <label for="companyName">Company Name *</label>
+                          <label for="companyName">Company Name</label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -382,7 +379,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="JobTitle">Job Title *</label>
+                          <label for="JobTitle">Job Title </label>
                           <mat-form-field>
                             <input
                               matInput
@@ -400,7 +397,7 @@
                         </div>
                         <div class="row">
                           <div class="form-group col">
-                            <label for="startDate">Start Date *</label>
+                            <label for="startDate">Start Date</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -435,7 +432,7 @@
                           </div>
 
                           <div class="form-group col">
-                            <label for="endDate">End Date *</label>
+                            <label for="endDate">End Date</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -470,7 +467,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="jobDescription">Job Description *</label>
+                          <label for="jobDescription">Job Description</label>
 
                           <textarea
                             type="text"
@@ -646,7 +643,7 @@
 
                       <div class="modal-body">
                         <div class="form-group">
-                          <label for="degree">Degree *</label>
+                          <label for="degree">Degree</label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -663,7 +660,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="major">Major *</label>
+                          <label for="major">Major</label>
                           <mat-form-field>
                             <input
                               matInput
@@ -680,9 +677,7 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="institutionName"
-                            >Institution Name *</label
-                          >
+                          <label for="institutionName">Institution Name </label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -705,7 +700,7 @@
                         </div>
                         <div class="row">
                           <div class="form-group col">
-                            <label for="startDate">Start Date *</label>
+                            <label for="startDate">Start Date </label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -745,7 +740,7 @@
                           </div>
 
                           <div class="form-group col">
-                            <label for="endDate">End Date *</label>
+                            <label for="endDate">End Date </label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -784,7 +779,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="fieldOfStudy">Field of Study *</label>
+                          <label for="fieldOfStudy">Field of Study </label>
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -806,7 +801,7 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="educationLevel">Education Level *</label>
+                          <label for="educationLevel">Education Level </label>
                           <mat-form-field appearance="fill">
                             <mat-select
                               formControlName="educationLevel"
@@ -918,7 +913,7 @@
 
                   <div>
                     <button class="skills-btn" (click)="openModal(3)">
-                      + Add skills
+                      + Add Skills
                     </button>
                   </div>
 
@@ -942,7 +937,7 @@
                                 Edit Skill
                               </ng-container>
                               <ng-template #showSkillText>
-                                Add skill
+                                Add Skill
                               </ng-template>
                             </h5>
                           </span>
@@ -969,7 +964,7 @@
                         </div>
                         <div class="modal-body">
                           <div class="form-group">
-                            <label for="JobTitle">Skill name *</label>
+                            <label for="JobTitle">Skill Name </label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -987,7 +982,7 @@
                             </div>
                           </div>
                           <div class="form-group">
-                            <label for="JobTitle">Proficiency level *</label>
+                            <label for="JobTitle">Proficiency level </label>
                             <mat-form-field>
                               <input
                                 matInput
@@ -1009,7 +1004,7 @@
                             </div>
                           </div>
                           <div class="form-group">
-                            <label for="noOfYears">Years of experience *</label>
+                            <label for="noOfYears">Years of experience</label>
                             <mat-form-field>
                               <input
                                 matInput
@@ -1105,40 +1100,6 @@
                     (change)="onFileChange($event)"
                   />
                 </div>
-                <div
-                  *ngIf="resume?.valid"
-                  style="margin: 10px 0px"
-                  [style.visibility]="resume?.value ? 'visible' : 'hidden'"
-                >
-                  <span
-                    style="
-                      display: flex;
-                      justify-content: space-around;
-                      align-items: center;
-                    "
-                  >
-                    <span style="color: black"
-                      >{{ selectedResumeFile | slice : 0 : 20 }}...</span
-                    >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
-                      style="width: 20px; height: 20px"
-                      (click)="handleRemoveResumeFile()"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </span>
-                </div>
-
                 <div *ngIf="resume?.invalid && submitted">
                   <small *ngIf="resume?.errors?.['required']"
                     >Resume is required</small
@@ -1167,48 +1128,48 @@
                   />
                 </div>
 
-                <div style="margin: 10px 0px">
-                  <span
-                    *ngIf="coverLetter?.valid"
-                    [style.visibility]="
-                      coverLetter?.value ? 'visible' : 'hidden'
-                    "
-                  >
-                    <span
-                      style="
-                        display: flex;
-                        justify-content: space-around;
-                        align-items: center;
-                      "
-                    >
-                      <span style="color: black"
-                        >{{ selectedCoverLetterFile | slice : 0 : 20 }}...</span
-                      >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                        style="width: 20px; height: 20px"
-                        (click)="handleRemoveCoverLetter()"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </span>
-                  </span>
-                </div>
-
                 <div *ngIf="coverLetter?.invalid && submitted">
                   <small *ngIf="coverLetter?.errors?.['required']"
                     >Cover letter is required</small
                   >
                 </div>
+              </div>
+            </div>
+
+            <div class="supporting-doc_exit">
+              <div class="resume" *ngIf="resume?.valid">
+                <ng-container *ngIf="isResumeData; else content">
+                  <a [href]="resume?.value" style="cursor: pointer"
+                    >VIEW RESUME</a
+                  >
+                </ng-container>
+                <ng-template #content>
+                  <span>{{ selectedResumeFile | slice : 0 : 30 }}...</span>
+                </ng-template>
+                <span
+                  class="text-danger"
+                  style="cursor: pointer"
+                  (click)="handleRemoveResume()"
+                  >REMOVE</span
+                >
+              </div>
+
+              <div class="coverLetter" *ngIf="coverLetter?.valid">
+                <ng-container *ngIf="isCoverLetterData; else content">
+                  <a [href]="coverLetter?.value" style="cursor: pointer"
+                    >VIEW COVER LETTER</a
+                  >
+                </ng-container>
+                <ng-template #content>
+                  <span>{{ selectedCoverLetterFile | slice : 0 : 30 }}...</span>
+                </ng-template>
+
+                <span
+                  class="text-danger"
+                  style="cursor: pointer"
+                  (click)="handleRemoveCoverLetter()"
+                  >REMOVE</span
+                >
               </div>
             </div>
           </div>
@@ -1232,7 +1193,10 @@
                       item.questionType === 'TEXT' && !item.isQualifyQuestion
                     "
                   >
-                    <label for="question">{{ item.description }}</label>
+                    <span for="question"
+                      >{{ item.description }}
+                      <span class="required-icon"> *</span></span
+                    >
                     <mat-form-field *ngIf="item.questionType === 'TEXT'">
                       <input [formControlName]="item.id" matInput />
                     </mat-form-field>
@@ -1252,7 +1216,10 @@
                       item.questionType === 'TEXT' && item.isQualifyQuestion
                     "
                   >
-                    <label for="question">{{ item.description }}</label>
+                    <span for="question"
+                      >{{ item.description }}
+                      <span class="required-icon"> *</span></span
+                    >
                     <mat-form-field>
                       <input
                         [formControlName]="item.id"
@@ -1301,7 +1268,10 @@
                   </div>
 
                   <div *ngIf="item.questionType === 'DROPDOWN'">
-                    <label for="question">{{ item.description }}</label>
+                    <span for="question"
+                      >{{ item.description }}
+                      <span class="required-icon"> *</span></span
+                    >
                     <mat-form-field>
                       <mat-select [formControlName]="item.id">
                         <mat-option
@@ -1347,7 +1317,7 @@
             (click)="onSubmit()"
           >
             <ng-container *ngIf="isSubmitting; else showLoader">
-              <span class="loader"></span>
+              <span class="mini-loader-spinner"></span>
             </ng-container>
             <ng-template #showLoader>
               <span>Submit Application</span>

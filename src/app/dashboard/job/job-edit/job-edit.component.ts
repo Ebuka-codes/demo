@@ -3,7 +3,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
@@ -17,9 +16,9 @@ import { map, Observable, startWith } from 'rxjs';
 import { job } from '../shared/job';
 import { JobService } from '../shared/job.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import Quill from 'quill';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-job-edit',
@@ -44,7 +43,6 @@ export class JobEditComponent {
   isLoadingQuestion: boolean = false;
   form!: FormGroup;
   questionForm!: FormGroup;
-  formatAmountValue: string = '';
   loading: boolean = false;
   froalaEditorInstance: any;
   questions: any;
@@ -94,11 +92,12 @@ export class JobEditComponent {
         '',
         [Validators.required, Validators.minLength(3), this.nameValidator()],
       ],
+      jobId: ['', Validators.required],
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
       jobType: ['', Validators.required],
-      companyName: ['', Validators.required],
+      companyName: [''],
       workMode: ['', Validators.required],
       requiredSkills: ['', Validators.required],
       startDate: ['', Validators.required],
@@ -189,6 +188,9 @@ export class JobEditComponent {
   get jobTitle() {
     return this.form.get('jobTitle');
   }
+  get jobId() {
+    return this.form.get('jobId');
+  }
   get jobDescription() {
     return this.form.get('jobDescription');
   }
@@ -243,16 +245,6 @@ export class JobEditComponent {
       const valid = /^\d+$/.test(value);
       return valid ? null : { invalidAmount: { value: control.value } };
     };
-  }
-  formatAmount(amount: Event) {
-    const salary = amount.target as HTMLInputElement;
-    if (amount) {
-      this.formatAmountValue = salary.value
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    } else {
-      this.formatAmountValue = '';
-    }
   }
 
   getAllQuestion() {

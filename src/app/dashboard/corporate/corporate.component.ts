@@ -12,8 +12,8 @@ import { Modal } from 'bootstrap';
 import { CorporateService } from './shared/corporate.service';
 import { Corporate } from './shared/corporate';
 import { Observable } from 'rxjs';
-import { ToastService } from 'src/app/shared/service/toast.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-corporate',

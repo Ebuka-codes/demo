@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { job } from './job';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { enviroments } from 'src/environments/enviorments';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
 
 @Injectable({
@@ -29,8 +29,8 @@ export class JobService {
   getJobById(id: string | null) {
     return this.httpClient.get<job>(Constants.JOB_URL.JOB + `/${id}`);
   }
-  getAllJobs() {
-    return this.httpClient.get<job>(Constants.JOB_URL.JOB);
+  getAllJobs(): Observable<job[]> {
+    return this.httpClient.get<job[]>(Constants.JOB_URL.JOB);
   }
 
   editQueryDetails(id: string, value: any) {
