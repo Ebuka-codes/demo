@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { CandidateFilterModalComponent } from './components/candidate-filter-modal/candidate-filter-modal.component';
+import { CandidateSearchModalComponent } from './components/candidate-search-modal/candidate-search-modal.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { CandidateFilterModalComponent } from './components/candidate-filter-mod
     CandidateScheduleDateComponent,
     CandidateRejectComponent,
     CandidateFilterModalComponent,
+    CandidateSearchModalComponent,
   ],
   imports: [
     FormsModule,
@@ -33,6 +36,7 @@ import { CandidateFilterModalComponent } from './components/candidate-filter-mod
     MatSelectModule,
     MatCheckboxModule,
     NgxMaterialTimepickerModule,
+    MatSliderModule,
   ],
 })
 export class CandidateModule {}

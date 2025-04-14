@@ -1,10 +1,29 @@
 .job-container {
-  h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-left: 20px;
+  .action {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    h2 {
+      font-weight: 600;
+      font-size: 23px;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    .nav-back {
+      background-color: white;
+      border-radius: 50px;
+      padding: 3px 5px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: #0000004d 0 2px 6px;
+    }
+    p {
+      font-size: 14px;
+    }
   }
-
   .job-action {
     margin: 20px 0px;
     justify-content: space-between;

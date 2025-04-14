@@ -6,6 +6,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-role',
@@ -22,7 +23,8 @@ export class RoleComponent implements OnInit {
     private fb: FormBuilder,
     private roleService: RoleService,
     private loaderService: LoaderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private location: Location
   ) {
     this.userRoleForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -97,5 +99,8 @@ export class RoleComponent implements OnInit {
 
   resetForm() {
     this.userRoleForm.reset();
+  }
+  onBack() {
+    this.location.back();
   }
 }

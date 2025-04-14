@@ -1,7 +1,7 @@
 <div
   class="modal fade"
   #myQuestionModal
-  id="addQuestionModal"
+  id="questionModal"
   tabindex="-1"
   aria-labelledby="modalLabel"
   aria-hidden="true"
@@ -10,7 +10,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Add Question</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">
+          {{ isEditModal ? "Edit Question" : "Create Question" }}
+        </h5>
         <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +37,7 @@
               formControlName="description"
               style="height: 100px"
             ></textarea>
-            <div *ngIf="description?.invalid && isSubmittedQuestion">
+            <div *ngIf="description?.invalid && questionTypes?.touched">
               <small *ngIf="description?.errors?.['required']">
                 Description field is required
               </small>
@@ -50,7 +52,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <div *ngIf="questionTypes?.invalid && isSubmittedQuestion">
+            <div *ngIf="questionTypes?.invalid && questionTypes?.touched">
               <small *ngIf="questionTypes?.errors?.['required']">
                 Question type is required
               </small>
@@ -66,7 +68,7 @@
               *ngFor="let item of questionTypeOptions; let i = index"
             >
               <div class="question-dropdown-options">
-                <span>{{ item.description | titlecase }}</span>
+                <span>{{ item.description }}</span>
                 <span
                   class="bi bi-dash-circle"
                   style="color: red; cursor: pointer; font-size: 14px"
@@ -88,7 +90,7 @@
               </div>
             </div>
 
-            <div *ngIf="shortListing && questionTypes?.value === 'TEXT'">
+            <div *ngIf="isQualifyQuestion && questionTypes?.value === 'TEXT'">
               <div>
                 <label for="option">Operator</label>
                 <mat-form-field>
@@ -97,7 +99,7 @@
                       *ngFor="let operator of operatorData"
                       [value]="operator"
                     >
-                      {{ operator | titlecase }}
+                      {{ operator }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -115,7 +117,7 @@
                     (keydown)="preventInvalidKey($event)"
                   />
                 </mat-form-field>
-                <div *ngIf="qualifyValue?.invalid && isSubmittedQuestion">
+                <div *ngIf="qualifyValue?.invalid && questionTypes?.touched">
                   <small *ngIf="qualifyValue?.errors?.['required']"
                     >Qualified value is required</small
                   >

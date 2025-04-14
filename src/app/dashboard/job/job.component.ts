@@ -1,17 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
 import {
   debounceTime,
   distinctUntilChanged,
   Observable,
-  of,
   switchMap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-job',
@@ -29,10 +29,12 @@ export class JobComponent implements OnInit {
   searchLoading = false;
   filteredData!: Array<job>;
   loadingData!: boolean;
+
   constructor(
     public jobService: JobService,
     private loaderService: LoaderService,
-    private route: Router
+    private route: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -112,5 +114,9 @@ export class JobComponent implements OnInit {
   }
   handleDeleteJob(id: string) {
     this.jobId = id;
+  }
+
+  onBack() {
+    this.location.back();
   }
 }

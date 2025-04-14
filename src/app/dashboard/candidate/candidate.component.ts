@@ -1,18 +1,27 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  signal,
+  TemplateRef,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { Candidate, QuestionData } from './shared/candidate';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
 import { CandidateService } from './shared/candidate.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { Location } from '@angular/common';
+import {
+  NgbOffcanvas,
+  OffcanvasDismissReasons,
+} from '@ng-bootstrap/ng-bootstrap';
+import { CandidateSearchModalComponent } from './components/candidate-search-modal/candidate-search-modal.component';
 
 @Component({
   selector: 'app-candidate',
@@ -23,7 +32,6 @@ export class CandidateComponent implements OnInit {
   @ViewChild('viewCandidateModal') firstModal!: ElementRef;
   @ViewChild('scheduleDateModal') secondModal!: ElementRef;
   @ViewChild('matSelect') matSelect!: MatSelect;
-  @ViewChild('matSelectOperand') matSelectOperand!: MatSelect;
 
   candidateData!: Array<Candidate>;
   filteredCandidate!: Array<Candidate>;
@@ -41,79 +49,23 @@ export class CandidateComponent implements OnInit {
   activeTag = 'Candidate';
   shortListedData!: Array<Candidate>;
   interviewData!: Array<Candidate>;
-  qualifiedQuestion = new FormControl();
   selectedJobValue!: string;
-  candidateOperand!: string[];
-  operand1: boolean = false;
-  operand2: boolean = false;
-  operand3: boolean = false;
-  searchForm!: FormGroup;
+  isSearchFilterOpen: boolean = false;
+
   constructor(
     private toastService: ToastService,
     private loaderService: LoaderService,
     private candidateService: CandidateService,
-    private fb: FormBuilder
-  ) {
-    this.searchForm = this.fb.group({
-      educationalSearchDTO: this.fb.group({
-        educationLevel: [''],
-        degree: [''],
-        fieldOfStudy: [''],
-        searchOperand: [''],
-        searchTerm: [''],
-        from: [''],
-        to: [''],
-      }),
-      workHistorySearchDTO: this.fb.group({
-        jobTitle: [''],
-        jobDescription: [''],
-        searchOperand: [''],
-        searchTerm: [''],
-        from: [''],
-        to: [''],
-      }),
-      skillSearchDTO: this.fb.group({
-        skillName: [''],
-        proficiencyLevel: [''],
-        noOfYears: [0],
-        searchOperand: [''],
-        searchTerm: [''],
-        from: [''],
-        to: [''],
-      }),
-    });
-  }
-
+    private location: Location
+  ) {}
   ngOnInit() {
-    this.getAllJob();
-    this.getCandidateOperand();
+    this.loadAllJob();
   }
-
-  onEducationOperandChange(event: MatSelectChange) {
-    if (event.value === 'LIKE') {
-      this.operand1 = true;
-    }
-  }
-
-  onWorkOperandChange(event: MatSelectChange) {
-    if (event.value === 'LIKE') {
-      this.operand2 = true;
-    }
-  }
-
-  onSkillOperandChange(event: MatSelectChange) {
-    if (event.value === 'LIKE') {
-      this.operand3 = true;
-    }
-  }
-
-  handleSelectedJob() {
+  onSelectedJob() {
     this.selectedJobValue = this.matSelect.value.id;
-    this.getCandidateByJobId(this.selectedJobValue);
-    this.getQualifiedQuestion(this.selectedJobValue);
+    this.loadCandidateByJobId(this.selectedJobValue);
   }
-
-  toggletabs(tab: string) {
+  onToggletabs(tab: string) {
     this.activeTag = tab;
     if (this.activeTag === 'Shortlisted') {
       this.filteredCandidate = this.candidateData.filter(
@@ -128,7 +80,7 @@ export class CandidateComponent implements OnInit {
     }
   }
 
-  toggleAllCheckbox() {
+  onToggleAllCheckbox() {
     this.selectedAllChecked = !this.selectedAllChecked;
     if (this.selectedAllChecked) {
       this.selectedIds = this.filteredCandidate.map((item) => item.id);
@@ -136,7 +88,7 @@ export class CandidateComponent implements OnInit {
       this.selectedIds = [];
     }
   }
-  toggleSelection(id: string) {
+  onToggleSelection(id: string) {
     if (this.selectedIds.includes(id)) {
       this.selectedIds = this.selectedIds.filter((itemId) => itemId !== id);
     } else {
@@ -145,7 +97,7 @@ export class CandidateComponent implements OnInit {
     this.selectedAllChecked =
       this.selectedIds.length === this.filteredCandidate.length;
   }
-  getAllJob() {
+  loadAllJob() {
     this.loaderService.setLoading(true);
     this.candidateService.getAllJobs().subscribe({
       next: (response: any) => {
@@ -164,7 +116,7 @@ export class CandidateComponent implements OnInit {
       },
     });
   }
-  getCandidateByJobId(jobId: string) {
+  loadCandidateByJobId(jobId: string) {
     this.loaderService.setLoading(true);
     this.candidateService.getCandidateByJobId(jobId).subscribe({
       next: (response: any) => {
@@ -183,7 +135,12 @@ export class CandidateComponent implements OnInit {
       },
     });
   }
-
+  onSearchFilter() {
+    this.isSearchFilterOpen = true;
+  }
+  onCloseSearchFilter(value: boolean) {
+    this.isSearchFilterOpen = value;
+  }
   onShorListCandidate() {
     const data = {
       ids: this.selectedIds,
@@ -196,7 +153,7 @@ export class CandidateComponent implements OnInit {
           this.loaderService.setLoading(false);
           this.toastService.success('Shortlisted successfully');
           this.selectedIds = [];
-          this.getCandidateByJobId(this.selectedJobValue);
+          this.loadCandidateByJobId(this.selectedJobValue);
         },
         error: (err) => {
           console.log(err);
@@ -206,56 +163,9 @@ export class CandidateComponent implements OnInit {
       });
     }
   }
-
-  handleQualifiedQuestion() {
-    if (this.qualifiedQuestion.value) {
-      const data = {
-        ids: this.qualifiedQuestion.value,
-      };
-      this.loaderService.setLoading(true);
-      this.candidateService.filterCandidateByQualifiedQuestion(data).subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.filteredCandidate = response.data;
-            this.loaderService.setLoading(false);
-            this.toastService.success(response.message);
-            this.qualifiedQuestion.reset();
-          }
-        },
-        error: (err) => {
-          this.loaderService.setLoading(false);
-          this.toastService.error(err.message);
-          this.qualifiedQuestion.reset();
-        },
-      });
-    }
-  }
-  getQualifiedQuestion(jobId: string | undefined) {
-    console.log(jobId);
-    this.loaderService.setLoading(true);
-    this.candidateService.getQualifiedQuestion(jobId).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.qualifiedQuestionData = response.data;
-          setTimeout(() => {
-            this.loaderService.setLoading(false);
-          }, 4000);
-        }
-      },
-      error: (error) => {
-        this.toastService.error(error.message);
-        this.loaderService.setLoading(false);
-      },
-      complete: () => {
-        console.log('Qualified question fetched');
-      },
-    });
-  }
-
   getCandidates() {
-    this.getCandidateByJobId(this.selectedJobValue);
+    this.loadCandidateByJobId(this.selectedJobValue);
   }
-
   openScheduleModal(id: string) {
     this.closModal('viewCandidateModal');
     const scheduleModal = new Modal(
@@ -264,7 +174,6 @@ export class CandidateComponent implements OnInit {
     this.candidateId = id;
     scheduleModal.show();
   }
-
   openFilterModal() {
     const modal = Modal.getInstance(
       (document.querySelector('#filterCandidateModal') as HTMLDivElement) ||
@@ -295,7 +204,7 @@ export class CandidateComponent implements OnInit {
     }, 300);
   }
 
-  handleViewCandidate(id: string) {
+  onViewCandidate(id: string) {
     if (id) {
       this.candidateViewData = this.filteredCandidate.find(
         (candidate: any) => candidate.id === id
@@ -307,11 +216,11 @@ export class CandidateComponent implements OnInit {
         new Modal(
           document.getElementById('viewCandidateModal') as HTMLDivElement
         );
-      console.log(id, 'me');
+
       viewCandidateModal.show();
     }
   }
-  handleScheduleDate(id: string) {
+  onScheduleDate(id: string) {
     this.scheduleModalOpen = true;
     this.candidateId = id;
     const modal =
@@ -322,22 +231,37 @@ export class CandidateComponent implements OnInit {
     modal.show();
   }
 
-  handleReject(id: string) {
+  onReject(id: string) {
     this.candidateId = id;
   }
-  getCandidateOperand() {
-    this.candidateService.getCandidateOperand().subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.candidateOperand = response.data;
+
+  onBack() {
+    this.location.back();
+  }
+
+  private offcanvasService = inject(NgbOffcanvas);
+  closeResult: WritableSignal<string> = signal('');
+
+  open() {
+    this.offcanvasService
+      .open(CandidateSearchModalComponent, { position: 'end' })
+      .result.then(
+        (result) => {
+          this.closeResult.set(`Closed with: ${result}`);
+        },
+        (reason) => {
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
         }
-      },
-      error: (error) => {
-        this.toastService.error(error.message);
-      },
-      complete: () => {
-        console.log('Candidate operand fetched');
-      },
-    });
+      );
+  }
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case OffcanvasDismissReasons.ESC:
+        return 'by pressing ESC';
+      case OffcanvasDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on the backdrop';
+      default:
+        return `with: ${reason}`;
+    }
   }
 }

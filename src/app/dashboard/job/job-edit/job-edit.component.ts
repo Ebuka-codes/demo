@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import Quill from 'quill';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-job-edit',
@@ -85,7 +86,8 @@ export class JobEditComponent {
     private route: ActivatedRoute,
     private toastService: ToastService,
     private loaderService: LoaderService,
-    private routes: Router
+    private routes: Router,
+    private location: Location
   ) {
     this.form = this.fb.group({
       jobTitle: [
@@ -304,7 +306,7 @@ export class JobEditComponent {
 
   getQuestionsById(id: string) {
     this.loaderService.setLoading(true);
-    this.jobService.getQuestionsById(id).subscribe((response: any) => {
+    this.jobService.getQuestionById(id).subscribe((response: any) => {
       if (response.valid && response.data) {
         this.viewQuestionData = response.data;
         this.form.patchValue(this.viewQuestionData);
@@ -526,5 +528,8 @@ export class JobEditComponent {
       this.minEndDate = selectedDate;
       this.isEditDate = false;
     }
+  }
+  onBack() {
+    this.location.back();
   }
 }

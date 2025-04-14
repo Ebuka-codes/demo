@@ -41,7 +41,7 @@ export class LoginComponent {
   get password() {
     return this.form.get('password');
   }
-  handleLogin(data: LoginType) {
+  onLogin(data: LoginType) {
     this.isLoading = true;
     this.authService.login(data).subscribe({
       next: (response: any) => {
@@ -63,7 +63,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.form.valid) {
       console.log(this.form.value);
-      this.handleLogin(this.form.value);
+      this.onLogin(this.form.value);
     } else {
       this.form.markAllAsTouched();
     }

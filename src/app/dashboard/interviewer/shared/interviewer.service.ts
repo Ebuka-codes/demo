@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroments } from 'src/environments/enviorments';
 import { Interviewer } from './interviewer';
+import { Constants } from 'src/app/utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +12,15 @@ export class InterviewerService {
   constructor(private httpClient: HttpClient) {}
 
   createInterviewer(data: Interviewer) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.post<Interviewer>(
-      this.baseUrl + 'interview-invitees',
-      data,
-      { headers }
+      Constants.INTERVIEW_URL.INTERVIEWER,
+      data
+    );
+  }
+
+  getAllInterviewers() {
+    return this.httpClient.get<Interviewer>(
+      Constants.INTERVIEW_URL.INTERVIEWER
     );
   }
 }

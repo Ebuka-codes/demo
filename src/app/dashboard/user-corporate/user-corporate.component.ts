@@ -9,6 +9,7 @@ import {
 import { CorporateService } from '../corporate/shared/corporate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-user-corporate',
   templateUrl: './user-corporate.component.html',
@@ -27,7 +28,8 @@ export class UserCorporateComponent implements OnInit {
     private fb: FormBuilder,
     private corporateService: CorporateService,
     private loaderService: LoaderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private location: Location
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -182,5 +184,9 @@ export class UserCorporateComponent implements OnInit {
           },
         });
     }
+  }
+
+  onBack() {
+    this.location.back();
   }
 }

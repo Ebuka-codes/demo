@@ -13,7 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { JobRoutingModule } from './job-routing.module';
 import { JobComponent } from './job.component';
-import { JobQuestionCreateComponent } from './job-question-create/job-question-create.component';
+import { JobQuestionCreateComponent } from './components/job-question-create/job-question-create.component';
 import { JobViewComponent } from './job-view/job-view.component';
 import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDeleteComponent } from './job-delete/job-delete.component';

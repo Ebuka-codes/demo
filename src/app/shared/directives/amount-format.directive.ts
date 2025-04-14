@@ -5,12 +5,7 @@ import { NgControl } from '@angular/forms';
   selector: '[amountFormat]',
 })
 export class AmountFormatDirective {
-  private previousValue: string = '';
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private control: NgControl
-  ) {}
+  constructor(private renderer: Renderer2, private control: NgControl) {}
   @HostListener('input', ['$event']) onInput(event: Event) {
     const input = event.target as HTMLInputElement;
 

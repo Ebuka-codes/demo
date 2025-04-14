@@ -25,7 +25,7 @@ export const Constants = {
   },
 
   INTERVIEW_URL: {
-    GET_INTERVIEWERS: `${BASE_URL}/api/interview-invitees`,
+    INTERVIEWER: `${BASE_URL}/api/interview-invitees`,
   },
   CORPORATE_URL: {
     CORPORATE: `${BASE_URL}/api/corporates`,

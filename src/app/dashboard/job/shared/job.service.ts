@@ -50,14 +50,22 @@ export class JobService {
       question
     );
   }
+
+  getQuestionById(id: string) {
+    return this.httpClient.get(
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`
+    );
+  }
   getAllQuestions() {
     return this.httpClient.get(Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS);
   }
-
+  editQuestion(id: string, data: any) {
+    return this.httpClient.put(
+      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`,
+      data
+    );
+  }
   getOperator() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
     return this.httpClient.get(
       Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/get-all-operator`
     );
@@ -78,12 +86,6 @@ export class JobService {
       data
     );
   }
-  getQuestionsById(id: string) {
-    return this.httpClient.get(
-      Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`
-    );
-  }
-
   searchjob(data: string) {
     return this.httpClient.get(
       Constants.JOB_URL.JOB + `/search?keyword=${data}`

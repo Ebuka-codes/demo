@@ -5,6 +5,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-user',
@@ -22,7 +23,8 @@ export class UserComponent {
     private fb: FormBuilder,
     private userService: UserService,
     private loaderService: LoaderService,
-    private toasterService: ToastService
+    private toasterService: ToastService,
+    private location: Location
   ) {
     this.userForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -128,5 +130,8 @@ export class UserComponent {
 
   resetForm() {
     this.userForm.reset();
+  }
+  onBack() {
+    this.location.back();
   }
 }

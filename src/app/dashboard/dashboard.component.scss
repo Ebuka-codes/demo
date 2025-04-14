@@ -37,13 +37,11 @@ main {
   z-index: 400000;
   border-bottom: 3px solid #28a745;
   animation: load 1.5s infinite ease-in-out;
-
   ::after {
     border: 1px solid red;
     width: 100%;
   }
 }
-
 @keyframes load {
   0% {
     width: 0;

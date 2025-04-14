@@ -7,7 +7,25 @@
       margin-bottom: 20px;
     "
   >
-    <h2>Job Applicants</h2>
+    <div class="action">
+      <span class="nav-back" (click)="onBack()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </span>
+      <h2>Job Applicants</h2>
+    </div>
     <div class="job-search">
       <mat-form-field>
         <mat-select
@@ -21,16 +39,16 @@
         </mat-select>
       </mat-form-field>
 
-      <button type="button" (click)="handleSelectedJob()">Submit</button>
+      <button type="button" (click)="onSelectedJob()">Submit</button>
     </div>
   </div>
 
   <div
-    *ngIf="filteredCandidate || qualifiedQuestionData?.length"
+    *ngIf="filteredCandidate"
     style="
       margin-top: 30px;
-      display: grid;
-      grid-template-columns: 1fr 2fr;
+      display: flex;
+      justify-content: space-between;
       gap: 20px;
       margin-bottom: 20px;
     "
@@ -38,174 +56,32 @@
     <div class="tabs">
       <button
         *ngFor="let tab of tabs; let i = index"
-        (click)="toggletabs(tab)"
+        (click)="onToggletabs(tab)"
         [class.active]="activeTag === tab"
       >
         {{ tab }}
       </button>
     </div>
-
-    <div *ngIf="qualifiedQuestionData?.length">
-      <div class="qualified-question">
-        <mat-form-field style="min-width: 500px">
-          <mat-select
-            [formControl]="qualifiedQuestion"
-            multiple
-            placeholder="Select a qualified question"
-          >
-            <mat-option
-              *ngFor="let item of qualifiedQuestionData"
-              [value]="item.id"
-              >{{ item.description }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- <button type="button" (click)="handleQualifiedQuestion()">Apply</button> -->
-      </div>
+    <div class="advance-btn" (click)="open()">
+      <button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-sliders"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"
+          /></svg
+        >Advanced Search
+      </button>
     </div>
   </div>
-
   <ng-container *ngIf="filteredCandidate; else noData">
     <div class="candidate-content">
-      <form class="form-container">
-        <div class="form-section">
-          <h3>Education</h3>
-          <div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col">
-                  <label for="">Education Level</label>
-                  <input formControlName="educationLevel" />
-                </div>
-                <div class="col">
-                  <label for="">Degree</label>
-                  <input formControlName="degree" />
-                </div>
-
-                <div class="col">
-                  <label for="">Field of study</label>
-                  <input formControlName="fieldOfStudy" />
-                </div>
-
-                <div class="col">
-                  <label for="">Select Operand</label>
-                  <mat-form-field>
-                    <mat-select
-                      formControlName="searchOperand"
-                      (selectionChange)="onEducationOperandChange($event)"
-                    >
-                      <mat-option
-                        *ngFor="let operand of candidateOperand"
-                        [value]="operand"
-                        >{{ operand }}</mat-option
-                      >
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-3" *ngIf="operand1">
-                  <label for="">Search term</label>
-                  <input formControlName="SearchTerm" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="form-section">
-          <h3>Work History</h3>
-          <div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-4">
-                  <label for="">Job Title</label>
-                  <input formControlName="jobTitle" />
-                </div>
-                <div class="col-4">
-                  <label for="">Job Description</label>
-                  <input formControlName="jobDescription" />
-                </div>
-
-                <div class="col-4">
-                  <label for="">Select Operand</label>
-                  <mat-form-field>
-                    <mat-select
-                      formControlName="searchOperand"
-                      (selectionChange)="onWorkOperandChange($event)"
-                    >
-                      <mat-option
-                        *ngFor="let operand of candidateOperand"
-                        [value]="operand"
-                        >{{ operand }}</mat-option
-                      >
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-3" *ngIf="operand2">
-                  <label for="">Search term</label>
-                  <input formControlName="SearchTerm" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="form-section">
-          <h3>Skills</h3>
-          <div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col">
-                  <label for="">Skill Name</label>
-                  <input formControlName="skillName" />
-                </div>
-                <div class="col">
-                  <label for="">Proficiency Level</label>
-                  <input formControlName="proficiencyLevel" />
-                </div>
-
-                <div class="col">
-                  <label for="">Years of Experience</label>
-                  <input formControlName="noOfYears" type="number" />
-                </div>
-
-                <div class="col">
-                  <label for="">Select Operand</label>
-                  <mat-form-field>
-                    <mat-select
-                      formControlName="searchOperand"
-                      (selectionChange)="onSkillOperandChange($event)"
-                    >
-                      <mat-option
-                        *ngFor="let operand of candidateOperand"
-                        [value]="operand"
-                        >{{ operand }}</mat-option
-                      >
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-3" *ngIf="operand3">
-                  <label for="">Search term</label>
-                  <input formControlName="SearchTerm" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <button type="button" (click)="handleQualifiedQuestion()">Apply</button>
-      </form>
-
       <div class="candidate-table">
         <div class="candidate-header">
           <div class="candidate-search">
@@ -251,7 +127,7 @@
               >
                 <input
                   type="checkbox"
-                  (change)="toggleAllCheckbox()"
+                  (change)="onToggleAllCheckbox()"
                   [checked]="selectedAllChecked"
                 />
                 Name
@@ -269,7 +145,7 @@
               <td style="display: flex; gap: 20px; align-items: center">
                 <input
                   type="checkbox"
-                  (change)="toggleSelection(item.id)"
+                  (change)="onToggleSelection(item.id)"
                   [checked]="selectedIds.includes(item.id)"
                 />
                 {{ item?.name ? (item?.name | titlecase) : "N/A" }}
@@ -319,7 +195,7 @@
                     <span
                       data-bs-toggle="modal"
                       data-bs-target="#viewCandidateModal"
-                      (click)="handleViewCandidate(item.id)"
+                      (click)="onViewCandidate(item.id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -344,7 +220,7 @@
                     <span
                       data-bs-target="#scheduleModal"
                       data-bs-toggle="modal"
-                      (click)="handleScheduleDate(item.id)"
+                      (click)="onScheduleDate(item.id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -362,7 +238,7 @@
                       </svg>
                     </span>
                     <span
-                      (click)="handleReject(item.id)"
+                      (click)="onReject(item.id)"
                       data-bs-toggle="modal"
                       data-bs-target="#candidateRejectModal"
                     >
@@ -483,7 +359,6 @@
   [candidateViewData]="candidateViewData"
   (candidateUpdate)="getCandidates()"
 />
-
 <app-candidate-reject
   [candidateId]="candidateId"
   (candidateUpdate)="getCandidates()"

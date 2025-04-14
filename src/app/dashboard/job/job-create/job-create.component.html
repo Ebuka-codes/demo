@@ -599,6 +599,7 @@
               disableRipple
               formControlName="questionOptions"
               multiple
+              #questionSelect
             >
               <mat-option
                 *ngFor="let question of questionTypeDropdown"
@@ -615,6 +616,9 @@
                       stroke="currentColor"
                       class="size-6"
                       style="width: 20px; color: #919295dd"
+                      data-bs-toggle="modal"
+                      data-bs-target="#questionModal"
+                      (click)="onEditQuestion(question.id)"
                     >
                       <path
                         stroke-linecap="round"
@@ -628,6 +632,7 @@
                       fill="currentColor"
                       class="size-6"
                       style="width: 20px; color: #919295dd"
+                      (click)="onDeleteQuestion(question.id)"
                     >
                       <path
                         fill-rule="evenodd"
@@ -652,8 +657,9 @@
       <button
         class="question-btn mb-3"
         data-bs-toggle="modal"
-        data-bs-target="#addQuestionModal"
+        data-bs-target="#questionModal"
         type="button"
+        (click)="onAddQuestion()"
       >
         + Add Questions
       </button>
@@ -716,4 +722,8 @@
     </form>
   </div>
 </div>
-<app-job-question-create (updateQuestion)="updateQuestion()" />
+<app-job-question-create
+  (updateQuestion)="updateQuestion()"
+  [editId]="editId"
+  [isEditModal]="isEditModal"
+/>

@@ -64,8 +64,6 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    cursor: pointer;
-    align-items: center;
     svg {
       width: 22px;
       height: 22px;
@@ -87,6 +85,7 @@
   .notification-badge {
     display: inline-block;
     position: relative;
+    cursor: pointer;
     .badge-icon {
       svg {
         width: 24px;

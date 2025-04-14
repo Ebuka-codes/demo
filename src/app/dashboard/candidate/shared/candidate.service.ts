@@ -16,136 +16,58 @@ export class CandidateService {
     return this.httpClient.get<Candidate[]>(Constants.CANDIDATE_URL.CANDIDATES);
   }
   getCandidateByJobId(jobId: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.get<Candidate>(
-      Constants.CANDIDATE_URL.CANDIDATES + `by-job-detail/${jobId}`,
-      {
-        headers,
-      }
+      Constants.CANDIDATE_URL.CANDIDATES + `/by-job-detail/${jobId}`
     );
   }
   deleteCandidateById(id: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.delete(
-      Constants.CANDIDATE_URL.CANDIDATES + `/${id}`,
-      {
-        headers,
-      }
+      Constants.CANDIDATE_URL.CANDIDATES + `/${id}`
     );
   }
   hireCandidateById(id: string, data: {}) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.put(
       Constants.CANDIDATE_URL.CANDIDATES + `/hire/${id}`,
-      data,
-      {
-        headers,
-      }
+      data
     );
   }
   rejectCandidateById(id: string, data: {}) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.put(
       Constants.CANDIDATE_URL.CANDIDATES + `/reject/${id}`,
-      data,
-      {
-        headers,
-      }
+      data
     );
   }
 
   scheduleCandidateById(data: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.put(Constants.CANDIDATE_URL + '/schedule', data, {
-      headers,
-    });
+    return this.httpClient.put(Constants.CANDIDATE_URL + '/schedule', data);
   }
   filterCandidate(data: {}) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.put(Constants.FILTER_URL.FILTER_CANDIDATE, data, {
-      headers,
-    });
+    return this.httpClient.put(Constants.FILTER_URL.FILTER_CANDIDATE, data);
   }
   getAllJobs() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get<job>(Constants.JOB_URL.JOB, {
-      headers,
-    });
+    return this.httpClient.get<job>(Constants.JOB_URL.JOB);
   }
   getQualifiedQuestion(id: string | undefined) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.get(
-      Constants.JOB_URL.JOB + `/get-all-qualifying-question/${id}`,
-      {
-        headers,
-      }
+      Constants.JOB_URL.JOB + `/get-all-qualifying-question/${id}`
     );
   }
   shorListCandidate(data: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.put(Constants.CANDIDATE_URL.SHORTLIST, data, {
-      headers,
-    });
+    return this.httpClient.put(Constants.CANDIDATE_URL.SHORTLIST, data);
   }
 
   filterCandidateByQualifiedQuestion(data: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
     return this.httpClient.put(
       Constants.CANDIDATE_URL.FILTER_BY_QUALIFIED_QUESTION,
-      data,
-      {
-        headers,
-      }
+      data
     );
   }
 
   getInterviewer() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get(Constants.INTERVIEW_URL.GET_INTERVIEWERS, {
-      headers,
-    });
+    return this.httpClient.get(Constants.INTERVIEW_URL.INTERVIEWER);
   }
 
   getCandidateOperand() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': 'true',
-    });
-    return this.httpClient.get(Constants.CANDIDATE_URL.SEARCH_OPERAND, {
-      headers,
-    });
+    return this.httpClient.get(Constants.CANDIDATE_URL.SEARCH_OPERAND);
   }
 }

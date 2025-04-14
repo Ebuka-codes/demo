@@ -14,6 +14,7 @@ import { Corporate } from './shared/corporate';
 import { Observable } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-corporate',
@@ -41,7 +42,8 @@ export class CorporateComponent {
     private fb: FormBuilder,
     public corporateService: CorporateService,
     private toastService: ToastService,
-    public loaderService: LoaderService
+    public loaderService: LoaderService,
+    private location: Location
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -173,5 +175,9 @@ export class CorporateComponent {
   }
   handleViewCorporate(id: string) {
     this.corporateViewData = this.filteredData?.find((item) => item.id === id);
+  }
+
+  onBack() {
+    this.location.back();
   }
 }

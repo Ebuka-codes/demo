@@ -28,6 +28,7 @@ import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
 import { SessionComponent } from './components/ui/session/session.component';
 import { UserCorporateComponent } from './user-corporate/user-corporate.component';
+
 @NgModule({
   declarations: [
     DashboardComponent,

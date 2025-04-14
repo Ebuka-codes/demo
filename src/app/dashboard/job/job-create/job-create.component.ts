@@ -18,6 +18,7 @@ import { JobService } from '../shared/job.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-job-create',
@@ -32,6 +33,7 @@ export class JobCreateComponent {
   @ViewChild('newJobSkill') newJobSkill!: ElementRef<HTMLInputElement>;
   @ViewChild('myQuestionModal') modalElement!: ElementRef;
   @ViewChild(QuillEditorComponent) quillEditor!: QuillEditorComponent;
+  @ViewChild('questionSelect') questionSelect!: MatSelect;
   modalInstance!: Modal;
   workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   selectedWorkmode: number | null = null;
@@ -40,10 +42,10 @@ export class JobCreateComponent {
   isLoadingQuestion: boolean = false;
   form: FormGroup;
   questionForm!: FormGroup;
-
   loading: boolean = false;
   froalaEditorInstance: any;
   questions: any;
+  isEditModal!: boolean;
   froalaOptions: any = {
     placeholderText: 'Enter content here...',
     events: {
@@ -259,7 +261,7 @@ export class JobCreateComponent {
 
   getQuestionsById(id: string) {
     this.loaderService.setLoading(true);
-    this.jobService.getQuestionsById(id).subscribe((response: any) => {
+    this.jobService.getQuestionById(id).subscribe((response: any) => {
       if (response.valid && response.data) {
         this.viewQuestionData = response.data;
         this.form.patchValue(this.viewQuestionData);
@@ -270,24 +272,18 @@ export class JobCreateComponent {
       }
     });
   }
-  deleteQuestionsById(id: string) {
+  onAddQuestion() {
+    this.editId = '';
+  }
+  onDeleteQuestion(id: string) {
     this.loaderService.setLoading(true);
     this.jobService.deleteQuestionsById(id).subscribe((response: any) => {
       if (response.valid) {
         this.loaderService.setLoading(false);
         this.getAllQuestion();
-
-        this.notyf.error({
-          message: 'Deleted successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
+        this.toastService.success(response.message);
       } else {
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
+        this.toastService.success(response.message);
         this.loaderService.setLoading(false);
       }
     });
@@ -477,7 +473,6 @@ export class JobCreateComponent {
       this.isSubmitted = true;
     }
   }
-
   onStartDateChange() {
     if (this.form.get('startDate')?.value) {
       let selectedDate = new Date(this.form.get('startDate')?.value);
@@ -485,5 +480,13 @@ export class JobCreateComponent {
       this.minEndDate = selectedDate;
       this.isEditDate = false;
     }
+  }
+  onEditQuestion(id: string) {
+    this.editId = null as any;
+    setTimeout(() => {
+      this.editId = id;
+    });
+    this.questionSelect.close();
+    this.isEditModal = true;
   }
 }
