@@ -65,13 +65,7 @@ export class JobRecruitService {
     return this.job$;
   }
   getJobDetailsById(id: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
-    return this.httpClient.get(Constants.JOB_URL.JOB + `/${id}`, {
-      headers,
-    });
+    return this.httpClient.get(Constants.JOB_URL.JOB + `/${id}`);
   }
   searchJobs(params: string): Observable<any> {
     return this.httpClient.get<any>(
@@ -99,66 +93,31 @@ export class JobRecruitService {
   }
 
   getJobDetails(id: string | null) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.get<JobApplication>(
-      Constants.JOB_URL.JOB + `/${id}`,
-      {
-        headers,
-      }
+      Constants.JOB_URL.JOB + `/${id}`
     );
   }
   submitJobApplication(application: JobApplication) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.post<JobApplication>(
       Constants.CANDIDATE_URL.CANDIDATES,
-      application,
-      {
-        headers,
-      }
+      application
     );
   }
   getQueryDetailsByType() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.get<DetailsType>(
-      Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
-      {
-        headers,
-      }
+      Constants.QUERY_DETAILS_URL.QUERY_DETAILS
     );
   }
 
   createQueryDetails(data: DetailsType) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.post<DetailsType>(
       Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
-      data,
-      {
-        headers,
-      }
+      data
     );
   }
   searchJobByTitle(title: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'corp-key': this.encodedValue,
-    });
     return this.httpClient.get<JobApplication>(
-      this.baseUrl + `/api/job-lists/${title}`,
-      {
-        headers,
-      }
+      this.baseUrl + `/api/job-lists/${title}`
     );
   }
   convertFileToBase64(file: any) {
@@ -167,10 +126,7 @@ export class JobRecruitService {
     });
     return this.httpClient.post<any>(
       this.baseUrl + '/api/document/upload-base64',
-      file,
-      {
-        headers,
-      }
+      file
     );
   }
   setJobDetailId(id: string) {

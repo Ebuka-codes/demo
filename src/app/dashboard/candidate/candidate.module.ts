@@ -15,6 +15,9 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { CandidateFilterModalComponent } from './components/candidate-filter-modal/candidate-filter-modal.component';
 import { CandidateSearchModalComponent } from './components/candidate-search-modal/candidate-search-modal.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { CandidateMailModalComponent } from './components/candidate-mail-modal/candidate-mail-modal.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,7 @@ import { MatSliderModule } from '@angular/material/slider';
     CandidateRejectComponent,
     CandidateFilterModalComponent,
     CandidateSearchModalComponent,
+    CandidateMailModalComponent,
   ],
   imports: [
     FormsModule,
@@ -37,6 +41,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatCheckboxModule,
     NgxMaterialTimepickerModule,
     MatSliderModule,
+    SharedModule,
+    MatTooltipModule,
   ],
 })
 export class CandidateModule {}

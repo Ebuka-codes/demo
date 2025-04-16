@@ -1,0 +1,168 @@
+.mail-candidate {
+  .modal {
+    .modal-header {
+      .close-icon {
+        cursor: pointer;
+        font-size: 12px;
+        border-radius: 100%;
+        color: #1b1b1b94;
+        cursor: pointer;
+        margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+        padding: 2px;
+      }
+    }
+    .modal-body {
+      margin-top: 20px;
+      position: relative;
+      padding: 15px 20px;
+      .candidate-profile {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        img {
+          width: 35px;
+          height: 35px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        h2 {
+          font-size: 14px;
+          font-weight: 600;
+        }
+        span {
+          color: #d6d6d6ee;
+          font-size: 12px;
+        }
+        .info {
+          line-height: 1.3;
+        }
+      }
+      .chat-box {
+        margin-top: 20px;
+        min-height: 50vh;
+        .sender-conttainer {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: flex-end;
+          margin: 5px 0px;
+          .message-sender {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-bottom: 10px;
+            .message {
+              background-color: #28a745;
+              border-radius: 25px;
+              color: white;
+              font-size: 14px;
+              padding: 4px 10px;
+              display: inline-flex;
+              word-wrap: break-word;
+              line-height: 1.5;
+            }
+            .msg-delivery {
+              width: 10px;
+              height: 10px;
+              border-radius: 50px;
+              background-color: #28a745;
+              margin: 2px 0px;
+            }
+            .dateTime {
+              color: #d6d6d6ee;
+              font-size: 12px;
+            }
+          }
+        }
+        .receiver-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          margin-bottom: 10px;
+
+          .message-reciever {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            .message {
+              background-color: rgba(214 214 214 / 21%);
+              border-radius: 25px;
+              color: #1b1b1b94;
+              font-size: 14px;
+              padding: 4px 10px;
+              display: inline-block;
+              word-wrap: break-word;
+              overflow-wrap: break-word;
+              white-space: pre-wrap;
+              line-height: 1.5;
+            }
+            .msg-delivery {
+              width: 10px;
+              height: 10px;
+              border-radius: 50px;
+              background-color: rgba(214 214 214 / 21%);
+              margin: 2px 0px;
+            }
+            .dateTime {
+              color: #d6d6d6ee;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+      .send-box {
+        margin-top: 20px;
+        .content {
+          background-color: #aad3b433;
+          border-bottom: 2px solid #28a745;
+          border-radius: 10px;
+          padding: 10px 15px;
+          position: relative;
+          width: 100%;
+          input {
+            color: #1b1b1b94;
+            font-size: 14px;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            width: 70%;
+          }
+          .message-icon {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 15px;
+            svg {
+              width: 18px;
+              height: 18px;
+              color: #1b1b1b94;
+              cursor: pointer;
+            }
+          }
+          .mini-loader-spinner {
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            border: 3px solid #1ddb49f7;
+            border-color: #1ddb49f7 transparent #1ddb49f7 #1ddb49f7;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            animation: spin 0.5s linear infinite;
+            cursor: not-allowed;
+            margin-right: 5px;
+          }
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+        }
+      }
+    }
+  }
+}

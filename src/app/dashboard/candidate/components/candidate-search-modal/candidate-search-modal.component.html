@@ -57,7 +57,7 @@
         <div class="input-group" style="position: relative">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search and press Enter"
             [(ngModel)]="searchKeyword"
             (keypress)="onSelectedKeyword($event)"
             [ngModelOptions]="{ standalone: true }"
@@ -117,7 +117,7 @@
         <div class="input-group" style="position: relative">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search and press Enter"
             [(ngModel)]="searchSkill"
             (keypress)="onSelectedSkill($event)"
             [ngModelOptions]="{ standalone: true }"
@@ -178,7 +178,7 @@
         <div class="input-group" style="position: relative">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search and press Enter"
             [(ngModel)]="searchLocation"
             (keypress)="onSelectedLocation($event)"
             [ngModelOptions]="{ standalone: true }"
@@ -236,51 +236,15 @@
           </div>
         </div>
         <div class="checkbox-container">
-          <div class="filter-option">
+          <div class="filter-option" *ngFor="let item of experienceOptions">
             <label>
-              <input type="checkbox" />
-              Less than a year
+              <input
+                type="checkbox"
+                (change)="onToggleExperience(item.values, $event)"
+              />
+              {{ item.label }}
             </label>
-            <span class="count">300</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="checkbox" />
-              1-2 years
-            </label>
-            <span class="count">100</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="checkbox" />
-              3-4 years
-            </label>
-            <span class="count">50</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="checkbox" />
-              5-7 years
-            </label>
-            <span class="count">10</span>
-          </div>
-          <div class="filter-option">
-            <label>
-              <input type="checkbox" />
-              8-9
-            </label>
-            <span class="count">6</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="checkbox" />
-              10+ years
-            </label>
-            <span class="count">300</span>
+            <span class="count">{{ item.count }}</span>
           </div>
         </div>
         <div class="title">
@@ -345,59 +309,18 @@
           </div>
         </div>
         <div class="checkbox-container">
-          <div class="filter-option">
+          <div class="filter-option" *ngFor="let item of degreeTypeOption">
             <label>
-              <input type="radio" />
-              Bachelors (B SC, B Tech...)
+              <input
+                type="radio"
+                name="degreeType"
+                [value]="item.label"
+                [(ngModel)]="degreeType"
+                (click)="onToggleRadio(item.label)"
+              />
+              {{ item.label }}
             </label>
-            <span class="count">300</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" name="" />
-              PHD
-            </label>
-            <span class="count">100</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Secondary Education
-            </label>
-            <span class="count">50</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Masters (MSC)
-            </label>
-            <span class="count">10</span>
-          </div>
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              OND
-            </label>
-            <span class="count">6</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              HND
-            </label>
-            <span class="count">300</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Other
-            </label>
-            <span class="count">300</span>
+            <span class="count">{{ item.count }}</span>
           </div>
         </div>
 
@@ -419,53 +342,25 @@
           </div>
         </div>
         <div class="checkbox-container">
-          <div class="filter-option">
+          <div class="filter-option" *ngFor="let item of degreeOption">
             <label>
               <input
                 type="radio"
-                [checked]="selected === 'First Class'"
-                (click)="onToggleRadio('First Class')"
+                name="degree"
+                [value]="item.label"
+                [(ngModel)]="degree"
+                (click)="onToggleRadioDegree(item.label)"
               />
-              First Class
+              {{ item.label }}
             </label>
-            <span class="count">300</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Second Class Upper
-            </label>
-            <span class="count">100</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Second Class Lower
-            </label>
-            <span class="count">50</span>
-          </div>
-
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Third Class
-            </label>
-            <span class="count">10</span>
-          </div>
-          <div class="filter-option">
-            <label>
-              <input type="radio" />
-              Pass
-            </label>
-            <span class="count">6</span>
+            <span class="count">{{ item.count }}</span>
           </div>
         </div>
       </div>
+      <div class="divider"></div>
       <div class="btn-action">
-        <button type="button" class="reset">Reset</button>
-        <button class="search">Search</button>
+        <button type="reset" class="reset" (click)="onReset()">Reset</button>
+        <button class="search" type="button" (click)="search()">Search</button>
       </div>
     </form>
   </div>

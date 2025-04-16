@@ -258,7 +258,6 @@ export class JobCreateComponent {
       },
     });
   }
-
   getQuestionsById(id: string) {
     this.loaderService.setLoading(true);
     this.jobService.getQuestionById(id).subscribe((response: any) => {
@@ -328,7 +327,6 @@ export class JobCreateComponent {
       },
     });
   }
-
   openPanel() {
     setTimeout(() => {
       if (this.autoComplete) {

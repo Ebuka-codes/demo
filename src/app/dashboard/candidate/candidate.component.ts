@@ -4,7 +4,6 @@ import {
   inject,
   OnInit,
   signal,
-  TemplateRef,
   ViewChild,
   WritableSignal,
 } from '@angular/core';
@@ -17,10 +16,7 @@ import { MatSelect } from '@angular/material/select';
 import { CandidateService } from './shared/candidate.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
-import {
-  NgbOffcanvas,
-  OffcanvasDismissReasons,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchModalComponent } from './components/candidate-search-modal/candidate-search-modal.component';
 
 @Component({
@@ -49,8 +45,10 @@ export class CandidateComponent implements OnInit {
   activeTag = 'Candidate';
   shortListedData!: Array<Candidate>;
   interviewData!: Array<Candidate>;
-  selectedJobValue!: string;
-  isSearchFilterOpen: boolean = false;
+  selectedJobId!: string;
+  searchFilterData: WritableSignal<any | null> = signal(null);
+  private offcanvasService = inject(NgbOffcanvas);
+  closeResult: WritableSignal<string> = signal('');
 
   constructor(
     private toastService: ToastService,
@@ -62,8 +60,8 @@ export class CandidateComponent implements OnInit {
     this.loadAllJob();
   }
   onSelectedJob() {
-    this.selectedJobValue = this.matSelect.value.id;
-    this.loadCandidateByJobId(this.selectedJobValue);
+    this.selectedJobId = this.matSelect.value.id;
+    this.loadCandidateByJobId(this.selectedJobId);
   }
   onToggletabs(tab: string) {
     this.activeTag = tab;
@@ -118,29 +116,28 @@ export class CandidateComponent implements OnInit {
   }
   loadCandidateByJobId(jobId: string) {
     this.loaderService.setLoading(true);
+    this.isLoading = this.loaderService.isLoading$;
     this.candidateService.getCandidateByJobId(jobId).subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
           this.candidateData = response.data;
           this.filteredCandidate = this.candidateData;
           this.loaderService.setLoading(false);
+          this.isLoading = this.loaderService.isLoading$;
         }
       },
       error: (error) => {
         this.toastService.error(error.message);
         this.loaderService.setLoading(false);
+        this.isLoading = this.loaderService.isLoading$;
       },
       complete: () => {
         this.loaderService.setLoading(false);
+        this.isLoading = this.loaderService.isLoading$;
       },
     });
   }
-  onSearchFilter() {
-    this.isSearchFilterOpen = true;
-  }
-  onCloseSearchFilter(value: boolean) {
-    this.isSearchFilterOpen = value;
-  }
+
   onShorListCandidate() {
     const data = {
       ids: this.selectedIds,
@@ -153,7 +150,7 @@ export class CandidateComponent implements OnInit {
           this.loaderService.setLoading(false);
           this.toastService.success('Shortlisted successfully');
           this.selectedIds = [];
-          this.loadCandidateByJobId(this.selectedJobValue);
+          this.loadCandidateByJobId(this.selectedJobId);
         },
         error: (err) => {
           console.log(err);
@@ -164,7 +161,7 @@ export class CandidateComponent implements OnInit {
     }
   }
   getCandidates() {
-    this.loadCandidateByJobId(this.selectedJobValue);
+    this.loadCandidateByJobId(this.selectedJobId);
   }
   openScheduleModal(id: string) {
     this.closModal('viewCandidateModal');
@@ -173,6 +170,13 @@ export class CandidateComponent implements OnInit {
     );
     this.candidateId = id;
     scheduleModal.show();
+  }
+  openMailCandidateModal() {
+    this.closModal('viewCandidateModal');
+    const mailCandidateModal = new Modal(
+      document.getElementById('mailCandidateModal') as HTMLDivElement
+    );
+    mailCandidateModal.show();
   }
   openFilterModal() {
     const modal = Modal.getInstance(
@@ -239,29 +243,43 @@ export class CandidateComponent implements OnInit {
     this.location.back();
   }
 
-  private offcanvasService = inject(NgbOffcanvas);
-  closeResult: WritableSignal<string> = signal('');
-
   open() {
-    this.offcanvasService
-      .open(CandidateSearchModalComponent, { position: 'end' })
-      .result.then(
-        (result) => {
-          this.closeResult.set(`Closed with: ${result}`);
-        },
-        (reason) => {
-          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
-      );
+    const ref = this.offcanvasService.open(CandidateSearchModalComponent, {
+      position: 'end',
+    });
+    ref.componentInstance.onSearch = (data: any) => {
+      this.searchFilterData.set(data);
+      ref.close();
+    };
   }
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case OffcanvasDismissReasons.ESC:
-        return 'by pressing ESC';
-      case OffcanvasDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on the backdrop';
-      default:
-        return `with: ${reason}`;
-    }
+
+  clearSearchFilter() {
+    this.searchFilterData.set(null);
+  }
+
+  get isSearchFilterActive() {
+    return this.searchFilterData() !== null;
+  }
+  onSearchFilter() {
+    this.loaderService.setLoading(true);
+    this.candidateService
+      .searchFilter({ ...this.searchFilterData(), jobid: this.selectedJobId })
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.filteredCandidate = response.data;
+            this.loaderService.setLoading(false);
+            this.clearSearchFilter();
+          } else {
+            this.loaderService.setLoading(false);
+            this.clearSearchFilter();
+          }
+        },
+        error: (error) => {
+          this.loaderService.setLoading(false);
+          this.toastService.error(error.message);
+          this.clearSearchFilter();
+        },
+      });
   }
 }

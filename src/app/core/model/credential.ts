@@ -42,7 +42,7 @@ interface CompanyDetail {
 
 export const USER_TOKEN_KEY: string = '$x35w-cPBfH';
 
-export const CURRENT_CORPORATE_KEY: string = 'activeCorporate';
+export const CORP_KEY: string | null = localStorage.getItem('CorpKey');
 
 export const AUTHORIZATION_HEADER: string = 'Authorization';
 

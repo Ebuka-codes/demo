@@ -19,7 +19,7 @@ import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDeleteComponent } from './job-delete/job-delete.component';
 import { JobFilterComponent } from './job-filter/job-filter.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AmountFormatDirective } from 'src/app/shared/directives/amount-format.directive';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,6 @@ import { AmountFormatDirective } from 'src/app/shared/directives/amount-format.d
     JobEditComponent,
     JobDeleteComponent,
     JobFilterComponent,
-    AmountFormatDirective,
   ],
   imports: [
     ReactiveFormsModule,
@@ -47,6 +46,7 @@ import { AmountFormatDirective } from 'src/app/shared/directives/amount-format.d
     JobRoutingModule,
     FormsModule,
     MatButtonToggleModule,
+    SharedModule,
   ],
 })
 export class JobModule {}

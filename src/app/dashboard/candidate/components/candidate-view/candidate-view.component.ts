@@ -23,6 +23,7 @@ export class CandidateViewComponent {
   @Input() candidateViewData!: Candidate;
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
   @Output() openScheduleModal: EventEmitter<string> = new EventEmitter();
+  @Output() openMailCandidateModal: EventEmitter<any> = new EventEmitter();
   @ViewChild('myModal') modalElement!: ElementRef;
   @ViewChild('scheduleModal') modalSchedule!: ElementRef;
   modalInstance!: Modal;
@@ -76,7 +77,7 @@ export class CandidateViewComponent {
       });
   }
 
-  handleViewCandidate(id: string) {
+  onScheduleDate(id: string) {
     this.openScheduleModal.emit(id);
     const backdrop = document.querySelector('.modal-backdrop');
   }
@@ -90,5 +91,9 @@ export class CandidateViewComponent {
     return `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  }
+
+  onMailCandidate() {
+    this.openMailCandidateModal.emit();
   }
 }

@@ -205,6 +205,17 @@
           color: #e50c20;
         }
       }
+
+      // .job-link__dropdown {
+      h4 {
+        font-size: 12px;
+      }
+      .job_link__content {
+        .job-url {
+          background-color: #28a745;
+        }
+      }
+      // }
     }
   }
   tbody tr:nth-child(even) {

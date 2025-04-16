@@ -25,14 +25,11 @@ export const months: string[] = [
 ];
 
 export const educationLevels: string[] = [
-  'High School',
-  'Associate Degree',
+  'Secondary Education',
   "Bachelor's Degree",
   "Master's Degree",
   'Doctorate (PhD)',
   'Diploma',
-  'Certificate',
-  'Postgraduate Diploma',
 ];
 
 export const nigeriaStates: string[] = [

@@ -45,4 +45,8 @@ export const Constants = {
     FILTER_JOB: `${BASE_URL}/api/filter/job`,
     FILTER_CANDIDATE: `${BASE_URL}/api/filter/candidate`,
   },
+
+  MESSAGE_URL: {
+    MESSAGE: `${BASE_URL}/api/messages`,
+  },
 };

@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import { Location } from '@angular/common';
+import { enviroments } from 'src/environments/enviorments';
+import { CORP_KEY } from 'src/app/core/model/credential';
 
 @Component({
   selector: 'app-job',
@@ -29,6 +31,7 @@ export class JobComponent implements OnInit {
   searchLoading = false;
   filteredData!: Array<job>;
   loadingData!: boolean;
+  jobUrl = `http//${enviroments.API_URL}/${CORP_KEY}`;
 
   constructor(
     public jobService: JobService,

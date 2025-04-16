@@ -70,4 +70,21 @@ export class CandidateService {
   getCandidateOperand() {
     return this.httpClient.get(Constants.CANDIDATE_URL.SEARCH_OPERAND);
   }
+  searchFilter(data: any) {
+    return this.httpClient.post(
+      Constants.CANDIDATE_URL.CANDIDATES + '/search-filter',
+      data
+    );
+  }
+  sendMessage(data: any) {
+    return this.httpClient.post(
+      Constants.MESSAGE_URL.MESSAGE + '/candidate/send',
+      data
+    );
+  }
+  getMessage(id: string) {
+    return this.httpClient.get(
+      Constants.MESSAGE_URL.MESSAGE + `/candidate/${id}`
+    );
+  }
 }

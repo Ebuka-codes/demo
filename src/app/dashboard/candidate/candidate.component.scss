@@ -50,6 +50,10 @@
       text-align: center;
       display: flex;
       border: none;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
     }
     ::ng-deep .mat-mdc-form-field-flex {
       height: 40px !important;
@@ -108,9 +112,20 @@
       background-color: transparent;
       padding: 5px 10px;
       border-radius: 8px;
+
+      &.active {
+        background-color: #1ddb49f7;
+        border: none;
+        color: white;
+        svg {
+          color: white;
+        }
+      }
+      &:disabled {
+        cursor: not-allowed;
+      }
     }
   }
-
   .candidate-header {
     display: flex;
     justify-content: space-between;

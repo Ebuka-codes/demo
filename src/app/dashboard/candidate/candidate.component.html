@@ -39,7 +39,13 @@
         </mat-select>
       </mat-form-field>
 
-      <button type="button" (click)="onSelectedJob()">Submit</button>
+      <button
+        type="button"
+        (click)="onSelectedJob()"
+        [disabled]="isLoading | async"
+      >
+        Submit
+      </button>
     </div>
   </div>
 
@@ -62,22 +68,43 @@
         {{ tab }}
       </button>
     </div>
-    <div class="advance-btn" (click)="open()">
-      <button>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-sliders"
-          viewBox="0 0 16 16"
+
+    <div style="display: flex; align-items: center; gap: 20px">
+      <span
+        *ngIf="isSearchFilterActive"
+        style="
+          color: #e50c20;
+          text-decoration: underline;
+          text-decoration-color: #e50c20;
+          cursor: pointer;
+        "
+        (click)="clearSearchFilter()"
+      >
+        Clear Selection
+      </span>
+      <div
+        class="advance-btn"
+        (click)="isSearchFilterActive ? onSearchFilter() : open()"
+      >
+        <button
+          [class.active]="isSearchFilterActive"
+          [disabled]="isLoading | async"
         >
-          <path
-            fill-rule="evenodd"
-            d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"
-          /></svg
-        >Advanced Search
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-sliders"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"
+            /></svg
+          >Advanced Search
+        </button>
+      </div>
     </div>
   </div>
   <ng-container *ngIf="filteredCandidate; else noData">
@@ -356,6 +383,7 @@
 
 <app-candidate-view
   (openScheduleModal)="openScheduleModal($event)"
+  (openMailCandidateModal)="openMailCandidateModal()"
   [candidateViewData]="candidateViewData"
   (candidateUpdate)="getCandidates()"
 />
@@ -368,3 +396,7 @@
   (candidateUpdate)="getCandidates()"
 />
 <app-candidate-filter (updateCandidateData)="updateCandidateData($event)" />
+<app-candidate-mail-modal
+  [candidateData]="candidateViewData"
+  (candidateUpdate)="getCandidates()"
+/>

@@ -396,3 +396,10 @@ input[type="checkbox"] {
 .popover-body {
   background-color: rgb(221 221 221 / 47%) !important;
 }
+
+@media (min-width: 992px) {
+  .modal-lg,
+  .modal-xl {
+    --bs-modal-width: 700px !important;
+  }
+}
