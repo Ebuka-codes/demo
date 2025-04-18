@@ -7,7 +7,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Candidate } from '../../shared/candidate';
+
 import { CandidateService } from '../../shared/candidate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
@@ -24,12 +24,13 @@ export class CandidateMailModalComponent {
   @ViewChild('modal') modalElement!: ElementRef;
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
   @Input() candidateData!: any;
-  data!: Candidate;
   modalInstance!: Modal;
   message!: string;
   chat!: any[];
+  senderChat!: any[];
+  recieverChat!: any[];
   isLoading$!: Observable<boolean>;
-  isSendingMsg!: boolean;
+  isSendingMsg: boolean = false;
   constructor(
     private candidateService: CandidateService,
     private loaderService: LoaderService,
@@ -46,6 +47,12 @@ export class CandidateMailModalComponent {
         next: (response: any) => {
           if (response) {
             this.chat = response;
+            this.senderChat = this.chat.filter(
+              (data) => data.senderType === 'USER'
+            );
+            this.recieverChat = this.chat.filter(
+              (data) => data.senderType === 'CANDIDATE'
+            );
             this.loaderService.setLoading(false);
             this.isLoading$ = this.loaderService.isLoading$;
           } else {
@@ -72,19 +79,18 @@ export class CandidateMailModalComponent {
       backdrop.remove();
     }
 
-    this.loaderService.setLoading(false);
-    this.isLoading$ = this.loaderService.isLoading$;
+    this.isSendingMsg = false;
   }
   clearMessage() {
     this.message = '';
   }
   onSubmitMessage() {
     if (this.message) {
-      this.loaderService.setLoading(true);
-      this.isLoading$ = this.loaderService.isLoading$;
+      this.isSendingMsg = true;
       this.candidateService
         .sendMessage({
           candidateId: this.candidateData.id,
+          jobid: this.candidateData.jobDetail.id,
           content: this.message,
         })
         .subscribe({
@@ -130,7 +136,6 @@ export class CandidateMailModalComponent {
         day: '2-digit',
         year: 'numeric',
       });
-      console.log(`${dateFormatted} ${timeFormatted}`);
       return `${dateFormatted} ${timeFormatted}`;
     }
   }

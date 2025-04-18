@@ -1,11 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from './user.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
+import { finalize, Observable } from 'rxjs';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-user',
@@ -15,6 +16,7 @@ import { Location } from '@angular/common';
 export class UserComponent {
   @ViewChild('myModal') modalElement!: ElementRef;
   userForm: FormGroup;
+  isLoading$!: Observable<boolean>;
   modalInstance!: Modal;
   submitLoading!: boolean;
   userRoleData!: any[];
@@ -36,6 +38,7 @@ export class UserComponent {
       ],
       role: ['', [Validators.required]],
     });
+    this.isLoading$ = this.loaderService.isLoading$;
   }
   get firstName() {
     return this.userForm.get('firstName');
@@ -54,39 +57,39 @@ export class UserComponent {
   }
 
   ngOnInit() {
-    this.loaderService.setLoading(true);
     this.userService.getUserRole().subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
           this.userRoleData = response.data;
-          this.loaderService.setLoading(false);
         } else {
-          this.loaderService.setLoading(true);
+          this.toasterService.error(response.message);
         }
       },
-      error: () => {
-        this.loaderService.setLoading(true);
+      error: (error) => {
+        this.toasterService.error(error.message);
       },
     });
+
     this.loadUsers();
   }
   loadUsers(): void {
+    this.userData = [];
     this.loaderService.setLoading(true);
-    this.userService.getAllUsers().subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.userData = response.data;
-          this.loaderService.setLoading(false);
-        } else {
-          console.log('error');
-          this.loaderService.setLoading(false);
-        }
-      },
-      error: (error: any) => {
-        this.loaderService.setLoading(false);
-        this.toasterService.error(error);
-      },
-    });
+    this.userService
+      .getAllUsers()
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.userData = response.data;
+          } else {
+            this.toasterService.error(response.message);
+          }
+        },
+        error: (error: any) => {
+          this.toasterService.error(error.message);
+        },
+      });
   }
 
   ngAfterViewInit() {
@@ -97,32 +100,32 @@ export class UserComponent {
     const backdrop = document.querySelector('.modal-backdrop');
     backdrop?.remove();
   }
-  onSubmit(): void {
+  onSubmit() {
     if (this.userForm.valid) {
       this.loaderService.setLoading(true);
       this.submitLoading = true;
-      this.userService.createUser(this.userForm.value).subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.loaderService.setLoading(false);
-            this.toasterService.success('User created successfully');
+      this.userService
+        .createUser(this.userForm.value)
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              this.toasterService.success('User created successfully');
+              this.closeModal();
+              this.submitLoading = false;
+              this.loadUsers();
+            } else {
+              this.closeModal();
+              this.submitLoading = false;
+              this.toasterService.error(response.message);
+            }
+          },
+          error: (error) => {
+            this.toasterService.error(error.message);
             this.closeModal();
             this.submitLoading = false;
-            this.loadUsers();
-          } else {
-            this.loaderService.setLoading(false);
-            this.toasterService.error(response.message);
-            this.closeModal();
-            this.submitLoading = false;
-          }
-        },
-        error: (error) => {
-          this.toasterService.error(error.message);
-          this.closeModal();
-          this.loaderService.setLoading(false);
-          this.submitLoading = false;
-        },
-      });
+          },
+        });
     } else {
       this.userForm.markAllAsTouched();
     }
@@ -131,7 +134,7 @@ export class UserComponent {
   resetForm() {
     this.userForm.reset();
   }
-  onBack() {
+  onNavigateBack() {
     this.location.back();
   }
 }

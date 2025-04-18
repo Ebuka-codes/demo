@@ -15,6 +15,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-interviewer',
@@ -23,7 +24,7 @@ import { Location } from '@angular/common';
 })
 export class InterviewerComponent implements OnInit {
   form!: FormGroup;
-  isLoading: boolean = false;
+  isLoading$!: Observable<boolean>;
   @ViewChild('myModal') modalElement!: ElementRef;
   modalInstance!: Modal;
   time = '';
@@ -41,6 +42,7 @@ export class InterviewerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, this.validatePhone()]],
     });
+    this.isLoading$ = this.loaderService.isLoading$;
   }
 
   ngOnInit(): void {
@@ -64,53 +66,59 @@ export class InterviewerComponent implements OnInit {
   }
 
   loadInterviewers() {
+    this.data = [];
     this.loaderService.setLoading(true);
-    this.interviewerService.getAllInterviewers().subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.data = response.data;
+    this.interviewerService
+      .getAllInterviewers()
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.data = response.data;
+          } else {
+            this.toastService.error(response.message);
+          }
+        },
+        error: (error) => {
           this.loaderService.setLoading(false);
-        } else {
-          this.loaderService.setLoading(false);
-        }
-      },
-      error: (error) => {
-        this.loaderService.setLoading(true);
-        this.toastService.error(error.message);
-      },
-    });
+          this.toastService.error(error.message);
+        },
+      });
+  }
+  closeModal() {
+    this.modalInstance.hide();
+    const backdrop = document.querySelector('.modal-backdrop');
+    backdrop?.remove();
   }
   createInterviewer(data: Interviewer) {
     this.loaderService.setLoading(true);
-    this.isLoading = true;
+    this.isLoading$ = this.loaderService.isLoading$;
     this.interviewerService.createInterviewer(data).subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
           this.resetForm();
           this.toastService.success(response.message);
           this.loaderService.setLoading(false);
-          this.isLoading = false;
-          this.modalInstance.hide();
-          const backdrop = document.querySelector('.modal-backdrop');
-          backdrop?.remove();
+          this.isLoading$ = this.loaderService.isLoading$;
+          this.closeModal();
+          this.loadInterviewers();
         } else {
           this.loaderService.setLoading(false);
-          this.isLoading = false;
+          this.isLoading$ = this.loaderService.isLoading$;
+          this.closeModal();
+          this.toastService.error(response.message);
         }
       },
       error: (error) => {
         this.toastService.error(error.message);
         this.loaderService.setLoading(false);
-        this.isLoading = false;
-        this.modalInstance.hide();
-        const backdrop = document.querySelector('.modal-backdrop');
-        backdrop?.remove();
+        this.isLoading$ = this.loaderService.isLoading$;
+        this.closeModal();
       },
     });
   }
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.valid);
       this.createInterviewer(this.form.value);
     } else {
       this.form.markAllAsTouched();

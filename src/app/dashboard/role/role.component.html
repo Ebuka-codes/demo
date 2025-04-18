@@ -80,6 +80,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="(isLoading$ | async) && roleData.length === 0">
+          <td colspan="8">Loading data...</td>
+        </tr>
         <tr *ngFor="let role of roleData">
           <td
             style="
@@ -168,7 +171,8 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="!roleData?.length">
+
+        <tr *ngIf="!roleData?.length && !(isLoading$ | async)">
           <td>No record found</td>
         </tr>
       </tbody>
@@ -210,7 +214,9 @@
         <div class="modal-body">
           <form [formGroup]="userRoleForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name"
+                >Name <span class="required-icon">*</span></label
+              >
               <input id="name" formControlName="name" type="text" />
               <div *ngIf="name?.invalid && name?.touched">
                 <small class="text-danger" *ngIf="name?.hasError('required')"
@@ -223,7 +229,9 @@
             </div>
 
             <div class="form-group">
-              <label for="description">Description</label>
+              <label for="description"
+                >Description <span class="required-icon">*</span></label
+              >
               <textarea
                 rows="4"
                 id="description"
@@ -239,8 +247,11 @@
               </div>
             </div>
             <div class="btn-action">
+              <button type="button" class="close-btn" data-bs-dismiss="modal">
+                <span>Cancel</span>
+              </button>
               <button type="submit" class="submit-btn">
-                <ng-container *ngIf="!submitLoading; else showLoader">
+                <ng-container *ngIf="!(isLoading$ | async); else showLoader">
                   Submit
                 </ng-container>
                 <ng-template #showLoader>

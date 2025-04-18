@@ -3,10 +3,10 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { UserProfile, UserToken } from 'src/app/core/model/credential';
 import { AuthService } from 'src/app/core/service/auth.service';
-import { ToastService } from 'src/app/core/service/toast.service';
 import { TokenService } from 'src/app/core/service/token.service';
-import { UserService } from 'src/app/dashboard/user/user.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
+import { UserService } from '../../user/user.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -29,7 +29,7 @@ export class SidebarComponent {
     this.route.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.isJobActive = this.route.url.startsWith('/dashboard/job');
+        this.isJobActive = this.route.url.startsWith('/job');
         this.cdr.detectChanges();
       });
     this.isLoading = true;
@@ -41,6 +41,20 @@ export class SidebarComponent {
       }
     });
   }
+
+  ngOnInit(): void {
+    this.userService.loadUserProfile().subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.userService.setUserProfile(response.data);
+        }
+      },
+      error: (error: any) => {
+        this.toastService.error(error.message);
+      },
+    });
+  }
+
   onLogout() {
     const token: UserToken = JSON.parse(this.tokenService.getToken() || '{}');
     const refreshToken = token.refresh_token?.toString();

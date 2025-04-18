@@ -1,12 +1,10 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
-import { UserService } from '../user/user.service';
-import { JobService } from '../job/shared/job.service';
-import { CandidateService } from '../candidate/shared/candidate.service';
+import { Observable } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { UserProfile } from 'src/app/core/model/credential';
 import { DashboardService } from '../dashboard.service';
 import { DashboardStats } from './shared/dashboardStats';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -47,7 +45,7 @@ export class AdminDashboardComponent {
         setTimeout(() => {
           this.loaderService.setLoading(false);
           this.isLoading$ = this.loaderService.isLoading$;
-        }, 1000);
+        }, 2000);
       } else {
         setTimeout(() => {
           this.loaderService.setLoading(false);

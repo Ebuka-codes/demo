@@ -130,7 +130,9 @@ $demo-theme: mat.define-light-theme(
 }
 
 .dropdown-menu {
-  border: 1px solid #dfdede !important;
+  border: 1px solid white !important;
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   button,
   a {
     display: flex;
@@ -143,19 +145,21 @@ $demo-theme: mat.define-light-theme(
   }
   a {
     text-decoration: none;
-    color: rgb(14 13 13 / 84%);
+    color: rgb(71 85 105);
   }
+
   .dropdown-item {
-    color: rgb(14 13 13);
-    :focus,
-    :hover svg {
-      color: white;
+    color: rgb(71 85 105);
+    &:focus,
+    &:hover {
+      background-color: #28a745 !important;
+      color: white !important;
     }
-  }
-  :focus,
-  :hover {
-    color: white;
-    background-color: #28a745;
+    a:hover,
+    a:focus {
+      background-color: #28a745 !important;
+      color: white !important;
+    }
   }
 }
 
@@ -180,28 +184,6 @@ $demo-theme: mat.define-light-theme(
       border-bottom: none;
     }
   }
-}
-
-.ngb-dropdown-menu .dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: rgb(14 13 13 / 84%);
-  background-color: transparent;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-/* Hover & Focus Effects */
-.ngb-dropdown-menu .dropdown-item:hover,
-.ngb-dropdown-menu .dropdown-item:focus {
-  background-color: #7856fffd;
-  color: white;
-}
-
-/* Change SVG color on hover */
-.ngb-dropdown-menu .dropdown-item:hover .svg,
-.ngb-dropdown-menu .dropdown-item:focus .svg {
-  fill: white;
 }
 
 .mat-step-icon-selected {

@@ -19,6 +19,9 @@ import { JobLayoutComponent } from './ui/job-layout/job-layout.component';
 import { HeaderComponent } from './ui/header/header.component';
 import { JobListingComponent } from './pages/job-listing/job-listing.component';
 import { CoreModule } from './core/core.module';
+import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
+import { RecruiterMessageComponent } from './pages/recruiter-message/recruiter-message.component';
+import { QuillEditorComponent, QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,8 @@ import { CoreModule } from './core/core.module';
     HeaderComponent,
     LoaderSpinnerComponent,
     JobListingComponent,
+    CandidateVerificationComponent,
+    RecruiterMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +51,7 @@ import { CoreModule } from './core/core.module';
     HttpClientModule,
     NgbModule,
     CoreModule,
+    QuillModule,
   ],
 
   bootstrap: [AppComponent],

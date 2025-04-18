@@ -7,6 +7,8 @@ import { VerifyEmailComponent } from './authentication/verify-email/verify-email
 import { JobListingComponent } from './pages/job-listing/job-listing.component';
 import { SessionComponent } from './dashboard/components/ui/session/session.component';
 import { AuthGuard } from './core/guard/auth-guard.service';
+import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
+import { RecruiterMessageComponent } from './pages/recruiter-message/recruiter-message.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,8 +33,17 @@ const routes: Routes = [
     path: 'session',
     component: SessionComponent,
   },
+
   {
-    path: 'job',
+    path: 'candidate/action',
+    component: CandidateVerificationComponent,
+  },
+  {
+    path: 'recruiter-message/:token',
+    component: RecruiterMessageComponent,
+  },
+  {
+    path: 'apply',
     loadChildren: () =>
       import('./pages/job-details/job-details.module').then(
         (m) => m.JobDetailsModule

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
+import { enviroments } from 'src/environments/enviorments';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { Constants } from 'src/app/utils/constants';
 export class CandidateService {
   private candidateDataSubject$ = new BehaviorSubject<any>(null);
   candateData$ = this.candidateDataSubject$.asObservable();
+  baseUrl = enviroments.API_URL;
   constructor(private httpClient: HttpClient) {}
 
   getCandidatesInfo(id: string | null) {
@@ -29,5 +31,26 @@ export class CandidateService {
   }
   getCandidateData() {
     return this.candidateDataSubject$.getValue();
+  }
+
+  sendCandiateOtp(token: any) {
+    return this.httpClient.post(
+      this.baseUrl + `/auth/common/otp/sendotp`,
+      token
+    );
+  }
+
+  verifyCandidate(data: any) {
+    return this.httpClient.post(
+      this.baseUrl + `/auth/common/otp/validate`,
+      data
+    );
+  }
+
+  candidateResponse(token: string | null, data: any) {
+    return this.httpClient.post(
+      this.baseUrl + `/auth/common/action?token=${token}`,
+      data
+    );
   }
 }

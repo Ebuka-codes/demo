@@ -19,6 +19,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { MatSelect } from '@angular/material/select';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-job-create',
@@ -83,7 +84,8 @@ export class JobCreateComponent {
     private jobService: JobService,
     private loaderService: LoaderService,
     private toastService: ToastService,
-    private route: Router
+    private route: Router,
+    private location: Location
   ) {
     this.form = this.fb.group({
       jobTitle: ['', [Validators.required, Validators.minLength(3)]],
@@ -486,5 +488,9 @@ export class JobCreateComponent {
     });
     this.questionSelect.close();
     this.isEditModal = true;
+  }
+
+  onNavigateBack() {
+    this.location.back();
   }
 }

@@ -529,7 +529,7 @@ export class JobEditComponent {
       this.isEditDate = false;
     }
   }
-  onBack() {
+  onNavigateBack() {
     this.location.back();
   }
 }

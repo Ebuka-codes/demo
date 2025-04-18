@@ -4,8 +4,6 @@ export const Constants = {
   AUTH_URL: {
     LOGIN: `${BASE_URL}/auth/login`,
     SIGNUP: `${BASE_URL}/auth/corporate/create`,
-    MICROSOFT_LOGIN: '',
-    GOOGLE_LOGIN: '',
     FORGOT_PASSWORD: `${BASE_URL}/auth/forgot-password`,
     RESET_PASSWORD: `${BASE_URL}/auth/reset-password`,
     VERIFICATION_OTP: `${BASE_URL}/auth/otp/sendotp`,

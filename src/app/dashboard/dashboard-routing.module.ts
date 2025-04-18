@@ -8,28 +8,20 @@ import { InterviewerComponent } from './interviewer/interviewer.component';
 import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
 import { UserCorporateComponent } from './user-corporate/user-corporate.component';
+import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: '',
+    component: DashboardLayoutComponent,
 
     children: [
-      { path: '', component: AdminDashboardComponent },
+      { path: 'dashboard', component: AdminDashboardComponent },
 
       { path: 'candidate', component: CandidateComponent },
       {
-        path: 'job',
-        component: JobComponent,
-      },
-      {
-        path: 'corporate',
-        loadChildren: () =>
-          import('./corporate/corporate.module').then((m) => m.CorporateModule),
-      },
-      {
-        path: 'job',
-        loadChildren: () => import('./job/job.module').then((m) => m.JobModule),
+        path: 'user',
+        component: UserComponent,
       },
       {
         path: 'interviewer',
@@ -41,12 +33,18 @@ const routes: Routes = [
       },
 
       {
-        path: 'user',
-        component: UserComponent,
-      },
-      {
         path: 'user/role',
         component: RoleComponent,
+      },
+      // Lazy-loaded routes
+      {
+        path: 'corporate',
+        loadChildren: () =>
+          import('./corporate/corporate.module').then((m) => m.CorporateModule),
+      },
+      {
+        path: 'job',
+        loadChildren: () => import('./job/job.module').then((m) => m.JobModule),
       },
     ],
   },

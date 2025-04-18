@@ -83,7 +83,7 @@
       </li> -->
       <li [ngClass]="isJobActive ? 'side-link active' : 'side-link'">
         <a
-          routerLink="/dashboard/job"
+          routerLink="/job"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -111,7 +111,7 @@
       <li>
         <a
           class="side-link"
-          routerLink="/dashboard/candidate"
+          routerLink="/candidate"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -138,7 +138,7 @@
       <li>
         <a
           class="side-link"
-          routerLink="/dashboard/user"
+          routerLink="/user"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -165,7 +165,7 @@
       <li>
         <a
           class="side-link"
-          routerLink="/dashboard/interviewer"
+          routerLink="/interviewer"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -209,7 +209,7 @@
         <li>
           <a
             class="side-link"
-            routerLink="/dashboard/user/role"
+            routerLink="/user/role"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
           >
@@ -263,7 +263,7 @@
         <li style="cursor: pointer">
           <a
             class="side-link"
-            routerLink="/dashboard/user/corporate"
+            routerLink="/user/corporate"
             routerLinkActive="active"
           >
             <span class="sidebar-icon">
@@ -289,11 +289,7 @@
         <div class="divider"></div>
 
         <li style="cursor: pointer">
-          <a
-            class="side-link"
-            routerLink="/dashboard/logout"
-            (click)="onLogout()"
-          >
+          <a class="side-link" routerLink="/logout" (click)="onLogout()">
             <span class="sidebar-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

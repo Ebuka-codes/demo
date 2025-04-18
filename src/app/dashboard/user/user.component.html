@@ -1,7 +1,7 @@
 <div class="user-container">
   <header>
     <div class="user-header">
-      <span class="nav-back" (click)="onBack()">
+      <span class="nav-back" (click)="onNavigateBack()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -82,6 +82,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="(isLoading$ | async) && userData?.length === 0">
+          <td colspan="8">Loading users...</td>
+        </tr>
         <tr *ngFor="let item of userData">
           <td style="display: flex; gap: 20px; align-items: center">
             <input
@@ -165,7 +168,8 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="!userData?.length">
+
+        <tr *ngIf="!userData?.length && !(isLoading$ | async)">
           <td>No record found</td>
         </tr>
       </tbody>
@@ -207,7 +211,9 @@
         <div class="modal-body">
           <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-              <label for="firstName">First Name</label>
+              <label for="firstName"
+                >First Name <span class="required-icon">*</span></label
+              >
               <input id="firstName" formControlName="firstName" type="text" />
               <div *ngIf="firstName?.invalid && firstName?.touched">
                 <small
@@ -224,7 +230,9 @@
             </div>
 
             <div class="form-group">
-              <label for="lastName">Last Name</label>
+              <label for="lastName"
+                >Last Name <span class="required-icon">*</span></label
+              >
               <input id="lastName" formControlName="lastName" type="text" />
               <div *ngIf="lastName?.invalid && lastName?.touched">
                 <small
@@ -241,7 +249,9 @@
             </div>
 
             <div class="form-group">
-              <label for="email">Email Address</label>
+              <label for="email"
+                >Email Address <span class="required-icon">*</span></label
+              >
               <input id="email" formControlName="email" type="email" />
               <div *ngIf="email?.invalid && email?.touched">
                 <small class="text-danger" *ngIf="email?.hasError('required')"
@@ -253,7 +263,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="phoneNumber">Phone Number</label>
+              <label for="phoneNumber"
+                >Phone Number <span class="required-icon">*</span></label
+              >
               <input
                 id="phoneNumber"
                 formControlName="phoneNumber"
@@ -273,7 +285,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="role">Assign Role</label>
+              <label for="role"
+                >Assign Role <span class="required-icon">*</span></label
+              >
               <mat-form-field>
                 <mat-select id="role" formControlName="role">
                   <mat-option
@@ -296,8 +310,12 @@
               <button type="button" class="close-btn" data-bs-dismiss="modal">
                 <span>Cancel</span>
               </button>
-              <button type="submit" class="submit-btn">
-                <ng-container *ngIf="!submitLoading; else showLoader">
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="isLoading$ | async"
+              >
+                <ng-container *ngIf="!(isLoading$ | async); else showLoader">
                   Submit
                 </ng-container>
                 <ng-template #showLoader>

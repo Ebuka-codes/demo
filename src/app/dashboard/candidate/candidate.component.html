@@ -144,21 +144,14 @@
         <table>
           <thead>
             <tr>
-              <th
-                style="
-                  display: flex;
-                  gap: 20px;
-                  padding-left: 10px;
-                  align-items: center;
-                "
-              >
+              <th>
                 <input
                   type="checkbox"
                   (change)="onToggleAllCheckbox()"
                   [checked]="selectedAllChecked"
                 />
-                Name
               </th>
+              <th>Name</th>
               <th>Job Title</th>
               <th>Job Type</th>
               <th>Work Mode</th>
@@ -169,12 +162,14 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of filteredCandidate">
-              <td style="display: flex; gap: 20px; align-items: center">
+              <td>
                 <input
                   type="checkbox"
                   (change)="onToggleSelection(item.id)"
                   [checked]="selectedIds.includes(item.id)"
                 />
+              </td>
+              <td>
                 {{ item?.name ? (item?.name | titlecase) : "N/A" }}
               </td>
 

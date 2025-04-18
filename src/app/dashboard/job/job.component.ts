@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
 import {
@@ -14,6 +14,8 @@ import { Modal } from 'bootstrap';
 import { Location } from '@angular/common';
 import { enviroments } from 'src/environments/enviorments';
 import { CORP_KEY } from 'src/app/core/model/credential';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-job',
@@ -24,28 +26,30 @@ export class JobComponent implements OnInit {
   jobData!: Array<job>;
   isLoading$!: Observable<any>;
   searchText = new FormControl();
-  corpKey!: string | null;
   viewJobData!: Array<job>;
   jobId!: string;
   jobSearch!: string;
   searchLoading = false;
   filteredData!: Array<job>;
   loadingData!: boolean;
-  jobUrl = `http//${enviroments.API_URL}/${CORP_KEY}`;
+  jobUrl!: string;
+  corpKey: string | null = CORP_KEY;
 
   constructor(
     public jobService: JobService,
     private loaderService: LoaderService,
     private route: Router,
-    private location: Location
+    private location: Location,
+    private clipboard: Clipboard,
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.getAllJob();
-    this.corpKey = localStorage.getItem('corp-key');
+    this.loadJobs();
+    this.jobUrl = `${enviroments.API_URL}/apply/${this.corpKey}`;
   }
-
-  getAllJob() {
+  loadJobs() {
     this.loaderService.setLoading(true);
     this.isLoading$ = this.loaderService.isLoading$;
     this.jobService.getAllJobs().subscribe({
@@ -55,14 +59,15 @@ export class JobComponent implements OnInit {
             a.jobTitle.localeCompare(b.jobTitle)
           );
           this.loaderService.setLoading(false);
-
           this.filteredData = this.jobData;
+
+          this.cdr.detectChanges();
         }
       },
       error: (error) => {
-        console.log('Error: ', error);
         this.loaderService.setLoading(false);
         this.jobData = [];
+        this.toastService.error(error.message);
       },
     });
   }
@@ -113,7 +118,7 @@ export class JobComponent implements OnInit {
     this.viewJobData = this.jobData.filter((job) => job.id === id);
   }
   handleEditJob(id: string) {
-    this.route.navigateByUrl(`/dashboard/job/edit/${id}`, { replaceUrl: true });
+    this.route.navigateByUrl(`/job/edit/${id}`, { replaceUrl: true });
   }
   handleDeleteJob(id: string) {
     this.jobId = id;
@@ -121,5 +126,8 @@ export class JobComponent implements OnInit {
 
   onBack() {
     this.location.back();
+  }
+  onCopy() {
+    this.clipboard.copy(this.jobUrl);
   }
 }

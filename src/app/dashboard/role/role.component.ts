@@ -7,6 +7,7 @@ import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-role',
@@ -17,7 +18,7 @@ export class RoleComponent implements OnInit {
   @ViewChild('myModal') modalElement!: ElementRef;
   modalInstance!: Modal;
   userRoleForm!: FormGroup;
-  submitLoading!: boolean;
+  isLoading$!: Observable<boolean>;
   roleData!: any[];
   constructor(
     private fb: FormBuilder,
@@ -30,6 +31,7 @@ export class RoleComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', Validators.required],
     });
+    this.isLoading$ = this.loaderService.isLoading$;
   }
   get name() {
     return this.userRoleForm.get('name');
@@ -50,48 +52,52 @@ export class RoleComponent implements OnInit {
     this.loadUserRole();
   }
   loadUserRole() {
+    this.roleData = [];
     this.loaderService.setLoading(true);
-    this.roleService.getUserRole().subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.roleData = response.data;
-          this.loaderService.setLoading(false);
-        } else {
-          this.loaderService.setLoading(false);
-          this.toastService.error(response.message);
-        }
-      },
-      error: (error) => {
-        this.loaderService.setLoading(false);
-        this.toastService.error(error.message);
-      },
-    });
-  }
-  onSubmit() {
-    if (this.userRoleForm.valid) {
-      this.submitLoading = true;
-      this.loaderService.setLoading(true);
-      this.roleService.createUserRole(this.userRoleForm.value).subscribe({
+    this.roleService
+      .getUserRole()
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
         next: (response: any) => {
-          if (response.valid) {
+          if (response.valid && response.data) {
+            this.roleData = response.data;
             this.loaderService.setLoading(false);
-            this.submitLoading = false;
-            this.toastService.success(response.message);
-            this.closeModal();
-            this.loadUserRole();
           } else {
             this.loaderService.setLoading(false);
-            this.submitLoading = false;
             this.toastService.error(response.message);
-            this.closeModal();
           }
         },
         error: (error) => {
+          this.loaderService.setLoading(false);
           this.toastService.error(error.message);
-          this.loaderService.setLoading(true);
-          this.closeModal();
         },
       });
+  }
+  onSubmit() {
+    if (this.userRoleForm.valid) {
+      this.loaderService.setLoading(true);
+      this.roleService
+        .createUserRole(this.userRoleForm.value)
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid) {
+              this.loaderService.setLoading(false);
+              this.toastService.success(response.message);
+              this.closeModal();
+              this.loadUserRole();
+            } else {
+              this.loaderService.setLoading(false);
+              this.toastService.error(response.message);
+              this.closeModal();
+            }
+          },
+          error: (error) => {
+            this.toastService.error(error.message);
+            this.loaderService.setLoading(true);
+            this.closeModal();
+          },
+        });
     } else {
       this.userRoleForm.markAllAsTouched();
     }

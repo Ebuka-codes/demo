@@ -1,0 +1,100 @@
+.candidate-verification {
+  background-color: #28a745;
+  background-image: url("/assets/image/Desktop-bg.png");
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+
+  header {
+    background-color: white;
+    padding: 10px 40px;
+    width: 100%;
+    img {
+      width: 120px;
+      margin-left: 20px;
+    }
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+    margin-top: 50px;
+
+    .verify-card {
+      border-radius: 10px;
+      background-color: rgb(251 251 251);
+      padding: 20px 40px;
+      line-height: 1.5;
+      width: 50%;
+
+      h3 {
+        font-size: 18px;
+        margin-top: 10px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        margin: 20px 0px;
+        label {
+          font-size: 14px;
+          padding: 10px 0px;
+        }
+        input {
+          border: 1px solid #dddd;
+          border-radius: 7px;
+          padding: 10px 15px;
+          background-color: white;
+          outline: none;
+        }
+        .resend-otp {
+          color: rgba(216, 5, 5, 0.89);
+          padding-top: 5px;
+          float: right;
+          font-size: 14px;
+          cursor: pointer;
+          text-align: right;
+        }
+        .verify-btn {
+          display: flex;
+          justify-content: flex-end;
+          button {
+            background-color: #28a745;
+            color: white;
+            border-radius: 10px;
+            padding: 8px 20px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            width: 150px;
+
+            &:disabled {
+              cursor: not-allowed;
+            }
+          }
+        }
+
+        .mini-loader-spinner {
+          border: 3px solid white;
+          border-color: white transparent white white;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          margin: 0px auto;
+          animation: spin 0.5s linear infinite;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+    }
+  }
+}

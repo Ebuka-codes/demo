@@ -1,0 +1,60 @@
+.layout {
+  display: grid;
+  grid-template-rows: 70px 1fr;
+  grid-template-columns: 15.75rem 1fr;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.outlet {
+  position: relative;
+  background-color: #f9f9f9;
+  padding: 2rem 1.5rem;
+  overflow-x: hidden;
+  max-width: 120rem;
+  margin-bottom: 100px;
+}
+main {
+  background-color: #f9f9f9;
+  height: 100vh;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20000;
+
+  .progress-track {
+    width: 100%;
+    height: 3px;
+    background-color: #ececec;
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: #28a745;
+      transition: width 0.2s ease-out;
+    }
+  }
+}
+@keyframes load {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}

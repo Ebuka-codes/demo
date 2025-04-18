@@ -8,7 +8,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { Candidate, QuestionData } from './shared/candidate';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
@@ -55,7 +55,9 @@ export class CandidateComponent implements OnInit {
     private loaderService: LoaderService,
     private candidateService: CandidateService,
     private location: Location
-  ) {}
+  ) {
+    this.isLoading = this.loaderService.isLoading$;
+  }
   ngOnInit() {
     this.loadAllJob();
   }
@@ -97,45 +99,36 @@ export class CandidateComponent implements OnInit {
   }
   loadAllJob() {
     this.loaderService.setLoading(true);
-    this.candidateService.getAllJobs().subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.job = response.data;
-          console.log(this.job);
-          this.loaderService.setLoading(false);
-        }
-      },
-      error: (error) => {
-        this.toastService.error(error.error.message);
-        this.loaderService.setLoading(false);
-      },
-      complete: () => {
-        console.log('All jobs fetched');
-      },
-    });
+    this.candidateService
+      .getAllJobs()
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.job = response.data;
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.error.message);
+        },
+      });
   }
   loadCandidateByJobId(jobId: string) {
     this.loaderService.setLoading(true);
-    this.isLoading = this.loaderService.isLoading$;
-    this.candidateService.getCandidateByJobId(jobId).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.candidateData = response.data;
-          this.filteredCandidate = this.candidateData;
-          this.loaderService.setLoading(false);
-          this.isLoading = this.loaderService.isLoading$;
-        }
-      },
-      error: (error) => {
-        this.toastService.error(error.message);
-        this.loaderService.setLoading(false);
-        this.isLoading = this.loaderService.isLoading$;
-      },
-      complete: () => {
-        this.loaderService.setLoading(false);
-        this.isLoading = this.loaderService.isLoading$;
-      },
-    });
+    this.candidateService
+      .getCandidateByJobId(jobId)
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.candidateData = response.data;
+            this.filteredCandidate = this.candidateData;
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+        },
+      });
   }
 
   onShorListCandidate() {
@@ -144,20 +137,20 @@ export class CandidateComponent implements OnInit {
     };
     if (data.ids.length > 0) {
       this.loaderService.setLoading(true);
-      this.candidateService.shorListCandidate(data).subscribe({
-        next: (response: any) => {
-          this.shortListedData = response.data;
-          this.loaderService.setLoading(false);
-          this.toastService.success('Shortlisted successfully');
-          this.selectedIds = [];
-          this.loadCandidateByJobId(this.selectedJobId);
-        },
-        error: (err) => {
-          console.log(err);
-          this.loaderService.setLoading(false);
-          this.toastService.error(err.message);
-        },
-      });
+      this.candidateService
+        .shorListCandidate(data)
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .subscribe({
+          next: (response: any) => {
+            this.shortListedData = response.data;
+            this.toastService.success('Shortlisted successfully');
+            this.selectedIds = [];
+            this.loadCandidateByJobId(this.selectedJobId);
+          },
+          error: (err) => {
+            this.toastService.error(err.message);
+          },
+        });
     }
   }
   getCandidates() {

@@ -30,7 +30,9 @@
       <div class="modal-body">
         <form [formGroup]="scheduledDateForm" (ngSubmit)="onSubmit()">
           <div>
-            <label for="schedule-date">Select Date * </label>
+            <label for="schedule-date"
+              >Select Date <span class="required-icon">*</span>
+            </label>
             <mat-form-field>
               <input
                 matInput
@@ -49,7 +51,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="time">Select time *</label>
+            <label for="time"
+              >Select time <span class="required-icon">*</span></label
+            >
             <input [ngxTimepicker]="picker" formControlName="scheduledTime" />
             <ngx-material-timepicker #picker></ngx-material-timepicker>
 
@@ -61,7 +65,9 @@
           </div>
 
           <div class="form-group">
-            <label for="interviewers">Interviewers *</label>
+            <label for="interviewers"
+              >Interviewers <span class="required-icon">*</span></label
+            >
             <mat-form-field>
               <mat-select
                 formControlName="interviewers"
@@ -82,7 +88,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="description">Description</label>
+            <label for="description"
+              >Description <span class="required-icon">*</span></label
+            >
             <textarea
               id="description"
               formControlName="scheduledDescription"
@@ -91,7 +99,7 @@
             ></textarea>
             <div *ngIf="description?.invalid && description?.touched">
               <small *ngIf="description?.errors?.['required']"
-                >description is required</small
+                >Description is required</small
               >
             </div>
           </div>
@@ -105,10 +113,10 @@
               class="submit-btn"
               [disabled]="isLoading$ | async"
             >
-              <ng-container *ngIf="isLoading$ | async; else showLoader">
+              <ng-container *ngIf="isLoading$ | async; else content">
                 <span class="mini-loader-spinner"></span>
               </ng-container>
-              <ng-template #showLoader>
+              <ng-template #content>
                 <span>Submit</span>
               </ng-template>
             </button>

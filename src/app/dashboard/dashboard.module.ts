@@ -28,6 +28,7 @@ import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
 import { SessionComponent } from './components/ui/session/session.component';
 import { UserCorporateComponent } from './user-corporate/user-corporate.component';
+import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { UserCorporateComponent } from './user-corporate/user-corporate.componen
     RoleComponent,
     SessionComponent,
     UserCorporateComponent,
+    DashboardLayoutComponent,
   ],
   imports: [
     FormsModule,

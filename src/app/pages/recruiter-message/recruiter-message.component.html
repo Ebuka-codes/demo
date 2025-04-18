@@ -1,0 +1,56 @@
+<section class="recruiter-message">
+  <header>
+    <img src="../../../assets/image/logo-2.PNG" alt="logo" />
+  </header>
+  <div class="container">
+    <div class="message-card">
+      <h1>RECRUITER REQUEST</h1>
+      <p>
+        Based on your
+        <strong>{{ recruiterData.jobTitle }} </strong> role application at
+        <strong>{{ recruiterData.companyName }} </strong> you have a message.
+      </p>
+      <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h4 class="question">"{{ recruiterData.message }}"</h4>
+        <label for="message">Answer</label>
+        <div style="margin-top: 5px">
+          <quill-editor formControlName="content"></quill-editor>
+        </div>
+        <div
+          *ngIf="
+            form.controls['content']?.invalid &&
+            form.controls['content']?.touched
+          "
+        >
+          <small
+            class="text-danger mt-4"
+            *ngIf="form.controls['content']?.errors?.['required']"
+            >Field is required</small
+          >
+        </div>
+
+        <div class="submit-btn">
+          <button type="submit" [disabled]="isLoading">
+            <ng-container *ngIf="isLoading; else content">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #content>
+              Send
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-send-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
+                /></svg
+            ></ng-template>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

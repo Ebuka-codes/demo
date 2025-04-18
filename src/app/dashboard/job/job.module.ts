@@ -9,7 +9,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { QuillModule } from 'ngx-quill';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { JobRoutingModule } from './job-routing.module';
 import { JobComponent } from './job.component';
@@ -20,6 +20,7 @@ import { JobDeleteComponent } from './job-delete/job-delete.component';
 import { JobFilterComponent } from './job-filter/job-filter.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     MatButtonToggleModule,
     SharedModule,
+    NgbTooltipModule,
   ],
 })
 export class JobModule {}

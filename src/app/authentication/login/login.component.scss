@@ -3,11 +3,10 @@
   .login-header {
     background-color: #299345;
     width: 100%;
-    min-height: 100%;
     padding: 10px 0px;
     padding-left: 70px;
     z-index: 999;
-    position: relative;
+
     img {
       width: 120px;
     }
@@ -15,27 +14,26 @@
   .content {
     display: flex;
     height: 100vh;
-    align-items: center;
 
     .image-section {
-      position: relative;
       width: 60%;
-      height: 100%;
-      overflow: hidden;
       background-color: #299345;
+      position: relative;
+      overflow: hidden;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
-      .text {
+      .bg-text {
         position: absolute;
         top: 75%;
         left: 50%;
         width: 80%;
         line-height: 1.2;
         transform: translate(-50%, -50%);
+        z-index: 2;
         span {
           font-weight: 600;
           font-size: 40px;
@@ -45,7 +43,8 @@
     }
     .login-form {
       width: 50%;
-      margin: 0px auto;
+      margin: 70px auto;
+      justify-content: center;
       .form-wrapper {
         width: 100%;
         max-width: 550px;
@@ -121,6 +120,10 @@
             &:hover,
             &:focus {
               box-shadow: #0000004d 0 2px 6px;
+            }
+
+            &:disabled {
+              cursor: not-allowed;
             }
           }
 

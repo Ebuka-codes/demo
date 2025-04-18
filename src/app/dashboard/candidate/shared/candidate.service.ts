@@ -78,6 +78,13 @@ export class CandidateService {
   }
   sendMessage(data: any) {
     return this.httpClient.post(
+      Constants.MESSAGE_URL.MESSAGE + '/user/send',
+      data
+    );
+  }
+
+  candidateMessage(data: any) {
+    return this.httpClient.post(
       Constants.MESSAGE_URL.MESSAGE + '/candidate/send',
       data
     );

@@ -81,6 +81,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="(isLoading$ | async) && data.length === 0">
+          <td colspan="8">Loading data...</td>
+        </tr>
         <tr *ngFor="let item of data">
           <td style="display: flex; gap: 20px; align-items: center">
             <input
@@ -164,8 +167,8 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="!data?.length">
-          <td>No record found</td>
+        <tr *ngIf="!data?.length && !(isLoading$ | async)">
+          <td colspan="8">No record found</td>
         </tr>
       </tbody>
     </table>
@@ -208,7 +211,9 @@
           <div class="modal-body">
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="form-group">
-                <label for="name">Name *</label>
+                <label for="name"
+                  >Name <span class="required-icon">*</span></label
+                >
                 <input id="name" type="text" formControlName="name" />
                 <small
                   *ngIf="
@@ -222,7 +227,9 @@
               </div>
 
               <div class="form-group">
-                <label for="email">Email *</label>
+                <label for="email"
+                  >Email <span class="required-icon">*</span></label
+                >
                 <input id="email" type="email" formControlName="email" />
 
                 <div
@@ -249,7 +256,9 @@
               </div>
 
               <div class="form-group">
-                <label for="phone">Phone *</label>
+                <label for="phone"
+                  >Phone <span class="required-icon">*</span></label
+                >
                 <input id="phone" type="tel" formControlName="phone" />
                 <div
                   *ngIf="
@@ -278,8 +287,12 @@
                 <button type="button" class="close-btn" data-bs-dismiss="modal">
                   <span>Cancel</span>
                 </button>
-                <button type="submit" class="submit-btn" [disabled]="isLoading">
-                  <ng-container *ngIf="isLoading; else showLoader">
+                <button
+                  type="submit"
+                  class="submit-btn"
+                  [disabled]="isLoading$ | async"
+                >
+                  <ng-container *ngIf="isLoading$ | async; else showLoader">
                     <span class="mini-loader-spinner"></span>
                   </ng-container>
                   <ng-template #showLoader>

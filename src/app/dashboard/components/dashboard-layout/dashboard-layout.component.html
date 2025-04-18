@@ -1,4 +1,8 @@
-<!-- <div *ngIf="isLoading$ | async" class="progress-bar"></div>
+<div class="progress-container" *ngIf="isLoading">
+  <div class="progress-track">
+    <div class="progress-bar" [style.width.%]="progress"></div>
+  </div>
+</div>
 <div class="layout">
   <app-sidebar></app-sidebar>
   <div>
@@ -7,4 +11,4 @@
       <router-outlet></router-outlet>
     </main>
   </div>
-</div> -->
+</div>

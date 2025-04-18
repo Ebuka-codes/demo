@@ -204,18 +204,17 @@
         span:nth-child(3) {
           color: #e50c20;
         }
-      }
 
-      // .job-link__dropdown {
-      h4 {
-        font-size: 12px;
-      }
-      .job_link__content {
-        .job-url {
-          background-color: #28a745;
+        .humburger-icon svg {
+          color: #d9d9d9;
+          width: 28px;
+          height: 28px;
+          cursor: pointer;
+        }
+        .humburger-icon[ngbDropdownToggle]::after {
+          display: none !important;
         }
       }
-      // }
     }
   }
   tbody tr:nth-child(even) {
@@ -223,5 +222,19 @@
   }
   tbody tr:nth-child(odd) {
     background-color: white !important;
+  }
+}
+.dropdown-menu {
+  ::ng-deep .dropdown-item {
+    color: rgb(14 13 13);
+    &:focus,
+    &:hover {
+      background-color: transparent !important;
+      color: rgb(14 13 13) !important;
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+    }
   }
 }
