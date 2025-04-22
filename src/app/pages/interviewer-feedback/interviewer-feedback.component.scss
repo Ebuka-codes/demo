@@ -1,0 +1,188 @@
+.feedback {
+  background-color: #28a745;
+  background-image: url("/assets/image/Desktop-bg.png");
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+
+  header {
+    background-color: white;
+    padding: 10px 40px;
+    width: 100%;
+    img {
+      width: 120px;
+      margin-left: 20px;
+    }
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+    margin-top: 50px;
+  }
+  .content {
+    border-radius: 10px;
+    background-color: white;
+    padding: 20px 40px;
+    line-height: 1.5;
+    width: 100%;
+    .title {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #28a745;
+      padding: 10px 0px;
+      color: #63a728;
+      h2 {
+        font-size: 20px;
+      }
+    }
+    .error-summary {
+      text-align: right;
+      color: rgba(220, 53, 69);
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 20px;
+      font-size: 15px;
+      svg {
+        width: 13px;
+        height: 13px;
+        color: rgba(220, 53, 69);
+      }
+    }
+    .item {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 20px;
+
+      .perspective-tabs {
+        .active-tab {
+          width: 250px;
+          border-left: 3px solid #28a745;
+          border-top: 1px solid #dddddd;
+          background-color: white;
+          border-bottom: none;
+          border-right: none;
+          padding: 15px 15px 20px 15px;
+          line-height: 0.4;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          outline: none;
+
+          &:focus {
+            outline: none;
+          }
+
+          h5 {
+            font-weight: 500;
+            color: #28a745;
+            font-size: 16px;
+          }
+          span {
+            color: #63a728;
+          }
+        }
+        .not-active {
+          width: 250px;
+          background-color: #dddddd;
+          padding: 10px;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          outline: none;
+          border: none;
+          padding: 15px 15px 20px 15px;
+          line-height: 0.4;
+
+          h5 {
+            color: #aaaaaa;
+            font-size: 16px;
+          }
+          span {
+            color: rgb(51 51 51);
+          }
+        }
+      }
+      form {
+        margin-top: 20px;
+        .form-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+
+          .form-group {
+            background-color: #f9f9f9;
+            padding: 10px 20px;
+            border-radius: 5px;
+
+            span {
+              margin-bottom: 20px;
+              font-size: 16px;
+            }
+            .comment {
+              background-color: white;
+              border-radius: 5px;
+              border: 1px solid rgb(223 221 221 / 93%);
+              padding: 3px 15px;
+              font-size: 14px;
+              color: #aaaaaa;
+              height: 130px;
+              width: 100%;
+              outline: none;
+              margin-top: 10px;
+            }
+          }
+          .error {
+            border: 1px solid rgba(220, 53, 69) !important;
+          }
+          small {
+            font-size: 14px;
+          }
+
+          .invalid-field ::ng-deep .mat-mdc-text-field-wrapper {
+            border: 1px solid rgba(220, 53, 69) !important;
+          }
+        }
+
+        .submit-btn {
+          background-color: #28a745;
+          color: white;
+          padding: 8px 25px;
+          text-align: center;
+          border-radius: 10px;
+          margin-top: 30px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          justify-content: center;
+          float: right;
+          outline: none;
+          border: none;
+          width: 150px;
+        }
+
+        .mini-loader-spinner {
+          border: 3px solid white;
+          border-color: white transparent white white;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          margin: 0px auto;
+          animation: spin 0.5s linear infinite;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+    }
+  }
+}

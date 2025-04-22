@@ -108,12 +108,8 @@
               <span>Cancel</span>
             </button>
 
-            <button
-              type="submit"
-              class="submit-btn"
-              [disabled]="isLoading$ | async"
-            >
-              <ng-container *ngIf="isLoading$ | async; else content">
+            <button type="submit" class="submit-btn" [disabled]="submitted">
+              <ng-container *ngIf="submitted; else content">
                 <span class="mini-loader-spinner"></span>
               </ng-container>
               <ng-template #content>

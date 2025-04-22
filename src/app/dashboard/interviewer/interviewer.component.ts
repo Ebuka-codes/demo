@@ -25,6 +25,7 @@ import { finalize, Observable } from 'rxjs';
 export class InterviewerComponent implements OnInit {
   form!: FormGroup;
   isLoading$!: Observable<boolean>;
+  submitting!: boolean;
   @ViewChild('myModal') modalElement!: ElementRef;
   modalInstance!: Modal;
   time = '';
@@ -91,31 +92,27 @@ export class InterviewerComponent implements OnInit {
     backdrop?.remove();
   }
   createInterviewer(data: Interviewer) {
-    this.loaderService.setLoading(true);
-    this.isLoading$ = this.loaderService.isLoading$;
-    this.interviewerService.createInterviewer(data).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.resetForm();
-          this.toastService.success(response.message);
-          this.loaderService.setLoading(false);
-          this.isLoading$ = this.loaderService.isLoading$;
+    this.submitting = true;
+    this.interviewerService
+      .createInterviewer(data)
+      .pipe(finalize(() => (this.submitting = false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.resetForm();
+            this.toastService.success(response.message);
+            this.closeModal();
+            this.loadInterviewers();
+          } else {
+            this.closeModal();
+            this.toastService.error(response.message);
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
           this.closeModal();
-          this.loadInterviewers();
-        } else {
-          this.loaderService.setLoading(false);
-          this.isLoading$ = this.loaderService.isLoading$;
-          this.closeModal();
-          this.toastService.error(response.message);
-        }
-      },
-      error: (error) => {
-        this.toastService.error(error.message);
-        this.loaderService.setLoading(false);
-        this.isLoading$ = this.loaderService.isLoading$;
-        this.closeModal();
-      },
-    });
+        },
+      });
   }
   onSubmit() {
     if (this.form.valid) {

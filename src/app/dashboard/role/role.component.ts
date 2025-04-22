@@ -20,6 +20,7 @@ export class RoleComponent implements OnInit {
   userRoleForm!: FormGroup;
   isLoading$!: Observable<boolean>;
   roleData!: any[];
+  submitLoading!: boolean;
   constructor(
     private fb: FormBuilder,
     private roleService: RoleService,
@@ -61,9 +62,7 @@ export class RoleComponent implements OnInit {
         next: (response: any) => {
           if (response.valid && response.data) {
             this.roleData = response.data;
-            this.loaderService.setLoading(false);
           } else {
-            this.loaderService.setLoading(false);
             this.toastService.error(response.message);
           }
         },
@@ -75,26 +74,23 @@ export class RoleComponent implements OnInit {
   }
   onSubmit() {
     if (this.userRoleForm.valid) {
-      this.loaderService.setLoading(true);
+      this.submitLoading = true;
       this.roleService
         .createUserRole(this.userRoleForm.value)
-        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .pipe(finalize(() => (this.submitLoading = false)))
         .subscribe({
           next: (response: any) => {
             if (response.valid) {
-              this.loaderService.setLoading(false);
               this.toastService.success(response.message);
               this.closeModal();
               this.loadUserRole();
             } else {
-              this.loaderService.setLoading(false);
               this.toastService.error(response.message);
               this.closeModal();
             }
           },
           error: (error) => {
             this.toastService.error(error.message);
-            this.loaderService.setLoading(true);
             this.closeModal();
           },
         });

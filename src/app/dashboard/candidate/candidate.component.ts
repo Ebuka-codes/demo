@@ -40,7 +40,7 @@ export class CandidateComponent implements OnInit {
   qualifiedQuestionData!: Array<QuestionData>;
   selectedJob!: string;
   selectedAllChecked: boolean = false;
-  selectedIds: string[] = [];
+  selectedCandidateIds: string[] = [];
   tabs: string[] = ['Candidate', 'Shortlisted', 'Interview'];
   activeTag = 'Candidate';
   shortListedData!: Array<Candidate>;
@@ -83,19 +83,21 @@ export class CandidateComponent implements OnInit {
   onToggleAllCheckbox() {
     this.selectedAllChecked = !this.selectedAllChecked;
     if (this.selectedAllChecked) {
-      this.selectedIds = this.filteredCandidate.map((item) => item.id);
+      this.selectedCandidateIds = this.filteredCandidate.map((item) => item.id);
     } else {
-      this.selectedIds = [];
+      this.selectedCandidateIds = [];
     }
   }
   onToggleSelection(id: string) {
-    if (this.selectedIds.includes(id)) {
-      this.selectedIds = this.selectedIds.filter((itemId) => itemId !== id);
+    if (this.selectedCandidateIds.includes(id)) {
+      this.selectedCandidateIds = this.selectedCandidateIds.filter(
+        (itemId) => itemId !== id
+      );
     } else {
-      this.selectedIds.push(id);
+      this.selectedCandidateIds.push(id);
     }
     this.selectedAllChecked =
-      this.selectedIds.length === this.filteredCandidate.length;
+      this.selectedCandidateIds.length === this.filteredCandidate.length;
   }
   loadAllJob() {
     this.loaderService.setLoading(true);
@@ -133,7 +135,7 @@ export class CandidateComponent implements OnInit {
 
   onShorListCandidate() {
     const data = {
-      ids: this.selectedIds,
+      ids: this.selectedCandidateIds,
     };
     if (data.ids.length > 0) {
       this.loaderService.setLoading(true);
@@ -144,11 +146,38 @@ export class CandidateComponent implements OnInit {
           next: (response: any) => {
             this.shortListedData = response.data;
             this.toastService.success('Shortlisted successfully');
-            this.selectedIds = [];
+            this.selectedCandidateIds = [];
             this.loadCandidateByJobId(this.selectedJobId);
           },
           error: (err) => {
             this.toastService.error(err.message);
+          },
+        });
+    }
+  }
+  onInterviewerFeedback() {
+    const data = {
+      candidateIds: this.selectedCandidateIds,
+      jobId: this.selectedJobId,
+    };
+    if (data.candidateIds.length > 0) {
+      this.loaderService.setLoading(true);
+      this.candidateService
+        .interviewerFeedback(data)
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              this.toastService.success(response.message);
+              this.selectedCandidateIds = [];
+            } else {
+              this.toastService.success(response.message);
+              this.selectedCandidateIds = [];
+            }
+          },
+          error: (error) => {
+            this.toastService.error(error.message);
+            this.selectedCandidateIds = [];
           },
         });
     }
@@ -232,7 +261,7 @@ export class CandidateComponent implements OnInit {
     this.candidateId = id;
   }
 
-  onBack() {
+  onNavigateBack() {
     this.location.back();
   }
 
@@ -257,19 +286,17 @@ export class CandidateComponent implements OnInit {
     this.loaderService.setLoading(true);
     this.candidateService
       .searchFilter({ ...this.searchFilterData(), jobid: this.selectedJobId })
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
         next: (response: any) => {
           if (response.valid && response.data) {
             this.filteredCandidate = response.data;
-            this.loaderService.setLoading(false);
             this.clearSearchFilter();
           } else {
-            this.loaderService.setLoading(false);
             this.clearSearchFilter();
           }
         },
         error: (error) => {
-          this.loaderService.setLoading(false);
           this.toastService.error(error.message);
           this.clearSearchFilter();
         },

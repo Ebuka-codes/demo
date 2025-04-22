@@ -39,7 +39,10 @@ export class CandidateService {
   }
 
   scheduleCandidateById(data: string) {
-    return this.httpClient.put(Constants.CANDIDATE_URL + '/schedule', data);
+    return this.httpClient.put(
+      Constants.CANDIDATE_URL.CANDIDATES + '/schedule',
+      data
+    );
   }
   filterCandidate(data: {}) {
     return this.httpClient.put(Constants.FILTER_URL.FILTER_CANDIDATE, data);
@@ -92,6 +95,12 @@ export class CandidateService {
   getMessage(id: string) {
     return this.httpClient.get(
       Constants.MESSAGE_URL.MESSAGE + `/candidate/${id}`
+    );
+  }
+  interviewerFeedback(data: any) {
+    return this.httpClient.post(
+      Constants.FEEDBACK_URL.FEEDBACK + `/send-feedback-link`,
+      data
     );
   }
 }

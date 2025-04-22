@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Modal } from 'bootstrap';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { CandidateService } from '../../shared/candidate.service';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { Candidate } from '../../shared/candidate';
 import { ToastService } from 'src/app/core/service/toast.service';
 
@@ -43,7 +43,7 @@ export class CandidateFilterModalComponent {
     }
   );
   jobTitle: any;
-  isLoading$!: Observable<boolean>;
+  isLoading!: boolean;
   constructor(
     private fb: FormBuilder,
     private candidateService: CandidateService,
@@ -67,11 +67,9 @@ export class CandidateFilterModalComponent {
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
           this.jobTitle = new Set(reponse.data.map((job: job) => job.jobTitle));
-          this.loaderService.setLoading(false);
         }
       },
       error: (error) => {
-        this.loaderService.setLoading(false);
         this.toastService.error(error.message);
       },
     });
@@ -96,28 +94,25 @@ export class CandidateFilterModalComponent {
       this.filterForm.get('jobTitle')?.value ||
       this.filterForm.get('status')?.value
     ) {
-      this.loaderService.setLoading(true);
-      this.isLoading$ = this.loaderService.isLoading$;
-      this.candidateService.filterCandidate(data).subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.loaderService.setLoading(false);
-            this.isLoading$ = this.loaderService.isLoading$;
+      this.isLoading = true;
+      this.candidateService
+        .filterCandidate(data)
+        .pipe(finalize(() => (this.isLoading = true)))
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              this.closeModal();
+              this.updateCandidateData.emit(response.data);
+              this.toastService.success(response.message);
+            } else {
+              this.toastService.error(response.message);
+            }
+          },
+          error: (error) => {
             this.closeModal();
-            this.updateCandidateData.emit(response.data);
-            this.toastService.success(response.message);
-          } else {
-            this.loaderService.setLoading(false);
-            this.isLoading$ = this.loaderService.isLoading$;
-          }
-        },
-        error: (error) => {
-          this.loaderService.setLoading(false);
-          this.isLoading$ = this.loaderService.isLoading$;
-          this.closeModal();
-          this.toastService.error(error.message);
-        },
-      });
+            this.toastService.error(error.message);
+          },
+        });
     }
   }
 }

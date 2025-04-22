@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CandidateService } from '../../shared/candidate.service';
 import { Modal } from 'bootstrap';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import flatpickr from 'flatpickr';
 import { ToastService } from 'src/app/core/service/toast.service';
 
@@ -91,26 +91,23 @@ export class CandidateScheduleDateComponent implements OnInit {
     });
   }
   createScheduleDate(data: any) {
-    this.loaderService.setLoading(true);
-    this.isLoading$ = this.loaderService.isLoading$;
-    this.candidateService.scheduleCandidateById(data).subscribe({
-      next: (response: any) => {
-        this.submitted = false;
-        this.toastService.success(response.message);
-        this.scheduledDateForm.reset();
-        this.closeModal();
-        this.candidateUpdate.emit();
-        this.loaderService.setLoading(false);
-        this.isLoading$ = this.loaderService.isLoading$;
-      },
-      error: (error) => {
-        this.toastService.error(error.message);
-        this.loaderService.setLoading(false);
-        this.isLoading$ = this.loaderService.isLoading$;
-        this.closeModal();
-        this.candidateUpdate.emit();
-      },
-    });
+    this.submitted = true;
+    this.candidateService
+      .scheduleCandidateById(data)
+      .pipe(finalize(() => (this.submitted = false)))
+      .subscribe({
+        next: (response: any) => {
+          this.toastService.success(response.message);
+          this.scheduledDateForm.reset();
+          this.closeModal();
+          this.candidateUpdate.emit();
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+          this.closeModal();
+          this.candidateUpdate.emit();
+        },
+      });
   }
   onSubmit() {
     const data = new Date(this.scheduledDateForm.get('scheduledDate')?.value);

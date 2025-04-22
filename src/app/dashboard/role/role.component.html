@@ -223,7 +223,7 @@
                   >Name is required.</small
                 >
                 <small class="text-danger" *ngIf="name?.hasError('minlength')"
-                  >First Name must be at least 2 characters long.</small
+                  >Name must be at least 2 characters long.</small
                 >
               </div>
             </div>
@@ -251,12 +251,10 @@
                 <span>Cancel</span>
               </button>
               <button type="submit" class="submit-btn">
-                <ng-container *ngIf="!(isLoading$ | async); else showLoader">
-                  Submit
-                </ng-container>
-                <ng-template #showLoader>
+                <ng-container *ngIf="submitLoading; else content">
                   <span class="mini-loader-spinner"></span>
-                </ng-template>
+                </ng-container>
+                <ng-template #content> Submit </ng-template>
               </button>
             </div>
           </form>

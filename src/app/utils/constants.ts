@@ -47,4 +47,7 @@ export const Constants = {
   MESSAGE_URL: {
     MESSAGE: `${BASE_URL}/api/messages`,
   },
+  FEEDBACK_URL: {
+    FEEDBACK: `${BASE_URL}/api/feedback`,
+  },
 };

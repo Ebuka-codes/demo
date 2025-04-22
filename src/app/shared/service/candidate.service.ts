@@ -16,7 +16,7 @@ export class CandidateService {
   getCandidatesInfo(id: string | null) {
     return this.httpClient.get(Constants.CANDIDATE_URL.CANDIDATES + `/${id}`);
   }
-  candidateLogin(email: any) {
+  candidateLogin(email: string) {
     return this.httpClient.get(
       Constants.CANDIDATE_URL.CANDIDATES + `/exists/${email}`
     );

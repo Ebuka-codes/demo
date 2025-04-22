@@ -102,28 +102,24 @@ export class UserComponent {
   }
   onSubmit() {
     if (this.userForm.valid) {
-      this.loaderService.setLoading(true);
       this.submitLoading = true;
       this.userService
         .createUser(this.userForm.value)
-        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .pipe(finalize(() => (this.submitLoading = false)))
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
               this.toasterService.success('User created successfully');
               this.closeModal();
-              this.submitLoading = false;
               this.loadUsers();
             } else {
               this.closeModal();
-              this.submitLoading = false;
               this.toasterService.error(response.message);
             }
           },
           error: (error) => {
             this.toasterService.error(error.message);
             this.closeModal();
-            this.submitLoading = false;
           },
         });
     } else {

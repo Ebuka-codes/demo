@@ -142,7 +142,7 @@
         font-weight: 400;
         outline: none;
         border: 1px solid #dddd;
-        border-radius: 25px;
+        border-radius: 10px;
         ::placeholder {
           font-size: 16px;
         }
@@ -161,9 +161,9 @@
       padding: 10px;
       width: 100px;
       background-color: transparent;
-      border-radius: 25px;
+      border-radius: 10px;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 400;
       color: white;
       border: 1px solid #dddd;
       color: #000000;
@@ -260,13 +260,6 @@
       padding-left: 10px;
     }
 
-    tbody tr input:checked {
-      border: 1px solid blue;
-      ::after {
-        content: "";
-        opacity: 1;
-      }
-    }
     tbody {
       td {
         font-size: 14px;
@@ -276,49 +269,52 @@
       .status-btn {
         .scheduled {
           background-color: #e0ebff;
-          padding: 3px 20px;
+          padding: 3px 10px;
           border-radius: 5px;
           color: #2a5dcc;
           border: none;
           font-size: 13px;
-          max-width: 100px;
         }
 
         .hired {
           background-color: #e7f7ef;
-          padding: 3px 20px;
+          padding: 3px 10px;
           border-radius: 5px;
           color: #0dab6f;
           border: none;
           font-size: 13px;
-          max-width: 100px;
         }
         .rejected {
           background-color: #ff000017;
-          padding: 3px 20px;
+          padding: 3px 10px;
           border-radius: 5px;
           color: #e50c20;
-          max-width: 100px;
           border: none;
           font-size: 13px;
         }
         .pending {
           background-color: #fff6d3;
-          padding: 3px 20px;
+          padding: 3px 10px;
           border-radius: 5px;
           color: #e8be29;
           border: none;
           font-size: 13px;
-          max-width: 100px;
         }
         .shortlist {
           background-color: #17a2b81f;
-          padding: 3px 20px;
+          padding: 3px 10px;
           border-radius: 5px;
           color: #17a2b8;
           border: none;
           font-size: 13px;
-          max-width: 100px;
+        }
+        .open {
+          background-color: rgb(243 232 255);
+          color: rgb(168 85 247);
+          padding: 3px 10px;
+          border-radius: 5px;
+          border: none;
+          font-size: 13px;
         }
       }
       .action {

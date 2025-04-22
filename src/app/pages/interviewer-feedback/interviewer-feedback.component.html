@@ -1,0 +1,138 @@
+<section class="feedback">
+  <header>
+    <img src="../../../assets/image/logo-2.PNG" alt="logo" />
+  </header>
+
+  <div class="container">
+    <div class="content">
+      <div class="title">
+        <h2>{{ candidateInfo.candidateName }} - {{ data.title }}</h2>
+      </div>
+      <span class="error-summary" *ngIf="isValid">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-info-circle-fill"
+          viewBox="0 0 16 16"
+          style="cursor: pointer"
+          ngbPopover="This search field scans talent resumes and 
+        retrieves all talents whose profile contain the entered keyword!"
+          triggers="mouseenter:mouseleave"
+        >
+          <path
+            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"
+          />
+        </svg>
+        All feedback info is required</span
+      >
+      <div class="item">
+        <div>
+          <div
+            class="perspective-tabs"
+            *ngFor="let item of data.perspectives; let i = index"
+          >
+            <button
+              (click)="onSelectPerspective(i)"
+              [ngClass]="selectedIndex === i ? 'active-tab' : 'not-active'"
+            >
+              <h5>Total {{ item.name }}</h5>
+              <span>weight-{{ item.weight }}</span>
+            </button>
+          </div>
+        </div>
+
+        <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+          <div formArrayName="perspectives">
+            <ng-container *ngIf="perspectiveControls.length > selectedIndex">
+              <div [formGroupName]="selectedIndex">
+                <div formArrayName="items" class="form-container">
+                  <div
+                    class="form-group"
+                    *ngFor="
+                      let item of data.perspectives[selectedIndex].items;
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
+                    <label>{{ item.question }}</label>
+
+                    <mat-form-field
+                      style="margin-top: 10px"
+                      appearance="fill"
+                      [ngClass]="{
+                        'invalid-field':
+                          getItemGroup(i).get('rating')?.touched &&
+                          getItemGroup(i).get('rating')?.invalid
+                      }"
+                    >
+                      <mat-select formControlName="rating" placeholder="Rating">
+                        <mat-option
+                          *ngFor="let option of item.ratingScale.ratingValues"
+                          [value]="option.score"
+                        >
+                          {{ option.label }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        getItemGroup(i).get('rating')?.touched &&
+                        getItemGroup(i).get('rating')?.invalid
+                      "
+                    >
+                      Rating is required
+                    </small>
+
+                    <textarea
+                      placeholder="Add a Comment"
+                      formControlName="comment"
+                      class="comment"
+                      [class.error]="
+                        getItemGroup(i).get('comment')?.touched &&
+                        getItemGroup(i).get('comment')?.invalid
+                      "
+                    ></textarea>
+
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        getItemGroup(i).get('comment')?.touched &&
+                        getItemGroup(i).get('comment')?.invalid
+                      "
+                    >
+                      Comment is required
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <button type="submit" class="submit-btn" [disabled]="isLoading">
+            <ng-container *ngIf="isLoading; else content">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #content>
+              Submit
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-send-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
+                /></svg
+            ></ng-template>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

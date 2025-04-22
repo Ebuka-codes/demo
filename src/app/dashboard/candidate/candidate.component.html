@@ -8,7 +8,7 @@
     "
   >
     <div class="action">
-      <span class="nav-back" (click)="onBack()">
+      <span class="nav-back" (click)="onNavigateBack()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -131,9 +131,15 @@
           <div>
             <button type="button" (click)="openFilterModal()">Filter</button>
           </div>
-          <div>
+          <div *ngIf="activeTag === 'Candidate'">
             <button type="button" (click)="onShorListCandidate()">
               Shortlist
+            </button>
+          </div>
+
+          <div *ngIf="activeTag === 'Interview'">
+            <button type="button" (click)="onInterviewerFeedback()">
+              Feedback
             </button>
           </div>
 
@@ -166,7 +172,7 @@
                 <input
                   type="checkbox"
                   (change)="onToggleSelection(item.id)"
-                  [checked]="selectedIds.includes(item.id)"
+                  [checked]="selectedCandidateIds.includes(item.id)"
                 />
               </td>
               <td>
@@ -204,7 +210,8 @@
                     hired: item.status === 'HIRED',
                     rejected: item.status === 'REJECTED',
                     scheduled: item.status === 'INTERVIEW_SCHEDULED',
-                    shortlist: item.status === 'SHORTLIST'
+                    shortlist: item.status === 'SHORTLIST',
+                    open: item.status === 'OPEN'
                   }"
                 >
                   {{ item?.status?.slice(0, 9) | titlecase }}
@@ -218,6 +225,8 @@
                       data-bs-toggle="modal"
                       data-bs-target="#viewCandidateModal"
                       (click)="onViewCandidate(item.id)"
+                      mat-raised-button
+                      matTooltip="View"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -240,9 +249,12 @@
                       </svg>
                     </span>
                     <span
+                      *ngIf="activeTag !== 'interview'"
                       data-bs-target="#scheduleModal"
                       data-bs-toggle="modal"
                       (click)="onScheduleDate(item.id)"
+                      mat-raised-button
+                      matTooltip="Schedule Interview"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -263,6 +275,8 @@
                       (click)="onReject(item.id)"
                       data-bs-toggle="modal"
                       data-bs-target="#candidateRejectModal"
+                      mat-raised-button
+                      matTooltip="Reject"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -365,8 +379,8 @@
               </td>
             </tr>
 
-            <tr *ngIf="!(isLoading | async) && !filteredCandidate">
-              <td style="font-style: italic">No candidate yet</td>
+            <tr *ngIf="!(isLoading | async) && filteredCandidate.length === 0">
+              <td>No candidate</td>
             </tr>
           </tbody>
         </table>

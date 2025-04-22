@@ -9,6 +9,8 @@ import { SessionComponent } from './dashboard/components/ui/session/session.comp
 import { AuthGuard } from './core/guard/auth-guard.service';
 import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
 import { RecruiterMessageComponent } from './pages/recruiter-message/recruiter-message.component';
+import { InterviewerValidationComponent } from './pages/interviewer-validation/interviewer-validation.component';
+import { InterviewerFeedbackComponent } from './pages/interviewer-feedback/interviewer-feedback.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -38,10 +40,21 @@ const routes: Routes = [
     path: 'candidate/action',
     component: CandidateVerificationComponent,
   },
+
   {
     path: 'recruiter-message/:token',
     component: RecruiterMessageComponent,
   },
+
+  {
+    path: 'interviewer/feedback/action',
+    component: InterviewerValidationComponent,
+  },
+  {
+    path: 'feedback-response/:token',
+    component: InterviewerFeedbackComponent,
+  },
+
   {
     path: 'apply',
     loadChildren: () =>

@@ -18,7 +18,6 @@ export class RecruiterMessageComponent implements OnInit {
   token!: string | null;
   constructor(
     private fb: FormBuilder,
-    private location: Location,
     private candidateService: CandidateService,
     private toastService: ToastService,
     private route: ActivatedRoute,

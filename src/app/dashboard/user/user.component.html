@@ -313,14 +313,12 @@
               <button
                 type="submit"
                 class="submit-btn"
-                [disabled]="isLoading$ | async"
+                [disabled]="submitLoading"
               >
-                <ng-container *ngIf="!(isLoading$ | async); else showLoader">
-                  Submit
-                </ng-container>
-                <ng-template #showLoader>
+                <ng-container *ngIf="submitLoading; else content">
                   <span class="mini-loader-spinner"></span>
-                </ng-template>
+                </ng-container>
+                <ng-template #content> Submit </ng-template>
               </button>
             </div>
           </form>

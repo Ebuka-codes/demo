@@ -86,7 +86,7 @@
           font-weight: 400;
           outline: none;
           border: 1px solid #dddd;
-          border-radius: 20px;
+          border-radius: 10px;
           ::placeholder {
             font-size: 16px;
           }
@@ -105,7 +105,7 @@
         padding: 10px;
         width: 100px;
         background-color: transparent;
-        border-radius: 25px;
+        border-radius: 10px;
         font-size: 14px;
         font-weight: 600;
         border: 1px solid #dddd;
@@ -152,7 +152,7 @@
       .status-btn {
         .active {
           background-color: #e7f7ef;
-          padding: 5px 20px;
+          padding: 5px 10px;
           border-radius: 5px;
           color: #0dab6f;
           border: none;
