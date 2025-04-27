@@ -1,56 +1,60 @@
-<section class="job-container">
-  <app-header />
-  <main>
-    <section class="hero-section">
-      <div class="content">
-        <div class="info">
-          <h1>Unlock Your Career Potential</h1>
-          <p>
-            Discover your dream job, get noticed by top employers, and take your
-            career to the next level.
-          </p>
-          <p>
-            Explore latest job openings apply now, and start you journey to
-            success!
-          </p>
+<div class="job-container">
+  <div class="loader-container" *ngIf="isLoadingData$ | async">
+    <div class="full-loader"></div>
+  </div>
+
+  <div *ngIf="!(isLoadingData$ | async) && jobList.length">
+    <app-header />
+    <main>
+      <section class="hero-section">
+        <div class="content">
+          <div class="info">
+            <h1>Unlock Your Career Potential</h1>
+            <p>
+              Discover your dream job, get noticed by top employers, and take
+              your career to the next level.
+            </p>
+            <p>
+              Explore latest job openings apply now, and start you journey to
+              success!
+            </p>
+          </div>
+
+          <img src="../../../assets/image/search-image.png" alt="" />
         </div>
+      </section>
 
-        <img src="../../../assets/image/search-image.png" alt="" />
-      </div>
-    </section>
+      <div style="width: 60%; margin: auto">
+        <div class="search">
+          <div style="position: relative; width: 100%">
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                />
+              </svg>
+            </span>
+            <input
+              #input
+              type="text"
+              placeholder="Search"
+              [(ngModel)]="searchValue"
+              (keydown.enter)="onSearchEnter(input.value)"
+            />
+          </div>
 
-    <div style="width: 60%; margin: auto">
-      <div class="search">
-        <div style="position: relative; width: 100%">
-          <span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-4"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-          </span>
-          <input
-            #input
-            type="text"
-            placeholder=" Search"
-            [(ngModel)]="searchValue"
-            (keydown.enter)="onSearchEnter(input.value)"
-          />
+          <button type="submit" (click)="searchJob()">Find jobs</button>
         </div>
-
-        <button type="submit" (click)="searchJob()">Find jobs</button>
       </div>
-    </div>
-    <ng-container *ngIf="!(isLoadingData$ | async); else showLoading">
       <div class="category">
         <span class="icon">
           <svg
@@ -67,7 +71,6 @@
             />
           </svg>
         </span>
-
         <span class="total-job">{{ jobList.length }} OPEN JOBS</span>
         <div class="category-btn">
           <div ngbDropdown class="d-inline-block">
@@ -138,7 +141,9 @@
         </button>
       </div>
 
-      <ng-container *ngIf="!isLoadingSearch && jobList.length">
+      <ng-container
+        *ngIf="!isLoadingSearch && jobList.length; else showLoading"
+      >
         <div class="job-listing">
           <h3>Lastest <span style="color: #299345">jobs openings</span></h3>
           <div class="content-container">
@@ -148,11 +153,11 @@
                 <div class="location-date">
                   <span
                     style="
-                      width: 5px;
-                      height: 5px;
+                      width: 4px;
+                      height: 4px;
                       border-radius: 50%;
-                      border: 1px solid black;
-                      background-color: black;
+                      border: 1px solid #515b6f;
+                      background-color: #515b6f;
                     "
                   ></span>
                   <span class="location">{{
@@ -160,16 +165,16 @@
                   }}</span>
                   <span
                     style="
-                      width: 5px;
-                      height: 5px;
+                      width: 4px;
+                      height: 4px;
                       border-radius: 50%;
-                      border: 1px solid black;
-                      background-color: black;
+                      border: 1px solid #515b6f;
+                      background-color: #515b6f;
                     "
                   ></span>
                   <div class="date">
-                    Posted on
-                    {{ job.startDate.toString().replaceAll("-", "/") }}
+                    Posting Dates
+                    {{ job.endDate.toString().replaceAll("-", "/") }}
                   </div>
                 </div>
 
@@ -199,7 +204,7 @@
 
                 <button
                   type="button"
-                  [routerLink]="['/apply/job-details', job.id]"
+                  [routerLink]="['/apply', job.id, 'overview']"
                 >
                   View details
                 </button>
@@ -253,18 +258,16 @@
           <div></div>
         </div>
       </ng-container>
-    </ng-container>
-    <ng-template #showLoading> <span class="loader"></span> </ng-template>
+      <ng-template #showLoading> <span class="loader"></span></ng-template>
+      <div
+        class="search-no-results"
+        *ngIf="!isLoadingSearch && jobList?.length === 0"
+      >
+        <p class="search-no-results__header">No results were found.</p>
+      </div>
+    </main>
+    <app-footer />
+  </div>
 
-    <ng-container *ngIf="isLoadingSearch">
-      <span class="loader"></span>
-    </ng-container>
-    <div
-      class="search-no-results"
-      *ngIf="!isLoadingSearch && jobList?.length === 0"
-    >
-      <p class="search-no-results__header">No results were found.</p>
-    </div>
-  </main>
-  <app-footer />
-</section>
+  <h3 *ngIf="!(isLoadingData$ | async) && !jobList.length">errror occur</h3>
+</div>

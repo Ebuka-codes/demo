@@ -378,7 +378,9 @@ input[type="checkbox"] {
 .popover-body {
   background-color: rgb(221 221 221 / 47%) !important;
 }
-
+.mat-mdc-icon-button .mat-mdc-focus-indicator {
+  background: none !important;
+}
 @media (min-width: 992px) {
   .modal-lg,
   .modal-xl {

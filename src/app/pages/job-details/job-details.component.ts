@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { job } from 'src/app/shared/type';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
@@ -11,6 +11,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { LoaderService } from 'src/app/shared/service/loader.service';
 @Component({
   selector: 'app-job-details',
   templateUrl: './job-details.component.html',
@@ -20,7 +21,7 @@ export class JobDetailsComponent implements OnInit {
   id: any;
   minDate: any;
   isFullPageLoading: boolean = false;
-  isLoading!: boolean;
+  isLoading$!: Observable<boolean>;
   errorMessage: string = '';
   id$!: Observable<string | null>;
   jobData!: job;
@@ -30,17 +31,20 @@ export class JobDetailsComponent implements OnInit {
     private navigateRoute: Router,
     private location: Location,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loaderService: LoaderService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, this.validateEmail()]],
       term: ['', Validators.required],
     });
+    this.isLoading$ = this.jobService.isLoading$;
   }
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.getJobDetailsById(id);
+
       if (id) {
         localStorage.setItem('jobId', id);
       }
@@ -51,22 +55,22 @@ export class JobDetailsComponent implements OnInit {
   }
 
   getJobDetailsById(id: string) {
-    this.isLoading = true;
-    this.jobService.getJobDetailsById(id).subscribe({
-      next: (response) => {
-        if (response.valid && response.data) {
-          this.jobService.setJobDetailData(response.data);
-          this.isLoading = false;
-        } else {
-          this.isLoading = false;
-        }
-      },
-      error: (error) => {
-        this.errorMessage = error.message;
-        this.isLoading = false;
-        this.jobService.setLoading(false);
-      },
-    });
+    this.jobService.setLoading(true);
+    this.jobService
+      .getJobDetailsById(id)
+      .pipe(finalize(() => this.jobService.setLoading(false)))
+      .subscribe({
+        next: (response) => {
+          if (response.valid && response.data) {
+            console.log(response.data);
+            this.jobService.setJobDetailData(response.data);
+          } else {
+          }
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+        },
+      });
   }
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {

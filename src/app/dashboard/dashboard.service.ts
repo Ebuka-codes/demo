@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Constants } from '../utils/constants';
 import { enviroments } from 'src/environments/enviorments';
 
 @Injectable({

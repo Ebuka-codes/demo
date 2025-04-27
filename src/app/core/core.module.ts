@@ -4,12 +4,14 @@ import { AuthService } from './service/auth.service';
 import { AuthGuard } from './guard/auth-guard.service';
 import { AuthInterceptor } from './guard/auth.interceptor';
 import { ToastService } from './service/toast.service';
+import { UtilService } from './service/util.service';
 
 @NgModule({
   imports: [HttpClientModule],
   providers: [
     AuthService,
     ToastService,
+    UtilService,
     AuthGuard,
 
     {

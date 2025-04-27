@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { job } from 'src/app/shared/type';
 import { Moment } from 'moment';
 import { DateFormatService } from 'src/app/shared/service/date-format.service';
@@ -36,6 +36,7 @@ import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
 import { NavigationService } from 'src/app/shared/service/navigation-service.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { UtilService } from 'src/app/core/service/util.service';
 @Component({
   selector: 'app-job-application',
   templateUrl: './job-application.component.html',
@@ -63,7 +64,7 @@ export class JobApplicationComponent implements OnInit {
   skillFormGroup!: FormGroup;
   supportingFormGroup!: FormGroup;
   workEducationAndSkill!: FormGroup;
-  isSubmitting: boolean = false;
+  isSubmitting!: boolean;
   selectedResumeFile!: string | null;
   selectedCoverLetterFile!: string | null;
   isLoading$!: Observable<any>;
@@ -100,7 +101,7 @@ export class JobApplicationComponent implements OnInit {
     private toastService: ToastService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private navService: NavigationService
+    private utilService: UtilService
   ) {
     this.personalFormGroup = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -149,6 +150,8 @@ export class JobApplicationComponent implements OnInit {
       resume: ['', Validators.required],
       coverLetter: ['', Validators.required],
     });
+
+    this.isLoading$ = this.jobService.isLoading$;
   }
 
   ngOnInit(): void {
@@ -174,26 +177,24 @@ export class JobApplicationComponent implements OnInit {
 
   getCandidateInfo() {
     if (this.route.snapshot.paramMap.get('candidateId')) {
-      this.jobService.setLoading(true);
-      this.isLoading$ = this.jobService.isLoading$;
+      // this.jobService.setLoading(true);
       this.candidateService
         .getCandidatesInfo(this.route.snapshot.paramMap.get('candidateId'))
+        .pipe(finalize(() => this.jobService.setLoading(false)))
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
               this.prefillCandidateForm(response.data);
               this.candidateService.setCandidateData(response?.data);
-              this.jobService.setLoading(false);
-              this.isLoading$ = this.jobService.isLoading$;
+
               this.cdr.detectChanges();
             } else {
-              this.jobService.setLoading(false);
-              this.isLoading$ = this.jobService.isLoading$;
             }
           },
         });
     } else {
       const existingData = this.candidateService.getCandidateData();
+
       if (existingData) {
         this.prefillCandidateForm(existingData);
       }
@@ -694,12 +695,8 @@ export class JobApplicationComponent implements OnInit {
     this.selectedCoverLetterFile = '';
   }
   getQuestionsByJobDetail(id: string | null) {
-    this.jobService.setLoading(true);
-    this.isLoading$ = this.jobService.isLoading$;
     this.jobService.getJobDetails(id).subscribe((response: any) => {
       if (response.valid && response.data) {
-        this.jobService.setLoading(false);
-        this.isLoading$ = this.jobService.isLoading$;
         this.questionData = response.data;
         let formControl: any = {};
         this.questionData.questionOptions.forEach((question: any) => {
@@ -723,26 +720,28 @@ export class JobApplicationComponent implements OnInit {
   }
   //Post Job-Application
   submitJobApplication(jobApplication: any) {
-    this.jobService.setLoading(true);
-    this.isLoading$ = this.jobService.getLoading();
     this.isSubmitting = true;
-    this.jobService.submitJobApplication(jobApplication).subscribe({
-      next: () => {
-        this.isSubmitting = false;
-        this.jobService.setLoading(false);
-        this.isLoading$ = this.jobService.getLoading();
-        this.toastService.success('Submitted successfully!');
-        setTimeout(() => {
-          this.navService.goToReturnUrl(this.router);
-        }, 2000);
-      },
-      error: (error) => {
-        this.toastService.error(error.message);
-        this.isSubmitting = false;
-        this.jobService.setLoading(false);
-        this.isLoading$ = this.jobService.getLoading();
-      },
-    });
+    this.jobService
+      .submitJobApplication(jobApplication)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid) {
+            this.toastService.success(response.message);
+            setTimeout(() => {
+              this.router.navigate(['/job-listing']);
+            }, 3500);
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+        },
+      });
   }
   onSubmit(): void {
     const formValues = this.questionsFormGroup?.value;
@@ -755,9 +754,11 @@ export class JobApplicationComponent implements OnInit {
     }
 
     const data = {
-      name: `${this.personalFormGroup.get('firstName')?.value} ${
+      name: `${this.utilService.capitalizeFirstLetter(
+        this.personalFormGroup.get('firstName')?.value
+      )} ${this.utilService.capitalizeFirstLetter(
         this.personalFormGroup.get('lastName')?.value
-      }`,
+      )}`,
       address: this.personalFormGroup.get('address')?.value,
       phone: this.personalFormGroup.get('phone')?.value,
       email: this.personalFormGroup.get('email')?.value,
@@ -780,23 +781,10 @@ export class JobApplicationComponent implements OnInit {
         this.questionsFormGroup.valid)
     ) {
       this.submitJobApplication(data);
+
+      console.log('me and you');
     } else {
-      this.submitted = true;
       this.questionsFormGroup.markAllAsTouched();
     }
-  }
-
-  getHistory(): string[] {
-    return this.history;
-  }
-
-  goBack() {
-    window.history.go(-4);
-    // const targetIndex = this.history.length - 1 - steps;
-    // if (targetIndex >= 0) {
-    //   const targetUrl = this.history[targetIndex];
-    //   console.log(targetUrl);
-    //   // this.router.navigateByUrl(targetUrl);
-    // }
   }
 }

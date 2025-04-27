@@ -4,10 +4,10 @@
   gap: 1rem;
   padding-top: 1.5rem;
   position: fixed;
-  width: 252px;
+  width: 256px;
   height: 100vh;
   background-color: white;
-  border-right: 1px solid #e5e3e3;
+  // border-right: 1px solid #e5e3e3;
 
   .header {
     line-height: 1.4;
@@ -21,11 +21,9 @@
 
     .user {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       padding: 0px 20px;
       margin-top: 20px;
-      margin-left: 10px;
-
       img {
         width: 40px;
         height: 40px;
@@ -39,9 +37,13 @@
         top: 7px;
 
         .role {
-          font-size: 12px;
-          color: #899bb1;
+          font-size: 11px;
+          color: #24222066;
           line-height: 1;
+          span {
+            font-size: 14px;
+            font-weight: 500;
+          }
         }
         span {
           font-weight: 600;
@@ -84,7 +86,7 @@
 
   .side_one {
     height: 100vh;
-    padding: 0px 20px;
+    padding: 0px;
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-gutter: stable;
@@ -97,7 +99,7 @@
   }
 
   .divider {
-    border-bottom: 1px solid #899bb13b;
+    border-bottom: 0.5px solid #e6e6e6;
   }
   ul {
     padding: 0px;
@@ -127,8 +129,12 @@
     display: flex;
     gap: 0.3rem;
     justify-content: space-between;
-    width: 100%;
-    border-radius: 25px;
+    width: 97%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+
     position: relative;
     font-size: 13px;
   }

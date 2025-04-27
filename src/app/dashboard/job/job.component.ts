@@ -33,6 +33,7 @@ export class JobComponent implements OnInit {
   filteredData!: Array<job>;
   loadingData!: boolean;
   jobUrl!: string;
+  path: string = 'http://localhost:4200';
   corpKey: string | null = CORP_KEY;
 
   constructor(
@@ -47,7 +48,7 @@ export class JobComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
-    this.jobUrl = `${enviroments.API_URL}/apply/${this.corpKey}`;
+    this.jobUrl = `${this.path}/apply`;
   }
   loadJobs() {
     this.loaderService.setLoading(true);
@@ -127,7 +128,7 @@ export class JobComponent implements OnInit {
   onBack() {
     this.location.back();
   }
-  onCopy() {
-    this.clipboard.copy(this.jobUrl);
+  onCopy(id: string) {
+    this.clipboard.copy(`${this.jobUrl}/${id}/overview`);
   }
 }

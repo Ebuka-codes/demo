@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { interval, Observable, Subscription } from 'rxjs';
+import { finalize, interval, Observable, Subscription } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
-import { UserService } from '../../user/user.service';
+import { AuthService } from 'src/app/core/service/auth.service';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -17,8 +17,8 @@ export class DashboardLayoutComponent {
 
   constructor(
     private loaderService: LoaderService,
-    private userService: UserService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private authService: AuthService
   ) {
     this.loaderService.isLoading$.subscribe((loading) => {
       this.isLoading = loading;
@@ -51,17 +51,8 @@ export class DashboardLayoutComponent {
   ngOnDestroy() {
     this.sub?.unsubscribe();
   }
-  ngOnInit(): void {
-    this.userService.loadUserProfile().subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.userService.setUserProfile(response.data);
-        }
-      },
-      error: (error: any) => {
-        this.toastService.error(error.message);
-      },
-    });
+  ngOnInit() {
+    this.authService.loadUserProfile().subscribe();
     this.isLoading$ = this.loaderService.isLoading$;
   }
 }

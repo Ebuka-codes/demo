@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -20,12 +26,13 @@ import { ToastService } from 'src/app/core/service/toast.service';
   templateUrl: './candidate-login.component.html',
   styleUrls: ['./candidate-login.component.scss'],
 })
-export class CandidateLoginComponent {
+export class CandidateLoginComponent implements OnInit {
   @ViewChild('myModal') modalElement!: ElementRef;
   modalInstance!: Modal;
   form!: FormGroup;
   isLoading!: Observable<boolean>;
   isSignIn: boolean = false;
+  jobId!: string | null;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -41,6 +48,12 @@ export class CandidateLoginComponent {
     });
   }
 
+  ngOnInit(): void {
+    const id = localStorage.getItem('jobId');
+    if (id) {
+      this.jobId = id;
+    }
+  }
   ngAfterViewInit(): void {
     this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
@@ -69,9 +82,13 @@ export class CandidateLoginComponent {
       .pipe(take(1))
       .subscribe({
         next: (response: any) => {
-          const id = response?.data?.id;
-          console.log(id, 'me and you');
-          this.router.navigate([`apply/${id}`], { relativeTo: this.route });
+          const candidateId = response?.data?.id;
+          this.router.navigate([
+            '/apply',
+            this.jobId,
+            'application',
+            candidateId,
+          ]);
         },
       });
   }
@@ -80,6 +97,14 @@ export class CandidateLoginComponent {
     this.isSignIn = false;
   }
 
+  closeModal() {
+    this.loaderService.setLoading(false);
+    this.modalInstance.hide();
+    const backdrop = document.querySelector('.modal-backdrop');
+    backdrop?.remove();
+    document.body.removeAttribute('style');
+    document.body.classList.add('force-scroll-reset');
+  }
   onLogin() {
     if (this.form.valid) {
       this.loaderService.setLoading(true);
@@ -89,27 +114,33 @@ export class CandidateLoginComponent {
         .subscribe({
           next: (response: any) => {
             if (response.data === true) {
-              console.log(response.data);
-              this.getUserData(this.form.get('email')?.value);
-              this.loaderService.setLoading(false);
-              this.modalInstance.hide();
-              const backdrop = document.querySelector('.modal-backdrop');
-              backdrop?.remove();
-              document.body.removeAttribute('style');
-              document.body.classList.add('force-scroll-reset');
+              this.candidateService
+                .getLoggedInCandidte(this.form.get('email')?.value)
+                .pipe(take(1))
+                .subscribe({
+                  next: (response: any) => {
+                    const candidateId = response?.data?.id;
+                    this.router.navigate([
+                      '/apply',
+                      this.jobId,
+                      'application',
+                      candidateId,
+                    ]);
+                    this.closeModal();
+                  },
+                });
             } else {
               this.loaderService.setLoading(false);
-              this.router.navigate(['apply'], { relativeTo: this.route });
-              this.modalInstance.hide();
-              const backdrop = document.querySelector('.modal-backdrop');
-              document.body.classList.add('force-scroll-reset');
-              backdrop?.remove();
-              document.body.removeAttribute('style');
+              this.router.navigate(['/apply', this.jobId, 'application'], {
+                relativeTo: this.route,
+              });
+              this.closeModal();
             }
           },
           error: (err) => {
             this.loaderService.setLoading(false);
             this.toastService.error(err.message);
+            this.closeModal();
           },
         });
     } else {

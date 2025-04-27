@@ -7,8 +7,6 @@ import { Constants } from 'src/app/utils/constants';
   providedIn: 'root',
 })
 export class UserService {
-  userSubject$ = new BehaviorSubject<any>(null);
-  user$ = this.userSubject$.asObservable();
   constructor(private httpClient: HttpClient) {}
   createUser(data: any) {
     return this.httpClient.post(Constants.USER_URL.USER + '/register', data);
@@ -18,15 +16,5 @@ export class UserService {
   }
   getAllUsers() {
     return this.httpClient.get(Constants.USER_URL.USER + '/find');
-  }
-
-  loadUserProfile() {
-    return this.httpClient.get(Constants.USER_URL.USER + '/profile');
-  }
-  setUserProfile(user: any) {
-    this.userSubject$.next(user);
-  }
-  getUserProfile() {
-    return this.user$;
   }
 }

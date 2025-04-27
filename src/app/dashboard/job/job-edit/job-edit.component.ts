@@ -12,7 +12,7 @@ import { Modal } from 'bootstrap';
 import { QuillEditorComponent } from 'ngx-quill';
 import { DetailsType, QuestionTypeOptions } from 'src/app/shared/type';
 import * as bootstrap from 'bootstrap';
-import { map, Observable, startWith } from 'rxjs';
+import { finalize, map, Observable, startWith } from 'rxjs';
 import { job } from '../shared/job';
 import { JobService } from '../shared/job.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -86,8 +86,7 @@ export class JobEditComponent {
     private route: ActivatedRoute,
     private toastService: ToastService,
     private loaderService: LoaderService,
-    private routes: Router,
-    private location: Location
+    private router: Router
   ) {
     this.form = this.fb.group({
       jobTitle: [
@@ -131,7 +130,6 @@ export class JobEditComponent {
         next: (response: any) => {
           if (response.data) {
             this.form.patchValue(response.data);
-
             setTimeout(() => {
               if (this.quill) {
                 this.quill.setContents(
@@ -147,6 +145,7 @@ export class JobEditComponent {
         },
         error: (err) => {
           this.loaderService.setLoading(false);
+          this.toastService.error(err.message);
         },
       });
   }
@@ -306,16 +305,17 @@ export class JobEditComponent {
 
   getQuestionsById(id: string) {
     this.loaderService.setLoading(true);
-    this.jobService.getQuestionById(id).subscribe((response: any) => {
-      if (response.valid && response.data) {
-        this.viewQuestionData = response.data;
-        this.form.patchValue(this.viewQuestionData);
-        this.loaderService.setLoading(false);
-      } else {
-        this.toastService.error('Error occur!');
-        this.loaderService.setLoading(false);
-      }
-    });
+    this.jobService
+      .getQuestionById(id)
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe((response: any) => {
+        if (response.valid && response.data) {
+          this.viewQuestionData = response.data;
+          this.form.patchValue(this.viewQuestionData);
+        } else {
+          this.toastService.error(response.message);
+        }
+      });
   }
   deleteQuestionsById(id: string) {
     this.loaderService.setLoading(true);
@@ -364,7 +364,7 @@ export class JobEditComponent {
         }
       },
       error: (error: any) => {
-        this.toastService.error('Error occur!');
+        this.toastService.error(error.message);
         this.loaderService.setLoading(false);
       },
     });
@@ -429,7 +429,6 @@ export class JobEditComponent {
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
-              console.log('yes');
               this.loaderService.setLoading(false);
               this.getJobDetailByType();
               this.selectedValue = '';
@@ -439,7 +438,7 @@ export class JobEditComponent {
             }
           },
           error: (err) => {
-            this.toastService.error('Error occur!');
+            this.toastService.error(err.message);
             this.selectedValue = '';
             this.isEditOpen = false;
           },
@@ -461,7 +460,7 @@ export class JobEditComponent {
         this.selectedValue = '';
       },
       (error) => {
-        this.toastService.error('Error occur!');
+        this.toastService.error(error.message);
         this.form.get(type)?.setValue('');
         this.loaderService.setLoading(false);
         this.selectedValue = '';
@@ -477,18 +476,17 @@ export class JobEditComponent {
         if (response.valid) {
           this.loading = false;
           this.loaderService.setLoading(false);
-          this.toastService.success('Job updated successfully!');
-          this.routes.navigate(['/dashboard/job']);
+          this.toastService.success(response.message);
+          setTimeout(() => {
+            this.router.navigate(['/job']);
+          }, 1500);
         }
       },
       error: (error: any) => {
         this.loading = false;
         this.isSubmitted = false;
-        this.form.enable();
-        this.form.reset();
-        this.form.get('jobDescription')?.setValue(' ');
         this.loaderService.setLoading(false);
-        this.toastService.error('Error occur!');
+        this.toastService.error(error.message);
       },
     });
   }
@@ -515,7 +513,6 @@ export class JobEditComponent {
         jobType: this.form.get('jobType')?.value,
         jobSalary: Number(this.form.get('jobSalary')?.value),
       });
-      this.form.get('jobDescription')?.setValue(' ');
     } else {
       this.isSubmitted = true;
     }
@@ -530,6 +527,6 @@ export class JobEditComponent {
     }
   }
   onNavigateBack() {
-    this.location.back();
+    this.router.navigate(['/job']);
   }
 }

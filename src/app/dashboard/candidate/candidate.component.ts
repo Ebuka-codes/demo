@@ -153,6 +153,8 @@ export class CandidateComponent implements OnInit {
             this.toastService.error(err.message);
           },
         });
+    } else {
+      this.toastService.error('Select candidate');
     }
   }
   onInterviewerFeedback() {
@@ -180,6 +182,8 @@ export class CandidateComponent implements OnInit {
             this.selectedCandidateIds = [];
           },
         });
+    } else {
+      this.toastService.error('Select candidate');
     }
   }
   getCandidates() {

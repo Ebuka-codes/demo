@@ -530,7 +530,6 @@
               matInput
               [matDatepicker]="startDate"
               formControlName="startDate"
-              required
               readonly
               (dateChange)="onStartDateChange()"
             />
@@ -557,7 +556,6 @@
               matInput
               [matDatepicker]="endDate"
               formControlName="endDate"
-              required
               readonly
               [disabled]="isEditDate"
               [min]="minEndDate"
@@ -566,7 +564,7 @@
               matSuffix
               [for]="endDate"
             ></mat-datepicker-toggle>
-            <mat-datepicker #endDate [disabled]="isEditDate"></mat-datepicker>
+            <mat-datepicker #endDate></mat-datepicker>
           </mat-form-field>
           <div *ngIf="jobEndDate?.invalid && isSubmitted">
             <small *ngIf="jobEndDate?.errors?.['required']">
@@ -668,7 +666,7 @@
         </div>
       </div>
 
-      <div style="margin-top: 70px">
+      <div>
         <button
           type="submit"
           [disabled]="loading"

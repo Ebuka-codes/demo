@@ -1,5 +1,6 @@
 .candidate-container {
   width: 100%;
+  padding: 2rem 1.5rem;
   .action {
     display: flex;
     gap: 15px;
@@ -114,7 +115,7 @@
       border-radius: 8px;
 
       &.active {
-        background-color: #1ddb49f7;
+        background-color: #52c41a;
         border: none;
         color: white;
         svg {
@@ -269,8 +270,14 @@
       .status-btn {
         .scheduled {
           background-color: #e0ebff;
-          padding: 3px 10px;
           border-radius: 5px;
+          text-align: center;
+          border: none;
+          font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
           color: #2a5dcc;
           border: none;
           font-size: 13px;
@@ -278,27 +285,39 @@
 
         .hired {
           background-color: #e7f7ef;
-          padding: 3px 10px;
-          border-radius: 5px;
           color: #0dab6f;
+          border-radius: 5px;
+          text-align: center;
           border: none;
           font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
         }
         .rejected {
           background-color: #ff000017;
-          padding: 3px 10px;
-          border-radius: 5px;
           color: #e50c20;
+          border-radius: 5px;
+          text-align: center;
           border: none;
           font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
         }
         .pending {
           background-color: #fff6d3;
-          padding: 3px 10px;
-          border-radius: 5px;
           color: #e8be29;
+          border-radius: 5px;
+          text-align: center;
           border: none;
           font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
         }
         .shortlist {
           background-color: #17a2b81f;
@@ -311,10 +330,14 @@
         .open {
           background-color: rgb(243 232 255);
           color: rgb(168 85 247);
-          padding: 3px 10px;
           border-radius: 5px;
+          text-align: center;
           border: none;
           font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
         }
       }
       .action {
@@ -351,7 +374,7 @@
             color: #6d6d6d;
           }
           span:nth-child(2) {
-            color: #28a745;
+            color: #6d6d6d;
           }
           span:nth-child(3) {
             color: #e50c20;

@@ -10,6 +10,7 @@ import {
 
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/service/auth.service';
+import { SignupDataService } from '../shared/signup-data.service';
 
 @Component({
   selector: 'app-signup',
@@ -26,6 +27,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private signupDataService: SignupDataService,
     private route: Router
   ) {
     this.form = this.fb.group({
@@ -137,7 +139,7 @@ export class SignupComponent implements OnInit {
           ?.value.toString()
           .padStart(11, '0'),
       };
-      this.authService.setUserData(userData);
+      this.signupDataService.setRegisterDta(userData);
       this.route.navigateByUrl('/verify-email');
     } else if (
       this.form.valid &&

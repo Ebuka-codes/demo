@@ -130,8 +130,8 @@
       .send-box {
         margin-top: 20px;
         .content {
-          background-color: #aad3b433;
-          border-bottom: 2px solid #28a745;
+          background-color: #e0f6e680;
+          border-bottom: 2px solid #299345;
           border-radius: 10px;
           padding: 10px 15px;
           position: relative;
@@ -143,6 +143,9 @@
             border: none;
             outline: none;
             width: 70%;
+            ::placeholder {
+              color: #bfbfbf;
+            }
           }
           .message-icon {
             position: absolute;

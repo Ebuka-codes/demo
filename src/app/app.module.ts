@@ -21,13 +21,10 @@ import { JobListingComponent } from './pages/job-listing/job-listing.component';
 import { CoreModule } from './core/core.module';
 import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
 import { RecruiterMessageComponent } from './pages/recruiter-message/recruiter-message.component';
-import { QuillEditorComponent, QuillModule } from 'ngx-quill';
+import { QuillModule } from 'ngx-quill';
 import { InterviewerValidationComponent } from './pages/interviewer-validation/interviewer-validation.component';
 import { InterviewerFeedbackComponent } from './pages/interviewer-feedback/interviewer-feedback.component';
-import {
-  MatFormFieldControl,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 

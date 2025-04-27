@@ -1,8 +1,27 @@
 .job-container {
-  background-color: rgb(238 238 238 / 41%);
+  background-color: #f8f8fd;
   width: 100%;
   min-height: 100vh;
   position: relative;
+  .loader-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .full-loader {
+    border: 3px solid #28a745;
+    border-color: #28a745 transparent #28a745 #28a745;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    animation: load 0.5s linear infinite;
+  }
+  @keyframes load {
+    to {
+      transform: rotate(360deg);
+    }
+  }
   main {
     flex-grow: 1;
     .hero-section {
@@ -22,7 +41,6 @@
       .content {
         width: 75%;
         margin-left: 90px;
-        // transform: translate(-50%, -50%);
         display: flex;
         gap: 60px;
         justify-content: space-between;
@@ -56,9 +74,9 @@
         top: 22px;
         left: 30px;
         font-size: 12px;
-        width: 20px;
-        height: 20px;
-        color: #b0b0b0;
+        width: 18px;
+        height: 18px;
+        color: #acacac;
         padding-right: 5px;
       }
       input {
@@ -69,11 +87,13 @@
         font-size: 14px;
         font-weight: 400;
         outline: none;
-        border: 1px solid #dddd;
         border-radius: 15px;
+        border: none;
+        box-shadow: 0px 4px 4px 0px #0000001a;
         ::placeholder {
-          font-size: 16px;
+          font-size: 20px;
           margin-right: 5px;
+          color: #acacac;
         }
       }
 
@@ -83,7 +103,7 @@
         font-weight: 600;
         cursor: pointer;
         outline: none;
-        padding: 12px 20px;
+        padding: 10px 25px;
         font-size: 13px;
         background-color: #299345;
         color: white;
@@ -109,7 +129,7 @@
       width: 60%;
 
       .icon {
-        background-color: #ddd;
+        background-color: #cac9c9;
         width: 26px;
         height: 26px;
         text-align: center;
@@ -126,6 +146,7 @@
 
       .category-btn {
         margin-left: 2px;
+
         .dropdown {
           margin-left: 10px;
           .btn {
@@ -136,7 +157,8 @@
             font-weight: 400;
           }
           .btn-outline-primary {
-            border-color: #747474 !important;
+            border-color: #000000 !important;
+            text-transform: uppercase;
           }
           &:hover,
           &:focus {
@@ -163,12 +185,12 @@
           }
         }
         ::ng-deep .dropdown-item:focus {
-          background-color: #2993454f !important;
+          background-color: #299345 !important;
           color: rgb(45, 45, 45);
         }
 
         ::ng-deep .dropdown-item:hover {
-          background-color: #2993454f !important;
+          background-color: #299345 !important;
           color: rgb(45, 45, 45);
         }
       }
@@ -192,6 +214,10 @@
     .job-listing {
       width: 80%;
       margin: 50px auto;
+      margin-bottom: 100px;
+      h3 {
+        font-size: 32px;
+      }
       .content-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -204,22 +230,16 @@
           align-items: center;
           padding: 18px 25px;
           background: #ffffff;
-          border: 1px solid #e8e8e8;
-          box-shadow: 0px 4px 8px rgb(0 0 0 / 15%);
           border-radius: 8px;
-          transition: transform 0.2s ease-in-out;
           cursor: pointer;
           margin-top: 20px;
 
-          &:hover {
-            transform: translateY(-3px);
-          }
           .info {
             flex: 1;
             .job-title {
-              font-size: 18px;
+              font-size: 20px;
               font-weight: bold;
-              color: #333;
+              color: #26282a;
               text-transform: capitalize;
             }
             .location-date {
@@ -227,9 +247,13 @@
               display: flex;
               gap: 10px;
               align-items: center;
+              color: #515b6f;
+              font-size: 16px;
               .location,
               .date {
                 font-size: 13px;
+                color: #515b6f;
+                font-size: 16px;
               }
             }
             .tags {
@@ -348,7 +372,6 @@
       margin-left: auto;
       margin-right: auto;
       animation: spin 0.5s linear infinite;
-      cursor: not-allowed;
     }
     @keyframes spin {
       to {

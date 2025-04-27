@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoaderService } from 'src/app/shared/service/loader.service';
+import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 
 @Component({
   selector: 'app-job-layout',
@@ -8,10 +8,10 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
   styleUrls: ['./job-layout.component.scss'],
 })
 export class JobLayoutComponent {
-  isLoading!: boolean;
-  constructor(private loaderService: LoaderService) {
-    this.loaderService.isLoading$.subscribe((loading) => {
-      loading = loading;
-    });
+  isLoading$!: Observable<boolean>;
+
+  constructor(private loaderService: JobRecruitService) {
+    this.isLoading$ = this.loaderService.isLoading$;
+    console.log(this.isLoading$.subscribe((loader) => console.log(loader)));
   }
 }

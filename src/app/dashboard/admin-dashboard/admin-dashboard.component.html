@@ -1,6 +1,11 @@
-<ng-container *ngIf="!(isLoading$ | async); else loader">
+<ng-container *ngIf="isLoading; else content">
+  <div class="loader-spinner"></div>
+</ng-container>
+<ng-template #content>
   <section class="dashboard-container">
-    <h1>Hello, {{ userProfile.personalDetail.firstName }}</h1>
+    <span *ngIf="profile$ | async as profile">
+      <h1>Hello, {{ profile.personalDetail.firstName }}</h1>
+    </span>
     <div class="content">
       <div style="width: 100%">
         <app-stats [data]="data" />
@@ -9,7 +14,4 @@
       <app-interviews />
     </div>
   </section>
-</ng-container>
-<ng-template #loader>
-  <div class="loader-spinner"></div>
 </ng-template>

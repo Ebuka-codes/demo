@@ -1,10 +1,14 @@
-<div class="loader" *ngIf="isLoading"></div>
-<div class="layout">
-  <div>
-    <app-header />
-    <div class="main">
-      <router-outlet />
-    </div>
-    <app-footer />
+<!-- <div class="layout-container">
+  <div class="loader-container" *ngIf="isLoading$ | async">
+    <div class="full-loader"></div>
   </div>
-</div>
+  <div class="layout" *ngIf="!(isLoading$ | async)">
+    <div>
+      <app-header />
+      <div class="main">
+        <router-outlet />
+      </div>
+      <app-footer />
+    </div>
+  </div>
+</div> -->

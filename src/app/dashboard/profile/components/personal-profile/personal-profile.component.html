@@ -1,0 +1,41 @@
+<section class="personal-container">
+  <div class="location">
+    <svg
+      width="17"
+      height="22"
+      viewBox="0 0 17 22"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8.5 0.0625C4.18701 0.0625 0.6875 3.2124 0.6875 7.09375C0.6875 13.3438 8.5 21.9375 8.5 21.9375C8.5 21.9375 16.3125 13.3438 16.3125 7.09375C16.3125 3.2124 12.813 0.0625 8.5 0.0625ZM8.5 11C7.88193 11 7.27775 10.8167 6.76384 10.4733C6.24994 10.13 5.8494 9.6419 5.61288 9.07089C5.37635 8.49987 5.31447 7.87153 5.43505 7.26534C5.55562 6.65915 5.85325 6.10233 6.29029 5.66529C6.72733 5.22825 7.28415 4.93062 7.89034 4.81005C8.49653 4.68947 9.12487 4.75135 9.69589 4.98788C10.2669 5.2244 10.755 5.62494 11.0983 6.13884C11.4417 6.65275 11.625 7.25693 11.625 7.875C11.6241 8.70352 11.2946 9.49785 10.7087 10.0837C10.1229 10.6696 9.32852 10.9991 8.5 11Z"
+        fill="#D3D3D3"
+      />
+    </svg>
+    <div class="info">
+      <h5>Location</h5>
+      <span>Lagos state</span>
+    </div>
+  </div>
+  <div class="job-detail">
+    <h5>Job Details</h5>
+    <div class="info" *ngIf="profile$ | async as profile">
+      <div class="label">Employee Id</div>
+      <div>12940440</div>
+      <div class="label">Organization</div>
+      <div style="color: #299345">{{ profile.companyDetail.name }}</div>
+      <div class="label">Position</div>
+      <div>Software Engineer</div>
+      <div class="label">Employee Type</div>
+      <div>Full-time</div>
+      <div class="label">Management Level</div>
+      <div>Level 2</div>
+      <div class="label">Hire Date</div>
+      <div>January 15, 2018</div>
+      <div class="label">Length of Service</div>
+      <div>6 years 4 months</div>
+      <div class="label">Time in Position</div>
+      <div>6 years 4 months</div>
+    </div>
+  </div>
+</section>

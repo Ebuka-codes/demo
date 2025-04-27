@@ -1,60 +1,10 @@
-<div *ngIf="isLoading" class="loader-container">
-  <div class="loader"></div>
-</div>
-<ng-container *ngIf="!isLoading && jobData; else content">
-  <section class="hero-section" *ngIf="!isLoading && jobData">
-    <div class="content">
-      <div class="info">
-        <div style="display: flex; align-items: center; gap: 20px">
-          <span class="arrow-back">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-              (click)="handleBack()"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 19.5 8.25 12l7.5-7.5"
-              />
-            </svg>
-          </span>
-          <h3>{{ jobData.jobTitle }} | Apply to {{ jobData.companyName }}</h3>
-        </div>
-        <div class="tabs">
-          <button
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            [routerLink]="['./']"
-          >
-            Overview
-          </button>
-          <button
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: false }"
-            [routerLink]="['apply']"
-          >
-            Application
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-  <router-outlet></router-outlet>
-</ng-container>
-<ng-template #content>
-  <div *ngIf="!isLoading && !jobData">Failed to load job details.</div>
-</ng-template>
+<div class="layout-container">
+  <div class="loader-container" *ngIf="isLoading$ | async">
+    <div class="full-loader"></div>
+  </div>
 
-<!-- <section class="job-detail__container">
-  <ng-container *ngIf="isLoading; else content">
-    <div class="loader"></div>
-  </ng-container>
-  <ng-template #content>
+  <div class="layout-content" *ngIf="!(isLoading$ | async) && jobData">
+    <app-header />
     <section class="hero-section">
       <div class="content">
         <div class="info">
@@ -80,50 +30,26 @@
           </div>
           <div class="tabs">
             <button
-              *ngFor="let tab of tabs; let i = index"
-              [class.active]="activeTag === tab"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [routerLink]="['overview']"
             >
-              {{ tab }}
+              Overview
+            </button>
+            <button
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              [routerLink]="['application']"
+            >
+              Application
             </button>
           </div>
         </div>
       </div>
     </section>
-    <div class="detail">
-      <div class="detail-header">
-        <div class="info">
-          <h4 class="info-title">{{ jobData.jobTitle }}</h4>
-          <div class="info-sub">
-            <span>{{ jobData.jobType }}</span>
-
-            <span
-              ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-send-fill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
-                /></svg
-            ></span>
-            <span class="info-location">{{ jobData.jobLocation }}</span>
-          </div>
-        </div>
-        <button
-          type="button"
-          class="apply-btn"
-          data-bs-toggle="modal"
-          data-bs-target="#loginModal"
-        >
-          Apply
-        </button>
-      </div>
-      <div class="job-section_container">
-        <div class="job-section" [innerHTML]="jobData.jobDescription"></div>
-      </div>
-    </div>
-  </ng-template>
-</section> -->
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+    <app-footer />
+  </div>
+</div>

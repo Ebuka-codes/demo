@@ -1,0 +1,54 @@
+.personal-container {
+  margin-top: 10px;
+  width: 60%;
+  .location {
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    svg {
+      color: #d3d3d3;
+      width: 25px;
+      height: 25px;
+    }
+    .info {
+      line-height: 1;
+      h5 {
+        font-size: 15px;
+        font-weight: 500;
+      }
+      span {
+        color: #299345;
+        font-weight: 500;
+      }
+    }
+  }
+  .job-detail {
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    .info {
+      margin: 30px 0px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      row-gap: 10px;
+      color: #5e5e5e;
+    }
+
+    .info div {
+      padding: 4px 0;
+      font-weight: 600;
+      color: #5e5e5e;
+      font-size: 14px;
+    }
+
+    .label {
+      font-weight: 500 !important;
+      font-size: 14px;
+    }
+  }
+}

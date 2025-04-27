@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CorporateDto } from 'src/app/core/model/auth';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { SignupDataService } from '../shared/signup-data.service';
 
 @Component({
   selector: 'app-verify-email',
@@ -21,14 +22,15 @@ export class VerifyEmailComponent implements OnInit {
     private fb: FormBuilder,
     private route: Router,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private signupDataService: SignupDataService
   ) {
     this.otpForm = this.fb.array(
       new Array(6).fill('').map(() => new FormControl(''))
     );
   }
   ngOnInit(): void {
-    this.authService.getUserData().subscribe((data) => {
+    this.signupDataService.getRegisterData().subscribe((data) => {
       if (data) {
         this.userData = data;
         this.isLoading = true;

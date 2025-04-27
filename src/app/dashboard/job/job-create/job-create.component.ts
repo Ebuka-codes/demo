@@ -84,7 +84,7 @@ export class JobCreateComponent {
     private jobService: JobService,
     private loaderService: LoaderService,
     private toastService: ToastService,
-    private route: Router,
+    private router: Router,
     private location: Location
   ) {
     this.form = this.fb.group({
@@ -323,8 +323,8 @@ export class JobCreateComponent {
           this.loaderService.setLoading(false);
         }
       },
-      error: (error: any) => {
-        this.toastService.error('Error occur!');
+      error: (error) => {
+        this.toastService.error(error.message);
         this.loaderService.setLoading(false);
       },
     });
@@ -384,8 +384,8 @@ export class JobCreateComponent {
               this.toastService.success(response.message);
             }
           },
-          error: (err) => {
-            this.toastService.error('Error occur!');
+          error: (error) => {
+            this.toastService.error(error.message);
             this.selectedValue = '';
             this.isEditOpen = false;
           },
@@ -408,7 +408,7 @@ export class JobCreateComponent {
         this.selectedValue = '';
       },
       (error) => {
-        this.toastService.error('Error occur!');
+        this.toastService.error(error.message);
         this.form.get(type)?.setValue('');
         this.loaderService.setLoading(false);
         this.selectedValue = '';
@@ -425,24 +425,21 @@ export class JobCreateComponent {
       next: (response: any) => {
         if (response.valid && response.data) {
           this.loaderService.setLoading(false);
-          this.toastService.success('Job created successfully!');
-          this.route.navigate(['/dashboard/job']);
+          this.toastService.success(response.message);
+          this.loading = false;
+          setTimeout(() => {
+            this.router.navigate(['/job']);
+          }, 1500);
         } else {
           this.loading = false;
           this.loaderService.setLoading(false);
-          this.toastService.error('Error occur!');
-          this.form.reset();
-          this.form.get('jobDescription')?.setValue(' ');
+          this.toastService.error(response.message);
         }
       },
-      error: () => {
+      error: (error) => {
         this.loading = false;
         this.loaderService.setLoading(false);
-        this.toastService.error('Error occur!');
-        this.form.enable();
-        this.form.reset();
-        this.isSubmitted = false;
-        this.form.get('jobDescription')?.setValue(' ');
+        this.toastService.error(error.message);
       },
     });
   }
@@ -468,7 +465,6 @@ export class JobCreateComponent {
 
     if (this.form.valid) {
       this.createNewJob(data);
-      this.form.get('jobDescription')?.setValue(' ');
     } else {
       this.isSubmitted = true;
     }
@@ -491,6 +487,6 @@ export class JobCreateComponent {
   }
 
   onNavigateBack() {
-    this.location.back();
+    this.router.navigate(['/job']);
   }
 }

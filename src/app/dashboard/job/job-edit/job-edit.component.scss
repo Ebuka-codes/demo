@@ -1,5 +1,6 @@
 .edit-job {
   margin: 20px auto;
+  padding: 2rem 1.5rem;
   .edit-job-header {
     display: flex;
     gap: 15px;
@@ -116,9 +117,6 @@
       }
     }
 
-    &:disabled {
-      cursor: pointer;
-    }
     .ai-btn {
       background-color: #eeeeee59;
       border: 0.0625rem solid #0000;
@@ -202,6 +200,9 @@
         background-color: #28a745;
         color: white;
         outline: none;
+      }
+      &:disabled {
+        cursor: not-allowed;
       }
     }
   }

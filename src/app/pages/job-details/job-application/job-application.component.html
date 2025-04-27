@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <form>
+  <form (ngSubmit)="onSubmit()">
     <mat-horizontal-stepper #stepper [linear]="true">
       <!-- personal-information -->
       <mat-step [stepControl]="personalFormGroup">
@@ -1297,7 +1297,6 @@
             </div>
           </div>
         </ng-container>
-
         <div class="supporting-page-btn">
           <button
             class="prev"
@@ -1308,18 +1307,11 @@
           >
             Back
           </button>
-          <button
-            type="submit"
-            [disabled]="isSubmitting"
-            class="submit-btn"
-            type="submit"
-            mat-button
-            (click)="onSubmit()"
-          >
-            <ng-container *ngIf="isSubmitting; else showLoader">
+          <button type="submit" [disabled]="isSubmitting" class="submit-btn">
+            <ng-container *ngIf="isSubmitting; else content">
               <span class="mini-loader-spinner"></span>
             </ng-container>
-            <ng-template #showLoader>
+            <ng-template #content>
               <span>Submit Application</span>
             </ng-template>
           </button>

@@ -46,23 +46,7 @@ export class JobRecruitService {
   }
 
   getJobList(): Observable<any> {
-    if (!this.jobListSubject$.value) {
-      this.isLoadingSubject.next(true);
-      this.httpClient
-        .get<any>(Constants.JOB_URL.JOB)
-        .pipe(
-          tap((response) => {
-            if (response.valid && response.data) {
-              this.jobListSubject$.next(response.data);
-              this.isLoadingSubject.next(false);
-            }
-          }),
-
-          finalize(() => this.isLoadingSubject.next(false))
-        )
-        .subscribe();
-    }
-    return this.job$;
+    return this.httpClient.get<any>(Constants.JOB_URL.JOB);
   }
   getJobDetailsById(id: any): Observable<any> {
     return this.httpClient.get(Constants.JOB_URL.JOB + `/${id}`);

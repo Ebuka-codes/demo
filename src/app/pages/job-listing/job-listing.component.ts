@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Notyf } from 'notyf';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { months } from 'src/app/shared/constants';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
-import { NavigationService } from 'src/app/shared/service/navigation-service.service';
 import { job } from 'src/app/shared/type';
 
 @Component({
@@ -30,32 +29,39 @@ export class JobListingComponent implements OnInit {
 
   constructor(
     private jobService: JobRecruitService,
-    private toastService: ToastService,
-    private navService: NavigationService,
-    private route: ActivatedRoute
-  ) {}
-  ngOnInit() {
+    private toastService: ToastService
+  ) {
     this.isLoadingData$ = this.jobService.isLoading$;
-    this.jobService.getJobList().subscribe((data) => {
-      this.jobList = data;
-      this.jobType = Array.from(
-        new Set(
-          this.jobList
-            ?.filter((job: any) => job.jobType)
-            .map((job: any) => job.jobType)
-        )
-      );
-      this.jobLocation = Array.from(
-        new Set(
-          this.jobList
-            ?.filter((job: any) => job.jobLocation)
-            .map((job: any) => job.jobLocation)
-        )
-      );
-    });
-
-    const slug = this.route.snapshot.paramMap.get('corpId');
-    this.navService.setReturnUrl(`/apply/${slug}`);
+  }
+  ngOnInit() {
+    this.jobService.setLoading(true);
+    this.jobService
+      .getJobList()
+      .pipe(finalize(() => this.jobService.setLoading(false)))
+      .subscribe({
+        next: (response) => {
+          if (response.valid && response.data) {
+            this.jobList = response.data;
+            this.jobType = Array.from(
+              new Set(
+                this.jobList
+                  ?.filter((job: any) => job.jobType)
+                  .map((job: any) => job.jobType)
+              )
+            );
+            this.jobLocation = Array.from(
+              new Set(
+                this.jobList
+                  ?.filter((job: any) => job.jobLocation)
+                  .map((job: any) => job.jobLocation)
+              )
+            );
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+        },
+      });
   }
 
   searchJob() {

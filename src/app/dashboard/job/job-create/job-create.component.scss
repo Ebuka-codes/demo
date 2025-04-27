@@ -1,5 +1,6 @@
 .create-job {
   margin: 20px auto;
+  padding: 2rem 1.5rem;
   .create-job-header {
     display: flex;
     gap: 15px;
@@ -118,7 +119,7 @@
     }
 
     &:disabled {
-      cursor: pointer;
+      cursor: not-allowed;
     }
     .ai-btn {
       background-color: #eeeeee59;

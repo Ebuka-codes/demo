@@ -30,7 +30,7 @@
       </button>
 
       <a
-        [href]="'http://localhost:4200/apply/' + corpKey"
+        [href]="path + '/job-listing'"
         target="_blank"
         type="button"
         class="btn-list"
@@ -246,7 +246,7 @@
                     <button
                       ngbDropdownItem
                       style="display: flex; gap: 5px; align-items: center"
-                      (click)="onCopy()"
+                      (click)="onCopy(item.id)"
                       placement="bottom"
                       ngbTooltip="Copy"
                     >
@@ -257,7 +257,9 @@
                           padding: 5px 10px;
                           font-size: 14px;
                         "
-                        >{{ jobUrl }}</span
+                        >{{
+                          jobUrl + "/" + item.id + "/overview" | slice : 0 : 50
+                        }}...</span
                       >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
