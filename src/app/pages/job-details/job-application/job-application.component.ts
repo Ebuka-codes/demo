@@ -91,6 +91,8 @@ export class JobApplicationComponent implements OnInit {
   isResumeData!: boolean;
   isCoverLetterData!: boolean;
   private history: string[] = [];
+  isUploadingResume: boolean = false;
+  isUploadingCoverLetter: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -627,8 +629,7 @@ export class JobApplicationComponent implements OnInit {
     }
   }
   convertResumeToBase64(file: File, name: string): void {
-    this.jobService.setLoading(true);
-    this.isLoading$ = this.jobService.isLoading$;
+    this.isUploadingResume = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -643,22 +644,21 @@ export class JobApplicationComponent implements OnInit {
             this.supportingFormGroup
               .get('resume')
               ?.setValue(response.data.path);
-            this.jobService.setLoading(false);
             this.isResumeData = false;
+            this.isUploadingResume = false;
           }
         },
         error: (err: any) => {
-          this.toastService.error('Error occur');
+          this.toastService.error(err.message);
           this.selectedResumeFile = '';
-          this.jobService.setLoading(false);
           this.isResumeData = false;
+          this.isUploadingResume = false;
         },
       });
     };
   }
   convertCoverLetterFileToBase64(file: File, name: string): void {
-    this.jobService.setLoading(true);
-    this.isLoading$ = this.jobService.isLoading$;
+    this.isUploadingCoverLetter = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -673,15 +673,15 @@ export class JobApplicationComponent implements OnInit {
             this.supportingFormGroup
               .get('coverLetter')
               ?.setValue(response.data.path);
-            this.jobService.setLoading(false);
             this.isCoverLetterData = false;
+            this.isUploadingCoverLetter = false;
           }
         },
         (err) => {
-          this.toastService.error('Error occur');
+          this.toastService.error(err.message);
           this.selectedCoverLetterFile = '';
-          this.jobService.setLoading(false);
           this.isCoverLetterData = false;
+          this.isUploadingCoverLetter = false;
         }
       );
     };

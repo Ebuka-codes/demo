@@ -51,9 +51,10 @@ export class InterviewerValidationComponent {
   onVerify() {
     if (this.form.valid) {
       this.loaderService.setLoading(true);
+      const Otp = this.form.get('otp')?.value.toString().trim();
       this.interviewerService
         .verifyInterviewer({
-          ...this.form.value,
+          otp: Otp,
           token: this.token,
         })
         .pipe(finalize(() => this.loaderService.setLoading(false)))

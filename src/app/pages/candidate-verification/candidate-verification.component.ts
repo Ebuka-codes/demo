@@ -38,7 +38,7 @@ export class CandidateVerificationComponent implements OnInit {
         if (response.valid) {
           console.log('token sent');
         } else {
-          console.log('token not sent');
+          console.log('token not sent'.toString);
           this.toastService.error(response.message);
         }
       },
@@ -51,9 +51,10 @@ export class CandidateVerificationComponent implements OnInit {
   onVerify() {
     if (this.form.valid) {
       this.loaderService.setLoading(true);
+      const otp = this.form.get('otp')?.value.toString().trim();
       this.candidteService
         .verifyCandidate({
-          ...this.form.value,
+          otp: otp,
           token: this.token,
         })
         .pipe(finalize(() => this.loaderService.setLoading(false)))

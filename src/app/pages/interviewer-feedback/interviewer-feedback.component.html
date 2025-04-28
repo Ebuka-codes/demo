@@ -4,134 +4,456 @@
   </header>
 
   <div class="container">
-    <div class="content">
-      <div class="title">
-        <h2>{{ candidateInfo.candidateName }} - {{ data.title }}</h2>
-      </div>
-      <span class="error-summary" *ngIf="isValid">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-info-circle-fill"
-          viewBox="0 0 16 16"
-          style="cursor: pointer"
-          ngbPopover="This search field scans talent resumes and 
-        retrieves all talents whose profile contain the entered keyword!"
-          triggers="mouseenter:mouseleave"
-        >
-          <path
-            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"
-          />
-        </svg>
-        All feedback info is required</span
-      >
-      <div class="item">
-        <div>
-          <div
-            class="perspective-tabs"
-            *ngFor="let item of data.perspectives; let i = index"
-          >
-            <button
-              (click)="onSelectPerspective(i)"
-              [ngClass]="selectedIndex === i ? 'active-tab' : 'not-active'"
-            >
-              <h5>Total {{ item.name }}</h5>
-              <span>weight-{{ item.weight }}</span>
-            </button>
+    <div><h1>Interviewer Feedback Form</h1></div>
+    <div class="candidate-info">
+      <div class="profile">
+        <h2>Candidate Information</h2>
+        <div class="info">
+          <div class="info-row">
+            <span class="title">Full Name</span>
+            <span class="text">John Doe</span>
+          </div>
+          <div class="info-row">
+            <span class="title">Job Title</span>
+            <span class="label">Software engineer</span>
+          </div>
+          <div class="info-row">
+            <span class="title">Email</span>
+            <span class="label">{{ "ebukanwuba45@yahoo.com" }}</span>
+          </div>
+          <div class="info-row">
+            <span class="title">Phone Number</span>
+            <span class="label">0912576061</span>
           </div>
         </div>
+      </div>
 
-        <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
-          <div formArrayName="perspectives">
-            <ng-container *ngIf="perspectiveControls.length > selectedIndex">
-              <div [formGroupName]="selectedIndex">
-                <div formArrayName="items" class="form-container">
-                  <div
-                    class="form-group"
-                    *ngFor="
-                      let item of data.perspectives[selectedIndex].items;
-                      let i = index
-                    "
-                    [formGroupName]="i"
-                  >
-                    <label>{{ item.question }}</label>
+      <div class="job-detail">
+        <h2>Job Detail</h2>
+        <div class="info">
+          <div class="info-row">
+            <span class="title">Job Title</span>
+            <span class="text">Software Engineer</span>
+          </div>
+          <div class="info-row">
+            <span class="title">Job Type</span>
+            <span class="label">Remote</span>
+          </div>
+          <div class="info-row">
+            <span class="title">Location</span>
+            <span class="label">Lagos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
 
-                    <mat-form-field
-                      style="margin-top: 10px"
-                      appearance="fill"
-                      [ngClass]="{
-                        'invalid-field':
+    <div class="action" *ngIf="isOtherFormInfo">
+      <span class="nav-back" (click)="onNavigateBack()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </span>
+    </div>
+
+    <span class="error-summary" *ngIf="isValid">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-info-circle-fill"
+        viewBox="0 0 16 16"
+        style="cursor: pointer"
+        ngbPopover="This search field scans talent resumes and 
+      retrieves all talents whose profile contain the entered keyword!"
+        triggers="mouseenter:mouseleave"
+      >
+        <path
+          d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"
+        />
+      </svg>
+      All feedback info is required</span
+    >
+
+    <div class="perspectives" *ngIf="!isOtherFormInfo">
+      <h4>Interviewer Feedback Form</h4>
+      <div class="content">
+        <div class="item">
+          <div>
+            <div
+              class="perspective-tabs"
+              *ngFor="let item of data.perspectives; let i = index"
+            >
+              <button
+                (click)="onSelectPerspective(i)"
+                [ngClass]="selectedIndex === i ? 'active-tab' : 'not-active'"
+              >
+                <h5>Total {{ item.name }}</h5>
+                <span>weight-{{ item.weight }}</span>
+              </button>
+            </div>
+            <button class="other-btn" (click)="showOtherForm()">
+              <h5>Other</h5>
+              <span>weight-20</span>
+            </button>
+          </div>
+
+          <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+            <div formArrayName="perspectives">
+              <ng-container *ngIf="perspectiveControls.length > selectedIndex">
+                <div [formGroupName]="selectedIndex">
+                  <div formArrayName="items" class="form-container">
+                    <div
+                      class="form-group"
+                      *ngFor="
+                        let item of data.perspectives[selectedIndex].items;
+                        let i = index
+                      "
+                      [formGroupName]="i"
+                    >
+                      <label>{{ item.question }}</label>
+
+                      <mat-form-field
+                        style="margin-top: 10px"
+                        appearance="fill"
+                        [ngClass]="{
+                          'invalid-field':
+                            getItemGroup(i).get('rating')?.touched &&
+                            getItemGroup(i).get('rating')?.invalid
+                        }"
+                      >
+                        <mat-select
+                          formControlName="rating"
+                          placeholder="Rating"
+                        >
+                          <mat-option
+                            *ngFor="let option of item.ratingScale.ratingValues"
+                            [value]="option.score"
+                          >
+                            {{ option.label }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      <small
+                        class="text-danger"
+                        *ngIf="
                           getItemGroup(i).get('rating')?.touched &&
                           getItemGroup(i).get('rating')?.invalid
-                      }"
-                    >
-                      <mat-select formControlName="rating" placeholder="Rating">
-                        <mat-option
-                          *ngFor="let option of item.ratingScale.ratingValues"
-                          [value]="option.score"
-                        >
-                          {{ option.label }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                        "
+                      >
+                        Rating is required
+                      </small>
 
-                    <small
-                      class="text-danger"
+                      <textarea
+                        placeholder="Add a Comment"
+                        formControlName="comment"
+                        class="comment"
+                        [class.error]="
+                          getItemGroup(i).get('comment')?.touched &&
+                          getItemGroup(i).get('comment')?.invalid
+                        "
+                      ></textarea>
+
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          getItemGroup(i).get('comment')?.touched &&
+                          getItemGroup(i).get('comment')?.invalid
+                        "
+                      >
+                        Comment is required
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+
+            <div class="observation">
+              <h4>Obserations, Challenges and Recommendations</h4>
+              <textarea
+                [ngClass]="{
+                  'invalid-field': observation?.touched && observation?.invalid
+                }"
+                formControlName="observation"
+                row="5"
+                placeholder="Add your observations, challenges, recommendations or comments"
+              ></textarea>
+
+              <small
+                class="text-danger"
+                *ngIf="observation?.touched && observation?.invalid"
+              >
+                Observation is required
+              </small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="others" *ngIf="isOtherFormInfo">
+      <div class="header">
+        <h4>OVERALL INTERVIEW PERFORMANCE SCORE</h4>
+        <p>
+          Calculate applicant's overall interview performance score by adding
+          the ratings for each interview category rated and dividing this sum by
+          the number of categories rated. Check the appropriate score range
+          below and fill in the Overall rating box with the applicable overall
+          rating.
+        </p>
+      </div>
+
+      <div class="content">
+        <div class="info">
+          <form action="" [formGroup]="otherFormInfo">
+            <div class="wrapper">
+              <div class="earnings">
+                <div class="stats">
+                  <label for="">Total Point</label>
+                  <input type="text" />
+                  <label for="">/</label>
+                  <label for="">Number of Categories rated =</label>
+                  <input type="text" />
+                  <label for="">Overall Rating</label>
+                </div>
+                <div class="mt-5">
+                  <div class="form-group">
+                    <label for="">Current Annual Employment Income:</label>
+                    <input
+                      amountFormat
+                      [ngClass]="
+                        currentAnnualSalary.invalid &&
+                        currentAnnualSalary.touched
+                          ? 'error'
+                          : ''
+                      "
+                      type="text"
+                      formControlName="currentAnnualSalary"
+                    />
+                    <!-- <div
                       *ngIf="
-                        getItemGroup(i).get('rating')?.touched &&
-                        getItemGroup(i).get('rating')?.invalid
+                        currentAnnualSalary.invalid &&
+                        currentAnnualSalary.touched
                       "
                     >
-                      Rating is required
-                    </small>
-
-                    <textarea
-                      placeholder="Add a Comment"
-                      formControlName="comment"
-                      class="comment"
-                      [class.error]="
-                        getItemGroup(i).get('comment')?.touched &&
-                        getItemGroup(i).get('comment')?.invalid
+                      <small
+                        class="text-danger"
+                        *ngIf="currentAnnualSalary.errors?.['required']"
+                        >Current annual salary is required</small
+                      >
+                    </div> -->
+                  </div>
+                  <div class="form-group">
+                    <label for="">Expected Annual Income from HMRecruit:</label>
+                    <input
+                      amountFormat
+                      [ngClass]="
+                        expectedAnnualSalary.invalid &&
+                        expectedAnnualSalary.touched
+                          ? 'error'
+                          : ''
                       "
-                    ></textarea>
+                      type="text"
+                      formControlName="expectedAnnualSalary"
+                    />
 
-                    <small
-                      class="text-danger"
+                    <!-- <div
                       *ngIf="
-                        getItemGroup(i).get('comment')?.touched &&
-                        getItemGroup(i).get('comment')?.invalid
+                        expectedAnnualSalary.invalid &&
+                        expectedAnnualSalary.touched
                       "
                     >
-                      Comment is required
-                    </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="expectedAnnualSalary.errors?.['required']"
+                        >Expected annual salary is required</small
+                      >
+                    </div> -->
+                  </div>
+                  <div class="form-group">
+                    <label for=""> Availability:</label>
+                    <input
+                      type="text"
+                      [ngClass]="
+                        availability.invalid && availability.touched
+                          ? 'error'
+                          : ''
+                      "
+                      formControlName="availability"
+                    />
+                    <!-- <div *ngIf="availability.invalid && availability.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="availability.errors?.['required']"
+                        >Availability is required</small
+                      >
+                    </div> -->
                   </div>
                 </div>
               </div>
-            </ng-container>
-          </div>
+              <div class="rating-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col-2">Total Scores</th>
+                      <th scope="col">Applicable Overall Rating</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td scope="row">25-30</td>
+                      <td>5</td>
+                    </tr>
+                    <tr>
+                      <td scope="row">19-23</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td scope="row">13-18</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td scope="row">7-12</td>
+                      <td>2</td>
+                    </tr>
 
-          <button type="submit" class="submit-btn" [disabled]="isLoading">
-            <ng-container *ngIf="isLoading; else content">
-              <span class="mini-loader-spinner"></span>
-            </ng-container>
-            <ng-template #content>
-              Submit
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-send-fill"
-                viewBox="0 0 16 16"
+                    <tr>
+                      <td scope="row">1-6</td>
+                      <td>1</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="Recommendation">Recommendation</label>
+              <textarea
+                row="5"
+                [ngClass]="
+                  recommendation.invalid && recommendation.touched
+                    ? 'error'
+                    : ''
+                "
+                formControlName="recommendation"
+              ></textarea>
+              <div *ngIf="recommendation.invalid && recommendation.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="recommendation.errors?.['required']"
+                  >Recommendation is required</small
+                >
+              </div>
+            </div>
+            <div class="radio-group">
+              <label for="This applicant is:">This applicant is:</label>
+              <div class="option">
+                <input
+                  type="radio"
+                  formControlName="candidateType"
+                  name="candidateType"
+                  value="A strong candidate"
+                />
+                <span>A strong candidate </span>
+              </div>
+              <div class="option">
+                <input
+                  type="radio"
+                  formControlName="candidateType"
+                  name="candidateType"
+                  value="A Possible candidate"
+                />
+                <span>A Possible candidate</span>
+              </div>
+              <div class="option">
+                <input
+                  type="radio"
+                  name="candidateType"
+                  formControlName="candidateType"
+                  value="A possible candidate for another position (explain
+                below)"
+                />
+                <span
+                  >A possible candidate for another position (explain
+                  below)</span
+                >
+              </div>
+              <div class="option">
+                <input
+                  type="radio"
+                  name="candidateType"
+                  value="Of no further interest"
+                  formControlName="candidateType"
+                />
+                <span> Of no further interest</span>
+              </div>
+              <div class="option">
+                <input
+                  type="radio"
+                  value="Other"
+                  name="candidateType"
+                  formControlName="candidateType"
+                />
+                <span>Other</span>
+              </div>
+
+              <div *ngIf="candidateType.invalid && candidateType.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="candidateType.errors?.['required']"
+                  >Applicant is required</small
+                >
+              </div>
+            </div>
+            <div class="form-group" style="margin: 30px 0px">
+              <label for="Alternate position"
+                >Alternate position(s) for which afplicant seems better
+                qualified:</label
               >
-                <path
-                  d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
-                /></svg
-            ></ng-template>
-          </button>
-        </form>
+              <textarea
+                [ngClass]="
+                  alternativePosition.invalid && alternativePosition.touched
+                    ? 'error'
+                    : ''
+                "
+                formControlName="alternativePosition"
+                row="5"
+              ></textarea>
+              <div
+                *ngIf="
+                  alternativePosition.invalid && alternativePosition.touched
+                "
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="alternativePosition.errors?.['required']"
+                  >Alternative Position is required</small
+                >
+              </div>
+            </div>
+
+            <button
+              class="submit-btn"
+              [disabled]="isLoading"
+              (click)="onSubmit()"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
