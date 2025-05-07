@@ -4,7 +4,7 @@ import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { job } from 'src/app/shared/type';
 
 @Component({
-  selector: 'app-job-overview',
+  selector: 'erecruit-job-overview',
   templateUrl: './job-overview.component.html',
   styleUrls: ['./job-overview.component.scss'],
 })

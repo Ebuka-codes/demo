@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
@@ -9,7 +9,7 @@ import { finalize, Observable } from 'rxjs';
 import { UserService } from './shared/user.service';
 
 @Component({
-  selector: 'app-user',
+  selector: 'erecruit-user',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
@@ -70,7 +70,6 @@ export class UsersComponent {
     this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
 
-  
   onNavigateBack() {
     this.location.back();
   }

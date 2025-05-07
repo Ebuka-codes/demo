@@ -1,14 +1,14 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, Observable } from 'rxjs';
-import { UserProfile, UserToken } from 'src/app/core/model/credential';
+import { filter } from 'rxjs';
+import { UserToken } from 'src/app/core/model/credential';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { TokenService } from 'src/app/core/service/token.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'erecruit-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })

@@ -19,7 +19,7 @@
     <h2>Edit Job</h2>
   </div>
   <div class="edit-job-content">
-    <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form action="" [formGroup]="form">
       <div class="row">
         <div class="col">
           <label for="jobTitle"
@@ -502,6 +502,7 @@
                 #newJobSkill
                 placeholder="Type skill and press enter"
                 class="addInput"
+                style="margin: 5px 20px"
                 (keydown.enter)="
                   isEditOpen
                     ? editQueryData($event, newJobSkill.value, 'jobSkill')
@@ -615,7 +616,7 @@
       <button
         class="question-btn mb-3"
         data-bs-toggle="modal"
-        data-bs-target="#addQuestionModal"
+        data-bs-target="#questionModal"
         type="button"
       >
         + Add Questions
@@ -627,27 +628,14 @@
         data-bs-target="#rewriteWithAiModal"
         data-bs-toggle="modal"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="size-6"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-
-        Write with Ai
+        Rewrite with Ai
       </button>
 
       <div class="row">
         <label for="description" style="margin-bottom: 5px"
           >Job Description <span class="required-icon">*</span></label
         >
-        <div style="margin-bottom: 20px">
+        <div>
           <quill-editor
             formControlName="jobDescription"
             #editor
@@ -656,33 +644,23 @@
           ></quill-editor>
         </div>
 
-        <div
-          style="position: relative; top: 50px"
-          *ngIf="jobDescription?.invalid && isSubmitted"
-        >
+        <div *ngIf="jobDescription?.invalid && isSubmitted">
           <small *ngIf="jobDescription?.errors?.['required']">
             Job description field is required
           </small>
         </div>
       </div>
-
-      <div>
-        <button
-          type="submit"
-          [disabled]="loading"
-          class="submit-btn"
-          type="submit"
-          mat-button
-        >
-          <ng-container *ngIf="loading; else showLoader">
-            <span class="mini-loader-spinner"></span>
-          </ng-container>
-          <ng-template #showLoader>
-            <span>Submit</span>
-          </ng-template>
-        </button>
-      </div>
     </form>
   </div>
+  <div class="submit-btn">
+    <button type="button" [disabled]="loading" (click)="onSubmit()">
+      <ng-container *ngIf="loading; else content">
+        <span class="mini-loader-spinner"></span>
+      </ng-container>
+      <ng-template #content>
+        <span>Continue</span>
+      </ng-template>
+    </button>
+  </div>
 </div>
-<app-job-question-create (updateQuestion)="updateQuestion()" />
+<ercruit-job-question-create (updateQuestion)="updateQuestion()" />

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-empty-data',
+  selector: 'erecruit-empty-data',
   templateUrl: './empty-data.component.html',
-  styleUrls: ['./empty-data.component.scss']
+  styleUrls: ['./empty-data.component.scss'],
 })
-export class EmptyDataComponent {
-
-}
+export class EmptyDataComponent {}

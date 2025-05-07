@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -15,14 +14,13 @@ import { CandidateLoginComponent } from '../candidate-login/candidate-login.comp
 import { CommonModule } from '@angular/common';
 import { JobDetailsRoutingModule } from './job-details-routing.module';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { monthYearFormatDirective } from 'src/app/shared/directives/month-date-format.directive';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
     JobOverviewComponent,
     JobApplicationComponent,
     CandidateLoginComponent,
-    monthYearFormatDirective,
   ],
   imports: [
     MatFormFieldModule,
@@ -39,6 +37,7 @@ import { monthYearFormatDirective } from 'src/app/shared/directives/month-date-f
     MatSelectModule,
     CommonModule,
     JobDetailsRoutingModule,
+    SharedModule,
   ],
 })
 export class JobDetailsModule {}

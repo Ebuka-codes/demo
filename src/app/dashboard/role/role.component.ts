@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 import { finalize, Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-role',
+  selector: 'erecruit-role',
   templateUrl: './role.component.html',
   styleUrls: ['./role.component.scss'],
 })

@@ -12,7 +12,7 @@ import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
-  selector: 'app-candidate-reject',
+  selector: 'erecruit-candidate-reject',
   templateUrl: './candidate-reject.component.html',
   styleUrls: ['./candidate-reject.component.scss'],
 })
@@ -40,10 +40,11 @@ export class CandidateRejectComponent {
       .rejectCandidateById(this.candidateId, { status: 'REJECTED' })
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.modalInstance.hide();
           this.candidateUpdate.emit();
           this.closeModal();
+          this.toastService.success(response.message);
         },
         error: (error) => {
           this.toastService.error(error.message);

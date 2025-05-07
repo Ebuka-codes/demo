@@ -20,7 +20,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-corporate-create',
+  selector: 'erecruit-corporate-create',
   templateUrl: './corporate-create.component.html',
   styleUrls: ['./corporate-create.component.scss'],
 })

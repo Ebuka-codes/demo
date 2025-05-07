@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-company-profile',
+  selector: 'erecruit-company-profile',
   templateUrl: './company-profile.component.html',
-  styleUrls: ['./company-profile.component.scss']
+  styleUrls: ['./company-profile.component.scss'],
 })
-export class CompanyProfileComponent {
-
-}
+export class CompanyProfileComponent {}

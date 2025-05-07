@@ -1,6 +1,7 @@
 .edit-job {
-  margin: 20px auto;
-  padding: 2rem 1.5rem;
+  margin: 20px 0px;
+  padding: 2rem 1.7rem;
+  width: 80%;
   .edit-job-header {
     display: flex;
     gap: 15px;
@@ -28,11 +29,8 @@
   }
   .edit-job-content {
     background-color: white;
-    padding: 10px 10px;
-    border-radius: 10px;
-    margin-top: 10px;
-    margin-bottom: 50px;
-    width: 90%;
+    padding: 5px 10px 10px 10px;
+    border-radius: 20px;
     form {
       margin-top: 40px;
       .row {
@@ -43,8 +41,9 @@
         margin: 15px 0px;
       }
       label {
-        font-size: 13px;
-        color: #484747;
+        font-size: 14px;
+        color: #474a4c;
+        font-weight: 400;
       }
       input {
         color: #6d6d6d;
@@ -83,63 +82,30 @@
         position: relative;
         top: 2px;
       }
-
       .question-btn {
         cursor: pointer;
-        margin: 15px;
-        border: 1px solid #ddd;
+        margin-top: 5px;
+        margin-left: 10px;
+        border: 1px solid #97c93c;
         border-radius: 25px;
-        padding: 10px 15px;
-        background: transparent;
-        &:hover,
-        :focus {
-          box-shadow: #0000004d 0 2px 6px;
-        }
-      }
-      .mini-loader-spinner {
-        border: 3px solid white;
-        border-color: white transparent white white;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        margin: 0px auto;
-        animation: spin 0.5s linear infinite;
-        cursor: not-allowed;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
+        padding: 5px 15px;
+        background: #97c93c;
+        color: white;
       }
     }
 
+    &:disabled {
+      cursor: not-allowed;
+    }
     .ai-btn {
-      background-color: #eeeeee59;
-      border: 0.0625rem solid #0000;
-      border-radius: 25px;
-      box-shadow: none;
       color: #28a745;
       margin-bottom: 30px;
       cursor: pointer;
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      font-size: 0.875rem;
       font-weight: 500;
-      letter-spacing: 0;
-      min-width: 100px;
-      padding: 0.75rem 1rem;
-      text-align: center;
       margin-left: 15px;
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
+      display: block;
+      border: none;
+      background-color: transparent;
     }
 
     ::ng-deep .mat-mdc-form-field-infix {
@@ -164,47 +130,6 @@
         }
       }
     }
-    .question-btn {
-      color: #28a745;
-      font-size: 14px;
-      border: none;
-      outline: none;
-      margin-left: 15px;
-      padding: 3px 4px;
-      margin: 10px 0px;
-    }
-
-    .submit-btn {
-      border-radius: 25px;
-      box-shadow: none;
-      cursor: pointer;
-      flex-shrink: 0;
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0;
-      min-width: 100px;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
-      border: none;
-      margin-right: 20px;
-      margin-bottom: 10px;
-      margin-top: 10px;
-      background-color: #28a745;
-      color: white;
-
-      &:hover,
-      :focus {
-        box-shadow: #0000004d 0 2px 6px;
-        background-color: #28a745;
-        color: white;
-        outline: none;
-      }
-      &:disabled {
-        cursor: not-allowed;
-      }
-    }
   }
   .auto-info {
     display: flex;
@@ -215,9 +140,75 @@
       height: 20px;
     }
   }
+  .submit-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 60px;
+    margin-top: 30px;
+    button {
+      border-radius: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      min-width: 100px;
+      padding: 0.57rem 1rem;
+      border: none;
+      background-color: #28a745;
+      color: white;
+
+      &:hover,
+      :focus {
+        box-shadow: #0000004d 0 2px 6px;
+        background-color: #28a745;
+        outline: none;
+      }
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+    .mini-loader-spinner {
+      border: 3px solid white;
+      border-color: white transparent white white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px auto;
+      animation: spin 0.5s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
 }
+
 input[type="checkbox"] {
   accent-color: #28a745;
+}
+::ng-deep .ql-toolbar.ql-snow {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid #dddd !important;
+}
+::ng-deep .ql-container.ql-snow {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 1px solid #dddd !important;
+}
+::ng-deep .ql-snow .ql-fill {
+  fill: #9f9f9f;
+}
+::ng-deep .ql-snow .ql-stroke {
+  stroke: #9f9f9f;
+}
+::ng-deep .ql-container {
+  height: 0px !important;
 }
 
 .custom-dropdown {
@@ -226,7 +217,6 @@ input[type="checkbox"] {
     position: absolute !important;
   }
 }
-
 .option-container {
   display: flex;
   align-items: center;
@@ -234,7 +224,7 @@ input[type="checkbox"] {
   gap: 10px;
 }
 .option-text {
-  flex: 1; /* Pushes icons to the right extreme */
+  flex: 1;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
@@ -254,7 +244,7 @@ input[type="checkbox"] {
   padding: 5px 10px;
   outline: none;
   font-size: 14px;
-  margin: 5px 20px;
+  margin: 5px 0px;
   width: 390px;
 }
 
@@ -265,5 +255,5 @@ input[type="checkbox"] {
   outline: none;
   font-size: 14px;
   margin: 5px 20px;
-  width: 390px;
+  width: 330px;
 }

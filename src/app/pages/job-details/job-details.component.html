@@ -4,7 +4,7 @@
   </div>
 
   <div class="layout-content" *ngIf="!(isLoading$ | async) && jobData">
-    <app-header />
+    <erecruit-header />
     <section class="hero-section">
       <div class="content">
         <div class="info">
@@ -50,6 +50,6 @@
     <main>
       <router-outlet></router-outlet>
     </main>
-    <app-footer />
+    <erecruit-footer />
   </div>
 </div>

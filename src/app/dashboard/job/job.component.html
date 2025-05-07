@@ -112,7 +112,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="isLoading$ | async">
+        <tr *ngIf="(isLoading$ | async) && jobData.length === 0">
           <td colspan="8">Loading jobs...</td>
         </tr>
 
@@ -289,6 +289,6 @@
     </table>
   </div>
 </div>
-<app-job-view [viewJobData]="viewJobData" />
-<app-job-delete (jobDeleted)="loadJobs()" [jobId]="jobId" />
-<app-job-filter (updateJobData)="updateJobData($event)" />
+<erecruit-job-view [viewJobData]="viewJobData" />
+<erecruit-job-delete (jobDeleted)="loadJobs()" [jobId]="jobId" />
+<erecruit-job-filter (updateJobData)="updateJobData($event)" />

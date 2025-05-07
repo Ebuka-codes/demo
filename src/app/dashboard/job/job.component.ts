@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import { Location } from '@angular/common';
-import { enviroments } from 'src/environments/enviorments';
 import { CORP_KEY } from 'src/app/core/model/credential';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ToastService } from 'src/app/core/service/toast.service';
@@ -23,7 +22,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
   styleUrls: ['./job.component.scss'],
 })
 export class JobComponent implements OnInit {
-  jobData!: Array<job>;
+  jobData: Array<job> = [];
   isLoading$!: Observable<any>;
   searchText = new FormControl();
   viewJobData!: Array<job>;
@@ -96,8 +95,8 @@ export class JobComponent implements OnInit {
               this.jobData = [];
             }
           },
-          error: () => {
-            console.log('Error: No Jobs Found');
+          error: (error) => {
+            console.log(error.message);
             this.searchLoading = false;
           },
         });

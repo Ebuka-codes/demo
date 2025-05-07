@@ -1,23 +1,19 @@
 import {
-  AfterViewInit,
+  ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CandidateService } from '../../shared/candidate.service';
 import { Modal } from 'bootstrap';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { finalize, Observable } from 'rxjs';
-import flatpickr from 'flatpickr';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-candidate-schedule-date',
+  selector: 'erecruit-candidate-schedule-date',
   templateUrl: './candidate-schedule-date.component.html',
   styleUrls: ['./candidate-schedule-date.component.scss'],
 })
@@ -35,7 +31,7 @@ export class CandidateScheduleDateComponent implements OnInit {
     private fb: FormBuilder,
     private candidateService: CandidateService,
     private toastService: ToastService,
-    private loaderService: LoaderService
+    private cdr: ChangeDetectorRef
   ) {
     this.scheduledDateForm = this.fb.group({
       scheduledDate: ['', Validators.required],
@@ -80,7 +76,7 @@ export class CandidateScheduleDateComponent implements OnInit {
   }
   getInterviewers() {
     return this.candidateService.getInterviewer().subscribe({
-      next: (response: any) => {
+      next: (response) => {
         if (response.valid && response.data) {
           this.interviewer = response.data;
         }
@@ -94,13 +90,18 @@ export class CandidateScheduleDateComponent implements OnInit {
     this.submitted = true;
     this.candidateService
       .scheduleCandidateById(data)
-      .pipe(finalize(() => (this.submitted = false)))
+      .pipe(
+        finalize(() => {
+          this.submitted = false;
+          this.cdr.detectChanges();
+        })
+      )
       .subscribe({
-        next: (response: any) => {
-          this.toastService.success(response.message);
+        next: (response) => {
           this.scheduledDateForm.reset();
           this.closeModal();
           this.candidateUpdate.emit();
+          this.toastService.success(response.message);
         },
         error: (error) => {
           this.toastService.error(error.message);

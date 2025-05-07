@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import * as bootstrap from 'bootstrap';
 import {
   AbstractControl,
   FormBuilder,
@@ -17,7 +16,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-corporate',
+  selector: 'erecruit-corporate',
   templateUrl: './corporate.component.html',
   styleUrls: ['./corporate.component.scss'],
 })

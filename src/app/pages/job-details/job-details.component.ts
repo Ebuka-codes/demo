@@ -13,7 +13,7 @@ import {
 } from '@angular/forms';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 @Component({
-  selector: 'app-job-details',
+  selector: 'erecruit-job-details',
   templateUrl: './job-details.component.html',
   styleUrls: ['./job-details.component.scss'],
 })

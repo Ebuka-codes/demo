@@ -7,7 +7,7 @@ import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
-  selector: 'app-candidate-verification',
+  selector: 'erecruit-candidate-verification',
   templateUrl: './candidate-verification.component.html',
   styleUrls: ['./candidate-verification.component.scss'],
 })

@@ -1,17 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { count } from 'rxjs';
 
 @Component({
-  selector: 'app-candidate-search-modal',
+  selector: 'erecruit-candidate-search-modal',
   templateUrl: './candidate-search-modal.component.html',
   styleUrls: ['./candidate-search-modal.component.scss'],
 })

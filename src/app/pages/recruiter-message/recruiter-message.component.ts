@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +6,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 
 @Component({
-  selector: 'app-recruiter-message',
+  selector: 'erecruit-recruiter-message',
   templateUrl: './recruiter-message.component.html',
   styleUrls: ['./recruiter-message.component.scss'],
 })

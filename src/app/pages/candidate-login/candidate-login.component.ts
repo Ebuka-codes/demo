@@ -22,7 +22,7 @@ import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
-  selector: 'app-candidate-login',
+  selector: 'erecruit-candidate-login',
   templateUrl: './candidate-login.component.html',
   styleUrls: ['./candidate-login.component.scss'],
 })

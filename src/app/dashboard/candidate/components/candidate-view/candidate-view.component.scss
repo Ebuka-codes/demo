@@ -105,7 +105,7 @@
   gap: 15px;
   align-items: center;
   justify-content: center;
-  margin: 30px 0px;
+  margin: 30px auto;
   button {
     border: none;
     padding: 13px 20px;
@@ -131,8 +131,34 @@
   background-color: #17a2b8;
   border-radius: 25px;
   border: none;
+  width: 100px;
+  display: flex;
+  justify-content: center;
   &:hover {
     background-color: #138496;
+  }
+  .mini-loader-spinner {
+    border: 3px solid white;
+    border-color: white transparent white white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px auto;
+    animation: spin 0.5s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  button {
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 }
 .mail-btn {
@@ -144,8 +170,34 @@
   background-color: #dc3545;
   border-radius: 25px;
   border: none;
+  width: 100px;
+  display: flex;
+  justify-content: center;
   &:hover {
     background-color: #c82333;
+  }
+  .mini-loader-spinner {
+    border: 3px solid white;
+    border-color: white transparent white white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px auto;
+    animation: spin 0.5s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  button {
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 }
 .schedule-date {

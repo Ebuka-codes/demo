@@ -12,10 +12,10 @@ export class DateFormatService {
   setMonthAndYear(
     formGroup: FormGroup,
     formControlName: string,
-    normalizedMonthAndYear: any, // it's supposed to be a Moment, but let's be safe
+    normalizedMonthAndYear: any,
     datepicker: MatDatepicker<Moment>
   ) {
-    const selected = moment(normalizedMonthAndYear); // force convert
+    const selected = moment(normalizedMonthAndYear);
 
     if (!selected.isValid()) {
       console.error('Invalid monthYear selection:', normalizedMonthAndYear);
@@ -25,7 +25,7 @@ export class DateFormatService {
     let currentVal = formGroup.get(formControlName)?.value;
 
     if (!moment.isMoment(currentVal)) {
-      currentVal = moment(); // fallback to current date
+      currentVal = moment();
     }
 
     const updated = currentVal
@@ -38,16 +38,4 @@ export class DateFormatService {
     formGroup.get(formControlName)?.setValue(updated);
     datepicker.close();
   }
-
-  // const updatedDate = ctrlValue.clone();
-  // console.log('Normalized Date:', normalizedMonthAndYear);
-  // const momentDate = moment(normalizedMonthAndYear);
-  // console.log('Moment Object:', momentDate);
-  // updatedDate.month(momentDate.month());
-  // updatedDate.year(momentDate.year());
-  // console.log(updatedDate, 'me here');
-
-  // console.log(formGroup, formControlName);
-  // formGroup.get(formControlName)?.setValue('03/2020');
-  // formGroup.get(formControlName)?.setValue(updatedDate.toDate());
 }

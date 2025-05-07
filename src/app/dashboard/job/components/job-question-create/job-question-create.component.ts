@@ -16,8 +16,9 @@ import { QuestionTypeOptions } from 'src/app/shared/type';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { finalize } from 'rxjs';
 @Component({
-  selector: 'app-job-question-create',
+  selector: 'ercruit-job-question-create',
   templateUrl: './job-question-create.component.html',
   styleUrls: ['./job-question-create.component.scss'],
 })
@@ -108,50 +109,56 @@ export class JobQuestionCreateComponent {
     this.questionTypeOptions.splice(index, 1);
   }
   onCreateQuestion(questionData: any) {
-    this.jobService.createQuestion(questionData).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
+    this.isLoadingQuestion = true;
+    this.jobService
+      .createQuestion(questionData)
+      .pipe(
+        finalize(() => {
+          this.isLoadingQuestion = false;
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.questionTypeOptions = [];
+            this.updateQuestion.emit();
+            this.toastService.success(response.message);
+            this.closeModal();
+          } else {
+            this.closeModal();
+            this.toastService.success(response.message);
+          }
+        },
+        error: (error: any) => {
           this.questionTypeOptions = [];
-          this.updateQuestion.emit();
-          this.loaderService.setLoading(false);
-          this.toastService.success('Created successfully!');
+          this.toastService.error(error.message);
           this.closeModal();
-        } else {
-          this.closeModal();
-          this.loaderService.setLoading(false);
-          this.toastService.success(response.message);
-        }
-      },
-      error: (error: any) => {
-        this.questionTypeOptions = [];
-        this.loaderService.setLoading(false);
-        this.toastService.error('Error occur while creating question!');
-        this.closeModal();
-      },
-    });
+        },
+      });
   }
   onEditQuestion(id: string, questionData: any) {
-    this.jobService.editQuestion(id, questionData).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
+    this.isLoadingQuestion = true;
+    this.jobService
+      .editQuestion(id, questionData)
+      .pipe(finalize(() => (this.isLoadingQuestion = false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.questionTypeOptions = [];
+            this.updateQuestion.emit();
+            this.toastService.success(response.message);
+            this.closeModal();
+          } else {
+            this.toastService.error(response.message);
+            this.closeModal();
+          }
+        },
+        error: (error: any) => {
           this.questionTypeOptions = [];
-          this.updateQuestion.emit();
-          this.loaderService.setLoading(false);
-          this.toastService.success(response.message);
+          this.toastService.error(error.message);
           this.closeModal();
-        } else {
-          this.toastService.error(response.message);
-          this.loaderService.setLoading(false);
-          this.closeModal();
-        }
-      },
-      error: (error: any) => {
-        this.questionTypeOptions = [];
-        this.loaderService.setLoading(false);
-        this.toastService.error(error.message);
-        this.closeModal();
-      },
-    });
+        },
+      });
   }
   getQuestionOperator() {
     this.loaderService.setLoading(true);
@@ -220,8 +227,6 @@ export class JobQuestionCreateComponent {
         this.operator?.value && this.qualifyValue?.value ? true : false,
     };
     if (this.questionForm.valid) {
-      this.isLoadingQuestion = true;
-      this.loaderService.setLoading(true);
       if (!this.editId) {
         this.onCreateQuestion(questionData);
       } else {

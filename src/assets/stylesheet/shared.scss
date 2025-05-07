@@ -272,10 +272,8 @@ input[type="checkbox"] {
 
 .flatpickr-calendar {
   position: static !important;
-}
-
-.flatpickr-calendar {
   width: max-content !important;
+  box-shadow: none;
 }
 
 .flatpickr-months {
@@ -380,6 +378,12 @@ input[type="checkbox"] {
 }
 .mat-mdc-icon-button .mat-mdc-focus-indicator {
   background: none !important;
+}
+.mdc-icon-button:hover {
+  background-color: transparent !important;
+}
+.mdc-icon-button:focus {
+  background-color: transparent !important;
 }
 @media (min-width: 992px) {
   .modal-lg,

@@ -5,6 +5,7 @@ import { Candidate } from './candidate';
 import { job } from '../../job/shared/job';
 import { Constants } from 'src/app/utils/constants';
 import { Observable } from 'rxjs';
+import { DataResponse } from 'src/app/shared/model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -12,93 +13,92 @@ import { Observable } from 'rxjs';
 export class CandidateService {
   constructor(private httpClient: HttpClient) {}
   baseUrl = enviroments.API_URL;
-  getCandidate(): Observable<Candidate[]> {
-    return this.httpClient.get<Candidate[]>(Constants.CANDIDATE_URL.CANDIDATES);
+  getCandidate(): Observable<DataResponse> {
+    return this.httpClient.get<any>(Constants.CANDIDATE_URL.CANDIDATES);
   }
-  getCandidateByJobId(jobId: string) {
-    return this.httpClient.get<Candidate>(
+  getCandidateByJobId(jobId: string): Observable<DataResponse> {
+    return this.httpClient.get<any>(
       Constants.CANDIDATE_URL.CANDIDATES + `/by-job-detail/${jobId}`
     );
   }
-  deleteCandidateById(id: string) {
-    return this.httpClient.delete(
+  deleteCandidateById(id: string): Observable<DataResponse> {
+    return this.httpClient.delete<any>(
       Constants.CANDIDATE_URL.CANDIDATES + `/${id}`
     );
   }
-  hireCandidateById(id: string, data: {}) {
-    return this.httpClient.put(
+  hireCandidateById(id: string, data: {}): Observable<DataResponse> {
+    return this.httpClient.put<any>(
       Constants.CANDIDATE_URL.CANDIDATES + `/hire/${id}`,
       data
     );
   }
-  rejectCandidateById(id: string, data: {}) {
-    return this.httpClient.put(
+  rejectCandidateById(id: string, data: {}): Observable<DataResponse> {
+    return this.httpClient.put<any>(
       Constants.CANDIDATE_URL.CANDIDATES + `/reject/${id}`,
       data
     );
   }
 
-  scheduleCandidateById(data: string) {
-    return this.httpClient.put(
+  scheduleCandidateById(data: string): Observable<DataResponse> {
+    return this.httpClient.put<any>(
       Constants.CANDIDATE_URL.CANDIDATES + '/schedule',
       data
     );
   }
-  filterCandidate(data: {}) {
-    return this.httpClient.put(Constants.FILTER_URL.FILTER_CANDIDATE, data);
+  filterCandidate(data: {}): Observable<DataResponse> {
+    return this.httpClient.post<any>(
+      Constants.FILTER_URL.FILTER_CANDIDATE,
+      data
+    );
   }
-  getAllJobs() {
-    return this.httpClient.get<job>(Constants.JOB_URL.JOB);
+  getAllJobs(): Observable<DataResponse> {
+    return this.httpClient.get<any>(Constants.JOB_URL.JOB);
   }
-  getQualifiedQuestion(id: string | undefined) {
-    return this.httpClient.get(
+  getQualifiedQuestion(id: string | undefined): Observable<DataResponse> {
+    return this.httpClient.get<any>(
       Constants.JOB_URL.JOB + `/get-all-qualifying-question/${id}`
     );
   }
-  shorListCandidate(data: any) {
-    return this.httpClient.put(Constants.CANDIDATE_URL.SHORTLIST, data);
+  shorListCandidate(data: any): Observable<DataResponse> {
+    return this.httpClient.put<any>(Constants.CANDIDATE_URL.SHORTLIST, data);
   }
 
-  filterCandidateByQualifiedQuestion(data: any) {
-    return this.httpClient.put(
+  filterCandidateByQualifiedQuestion(data: any): Observable<DataResponse> {
+    return this.httpClient.put<any>(
       Constants.CANDIDATE_URL.FILTER_BY_QUALIFIED_QUESTION,
       data
     );
   }
 
-  getInterviewer() {
-    return this.httpClient.get(Constants.INTERVIEW_URL.INTERVIEWER);
+  getInterviewer(): Observable<DataResponse> {
+    return this.httpClient.get<any>(Constants.INTERVIEW_URL.INTERVIEWER);
   }
-
-  getCandidateOperand() {
-    return this.httpClient.get(Constants.CANDIDATE_URL.SEARCH_OPERAND);
-  }
-  searchFilter(data: any) {
-    return this.httpClient.post(
+  searchFilter(data: any): Observable<DataResponse> {
+    return this.httpClient.post<any>(
       Constants.CANDIDATE_URL.CANDIDATES + '/search-filter',
       data
     );
   }
-  sendMessage(data: any) {
-    return this.httpClient.post(
+  sendMessage(data: any): Observable<DataResponse> {
+    return this.httpClient.post<any>(
       Constants.MESSAGE_URL.MESSAGE + '/user/send',
       data
     );
   }
 
-  candidateMessage(data: any) {
-    return this.httpClient.post(
+  candidateMessage(data: any): Observable<DataResponse> {
+    return this.httpClient.post<any>(
       Constants.MESSAGE_URL.MESSAGE + '/candidate/send',
       data
     );
   }
   getMessage(id: string) {
-    return this.httpClient.get(
+    return this.httpClient.get<any>(
       Constants.MESSAGE_URL.MESSAGE + `/candidate/${id}`
     );
   }
-  interviewerFeedback(data: any) {
-    return this.httpClient.post(
+  interviewerFeedback(data: any): Observable<DataResponse> {
+    return this.httpClient.post<any>(
       Constants.FEEDBACK_URL.FEEDBACK + `/send-feedback-link`,
       data
     );

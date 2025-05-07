@@ -11,7 +11,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">
-          {{ isEditModal ? "Edit Question" : "Create Question" }}
+          {{ isEditModal ? "Edit Question" : "Add Question" }}
         </h5>
         <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
           <svg
@@ -32,7 +32,9 @@
       <div class="modal-body">
         <form [formGroup]="questionForm" (ngSubmit)="onSubmitQuestion()">
           <div class="form-group">
-            <label for="desc">Description *</label>
+            <label for="desc"
+              >Description <span class="required-icon">*</span></label
+            >
             <textarea
               formControlName="description"
               style="height: 100px"
@@ -44,7 +46,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="questionType">Question Type *</label>
+            <label for="questionType"
+              >Question Type <span class="required-icon">*</span></label
+            >
             <mat-form-field>
               <mat-select formControlName="questionType">
                 <mat-option *ngFor="let type of questionType" [value]="type.key"
@@ -168,11 +172,15 @@
             <button type="button" class="close-btn" data-bs-dismiss="modal">
               <span>Cancel</span>
             </button>
-            <button type="submit" class="submit-btn">
-              <ng-container *ngIf="isLoadingQuestion; else showLoader">
+            <button
+              type="submit"
+              [disabled]="isLoadingQuestion"
+              class="submit-btn"
+            >
+              <ng-container *ngIf="isLoadingQuestion; else content">
                 <span class="mini-loader-spinner"></span>
               </ng-container>
-              <ng-template #showLoader>
+              <ng-template #content>
                 <span>Submit</span>
               </ng-template>
             </button>

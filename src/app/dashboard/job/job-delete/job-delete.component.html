@@ -36,8 +36,13 @@
           <button type="button" class="close-btn" data-bs-dismiss="modal">
             <span>Cancel</span>
           </button>
-          <button type="submit" class="submit-btn" (click)="onConfirmDelete()">
-            <ng-container *ngIf="isLoading$ | async; else showLoading">
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="submit-btn"
+            (click)="onConfirmDelete()"
+          >
+            <ng-container *ngIf="isLoading; else showLoading">
               <span class="mini-loader-spinner"></span>
             </ng-container>
             <ng-template #showLoading>

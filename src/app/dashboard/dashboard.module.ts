@@ -24,17 +24,11 @@ import { StatsComponent } from './components/stats/stats.component';
 import { JobListingComponent } from './components/job-listing/job-listing.component';
 import { InterviewsComponent } from './components/interviews/interviews.component';
 import { InterviewerComponent } from './interviewer/interviewer.component';
-import { UsersComponent } from './users/users.component';
 import { RoleComponent } from './role/role.component';
 import { SessionComponent } from './components/ui/session/session.component';
 import { UserCorporateComponent } from './user-corporate/user-corporate.component';
 import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
 import { UsersModule } from './users/users.module';
-import { ProfileComponent } from './profile/profile.component';
-import { UserCreateModalComponent } from './users/components/user-create-modal/user-create-modal.component';
-import { PersonalProfileComponent } from './profile/components/personal-profile/personal-profile.component';
-import { CompanyProfileComponent } from './profile/components/company-profile/company-profile.component';
-import { EmailSetupComponent } from './profile/components/email-setup/email-setup.component';
 import { ProfileModule } from './profile/profile.module';
 @NgModule({
   declarations: [

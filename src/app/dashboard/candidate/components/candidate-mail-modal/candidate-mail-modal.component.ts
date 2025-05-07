@@ -9,14 +9,13 @@ import {
 } from '@angular/core';
 
 import { CandidateService } from '../../shared/candidate.service';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-candidate-mail-modal',
+  selector: 'erecruit-candidate-mail-modal',
   templateUrl: './candidate-mail-modal.component.html',
   styleUrls: ['./candidate-mail-modal.component.scss'],
 })
@@ -33,7 +32,6 @@ export class CandidateMailModalComponent {
   isSendingMsg: boolean = false;
   constructor(
     private candidateService: CandidateService,
-    private loaderService: LoaderService,
     private toastService: ToastService
   ) {}
 
@@ -44,7 +42,7 @@ export class CandidateMailModalComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['candidateData']) {
       this.candidateService.getMessage(this.candidateData?.id).subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response) {
             this.chat = response;
             this.senderChat = this.chat.filter(
@@ -53,14 +51,12 @@ export class CandidateMailModalComponent {
             this.recieverChat = this.chat.filter(
               (data) => data.senderType === 'CANDIDATE'
             );
-            this.loaderService.setLoading(false);
-            this.isLoading$ = this.loaderService.isLoading$;
           } else {
-            this.loaderService.setLoading(false);
+            this.toastService.error(response.message);
           }
         },
         error: (error) => {
-          this.loaderService.setLoading(false);
+          this.toastService.error(error.message);
         },
       });
     }
@@ -94,13 +90,12 @@ export class CandidateMailModalComponent {
           content: this.message,
         })
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             if (response) {
               this.toastService.success('Message sent!');
               this.closeModal();
               this.candidateUpdate.emit();
             } else {
-              this.toastService.error('Message failed!');
               this.closeModal();
             }
           },
@@ -115,7 +110,6 @@ export class CandidateMailModalComponent {
     const timestamp = new Date(timestampStr);
     const now = new Date();
     const todayStr = now.toDateString();
-
     const yesterday = new Date();
     yesterday.setDate(now.getDate() - 1);
     const yesterdayStr = yesterday.toDateString();

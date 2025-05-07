@@ -20,7 +20,7 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchModalComponent } from './components/candidate-search-modal/candidate-search-modal.component';
 
 @Component({
-  selector: 'app-candidate',
+  selector: 'erecruit-candidate',
   templateUrl: './candidate.component.html',
   styleUrls: ['./candidate.component.scss'],
 })
@@ -105,7 +105,7 @@ export class CandidateComponent implements OnInit {
       .getAllJobs()
       .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response.valid && response.data) {
             this.job = response.data;
           }
@@ -121,7 +121,7 @@ export class CandidateComponent implements OnInit {
       .getCandidateByJobId(jobId)
       .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response.valid && response.data) {
             this.candidateData = response.data;
             this.filteredCandidate = this.candidateData;
@@ -143,7 +143,7 @@ export class CandidateComponent implements OnInit {
         .shorListCandidate(data)
         .pipe(finalize(() => this.loaderService.setLoading(false)))
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             this.shortListedData = response.data;
             this.toastService.success('Shortlisted successfully');
             this.selectedCandidateIds = [];
@@ -168,7 +168,7 @@ export class CandidateComponent implements OnInit {
         .interviewerFeedback(data)
         .pipe(finalize(() => this.loaderService.setLoading(false)))
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             if (response.valid && response.data) {
               this.toastService.success(response.message);
               this.selectedCandidateIds = [];
@@ -292,7 +292,7 @@ export class CandidateComponent implements OnInit {
       .searchFilter({ ...this.searchFilterData(), jobid: this.selectedJobId })
       .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response.valid && response.data) {
             this.filteredCandidate = response.data;
             this.clearSearchFilter();

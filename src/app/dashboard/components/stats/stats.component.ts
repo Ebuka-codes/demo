@@ -4,7 +4,7 @@ import { DashboardStats } from '../../admin-dashboard/shared/dashboardStats';
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-stats',
+  selector: 'erecruit-stats',
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss'],
 })
@@ -12,12 +12,7 @@ export class StatsComponent {
   @Input() data!: DashboardStats;
   @Input() candidateData!: any;
   candidateStats!: any[];
-
-  source = [
-    { id: 'Job Boards', value: 40 },
-    { id: 'Online', value: 20 },
-    { id: 'Recruitment Agency', value: 10 },
-  ];
+  option: string | null = 'Total';
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data?.candidateInfo) {
@@ -30,7 +25,6 @@ export class StatsComponent {
         label: key,
         value,
       }));
-      console.log(this.candidateStats);
       this.Renderhart();
     }
   }
@@ -40,50 +34,7 @@ export class StatsComponent {
   colors2 = ['#FBC784', '#2E78EE', '#28a745', '#e50c20'];
 
   Renderhart() {
-    new Chart('barChart1', {
-      type: 'doughnut',
-      data: {
-        datasets: [
-          {
-            data: this.source,
-            backgroundColor: this.colors1,
-          },
-        ],
-        labels: this.source.map((item) => item.value),
-      },
-      options: {
-        cutout: '80%',
-        radius: '70%',
-        rotation: 360,
-        animation: {
-          animateRotate: true,
-          animateScale: true,
-        },
-        parsing: {
-          key: 'value',
-        },
-        spacing: 0,
-        datasets: {
-          doughnut: {
-            hoverBackgroundColor: '#ffff',
-            borderColor: '#fff',
-            clip: 1,
-            borderJoinStyle: 'miter',
-          },
-        },
-
-        elements: {
-          point: {},
-        },
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-      },
-    });
-
-    new Chart('barChart2', {
+    new Chart('barChart', {
       type: 'doughnut',
       data: {
         datasets: [
@@ -125,5 +76,9 @@ export class StatsComponent {
         },
       },
     });
+  }
+  onToggle(event: Event) {
+    const element = event.target as HTMLElement;
+    this.option = element.textContent;
   }
 }

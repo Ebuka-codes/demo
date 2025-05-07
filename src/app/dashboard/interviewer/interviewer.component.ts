@@ -18,7 +18,7 @@ import { Location } from '@angular/common';
 import { finalize, Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-interviewer',
+  selector: 'erecruit-interviewer',
   templateUrl: './interviewer.component.html',
   styleUrls: ['./interviewer.component.scss'],
 })

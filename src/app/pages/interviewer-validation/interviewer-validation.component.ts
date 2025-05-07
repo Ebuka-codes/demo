@@ -7,7 +7,7 @@ import { InterviewerService } from 'src/app/shared/service/interviewer.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
-  selector: 'app-interviewer-validation',
+  selector: 'erecruit-interviewer-validation',
   templateUrl: './interviewer-validation.component.html',
   styleUrls: ['./interviewer-validation.component.scss'],
 })

@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/core/service/auth.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'erecruit-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })

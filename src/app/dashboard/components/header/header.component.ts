@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TimeService } from 'src/app/shared/service/time.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'erecruit-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

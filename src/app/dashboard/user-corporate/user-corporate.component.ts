@@ -11,7 +11,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
 @Component({
-  selector: 'app-user-corporate',
+  selector: 'erecruit-user-corporate',
   templateUrl: './user-corporate.component.html',
   styleUrls: ['./user-corporate.component.scss'],
 })

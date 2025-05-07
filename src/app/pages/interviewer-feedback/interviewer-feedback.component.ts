@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize } from 'rxjs';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { InterviewerService } from 'src/app/shared/service/interviewer.service';
 
 @Component({
-  selector: 'app-interviewer-feedback',
+  selector: 'erecruit-interviewer-feedback',
   templateUrl: './interviewer-feedback.component.html',
   styleUrls: ['./interviewer-feedback.component.scss'],
 })

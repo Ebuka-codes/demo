@@ -8,14 +8,13 @@ import {
 import { job, KeyValuePair } from '../../../job/shared/job';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Modal } from 'bootstrap';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { CandidateService } from '../../shared/candidate.service';
-import { finalize, Observable } from 'rxjs';
+import { finalize } from 'rxjs';
 import { Candidate } from '../../shared/candidate';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-candidate-filter',
+  selector: 'erecruit-candidate-filter',
   templateUrl: './candidate-filter-modal.component.html',
   styleUrls: ['./candidate-filter-modal.component.scss'],
 })
@@ -47,7 +46,6 @@ export class CandidateFilterModalComponent {
   constructor(
     private fb: FormBuilder,
     private candidateService: CandidateService,
-    private loaderService: LoaderService,
     private toastService: ToastService
   ) {
     this.filterForm = this.fb.group({
@@ -97,9 +95,9 @@ export class CandidateFilterModalComponent {
       this.isLoading = true;
       this.candidateService
         .filterCandidate(data)
-        .pipe(finalize(() => (this.isLoading = true)))
+        .pipe(finalize(() => (this.isLoading = false)))
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             if (response.valid && response.data) {
               this.closeModal();
               this.updateCandidateData.emit(response.data);

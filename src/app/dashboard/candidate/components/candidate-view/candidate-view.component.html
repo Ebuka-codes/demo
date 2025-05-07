@@ -311,61 +311,77 @@
 
       <div class="action-btn">
         <div class="hire">
-          <button (click)="hireCandidate(candidateViewData.id)">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16 21V19C16 17.8954 15.1046 17 14 17H6C4.89543 17 4 17.8954 4 19V21"
-                stroke="#ffff"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <circle
-                cx="10"
-                cy="7"
-                r="4"
-                stroke="#fff"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M17 10L19 12L22 9"
-                stroke="#ffff"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+          <button
+            (click)="hireCandidate(candidateViewData.id)"
+            [disabled]="isHiring"
+          >
+            <ng-container *ngIf="isHiring; else content">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #content>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 21V19C16 17.8954 15.1046 17 14 17H6C4.89543 17 4 17.8954 4 19V21"
+                  stroke="#ffff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle
+                  cx="10"
+                  cy="7"
+                  r="4"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M17 10L19 12L22 9"
+                  stroke="#ffff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
 
-            Hire
+              Hire
+            </ng-template>
           </button>
         </div>
 
         <div class="reject">
-          <button (click)="rejectCandidate(candidateViewData.id)">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="4" y1="4" x2="20" y2="20"></line>
-            </svg>
+          <button
+            (click)="rejectCandidate(candidateViewData.id)"
+            [disabled]="isRejecting"
+          >
+            <ng-container *ngIf="isRejecting; else content">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #content>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4" y1="4" x2="20" y2="20"></line>
+              </svg>
 
-            Reject
+              Reject
+            </ng-template>
           </button>
         </div>
         <div

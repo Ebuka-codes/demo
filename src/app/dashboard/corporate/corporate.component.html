@@ -209,13 +209,13 @@
     </table>
   </div>
 </div>
-<app-corporate-create (corporateCreated)="getCorporate()" />
+<erecruit-corporate-create (corporateCreated)="getCorporate()" />
 <app-corporate-edit
   [editedData]="editedData"
   (corporateEdited)="getCorporate()"
 />
-<app-corporate-view [corporateViewData]="corporateViewData" />
-<app-corporate-delete
+<erecruit-corporate-view [corporateViewData]="corporateViewData" />
+<erecruit-corporate-delete
   [corporateId]="corporateId"
   (corporateDeleted)="getCorporate()"
 />

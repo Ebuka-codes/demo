@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-corporate-delete',
+  selector: 'erecruit-corporate-delete',
   templateUrl: './corporate-delete.component.html',
   styleUrls: ['./corporate-delete.component.scss'],
 })

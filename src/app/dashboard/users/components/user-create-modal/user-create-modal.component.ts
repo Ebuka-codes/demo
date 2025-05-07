@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
 import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-user-create-modal',
+  selector: 'erecruit-user-create-modal',
   templateUrl: './user-create-modal.component.html',
   styleUrls: ['./user-create-modal.component.scss'],
 })

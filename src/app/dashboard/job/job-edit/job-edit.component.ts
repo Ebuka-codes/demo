@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -19,14 +25,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import Quill from 'quill';
 import { ToastService } from 'src/app/core/service/toast.service';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-job-edit',
   templateUrl: './job-edit.component.html',
   styleUrls: ['./job-edit.component.scss'],
 })
-export class JobEditComponent {
+export class JobEditComponent implements OnInit {
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
   @ViewChild('newEmpType') newEmpType!: ElementRef<HTMLInputElement>;
   @ViewChild('newJobTitle') newJobTitle!: ElementRef<HTMLInputElement>;
@@ -86,50 +91,48 @@ export class JobEditComponent {
     private route: ActivatedRoute,
     private toastService: ToastService,
     private loaderService: LoaderService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
-      jobTitle: [
-        '',
-        [Validators.required, Validators.minLength(3), this.nameValidator()],
-      ],
+      jobTitle: ['', [Validators.required, Validators.minLength(3)]],
       jobId: ['', Validators.required],
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
       jobType: ['', Validators.required],
-      companyName: [''],
       workMode: ['', Validators.required],
+      companyName: [''],
       requiredSkills: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      questionOptions: [[], Validators.required],
+      questionOptions: [[]],
       jobDescription: ['', Validators.required],
     });
   }
-
   onEditorCreated(quillInstance: Quill) {
     this.quill = quillInstance;
   }
-
-  ngOnInit(): void {
-    this.getJobDetailByType();
+  ngOnInit() {
     this.fetchData();
+    this.getJobDetailByType();
     this.getAllQuestion();
+    this.loaderService.setLoading(true);
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
 
   fetchData() {
-    this.loaderService.setLoading(true);
     this.jobService
       .getJobById(this.route.snapshot.paramMap.get('id'))
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
         next: (response: any) => {
           if (response.data) {
             this.form.patchValue(response.data);
+            this.form.updateValueAndValidity();
             setTimeout(() => {
               if (this.quill) {
                 this.quill.setContents(
@@ -139,12 +142,9 @@ export class JobEditComponent {
                 );
               }
             }, 1000);
-
-            this.loaderService.setLoading(false);
           }
         },
         error: (err) => {
-          this.loaderService.setLoading(false);
           this.toastService.error(err.message);
         },
       });
@@ -229,18 +229,10 @@ export class JobEditComponent {
     return this.form.get('questionOptions') as FormArray;
   }
 
-  nameValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const value = control.value;
-      const valid = /^[a-zA-Z\s]*$/.test(value);
-      return valid ? null : { invalidName: { value: control.value } };
-    };
-  }
   amountValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
-
-      if (value == '') {
+      if (value === '') {
         return null;
       }
       const valid = /^\d+$/.test(value);
@@ -256,12 +248,11 @@ export class JobEditComponent {
           const selectedIds = this.questionTypeDropdown.map((q) => q.id);
           setTimeout(() => {
             this.form.get('questionOptions')?.patchValue(selectedIds);
-            console.log('Patched Form:', this.form.value);
           }, 1000);
         }
       },
-      error: () => {
-        this.toastService.error('Error occur!');
+      error: (error) => {
+        this.toastService.error(error.message);
       },
     });
   }
@@ -299,36 +290,29 @@ export class JobEditComponent {
       },
       error: (error: any) => {
         this.isLoading = false;
+        this.toastService.error(error.message);
       },
     });
   }
 
-  getQuestionsById(id: string) {
+  onDeleteQuestion(id: string) {
     this.loaderService.setLoading(true);
     this.jobService
-      .getQuestionById(id)
+      .deleteQuestionsById(id)
       .pipe(finalize(() => this.loaderService.setLoading(false)))
-      .subscribe((response: any) => {
-        if (response.valid && response.data) {
-          this.viewQuestionData = response.data;
-          this.form.patchValue(this.viewQuestionData);
-        } else {
-          this.toastService.error(response.message);
-        }
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid) {
+            this.getAllQuestion();
+            this.toastService.success(response.message);
+          } else {
+            this.toastService.success(response.message);
+          }
+        },
+        error: (error) => {
+          this.toastService.success(error.message);
+        },
       });
-  }
-  deleteQuestionsById(id: string) {
-    this.loaderService.setLoading(true);
-    this.jobService.deleteQuestionsById(id).subscribe((response: any) => {
-      if (response.valid) {
-        this.loaderService.setLoading(false);
-        this.getAllQuestion();
-        this.toastService.success(response.message);
-      } else {
-        this.toastService.error('Error occur!');
-        this.loaderService.setLoading(false);
-      }
-    });
   }
   selectSkill(skill: string | undefined) {
     if (skill) {
@@ -355,19 +339,22 @@ export class JobEditComponent {
 
   createNewQueryDetails(data: DetailsType) {
     this.loaderService.setLoading(true);
-    this.jobService.createQueryDetails(data).subscribe({
-      next: (response: any) => {
-        if (response.valid) {
-          this.getJobDetailByType();
-          this.toastService.success(response.message);
-          this.loaderService.setLoading(false);
-        }
-      },
-      error: (error: any) => {
-        this.toastService.error(error.message);
-        this.loaderService.setLoading(false);
-      },
-    });
+    this.jobService
+      .createQueryDetails(data)
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid) {
+            this.getJobDetailByType();
+            this.toastService.success(response.message);
+          } else {
+            this.toastService.error(response.message);
+          }
+        },
+        error: (error: any) => {
+          this.toastService.error(error.message);
+        },
+      });
   }
   openPanel() {
     setTimeout(() => {
@@ -426,10 +413,10 @@ export class JobEditComponent {
           description: value,
           type: type,
         })
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
-              this.loaderService.setLoading(false);
               this.getJobDetailByType();
               this.selectedValue = '';
               this.isEditOpen = false;
@@ -471,24 +458,28 @@ export class JobEditComponent {
   handleEditJob(id: string | null, newJob: job) {
     this.loading = true;
     this.loaderService.setLoading(true);
-    this.jobService.editJob(id, newJob).subscribe({
-      next: (response: any) => {
-        if (response.valid) {
-          this.loading = false;
+    this.jobService
+      .editJob(id, newJob)
+      .pipe(
+        finalize(() => {
           this.loaderService.setLoading(false);
-          this.toastService.success(response.message);
-          setTimeout(() => {
-            this.router.navigate(['/job']);
-          }, 1500);
-        }
-      },
-      error: (error: any) => {
-        this.loading = false;
-        this.isSubmitted = false;
-        this.loaderService.setLoading(false);
-        this.toastService.error(error.message);
-      },
-    });
+          this.loading = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid) {
+            this.toastService.success(response.message);
+            setTimeout(() => {
+              this.router.navigate(['/job']);
+            }, 1500);
+          }
+        },
+        error: (error: any) => {
+          this.toastService.error(error.message);
+        },
+      });
   }
 
   onSubmit(): void {
@@ -517,12 +508,12 @@ export class JobEditComponent {
       this.isSubmitted = true;
     }
   }
-
   onStartDateChange() {
     if (this.form.get('startDate')?.value) {
       let selectedDate = new Date(this.form.get('startDate')?.value);
       selectedDate.setDate(selectedDate.getDate() + 1);
       this.minEndDate = selectedDate;
+      console.log(this.minEndDate);
       this.isEditDate = false;
     }
   }

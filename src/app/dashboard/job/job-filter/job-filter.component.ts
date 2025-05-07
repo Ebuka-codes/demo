@@ -14,7 +14,7 @@ import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-job-filter',
+  selector: 'erecruit-job-filter',
   templateUrl: './job-filter.component.html',
   styleUrls: ['./job-filter.component.scss'],
 })

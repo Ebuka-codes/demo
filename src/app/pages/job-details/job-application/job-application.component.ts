@@ -34,11 +34,10 @@ import { Modal } from 'bootstrap';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
-import { NavigationService } from 'src/app/shared/service/navigation-service.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { UtilService } from 'src/app/core/service/util.service';
 @Component({
-  selector: 'app-job-application',
+  selector: 'erecruit-job-application',
   templateUrl: './job-application.component.html',
   styleUrls: ['./job-application.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -637,24 +636,30 @@ export class JobApplicationComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.jobService.convertFileToBase64(data).subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.resumeValue = response.data;
-            this.supportingFormGroup
-              .get('resume')
-              ?.setValue(response.data.path);
-            this.isResumeData = false;
+      this.jobService
+        .convertFileToBase64(data)
+        .pipe(
+          finalize(() => {
             this.isUploadingResume = false;
-          }
-        },
-        error: (err: any) => {
-          this.toastService.error(err.message);
-          this.selectedResumeFile = '';
-          this.isResumeData = false;
-          this.isUploadingResume = false;
-        },
-      });
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe({
+          next: (response: any) => {
+            if (response.valid && response.data) {
+              this.resumeValue = response.data;
+              this.supportingFormGroup
+                .get('resume')
+                ?.setValue(response.data.path);
+              this.isResumeData = false;
+            }
+          },
+          error: (err: any) => {
+            this.toastService.error(err.message);
+            this.selectedResumeFile = '';
+            this.isResumeData = false;
+          },
+        });
     };
   }
   convertCoverLetterFileToBase64(file: File, name: string): void {
@@ -666,24 +671,30 @@ export class JobApplicationComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.jobService.convertFileToBase64(data).subscribe(
-        (response: any) => {
-          if (response.valid && response.data) {
-            this.coverLetterValue = response.data;
-            this.supportingFormGroup
-              .get('coverLetter')
-              ?.setValue(response.data.path);
-            this.isCoverLetterData = false;
+      this.jobService
+        .convertFileToBase64(data)
+        .pipe(
+          finalize(() => {
             this.isUploadingCoverLetter = false;
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe(
+          (response: any) => {
+            if (response.valid && response.data) {
+              this.coverLetterValue = response.data;
+              this.supportingFormGroup
+                .get('coverLetter')
+                ?.setValue(response.data.path);
+              this.isCoverLetterData = false;
+            }
+          },
+          (err) => {
+            this.toastService.error(err.message);
+            this.selectedCoverLetterFile = '';
+            this.isCoverLetterData = false;
           }
-        },
-        (err) => {
-          this.toastService.error(err.message);
-          this.selectedCoverLetterFile = '';
-          this.isCoverLetterData = false;
-          this.isUploadingCoverLetter = false;
-        }
-      );
+        );
     };
   }
   handleRemoveResume(): void {
@@ -781,8 +792,6 @@ export class JobApplicationComponent implements OnInit {
         this.questionsFormGroup.valid)
     ) {
       this.submitJobApplication(data);
-
-      console.log('me and you');
     } else {
       this.questionsFormGroup.markAllAsTouched();
     }

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { enviroments } from 'src/environments/enviorments';
+import { DataResponse } from '../shared/model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,8 @@ export class DashboardService {
   constructor(private httpClient: HttpClient) {}
   ngOnInit(): void {}
 
-  getDashboardData() {
-    return this.httpClient.get(this.baseUrl + '/api/dashboard');
+  getDashboardData(): Observable<DataResponse> {
+    return this.httpClient.get<any>(this.baseUrl + '/api/dashboard');
   }
 
   setLoading(loading: boolean) {

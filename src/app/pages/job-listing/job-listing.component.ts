@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Notyf } from 'notyf';
 import { finalize, Observable } from 'rxjs';
 import { ToastService } from 'src/app/core/service/toast.service';
@@ -8,7 +7,7 @@ import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { job } from 'src/app/shared/type';
 
 @Component({
-  selector: 'app-home',
+  selector: 'erecruit-job-listing',
   templateUrl: './job-listing.component.html',
   styleUrls: ['./job-listing.component.scss'],
 })

@@ -10,12 +10,12 @@ import { Candidate } from '../../shared/candidate';
 import { CandidateService } from '../../shared/candidate.service';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
-import { take } from 'rxjs';
+import { finalize } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-candidate-view',
+  selector: 'erecruit-candidate-view',
   templateUrl: './candidate-view.component.html',
   styleUrls: ['./candidate-view.component.scss'],
 })
@@ -29,7 +29,8 @@ export class CandidateViewComponent {
   modalInstance!: Modal;
   modalScheduleInstance!: Modal;
   candidateId!: string;
-
+  isRejecting!: boolean;
+  isHiring!: boolean;
   constructor(
     private candidateService: CandidateService,
     private loaderService: LoaderService,
@@ -40,46 +41,44 @@ export class CandidateViewComponent {
     this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
   }
   hireCandidate(id: string) {
-    this.loaderService.setLoading(true);
+    this.isHiring = true;
     this.candidateService
       .hireCandidateById(id, { status: 'HIRED' })
-      .pipe(take(1))
+      .pipe(finalize(() => (this.isHiring = false)))
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.modalInstance.hide();
           const backdrop = document.querySelector('.modal-backdrop');
           backdrop?.remove();
           this.candidateUpdate.emit();
-          this.toastService.success('Candidate hired successfully');
+          this.toastService.success(response.message);
         },
-        error: () => {
-          this.loaderService.setLoading(false);
-          this.toastService.error('Error hiring candidate!');
+        error: (error) => {
+          this.toastService.error(error.message);
         },
       });
   }
   rejectCandidate(id: string) {
-    this.loaderService.setLoading(true);
+    this.isRejecting = true;
     this.candidateService
       .rejectCandidateById(id, { status: 'REJECTED' })
+      .pipe(finalize(() => (this.isRejecting = false)))
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.modalInstance.hide();
           const backdrop = document.querySelector('.modal-backdrop');
           backdrop?.remove();
-          this.toastService.success('Candidate rejected');
+          this.toastService.success(response.message);
           this.candidateUpdate.emit();
         },
-        error: () => {
-          this.toastService.error('Error rejecting Candidate!');
-          this.loaderService.setLoading(false);
+        error: (error) => {
+          this.toastService.error(error.message);
         },
       });
   }
 
   onScheduleDate(id: string) {
     this.openScheduleModal.emit(id);
-    const backdrop = document.querySelector('.modal-backdrop');
   }
 
   updateCandidateTable() {

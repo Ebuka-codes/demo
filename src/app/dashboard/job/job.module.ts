@@ -20,7 +20,6 @@ import { JobDeleteComponent } from './job-delete/job-delete.component';
 import { JobFilterComponent } from './job-filter/job-filter.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -47,8 +46,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     JobRoutingModule,
     FormsModule,
     MatButtonToggleModule,
-    SharedModule,
     NgbTooltipModule,
+    SharedModule,
   ],
 })
 export class JobModule {}

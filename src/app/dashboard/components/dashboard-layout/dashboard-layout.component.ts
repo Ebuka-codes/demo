@@ -1,23 +1,20 @@
 import { Component } from '@angular/core';
-import { finalize, interval, Observable, Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { ToastService } from 'src/app/core/service/toast.service';
 import { AuthService } from 'src/app/core/service/auth.service';
 
 @Component({
-  selector: 'app-dashboard-layout',
+  selector: 'erecruit-dashboard-layout',
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.scss'],
 })
 export class DashboardLayoutComponent {
-  isLoading$!: Observable<boolean>;
-  isLoading = false;
+  isLoading!: boolean;
   progress = 0;
   private sub: Subscription | null = null;
 
   constructor(
     private loaderService: LoaderService,
-    private toastService: ToastService,
     private authService: AuthService
   ) {
     this.loaderService.isLoading$.subscribe((loading) => {
@@ -53,6 +50,5 @@ export class DashboardLayoutComponent {
   }
   ngOnInit() {
     this.authService.loadUserProfile().subscribe();
-    this.isLoading$ = this.loaderService.isLoading$;
   }
 }

@@ -6,17 +6,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { LoaderSpinnerComponent } from './ui/loader-spinner/loader-spinner.component';
 import { JobDetailsComponent } from './pages/job-details/job-details.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './authentication/signup/signup.component';
-import { FullPageLoaderSpinnerComponent } from './ui/full-page-loader-spinner/full-page-loader-spinner.component';
 import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
-import { FooterComponent } from './ui/footer/footer.component';
-import { AppLayoutComponent } from './ui/app-layout/app-layout.component';
-import { JobLayoutComponent } from './ui/job-layout/job-layout.component';
-import { HeaderComponent } from './ui/header/header.component';
 import { JobListingComponent } from './pages/job-listing/job-listing.component';
 import { CoreModule } from './core/core.module';
 import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
@@ -28,27 +22,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from './shared/shared.module';
-
 @NgModule({
   declarations: [
     AppComponent,
-    LoaderSpinnerComponent,
     JobDetailsComponent,
-    LoginComponent,
     HomeComponent,
+    LoginComponent,
     SignupComponent,
-    FullPageLoaderSpinnerComponent,
     VerifyEmailComponent,
-    FooterComponent,
-    AppLayoutComponent,
-    JobLayoutComponent,
-    HeaderComponent,
-    LoaderSpinnerComponent,
     JobListingComponent,
-    CandidateVerificationComponent,
     RecruiterMessageComponent,
-    InterviewerValidationComponent,
     InterviewerFeedbackComponent,
+    InterviewerValidationComponent,
+    CandidateVerificationComponent,
   ],
   imports: [
     BrowserModule,

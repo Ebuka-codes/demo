@@ -407,23 +407,24 @@
   </ng-container>
   <ng-template #noData></ng-template>
 </div>
-
-<app-candidate-view
+<erecruit-candidate-view
   (openScheduleModal)="openScheduleModal($event)"
   (openMailCandidateModal)="openMailCandidateModal()"
   [candidateViewData]="candidateViewData"
   (candidateUpdate)="getCandidates()"
 />
-<app-candidate-reject
+<erecruit-candidate-reject
   [candidateId]="candidateId"
   (candidateUpdate)="getCandidates()"
 />
-<app-candidate-schedule-date
+<erecruit-candidate-schedule-date
   [candidateId]="candidateId"
   (candidateUpdate)="getCandidates()"
 />
-<app-candidate-filter (updateCandidateData)="updateCandidateData($event)" />
-<app-candidate-mail-modal
+<erecruit-candidate-filter
+  (updateCandidateData)="updateCandidateData($event)"
+/>
+<erecruit-candidate-mail-modal
   [candidateData]="candidateViewData"
   (candidateUpdate)="getCandidates()"
 />

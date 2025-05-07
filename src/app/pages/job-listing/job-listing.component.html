@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="!(isLoadingData$ | async) && jobList.length">
-    <app-header />
+    <erecruit-header />
     <main>
       <section class="hero-section">
         <div class="content">
@@ -266,7 +266,7 @@
         <p class="search-no-results__header">No results were found.</p>
       </div>
     </main>
-    <app-footer />
+    <erecruit-footer />
   </div>
 
   <h3 *ngIf="!(isLoadingData$ | async) && !jobList.length">errror occur</h3>

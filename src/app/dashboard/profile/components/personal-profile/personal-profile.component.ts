@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/core/service/auth.service';
 
 @Component({
-  selector: 'app-personal-profile',
+  selector: 'erecruit-personal-profile',
   templateUrl: './personal-profile.component.html',
   styleUrls: ['./personal-profile.component.scss'],
 })
