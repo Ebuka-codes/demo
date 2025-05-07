@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { JobService } from '../shared/job.service';
 import { job, KeyValuePair } from '../shared/job';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 
@@ -23,6 +23,7 @@ export class JobFilterComponent {
   @ViewChild('filterJobModal') modalElement!: ElementRef;
   modalInstance!: Modal;
   jobTypes!: any;
+  isLoading!: boolean;
   workModes = new Array<KeyValuePair>(
     {
       key: 'REMOTE',
@@ -91,9 +92,7 @@ export class JobFilterComponent {
     }
   }
   onSubmit() {
-    this.loaderService.setLoading(true);
-    this.isLoading$ = this.loaderService.isLoading$;
-    this.filterForm.disable();
+    this.isLoading = true;
     const data = {
       ...this.filterForm.value,
       jobType: this.filterForm.get('jobType')?.value
@@ -108,30 +107,27 @@ export class JobFilterComponent {
         ? this.filterForm.get('status')?.value
         : '',
     };
-    this.jobService.filterJob(data).subscribe({
-      next: (response: any) => {
-        if (response.valid && response.data) {
-          this.loaderService.setLoading(false);
-          this.isLoading$ = this.loaderService.isLoading$;
-          this.updateJobData.emit(response.data);
+    this.jobService
+      .filterJob(data)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.updateJobData.emit(response.data);
+            this.closeModal();
+            this.resetFilterJobForm();
+            this.toastService.success(response.message);
+          } else {
+            this.loaderService.setLoading(false);
+            this.isLoading$ = this.loaderService.isLoading$;
+            this.toastService.error(response.message);
+          }
+        },
+        error: (err) => {
+          this.toastService.error(err.message);
           this.closeModal();
-          this.filterForm.enable();
           this.resetFilterJobForm();
-        } else {
-          this.loaderService.setLoading(false);
-          this.isLoading$ = this.loaderService.isLoading$;
-          this.toastService.error('Error occurred while filtering');
-          this.filterForm.enable();
-        }
-      },
-      error: (err) => {
-        this.toastService.error('Error occurred while filtering');
-        this.loaderService.setLoading(false);
-        this.isLoading$ = this.loaderService.isLoading$;
-        this.closeModal();
-        this.filterForm.enable();
-        this.resetFilterJobForm();
-      },
-    });
+        },
+      });
   }
 }

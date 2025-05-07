@@ -70,9 +70,6 @@
         margin-top: 10px;
       }
 
-      &:disabled {
-        cursor: not-allowed;
-      }
       .submit-btn {
         background-color: #28a745;
         color: #fff;
@@ -83,6 +80,9 @@
           background-color: #28a745;
           color: white;
           outline: none;
+        }
+        &:disabled {
+          cursor: not-allowed;
         }
       }
       .close-btn {

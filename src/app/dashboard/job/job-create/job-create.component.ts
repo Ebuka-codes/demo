@@ -479,7 +479,7 @@ export class JobCreateComponent implements OnInit, AfterViewInit {
       employmentType: this.form.get('employmentType')?.value.toUpperCase(),
       jobType: this.form.get('jobType')?.value,
       jobSalary: Number(this.form.get('jobSalary')?.value),
-      requiredSkills: [],
+      // requiredSkills: [],
     };
 
     if (this.form.valid) {

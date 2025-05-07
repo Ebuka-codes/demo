@@ -31,7 +31,7 @@ export class StatsComponent {
 
   colors1 = ['#1ddb49f7', '#141d28', '#28a745'];
 
-  colors2 = ['#FBC784', '#2E78EE', '#28a745', '#e50c20'];
+  colors2 = ['#facc15', '#2e78ee', '#28a745', '#e50c20'];
 
   Renderhart() {
     new Chart('barChart', {
