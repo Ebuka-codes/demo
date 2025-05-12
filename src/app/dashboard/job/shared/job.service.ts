@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { enviroments } from 'src/environments/enviorments';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
+import { DataResponse } from 'src/app/shared/model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -26,8 +27,8 @@ export class JobService {
   deleteJob(id: string) {
     return this.httpClient.delete(Constants.JOB_URL.JOB + `/${id}`);
   }
-  getJobById(id: string | null) {
-    return this.httpClient.get<job>(Constants.JOB_URL.JOB + `/${id}`);
+  getJobById(id: string | null): Observable<DataResponse> {
+    return this.httpClient.get<any>(Constants.JOB_URL.JOB + `/${id}`);
   }
   getAllJobs(): Observable<job[]> {
     return this.httpClient.get<job[]>(Constants.JOB_URL.JOB);

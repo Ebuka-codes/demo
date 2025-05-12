@@ -5,7 +5,7 @@
   position: relative;
   .loader-container {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
@@ -24,6 +24,7 @@
   }
   main {
     flex-grow: 1;
+    min-height: 100vh;
     .hero-section {
       background-color: #97c93c;
       background-image: url(../../../assets/image/job-listing-bg.jpg);
@@ -80,12 +81,12 @@
         padding-right: 5px;
       }
       input {
-        color: #4d4d4d;
+        color: #232323;
         width: 100%;
         padding: 20px 50px;
         text-overflow: ellipsis;
         font-size: 14px;
-        font-weight: 400;
+        font-weight: 500;
         outline: none;
         border-radius: 15px;
         border: none;
@@ -212,15 +213,16 @@
       }
     }
     .job-listing {
-      width: 80%;
+      width: 70%;
       margin: 50px auto;
       margin-bottom: 100px;
+      min-height: 50vh;
       h3 {
         font-size: 32px;
       }
       .content-container {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         column-gap: 20px;
         width: 100%;
         align-items: stretch;
@@ -231,7 +233,6 @@
           padding: 18px 25px;
           background: #ffffff;
           border-radius: 8px;
-          cursor: pointer;
           margin-top: 20px;
 
           .info {
@@ -260,37 +261,44 @@
               display: flex;
               gap: 10px;
               margin-top: 8px;
-              span {
+
+              .job-type {
+                background-color: #dee2e64f;
+                color: #333;
                 font-size: 12px;
                 font-weight: 600;
                 padding: 5px 10px;
                 border-radius: 25px;
               }
-
-              .job-type {
-                background-color: #dee2e64f;
-                color: #333;
-              }
-
               .work-mode {
                 background-color: transparent;
                 color: #1ddb49f7;
                 border: 1px solid #1ddb49f7;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 5px 10px;
+                border-radius: 25px;
               }
               .employment-type {
                 background-color: transparent;
-                color: #333;
-                border: 1px solid #ddd;
+                color: #062168;
+                border: 1px solid #062168;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 5px 10px;
+                border-radius: 25px;
               }
+            }
+            .divider {
+              border-radius: 0px !important;
+              border-right: 1px solid #d6ddeb;
             }
           }
           .action {
             display: flex;
             align-items: center;
             gap: 20px;
-            cursor: pointer;
             flex-shrink: 0;
-
             svg {
               width: 20px;
             }
@@ -301,6 +309,7 @@
               padding: 7px 15px;
               border: none;
               outline: none;
+              cursor: pointer;
             }
           }
         }
@@ -311,8 +320,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 30px 0px;
       span {
         font-size: 14px;
       }
@@ -329,34 +337,21 @@
         }
         .page-btn {
           button {
-            border: 1px solid #ddd;
+            border: 1px solid #d3d3d3;
             border-radius: 5px;
             padding: 3px 10px;
             margin: 0px 10px;
-            background-color: transparent;
-
+            background-color: #fafafa;
             cursor: pointer;
           }
           .active {
-            background-color: rgb(28 201 68 / 97%);
-            border: none !important;
+            background-color: #97c93c;
+            border: #d3d3d3 !important;
           }
         }
       }
     }
 
-    .search-no-results {
-      text-align: center;
-      margin: 0 auto;
-      max-width: 1000px;
-      margin-top: 30px;
-
-      .search-no-results__header {
-        margin-bottom: 2.2em;
-        font-weight: 500;
-        font-size: 18px;
-      }
-    }
     .loader {
       border: 3px solid #28a745;
       border-color: #28a745 transparent #28a745 #28a745;
@@ -367,8 +362,7 @@
       justify-content: center;
       flex-direction: column;
       align-items: center;
-      margin-top: 30px;
-      margin-bottom: 150px;
+      margin-top: 100px;
       margin-left: auto;
       margin-right: auto;
       animation: spin 0.5s linear infinite;
@@ -376,6 +370,17 @@
     @keyframes spin {
       to {
         transform: rotate(360deg);
+      }
+    }
+    .empty-data {
+      text-align: center;
+      margin-top: 100px;
+      h2 {
+        font-size: 24px;
+      }
+      p {
+        font-size: 18px;
+        color: #717171;
       }
     }
   }

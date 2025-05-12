@@ -1,24 +1,66 @@
 <div class="user-corporate">
-  <div class="user-corporate_header">
-    <span class="nav-back" (click)="onBack()">
+  <div class="header">
+    <div class="title">
+      <span class="nav-back" (click)="onNavigateBack()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </span>
+      <h2>Edit Corporate</h2>
+    </div>
+    <span
+      class="job-url"
+      (click)="onCopyUrl()"
+      placement="bottom"
+      ngbTooltip="Copy job url"
+      ><p>{{ jobListingUrl | slice : 0 : 50 }}...</p>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        width="17"
+        height="18"
+        viewBox="0 0 17 18"
         fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="size-6"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M15.75 19.5 8.25 12l7.5-7.5"
-        />
+        <g clip-path="url(#clip0_3313_45552)">
+          <path
+            d="M14.0008 6.89844H7.70078C6.92758 6.89844 6.30078 7.52524 6.30078 8.29844V14.5984C6.30078 15.3716 6.92758 15.9984 7.70078 15.9984H14.0008C14.774 15.9984 15.4008 15.3716 15.4008 14.5984V8.29844C15.4008 7.52524 14.774 6.89844 14.0008 6.89844Z"
+            stroke="black"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3.50039 11.1H2.80039C2.42909 11.1 2.07299 10.9525 1.81044 10.6899C1.54789 10.4274 1.40039 10.0713 1.40039 9.7V3.4C1.40039 3.0287 1.54789 2.6726 1.81044 2.41005C2.07299 2.1475 2.42909 2 2.80039 2H9.10039C9.47169 2 9.82779 2.1475 10.0903 2.41005C10.3529 2.6726 10.5004 3.0287 10.5004 3.4V4.1"
+            stroke="black"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_3313_45552">
+            <rect
+              width="16.8"
+              height="16.8"
+              fill="white"
+              transform="translate(0 0.601562)"
+            />
+          </clipPath>
+        </defs>
       </svg>
     </span>
-    <h2>Edit Corporate</h2>
   </div>
-
   <div class="content">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -79,7 +121,7 @@
         <div
           class="file-wrapper_content"
           (click)="!file ? triggerInput() : null"
-          [style.cursor]="file ? 'not-allowed' : 'pointer'"
+          [style.cursor]="file ? 'default' : 'pointer'"
           (dragover)="onDragOver($event)"
           (dragleave)="onDragLeave($event)"
           (drop)="onDrop($event)"
@@ -152,7 +194,7 @@
           </svg>
         </div>
       </div>
-      <button class="submit-btn" [disabled]="isLoadingLogo">
+      <button class="submit-btn" [disabled]="isLoadingLogo || submitLoading">
         <ng-container *ngIf="!submitLoading; else showLoader">
           Submit
         </ng-container>

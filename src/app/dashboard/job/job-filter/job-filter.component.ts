@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { JobService } from '../shared/job.service';
-import { job, KeyValuePair } from '../shared/job';
+import { job, jobFilterPayload, KeyValuePair } from '../shared/job';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { finalize, Observable } from 'rxjs';
 import { Modal } from 'bootstrap';
@@ -46,6 +46,10 @@ export class JobFilterComponent {
     {
       key: 'PENDING',
       value: 'Pending',
+    },
+    {
+      key: 'REJECTED',
+      value: 'Rejected',
     }
   );
   filterForm!: FormGroup;
@@ -62,7 +66,6 @@ export class JobFilterComponent {
       status: [''],
     });
   }
-
   ngAfterViewInit(): void {
     this.getJobType();
     this.modalInstance = new Modal(this.modalElement?.nativeElement);
@@ -79,7 +82,7 @@ export class JobFilterComponent {
         }
       },
       error: (err) => {
-        this.toastService.error('Error while getting filter data');
+        this.toastService.error(err.message);
       },
     });
   }
@@ -91,24 +94,11 @@ export class JobFilterComponent {
       backdrop?.remove();
     }
   }
-  onSubmit() {
+
+  onFilterJob(payload: jobFilterPayload) {
     this.isLoading = true;
-    const data = {
-      ...this.filterForm.value,
-      jobType: this.filterForm.get('jobType')?.value
-        ? this.filterForm.get('jobType')?.value
-        : '',
-
-      workMode: this.filterForm.get('workMode')?.value
-        ? this.filterForm.get('workMode')?.value
-        : '',
-
-      status: this.filterForm.get('status')?.value
-        ? this.filterForm.get('status')?.value
-        : '',
-    };
     this.jobService
-      .filterJob(data)
+      .filterJob(payload)
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (response: any) => {
@@ -118,7 +108,6 @@ export class JobFilterComponent {
             this.resetFilterJobForm();
             this.toastService.success(response.message);
           } else {
-            this.loaderService.setLoading(false);
             this.isLoading$ = this.loaderService.isLoading$;
             this.toastService.error(response.message);
           }
@@ -129,5 +118,29 @@ export class JobFilterComponent {
           this.resetFilterJobForm();
         },
       });
+  }
+  getPayload(): jobFilterPayload {
+    const rawValues = this.filterForm.value;
+    const payload: jobFilterPayload = {};
+    Object.keys(rawValues).forEach((key) => {
+      const value = rawValues[key];
+      if (value) {
+        payload[key as keyof jobFilterPayload] = value;
+      }
+    });
+
+    return payload;
+  }
+  onSubmit() {
+    const payload = this.getPayload();
+    if (
+      this.filterForm.get('jobType')?.value ||
+      this.filterForm.get('workMode')?.value ||
+      this.filterForm.get('status')?.value
+    ) {
+      this.onFilterJob(payload);
+    } else {
+      this.closeModal();
+    }
   }
 }

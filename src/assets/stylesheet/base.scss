@@ -5,10 +5,9 @@
 }
 html {
   height: 100%;
-  scrollbar-width: thin;
 }
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", sans-serif !important;
   height: 100%;
   overflow-x: hidden;
 }
@@ -19,7 +18,6 @@ img {
   -webkit-user-drag: none;
   -moz-user-drag: none;
   -ms-user-drag: none;
-
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;

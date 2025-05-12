@@ -28,7 +28,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'job-listing',
+    path: 'job-listing/:corpUrl',
     component: JobListingComponent,
   },
   {

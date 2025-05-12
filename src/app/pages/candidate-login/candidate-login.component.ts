@@ -18,7 +18,6 @@ import { Observable, take } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Modal } from 'bootstrap';
-
 import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 @Component({

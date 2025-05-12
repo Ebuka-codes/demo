@@ -89,9 +89,9 @@ export class JobApplicationComponent implements OnInit {
   candidateData!: Candidate;
   isResumeData!: boolean;
   isCoverLetterData!: boolean;
-  private history: string[] = [];
   isUploadingResume: boolean = false;
   isUploadingCoverLetter: boolean = false;
+  encodeUrl!: string | null;
 
   constructor(
     private fb: FormBuilder,
@@ -161,13 +161,10 @@ export class JobApplicationComponent implements OnInit {
       this.jobData = job;
       this.getQuestionsByJobDetail(job.id);
     });
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.history.push(event.urlAfterRedirects);
-        console.log('Updated History:', this.history);
-      }
-    });
+    const endcode = localStorage.getItem('corp-url');
+    if (endcode) {
+      this.encodeUrl = encodeURIComponent(endcode);
+    }
   }
 
   ngAfterViewInit() {
@@ -178,14 +175,14 @@ export class JobApplicationComponent implements OnInit {
 
   getCandidateInfo() {
     if (this.route.snapshot.paramMap.get('candidateId')) {
-      // this.jobService.setLoading(true);
       this.candidateService
         .getCandidatesInfo(this.route.snapshot.paramMap.get('candidateId'))
         .pipe(finalize(() => this.jobService.setLoading(false)))
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             if (response.valid && response.data) {
               this.prefillCandidateForm(response.data);
+              console.log(response.data);
               this.candidateService.setCandidateData(response?.data);
 
               this.cdr.detectChanges();
@@ -195,7 +192,6 @@ export class JobApplicationComponent implements OnInit {
         });
     } else {
       const existingData = this.candidateService.getCandidateData();
-
       if (existingData) {
         this.prefillCandidateForm(existingData);
       }
@@ -472,7 +468,6 @@ export class JobApplicationComponent implements OnInit {
     this.workFormGroup.reset();
   }
   handleEditWorkHistory(modalId: number, id: number) {
-    console.log(modalId, id);
     if (this.listItem.nativeElement.contains(this.deleteIcon.nativeElement)) {
       this.editId = id;
       console.log(this.workHistories[id]);
@@ -706,7 +701,7 @@ export class JobApplicationComponent implements OnInit {
     this.selectedCoverLetterFile = '';
   }
   getQuestionsByJobDetail(id: string | null) {
-    this.jobService.getJobDetails(id).subscribe((response: any) => {
+    this.jobService.getJobDetailsById(id).subscribe((response: any) => {
       if (response.valid && response.data) {
         this.questionData = response.data;
         let formControl: any = {};
@@ -730,10 +725,10 @@ export class JobApplicationComponent implements OnInit {
     }
   }
   //Post Job-Application
-  submitJobApplication(jobApplication: any) {
+  submitJobApplication(payload: any) {
     this.isSubmitting = true;
     this.jobService
-      .submitJobApplication(jobApplication)
+      .submitJobApplication(payload)
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
@@ -745,7 +740,7 @@ export class JobApplicationComponent implements OnInit {
           if (response.valid) {
             this.toastService.success(response.message);
             setTimeout(() => {
-              this.router.navigate(['/job-listing']);
+              this.router.navigate([`/job-listing/${this.encodeUrl}`]);
             }, 3500);
           }
         },

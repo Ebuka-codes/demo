@@ -3,6 +3,8 @@ import { Corporate, file } from './corporate';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { enviroments } from 'src/environments/enviorments';
 import { Constants } from 'src/app/utils/constants';
+import { Observable } from 'rxjs';
+import { DataResponse } from 'src/app/shared/model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -27,17 +29,17 @@ export class CorporateService {
   getAllCorporate() {
     return this.httpClient.get<any>(Constants.CORPORATE_URL.CORPORATE);
   }
-  getUserCorporate() {
+  getUserCorporate(): Observable<DataResponse> {
     return this.httpClient.get<any>(
       Constants.CORPORATE_URL.CORPORATE + '/get-user-corporate'
     );
   }
-  editCorporate(id: string, data: Corporate) {
+  editCorporate(id: string, data: Corporate): Observable<DataResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
     });
-    return this.httpClient.put<Corporate>(
+    return this.httpClient.put<any>(
       Constants.CORPORATE_URL.CORPORATE + `/${id}`,
       data,
       {
@@ -59,16 +61,21 @@ export class CorporateService {
     );
   }
 
-  convertFileToBase64(file: file) {
+  convertFileToBase64(file: file): Observable<DataResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.httpClient.post<file>(
+    return this.httpClient.post<any>(
       this.baseUrl + '/api/document/upload-base64',
       file,
       {
         headers,
       }
+    );
+  }
+  generateEndcodeUrl(): Observable<DataResponse> {
+    return this.httpClient.get<any>(
+      Constants.CORPORATE_URL.CORPORATE + '/encode-url'
     );
   }
 }

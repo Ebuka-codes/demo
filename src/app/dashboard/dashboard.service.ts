@@ -16,7 +16,7 @@ export class DashboardService {
   constructor(private httpClient: HttpClient) {}
   ngOnInit(): void {}
 
-  getDashboardData(): Observable<DataResponse> {
+  getDashboardData() {
     return this.httpClient.get<any>(this.baseUrl + '/api/dashboard');
   }
 

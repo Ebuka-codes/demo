@@ -32,7 +32,7 @@
             <button
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [routerLink]="['overview']"
+              [routerLink]="['overview' + '/', encodeUrl]"
             >
               Overview
             </button>

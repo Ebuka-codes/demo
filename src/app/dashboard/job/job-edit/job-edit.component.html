@@ -134,8 +134,8 @@
               id="workMode"
               formControlName="workMode"
             >
-              <mat-option *ngFor="let option of workmode" [value]="option">
-                {{ option | titlecase }}
+              <mat-option *ngFor="let option of workmode" [value]="option.key">
+                {{ option.value | titlecase }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -454,6 +454,7 @@
               disableRipple
               formControlName="requiredSkills"
               multiple
+              readonly
             >
               <mat-option *ngFor="let skill of jobSkillData" [value]="skill.id">
                 <div class="option-container">
@@ -597,10 +598,6 @@
                       question.description.slice(1)
                   }}
                 </span>
-              </mat-option>
-
-              <mat-option *ngIf="!questionTypeDropdown.length">
-                No question
               </mat-option>
             </mat-select>
           </mat-form-field>

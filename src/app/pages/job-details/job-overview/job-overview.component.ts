@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { job } from 'src/app/shared/type';
 
@@ -15,10 +16,17 @@ export class JobOverviewComponent implements OnInit {
   activeTag = 'Overview';
   constructor(
     private jobService: JobRecruitService,
-    private location: Location
+    private location: Location,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      const encodeUrl = params['corpUrl'];
+      if (encodeUrl) {
+        localStorage.setItem('corp-url', encodeUrl);
+      }
+    });
     this.jobService.jobDetailData$.subscribe((data) => {
       this.jobData = data;
     });
@@ -30,22 +38,6 @@ export class JobOverviewComponent implements OnInit {
       this.activeTag = 'Application';
     }
   }
-  // getJobDetailsById(id: string) {
-  //   this.isLoading = true;
-  //   this.jobService.getJobDetailsById(id).subscribe({
-  //     next: (response) => {
-  //       if (response.valid && response.data) {
-  //         this.jobData = response.data;
-  //         this.isLoading = false;
-  //       } else {
-  //         this.isLoading = false;
-  //       }
-  //     },
-  //     error: (error) => {
-  //       this.isLoading = false;
-  //     },
-  //   });
-  // }
   handleBack() {
     this.location.back();
   }

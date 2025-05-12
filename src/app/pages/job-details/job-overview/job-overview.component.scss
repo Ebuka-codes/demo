@@ -5,7 +5,8 @@
     width: 85%;
     margin: 0px auto;
     background: white;
-    padding: 2.5rem;
+    box-shadow: 0px 47.32px 63.88px 0px #0000000d;
+    padding: 1rem 2.5rem;
     border-radius: 1rem;
     z-index: 1;
 
@@ -16,7 +17,7 @@
 
       .info {
         .info-title {
-          font-size: 30px;
+          font-size: 26px;
           font-weight: 600;
         }
         .info-sub {

@@ -50,4 +50,8 @@ export const Constants = {
   FEEDBACK_URL: {
     FEEDBACK: `${BASE_URL}/api/feedback`,
   },
+
+  UNPROTECTED_URL: {
+    COMMON: `${BASE_URL}/auth/common`,
+  },
 };

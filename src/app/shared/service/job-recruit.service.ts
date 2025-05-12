@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { enviroments } from 'src/environments/enviorments';
-import { NavigationEnd, Router } from '@angular/router';
-import { DetailsType, job, JobApplication } from '../type';
+import { job, JobApplication } from '../type';
 import { Constants } from 'src/app/utils/constants';
+import { DataResponse } from '../model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -17,54 +17,63 @@ export class JobRecruitService {
   job$ = this.jobListSubject$.asObservable();
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
-  private errorSubject = new BehaviorSubject<string | null>(null);
-  private lastpathSubject$ = new BehaviorSubject<string>('');
-  lastPath$ = this.lastpathSubject$.asObservable();
-  error$ = this.errorSubject.asObservable();
   private jobDetailsId: string | null = null;
-  encodedValue: any;
   isLoading: boolean = false;
   private jobDetailDataSubject = new BehaviorSubject<any>(null);
   jobDetailData$ = this.jobDetailDataSubject.asObservable();
+  private corpUrlSubject = new BehaviorSubject<string | null>(null);
+  corpUrl$ = this.corpUrlSubject.asObservable();
 
-  constructor(private httpClient: HttpClient, private router: Router) {
-    this.updateLastPath();
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.updateLastPath();
-      }
+  constructor(private httpClient: HttpClient) {}
+  corpUrl!: string;
+  getJobList(): Observable<DataResponse> {
+    const corpUrl = this.getCurrentCorpUrl();
+    const headers = new HttpHeaders({
+      'corp-url': corpUrl || '',
     });
-  }
-  ngOnInit(): void {}
-  updateLastPath() {
-    const urlSegments = this.router.url.split('/').filter((segment) => segment);
-    const lastPath = urlSegments.length
-      ? `/${urlSegments[urlSegments.length - 1]}`
-      : '';
-    this.lastpathSubject$.next(lastPath);
-    this.encodedValue = btoa(lastPath?.replace(/^\/+|\/+$/g, '').toUpperCase());
-  }
-
-  getJobList(): Observable<any> {
-    return this.httpClient.get<any>(Constants.JOB_URL.JOB);
+    return this.httpClient.get<any>(
+      Constants.UNPROTECTED_URL.COMMON + '/job/get-all',
+      { headers }
+    );
   }
   getJobDetailsById(id: any): Observable<any> {
-    return this.httpClient.get(Constants.JOB_URL.JOB + `/${id}`);
-  }
-  searchJobs(params: string): Observable<any> {
-    return this.httpClient.get<any>(
-      Constants.JOB_URL.JOB + `/search?keyword=${params}`
+    const corpUrl = this.getCurrentCorpUrl();
+    const headers = new HttpHeaders({
+      'corp-url': corpUrl || '',
+    });
+    return this.httpClient.get(
+      Constants.UNPROTECTED_URL.COMMON + `/job/${id}`,
+      { headers }
     );
   }
-  filterJobs(params: string[]): Observable<any> {
+  searchJobs(params: string): Observable<DataResponse> {
+    const corpUrl = this.getCurrentCorpUrl();
+    const headers = new HttpHeaders({
+      'corp-url': corpUrl || '',
+    });
     return this.httpClient.get<any>(
-      Constants.JOB_URL.JOB + `/search-job-type?types=${params.join(',')}`
+      Constants.UNPROTECTED_URL.COMMON + `/job/search?keyword=${params}`,
+      { headers }
     );
   }
-
+  filterJobs(params: string[]): Observable<DataResponse> {
+    const corpUrl = this.getCurrentCorpUrl();
+    const headers = new HttpHeaders({
+      'corp-url': corpUrl || '',
+    });
+    return this.httpClient.get<any>(
+      Constants.UNPROTECTED_URL.COMMON +
+        `/job/search-job-type?types=${params.join(',')}`,
+      { headers }
+    );
+  }
   getJobType() {
+    const corpUrl = this.getCurrentCorpUrl();
+    const headers = new HttpHeaders({
+      'corp-url': corpUrl || '',
+    });
     this.httpClient
-      .get<any>(Constants.JOB_URL.JOB + '/jobtype')
+      .get<any>(Constants.UNPROTECTED_URL.COMMON + '/job/jobtype', { headers })
       .pipe(
         tap((response) => {
           if (response.valid && response.data) {
@@ -75,42 +84,27 @@ export class JobRecruitService {
       .subscribe();
     return this.category$;
   }
-
-  getJobDetails(id: string | null) {
-    return this.httpClient.get<JobApplication>(
-      Constants.JOB_URL.JOB + `/${id}`
-    );
-  }
-  submitJobApplication(application: JobApplication) {
-    return this.httpClient.post<JobApplication>(
-      Constants.CANDIDATE_URL.CANDIDATES,
-      application
-    );
-  }
-  getQueryDetailsByType() {
-    return this.httpClient.get<DetailsType>(
-      Constants.QUERY_DETAILS_URL.QUERY_DETAILS
-    );
-  }
-
-  createQueryDetails(data: DetailsType) {
-    return this.httpClient.post<DetailsType>(
-      Constants.QUERY_DETAILS_URL.QUERY_DETAILS,
-      data
-    );
-  }
-  searchJobByTitle(title: string) {
-    return this.httpClient.get<JobApplication>(
-      this.baseUrl + `/api/job-lists/${title}`
-    );
-  }
-  convertFileToBase64(file: any) {
+  submitJobApplication(application: JobApplication): Observable<DataResponse> {
+    const corpUrl = this.getCurrentCorpUrl();
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
+      'corp-url': corpUrl || '',
     });
     return this.httpClient.post<any>(
-      this.baseUrl + '/api/document/upload-base64',
-      file
+      Constants.UNPROTECTED_URL.COMMON + '/candidate/create',
+      application,
+      { headers }
+    );
+  }
+
+  convertFileToBase64(file: any) {
+    const corpUrl = this.getCurrentCorpUrl();
+    const headers = new HttpHeaders({
+      'corp-url': corpUrl || '',
+    });
+    return this.httpClient.post<any>(
+      Constants.UNPROTECTED_URL.COMMON + '/upload-base64',
+      file,
+      { headers }
     );
   }
   setJobDetailId(id: string) {
@@ -126,8 +120,14 @@ export class JobRecruitService {
   getLoading() {
     return this.isLoading$;
   }
-
   setJobDetailData(data: any) {
     this.jobDetailDataSubject.next(data);
+  }
+  setCorpUrl(value: string) {
+    this.corpUrlSubject.next(value);
+  }
+
+  getCurrentCorpUrl(): string | null {
+    return this.corpUrlSubject.value;
   }
 }

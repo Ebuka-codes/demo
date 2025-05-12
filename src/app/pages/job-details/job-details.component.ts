@@ -11,7 +11,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 @Component({
   selector: 'erecruit-job-details',
   templateUrl: './job-details.component.html',
@@ -26,13 +25,13 @@ export class JobDetailsComponent implements OnInit {
   id$!: Observable<string | null>;
   jobData!: job;
   form!: FormGroup;
+  encodeUrl!: string | null;
   constructor(
     private jobService: JobRecruitService,
     private navigateRoute: Router,
     private location: Location,
     private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private loaderService: LoaderService
+    private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, this.validateEmail()]],
@@ -44,7 +43,6 @@ export class JobDetailsComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.getJobDetailsById(id);
-
       if (id) {
         localStorage.setItem('jobId', id);
       }
@@ -52,6 +50,7 @@ export class JobDetailsComponent implements OnInit {
     this.jobService.jobDetailData$.subscribe((data) => {
       this.jobData = data;
     });
+    this.encodeUrl = localStorage.getItem('corp-url');
   }
 
   getJobDetailsById(id: string) {
@@ -62,7 +61,6 @@ export class JobDetailsComponent implements OnInit {
       .subscribe({
         next: (response) => {
           if (response.valid && response.data) {
-            console.log(response.data);
             this.jobService.setJobDetailData(response.data);
           } else {
           }

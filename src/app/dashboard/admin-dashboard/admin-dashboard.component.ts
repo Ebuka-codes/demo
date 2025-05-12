@@ -5,6 +5,8 @@ import { DashboardService } from '../dashboard.service';
 import { DashboardStats } from './shared/dashboardStats';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { CorporateService } from '../corporate/shared/corporate.service';
+import { CORP_URL } from 'src/app/core/model/credential';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -38,12 +40,17 @@ export class AdminDashboardComponent {
           this.cdr.detectChanges();
         })
       )
-      .subscribe((data: any) => {
-        if (data) {
-          this.data = data;
-        } else {
-          this.toastService.error('Error occur');
-        }
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.data = response;
+          } else {
+            this.toastService.error('Error occur');
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+        },
       });
   }
 }

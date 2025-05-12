@@ -12,7 +12,7 @@ export interface job {
   companyName: string;
   workMode: string;
   questionOptions: Array<optionType>;
-  requiredSkills: string[];
+  requiredSkills: Array<skillOption>;
   createdAt: string;
 }
 export interface optionType {
@@ -27,8 +27,19 @@ export interface optionType {
     }
   ];
 }
-
+export interface skillOption {
+  id: string;
+  createdAt: string;
+  description: string;
+  type: string;
+}
 export interface KeyValuePair {
   key: string;
   value: any;
+}
+
+export interface jobFilterPayload {
+  jobType?: string;
+  workMode?: string;
+  status?: string;
 }

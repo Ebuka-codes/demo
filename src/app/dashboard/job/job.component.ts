@@ -31,9 +31,8 @@ export class JobComponent implements OnInit {
   searchLoading = false;
   filteredData!: Array<job>;
   loadingData!: boolean;
-  jobUrl!: string;
-  path: string = 'http://localhost:4200';
-  corpKey: string | null = CORP_KEY;
+  jobUrl: string = 'http://localhost:4200/apply';
+  jobListingUrl!: string;
 
   constructor(
     public jobService: JobService,
@@ -47,7 +46,10 @@ export class JobComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
-    this.jobUrl = `${this.path}/apply`;
+    const encodeUrl = localStorage.getItem('corp-url');
+    if (encodeUrl) {
+      this.jobListingUrl = `http://localhost:4200/job-listing/${encodeUrl}`;
+    }
   }
   loadJobs() {
     this.loaderService.setLoading(true);
@@ -123,11 +125,14 @@ export class JobComponent implements OnInit {
   handleDeleteJob(id: string) {
     this.jobId = id;
   }
-
   onBack() {
     this.location.back();
   }
-  onCopy(id: string) {
-    this.clipboard.copy(`${this.jobUrl}/${id}/overview`);
+  onCopyUrl(id: string) {
+    const encodeUrl = encodeURIComponent(
+      localStorage.getItem('corp-url') || ''
+    );
+    console.log(encodeUrl);
+    this.clipboard.copy(`${this.jobUrl}/${id}/overview/${encodeUrl}`);
   }
 }

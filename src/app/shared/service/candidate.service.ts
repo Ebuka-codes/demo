@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
 import { enviroments } from 'src/environments/enviorments';
+import { DataResponse } from '../model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -11,19 +12,35 @@ export class CandidateService {
   private candidateDataSubject$ = new BehaviorSubject<any>(null);
   candateData$ = this.candidateDataSubject$.asObservable();
   baseUrl = enviroments.API_URL;
-  constructor(private httpClient: HttpClient) {}
-
-  getCandidatesInfo(id: string | null) {
-    return this.httpClient.get(Constants.CANDIDATE_URL.CANDIDATES + `/${id}`);
+  corpUrl!: string;
+  constructor(private httpClient: HttpClient) {
+    const value = localStorage.getItem('corp-url');
+    if (value) {
+      this.corpUrl = decodeURIComponent(value);
+    }
+  }
+  getCandidatesInfo(id: string | null): Observable<DataResponse> {
+    const headers = new HttpHeaders().set('corp-url', this.corpUrl);
+    return this.httpClient.get<any>(
+      Constants.UNPROTECTED_URL.COMMON + `/candidate/${id}`,
+      {
+        headers,
+      }
+    );
   }
   candidateLogin(email: string) {
+    const headers = new HttpHeaders().set('corp-url', this.corpUrl);
     return this.httpClient.get(
-      Constants.CANDIDATE_URL.CANDIDATES + `/exists/${email}`
+      Constants.UNPROTECTED_URL.COMMON + `/candidate/exists/${email}`,
+      { headers }
     );
   }
   getLoggedInCandidte(email: string) {
+    const headers = new HttpHeaders().set('corp-url', this.corpUrl);
     return this.httpClient.get(
-      Constants.CANDIDATE_URL.CANDIDATES + `/get-candidate-by-email/${email}`
+      Constants.UNPROTECTED_URL.COMMON +
+        `/candidate/get-candidate-by-email/${email}`,
+      { headers }
     );
   }
   setCandidateData(data: any) {
@@ -35,21 +52,21 @@ export class CandidateService {
 
   sendCandiateOtp(token: any) {
     return this.httpClient.post(
-      this.baseUrl + `/auth/common/otp/sendotp`,
+      Constants.UNPROTECTED_URL.COMMON + `/otp/sendotp`,
       token
     );
   }
 
   verifyCandidate(data: any) {
     return this.httpClient.post(
-      this.baseUrl + `/auth/common/otp/validate`,
+      Constants.UNPROTECTED_URL.COMMON + `/otp/validate`,
       data
     );
   }
 
   candidateResponse(token: string | null, data: any) {
     return this.httpClient.post(
-      this.baseUrl + `/auth/common/action?token=${token}`,
+      Constants.UNPROTECTED_URL.COMMON + `/action?token=${token}`,
       data
     );
   }

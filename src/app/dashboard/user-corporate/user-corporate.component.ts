@@ -10,6 +10,9 @@ import { CorporateService } from '../corporate/shared/corporate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
+import { finalize } from 'rxjs';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { CORP_URL } from 'src/app/core/model/credential';
 @Component({
   selector: 'erecruit-user-corporate',
   templateUrl: './user-corporate.component.html',
@@ -24,12 +27,15 @@ export class UserCorporateComponent implements OnInit {
   isLoadingLogo: boolean = false;
   logoUrl!: string;
   corporateId!: string;
+  endcodeUrl!: string;
+  jobListingUrl!: string;
   constructor(
     private fb: FormBuilder,
     private corporateService: CorporateService,
     private loaderService: LoaderService,
     private toastService: ToastService,
-    private location: Location
+    private location: Location,
+    private clipboard: Clipboard
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -62,27 +68,34 @@ export class UserCorporateComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCorporateData();
+    this.getEncodUrl();
   }
 
+  getEncodUrl() {
+    const endcodeUrl = localStorage.getItem(CORP_URL);
+    if (endcodeUrl) {
+      this.jobListingUrl = `${'http://localhost:4200/job-listing'}/${endcodeUrl}`;
+    }
+  }
   getCorporateData() {
     this.loaderService.setLoading(true);
-    this.corporateService.getUserCorporate().subscribe({
-      next: (response: any) => {
-        if (response) {
-          this.form.patchValue(response);
-          this.form.updateValueAndValidity();
-          this.corporateId = response.id;
-          this.loaderService.setLoading(false);
-        } else {
-          this.loaderService.setLoading(false);
-          this.toastService.success(response.message);
-        }
-      },
-      error: (error: any) => {
-        this.toastService.success(error.message);
-        this.loaderService.setLoading(false);
-      },
-    });
+    this.corporateService
+      .getUserCorporate()
+      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.form.patchValue(response);
+            this.form.updateValueAndValidity();
+            this.corporateId = response.id;
+          } else {
+            this.toastService.error(response.message);
+          }
+        },
+        error: (error: any) => {
+          this.toastService.error(error.message);
+        },
+      });
   }
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -136,20 +149,24 @@ export class UserCorporateComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.corporateService.convertFileToBase64(data).subscribe(
-        (response: any) => {
-          if (response.valid && response.data) {
-            this.logoUrl = response.data.path;
+      this.corporateService
+        .convertFileToBase64(data)
+        .pipe(
+          finalize(() => {
             this.isLoadingLogo = false;
             this.loaderService.setLoading(false);
-          }
-        },
-        (error) => {
-          this.toastService.error(error.message);
-          this.loaderService.setLoading(false);
-          this.isLoadingLogo = false;
-        }
-      );
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            if (response.valid && response.data) {
+              this.logoUrl = response.data.path;
+            }
+          },
+          error: (error) => {
+            this.toastService.error(error.message);
+          },
+        });
     };
   }
   removeFile() {
@@ -165,28 +182,29 @@ export class UserCorporateComponent implements OnInit {
           ...this.form.value,
           logo: this.logoUrl ? this.logoUrl : this.form.get('logo')?.value,
         })
+        .pipe(
+          finalize(() => {
+            this.loaderService.setLoading(false), (this.submitLoading = false);
+          })
+        )
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             if (response) {
-              this.loaderService.setLoading(false);
               this.submitLoading = false;
               this.toastService.success('Corporate updated successfully');
-            } else {
-              this.toastService.error(response.message);
-              this.loaderService.setLoading(false);
-              this.submitLoading = false;
             }
           },
           error: (error) => {
             this.toastService.error(error.message);
-            this.loaderService.setLoading(false);
-            this.submitLoading = false;
           },
         });
     }
   }
-
-  onBack() {
+  onNavigateBack() {
     this.location.back();
+  }
+
+  onCopyUrl() {
+    this.clipboard.copy(`${this.jobListingUrl}`);
   }
 }

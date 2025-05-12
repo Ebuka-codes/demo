@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { AuthService } from 'src/app/core/service/auth.service';
+import { CorporateService } from '../../corporate/shared/corporate.service';
+import { CORP_URL } from 'src/app/core/model/credential';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'erecruit-dashboard-layout',
@@ -15,7 +18,9 @@ export class DashboardLayoutComponent {
 
   constructor(
     private loaderService: LoaderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private corporateService: CorporateService,
+    private toastService: ToastService
   ) {
     this.loaderService.isLoading$.subscribe((loading) => {
       this.isLoading = loading;
@@ -50,5 +55,20 @@ export class DashboardLayoutComponent {
   }
   ngOnInit() {
     this.authService.loadUserProfile().subscribe();
+    this.loadEncodeUrl();
+  }
+  loadEncodeUrl() {
+    this.corporateService.generateEndcodeUrl().subscribe({
+      next: (response) => {
+        if (response.valid) {
+          localStorage.setItem(CORP_URL, response.data);
+        } else {
+          this.toastService.error(response.message);
+        }
+      },
+      error: (error: any) => {
+        this.toastService.error(error.message);
+      },
+    });
   }
 }

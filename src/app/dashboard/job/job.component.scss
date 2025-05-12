@@ -1,4 +1,5 @@
 .job-container {
+  margin-bottom: 140px;
   padding: 2rem 1.5rem;
   .action {
     display: flex;
@@ -63,7 +64,6 @@
     background-color: white;
     border-radius: 10px;
     padding: 10px 20px;
-    margin-bottom: 70px;
     margin-top: 20px;
     h2 {
       font-size: 22px;
@@ -226,6 +226,7 @@
   }
 }
 .dropdown-menu {
+  box-shadow: 0px 33.8px 45.63px 0px #0000000d !important;
   ::ng-deep .dropdown-item {
     color: rgb(14 13 13);
     &:focus,

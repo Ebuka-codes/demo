@@ -8,13 +8,13 @@ const route: Routes = [
     path: ':id',
     component: JobDetailsComponent,
     children: [
-      { path: 'overview', component: JobOverviewComponent },
+      { path: 'overview/:corpUrl', component: JobOverviewComponent },
       { path: 'application', component: JobApplicationComponent },
       {
         path: 'application/:candidateId',
         component: JobApplicationComponent,
       },
-      { path: '', redirectTo: 'overview', pathMatch: 'full' },
+      { path: '', redirectTo: 'overview/:corpUrl', pathMatch: 'full' },
     ],
   },
 ];

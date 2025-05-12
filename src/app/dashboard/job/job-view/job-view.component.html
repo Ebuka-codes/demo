@@ -86,7 +86,7 @@
                 class="col-sm-6 form-control-static p-2"
                 style="word-wrap: break-word"
               >
-                <span>{{ job.workMode | titlecase }}</span>
+                <span>{{ job.workMode.replace("_", "-") | titlecase }}</span>
               </div>
             </div>
 

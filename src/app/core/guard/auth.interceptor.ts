@@ -33,8 +33,14 @@ export class AuthInterceptor implements HttpInterceptor {
       console.error('Error parsing token:', error);
     }
 
-    // Skip interceptor for login or verify-email routes
-    if (req.url.includes('/login') || req.url.includes('/verify-email')) {
+    //unprotected route
+    if (
+      req.url.includes('/login') ||
+      req.url.includes('/verify-email') ||
+      req.url.includes('/apply/') ||
+      req.url.includes('/job-listing/') ||
+      req.url.includes('/candidates/exists')
+    ) {
       return next.handle(req);
     }
     let modifiedReq = req;
@@ -57,7 +63,6 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           this.tokenService.removeToken();
           this.router.navigate(['/session']);
-          console.warn('Session expired, redirecting to session page.');
           return throwError(() => 'Session expired');
         }
         return throwError(() => error);

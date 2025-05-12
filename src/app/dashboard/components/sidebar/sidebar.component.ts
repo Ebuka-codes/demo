@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
-import { UserToken } from 'src/app/core/model/credential';
+import { CORP_URL, UserToken } from 'src/app/core/model/credential';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { TokenService } from 'src/app/core/service/token.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
@@ -45,6 +45,7 @@ export class SidebarComponent {
         this.tokenService.removeToken();
         this.loaderService.setLoading(false);
         this.route.navigate(['/login']);
+        localStorage.removeItem(CORP_URL);
       } else {
         this.loaderService.setLoading(false);
         this.toastService.error(response.message);

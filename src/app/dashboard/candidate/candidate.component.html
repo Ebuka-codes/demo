@@ -196,7 +196,7 @@
               <td>
                 {{
                   item?.jobDetail?.workMode
-                    ? (item?.jobDetail?.workMode | titlecase)
+                    ? (item?.jobDetail?.workMode?.replace("_", "-") | titlecase)
                     : "N/A"
                 }}
               </td>

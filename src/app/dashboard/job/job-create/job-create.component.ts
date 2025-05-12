@@ -19,7 +19,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { DetailsType, QuestionTypeOptions } from 'src/app/shared/type';
 import * as bootstrap from 'bootstrap';
 import { finalize, map, Observable, startWith } from 'rxjs';
-import { job } from '../shared/job';
+import { job, KeyValuePair } from '../shared/job';
 import { JobService } from '../shared/job.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Router } from '@angular/router';
@@ -41,8 +41,15 @@ export class JobCreateComponent implements OnInit, AfterViewInit {
   @ViewChild(QuillEditorComponent) quillEditor!: QuillEditorComponent;
   @ViewChild('questionSelect') questionSelect!: MatSelect;
   modalInstance!: Modal;
-  workmode: string[] = ['HYBRID', 'REMOTE', 'ON_SITE'];
   selectedWorkmode: number | null = null;
+  workmode = new Array<KeyValuePair>(
+    {
+      key: 'HYBRID',
+      value: 'Hybrid',
+    },
+    { key: 'REMOTE', value: 'Remote' },
+    { key: 'ON_SITE', value: 'On-site' }
+  );
   isSubmitted: boolean = false;
   isSubmittedQuestion: boolean = false;
   isLoadingQuestion: boolean = false;
@@ -479,7 +486,6 @@ export class JobCreateComponent implements OnInit, AfterViewInit {
       employmentType: this.form.get('employmentType')?.value.toUpperCase(),
       jobType: this.form.get('jobType')?.value,
       jobSalary: Number(this.form.get('jobSalary')?.value),
-      // requiredSkills: [],
     };
 
     if (this.form.valid) {
