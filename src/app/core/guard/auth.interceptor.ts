@@ -39,7 +39,8 @@ export class AuthInterceptor implements HttpInterceptor {
       req.url.includes('/verify-email') ||
       req.url.includes('/apply/') ||
       req.url.includes('/job-listing/') ||
-      req.url.includes('/candidates/exists')
+      req.url.includes('/candidates/exists') ||
+      req.url.includes('/auth/common/job/')
     ) {
       return next.handle(req);
     }

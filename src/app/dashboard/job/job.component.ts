@@ -12,9 +12,9 @@ import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import { Location } from '@angular/common';
-import { CORP_KEY } from 'src/app/core/model/credential';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { enviroments } from 'src/environments/enviorments';
 
 @Component({
   selector: 'app-job',
@@ -22,6 +22,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
   styleUrls: ['./job.component.scss'],
 })
 export class JobComponent implements OnInit {
+  PORT_URL = enviroments.PORT_URL;
   jobData: Array<job> = [];
   isLoading$!: Observable<any>;
   searchText = new FormControl();
@@ -31,9 +32,8 @@ export class JobComponent implements OnInit {
   searchLoading = false;
   filteredData!: Array<job>;
   loadingData!: boolean;
-  jobUrl: string = 'http://localhost:4200/apply';
+  jobUrl: string = `${enviroments.PORT_URL}/apply`;
   jobListingUrl!: string;
-
   constructor(
     public jobService: JobService,
     private loaderService: LoaderService,
@@ -48,7 +48,7 @@ export class JobComponent implements OnInit {
     this.loadJobs();
     const encodeUrl = localStorage.getItem('corp-url');
     if (encodeUrl) {
-      this.jobListingUrl = `http://localhost:4200/job-listing/${encodeUrl}`;
+      this.jobListingUrl = `${this.PORT_URL}/job-listing/${encodeUrl}`;
     }
   }
   loadJobs() {
@@ -133,6 +133,6 @@ export class JobComponent implements OnInit {
       localStorage.getItem('corp-url') || ''
     );
     console.log(encodeUrl);
-    this.clipboard.copy(`${this.jobUrl}/${id}/overview/${encodeUrl}`);
+    this.clipboard.copy(`${this.PORT_URL}/apply/${id}/overview/${encodeUrl}`);
   }
 }

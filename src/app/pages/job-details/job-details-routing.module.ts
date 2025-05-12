@@ -8,13 +8,16 @@ const route: Routes = [
     path: ':id',
     component: JobDetailsComponent,
     children: [
-      { path: 'overview/:corpUrl', component: JobOverviewComponent },
+      {
+        path: 'overview/:corpUrl',
+        component: JobOverviewComponent,
+        pathMatch: 'full',
+      },
       { path: 'application', component: JobApplicationComponent },
       {
         path: 'application/:candidateId',
         component: JobApplicationComponent,
       },
-      { path: '', redirectTo: 'overview/:corpUrl', pathMatch: 'full' },
     ],
   },
 ];

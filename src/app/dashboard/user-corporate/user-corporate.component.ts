@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 import { finalize } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { CORP_URL } from 'src/app/core/model/credential';
+import { enviroments } from 'src/environments/enviorments';
 @Component({
   selector: 'erecruit-user-corporate',
   templateUrl: './user-corporate.component.html',
@@ -29,6 +30,8 @@ export class UserCorporateComponent implements OnInit {
   corporateId!: string;
   endcodeUrl!: string;
   jobListingUrl!: string;
+  PORT_URL = enviroments.PORT_URL;
+
   constructor(
     private fb: FormBuilder,
     private corporateService: CorporateService,
@@ -72,9 +75,9 @@ export class UserCorporateComponent implements OnInit {
   }
 
   getEncodUrl() {
-    const endcodeUrl = localStorage.getItem(CORP_URL);
-    if (endcodeUrl) {
-      this.jobListingUrl = `${'http://localhost:4200/job-listing'}/${endcodeUrl}`;
+    const encodeUrl = localStorage.getItem(CORP_URL);
+    if (encodeUrl) {
+      this.jobListingUrl = `${this.PORT_URL}/job-listing/${encodeUrl}`;
     }
   }
   getCorporateData() {

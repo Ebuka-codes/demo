@@ -302,7 +302,7 @@
             svg {
               width: 20px;
             }
-            button {
+            a {
               background-color: #299345;
               color: white;
               border-radius: 10px;
@@ -310,6 +310,7 @@
               border: none;
               outline: none;
               cursor: pointer;
+              text-decoration: none;
             }
           }
         }

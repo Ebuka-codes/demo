@@ -2,7 +2,6 @@
   <div class="loader-container" *ngIf="isLoading$ | async">
     <div class="full-loader"></div>
   </div>
-
   <div class="layout-content" *ngIf="!(isLoading$ | async) && jobData">
     <erecruit-header />
     <section class="hero-section">
