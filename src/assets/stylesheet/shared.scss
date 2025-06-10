@@ -1,0 +1,421 @@
+@use "@angular/material" as mat;
+@include mat.core();
+$demo-primary: mat.define-palette(mat.$indigo-palette);
+$demo-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+$demo-warn: mat.define-palette(mat.$red-palette);
+
+$demo-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $demo-primary,
+      accent: $demo-accent,
+      warn: $demo-warn,
+    ),
+  )
+);
+@include mat.all-component-themes($demo-theme);
+
+.fr-toolbar {
+  border-top-right-radius: 10px !important;
+  border-top-left-radius: 10px !important;
+}
+
+.fr-box.fr-basic .fr-wrapper {
+  border-bottom-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-color: #6d6d6d !important;
+}
+.fr-second-toolbar {
+  display: none;
+}
+
+.custom-dropdown .mat-select-panel {
+  z-index: 1055 !important;
+  position: absolute !important;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: white !important;
+  margin-top: 5px;
+  border: 1px solid #dddd !important;
+  border-radius: 5px !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled {
+  cursor: not-allowed;
+}
+
+.custom-dropdown .mat-select-panel {
+  z-index: 1055 !important;
+  position: absolute !important;
+}
+.mat-mdc-form-field-underline {
+  background-color: transparent !important;
+  border: none;
+}
+.mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.mat-mdc-option {
+  font-size: 14px;
+}
+.cdk-overlay-backdrop-showing {
+  border: none;
+}
+.mat-mdc-select-value-text {
+  font-size: 14px;
+  color: #6d6d6d;
+}
+.mdc-line-ripple {
+  display: none;
+}
+
+.mat-mdc-select-arrow svg {
+  fill: black !important;
+}
+.mat-mdc-form-field-flex {
+  height: 50px;
+}
+.mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+.mat-mdc-text-field-wrapper .showme {
+  border: 1px solid red !important;
+}
+.month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.month-picker .mat-calendar-arrow {
+  display: none;
+}
+
+.mat-step-header {
+  border-radius: 10px;
+}
+.mat-mdc-form-field {
+  display: block !important;
+}
+.mat-mdc-text-field-wrapper {
+  margin: 5px 0px;
+}
+
+.ql-container {
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.ql-editor {
+  min-height: 180px;
+}
+:host ::ng-deep .quill-editor + div {
+  position: relative;
+  z-index: 10;
+}
+
+.cdk-overlay-container {
+  z-index: 20000 !important;
+}
+
+.cdk-overlay-pane {
+  z-index: 1051 !important;
+  position: absolute !important;
+}
+
+.mat-mdc-input-element {
+  caret-color: black !important;
+}
+
+.dropdown-menu {
+  border: 1px solid white !important;
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  button,
+  a {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  a {
+    text-decoration: none;
+    color: rgb(71 85 105);
+  }
+
+  .dropdown-item {
+    color: rgb(71 85 105);
+    &:focus,
+    &:hover {
+      background-color: #28a745 !important;
+      color: white !important;
+    }
+    a:hover,
+    a:focus {
+      background-color: #28a745 !important;
+      color: white !important;
+    }
+  }
+}
+
+.accordion-button:focus,
+.accordion-button:active {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.accordion-button {
+  border: none !important;
+  background: #f9f9f9 !important;
+}
+.accordion-body {
+  ul {
+    border-bottom: 1px solid #eeee;
+    li {
+      padding: 5px 0px;
+    }
+
+    :nth-last-child(odd) {
+      border-bottom: none;
+    }
+  }
+}
+
+.mat-step-icon-selected {
+  background-color: #28a745 !important;
+}
+.mat-step-icon {
+  background-color: #28a745 !important;
+}
+
+.mat-mdc-form-field-infix {
+  padding-top: 10px !important;
+  padding-bottom: 0px !important;
+}
+.modal-xl {
+  min-width: 1000px !important;
+}
+
+input[type="checkbox"] {
+  accent-color: #28a745;
+  width: 22px;
+  height: 15px;
+}
+.mat-calendar-body-selected {
+  background-color: #c0edcc !important;
+  color: black !important;
+  border: none !important;
+}
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(
+    .mat-calendar-body-comparison-identical
+  ) {
+  background-color: #28a74545 !important;
+}
+
+.mat-calendar-body-today {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.mat-mdc-icon-button svg {
+  color: #a5a3a3 !important;
+}
+
+.mat-mdc-button-touch-target:hover {
+  background-color: transparent !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mdc-list-item__primary-text {
+  color: #6d6d6d !important;
+}
+
+.mat-primary .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-full {
+  background-color: #28a745 !important;
+}
+
+.mat-mdc-option .mat-pseudo-checkbox-minimal {
+  display: none !important;
+}
+.mat-mdc-option .mdc-list-item input {
+  border: 1px solid red;
+}
+
+.modal {
+  background-color: rgba(45, 45, 45, 0.5) !important;
+  z-index: 20000 !important;
+}
+.modal-backdrop {
+  background-color: rgba(45, 45, 45, 0.4) !important;
+}
+
+.me .mat-pseudo-checkbox {
+  display: none;
+}
+
+.mdc-text-field__input {
+  color: #6d6d6d !important;
+}
+.mdc-text-field--filled.mdc-text-field--no-label .mdc-text-field__input {
+  height: 0px;
+}
+
+.btn:hover {
+  background-color: transparent !important;
+  color: #6d6d6d !important;
+  border-color: #6d6d6d59 !important;
+}
+
+.flatpickr-calendar {
+  position: static !important;
+  width: max-content !important;
+  box-shadow: none;
+}
+
+.flatpickr-months {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  position: relative !important;
+}
+.flatpickr-day {
+  font-weight: 500 !important;
+}
+.flatpickr-day.selected {
+  background-color: #c0edcc !important;
+  color: black !important;
+  border: none !important;
+}
+.flatpickr-day.today {
+  background-color: #28a745 !important;
+  color: white !important;
+  border: none !important;
+}
+.flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  font-size: 14px !important;
+  background-color: white !important;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  fill: #28a745;
+}
+.flatpickr-monthDropdown-months option:hover {
+  background-color: #28a745 !important;
+}
+
+.mat-button-toggle-focus-overlay {
+  background-color: #28a745ba !important;
+}
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.mat-mdc-select-value-text {
+  font-weight: 400 !important;
+}
+
+.timepicker-overlay {
+  z-index: 10000000 !important;
+}
+.timepicker-backdrop-overlay {
+  z-index: 10000000 !important;
+}
+.timepicker__header {
+  background-color: #28a745 !important;
+}
+
+.timepicker-button {
+  color: #28a745 !important;
+}
+.clock-face__number > span.active {
+  background-color: #28a745 !important;
+}
+.clock-face__clock-hand {
+  background-color: #28a745 !important;
+}
+
+.custom-theme .flatpickr-time {
+  background: #28a745;
+  color: white;
+  border-radius: 5px;
+}
+
+//
+.custom-theme .flatpickr-time .numInputWrapper {
+  background: #218838;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.custom-theme .flatpickr-time .flatpickr-am-pm {
+  background: #1e7e34;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.custom-theme .flatpickr-time .numInputWrapper:hover,
+.custom-theme .flatpickr-time .flatpickr-am-pm:hover {
+  background: #1a662b;
+}
+.mat-mdc-slider {
+  width: 300px !important;
+  --mdc-slider-active-track-color: #28a745 !important;
+  --mdc-slider-handle-color: #28a745 !important;
+  --mdc-slider-focus-handle-color: #28a745 !important;
+  --mdc-slider-hover-handle-color: #28a745 !important;
+  --mdc-slider-inactive-track-color: rgba(40, 167, 69, 0.3) !important;
+  --mdc-slider-value-indicator-color: #28a745 !important;
+}
+
+.popover-body {
+  background-color: rgb(221 221 221 / 47%) !important;
+}
+.mat-mdc-icon-button .mat-mdc-focus-indicator {
+  background: none !important;
+}
+.mdc-icon-button:hover {
+  background-color: transparent !important;
+}
+.mdc-icon-button:focus {
+  background-color: transparent !important;
+}
+@media (min-width: 992px) {
+  .modal-lg,
+  .modal-xl {
+    --bs-modal-width: 700px !important;
+  }
+}
+
+.flatpickr-day.inRange,
+.flatpickr-day.prevMonthDay.inRange,
+.flatpickr-day.nextMonthDay.inRange,
+.flatpickr-day.today.inRange,
+.flatpickr-day.prevMonthDay.today.inRange,
+.flatpickr-day.nextMonthDay.today.inRange,
+.flatpickr-day:hover,
+.flatpickr-day.prevMonthDay:hover,
+.flatpickr-day.nextMonthDay:hover,
+.flatpickr-day:focus,
+.flatpickr-day.prevMonthDay:focus,
+.flatpickr-day.nextMonthDay:focus {
+  background-color: #e6e6e696 !important;
+  border-color: #e6e6e696 !important;
+  color: black !important;
+}
+.dayContainer .today {
+}

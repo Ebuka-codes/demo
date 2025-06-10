@@ -1,0 +1,663 @@
+<div class="edit-job">
+  <div class="edit-job-header">
+    <span class="nav-back" (click)="onNavigateBack()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 19.5 8.25 12l7.5-7.5"
+        />
+      </svg>
+    </span>
+    <h2>Edit Job</h2>
+  </div>
+  <div class="edit-job-content">
+    <form action="" [formGroup]="form">
+      <div class="row">
+        <div class="col">
+          <label for="jobTitle"
+            >Job Title <span class="required-icon">*</span></label
+          >
+          <mat-form-field>
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="title"
+              formControlName="jobTitle"
+            />
+            <mat-autocomplete #title="matAutocomplete">
+              <mat-option
+                *ngFor="let option of jobTitleOption | async"
+                [value]="option?.description"
+              >
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ option?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery($event, option?.id, option.description)
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          option?.id,
+                          'jobTitle',
+                          option.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </mat-option>
+
+              <input
+                placeholder="Type job title press enter"
+                class="addInput"
+                #newJobTitle
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobTitle.value, 'jobTitle')
+                    : addNewQueryData($event, newJobTitle.value, 'jobTitle')
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <div *ngIf="jobTitle?.invalid && isSubmitted">
+            <small *ngIf="jobTitle?.errors?.['required']">
+              Job title field is required
+            </small>
+
+            <small
+              *ngIf="jobTitle?.errors?.['minlength'] && !jobTitle?.errors?.['invalidName']"
+            >
+              Job title must be at least 3 characters long
+            </small>
+          </div>
+        </div>
+        <div class="col">
+          <label for="jobId">Job Id <span class="required-icon">*</span></label>
+          <input matInput type="text" formControlName="jobId" />
+          <div *ngIf="jobId?.invalid && isSubmitted">
+            <small *ngIf="jobId?.errors?.['required']">
+              Job Id field is required
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="workmode"
+            >Work Mode <span class="required-icon">*</span></label
+          >
+          <mat-form-field appearance="fill">
+            <mat-select
+              panelClass="custom-dropdown"
+              disableRipple
+              id="workMode"
+              formControlName="workMode"
+            >
+              <mat-option *ngFor="let option of workmode" [value]="option.key">
+                {{ option.value | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div *ngIf="workMode?.invalid && isSubmitted">
+            <small *ngIf="workMode?.errors?.['required']">
+              Work mode field is required
+            </small>
+          </div>
+        </div>
+        <div class="col">
+          <label for="jobLocation">Job Location</label>
+          <mat-form-field>
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="location"
+              formControlName="jobLocation"
+            />
+            <mat-autocomplete #location="matAutocomplete">
+              <mat-option
+                *ngFor="let location of jobLocationOption | async"
+                [value]="location.description"
+              >
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ location?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery(
+                          $event,
+                          location.id,
+                          location.description
+                        )
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          location.id,
+                          'jobLocation',
+                          location.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </mat-option>
+
+              <input
+                placeholder="Type location press enter"
+                class="addInput"
+                #newJobLocation
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobLocation.value, 'jobLocation')
+                    : addNewQueryData(
+                        $event,
+                        newJobLocation.value,
+                        'jobLocation'
+                      )
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
+            </mat-autocomplete>
+          </mat-form-field>
+          <div *ngIf="jobLocation?.invalid && isSubmitted">
+            <small *ngIf="jobLocation?.errors?.['required']">
+              Job location field is required
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="jobType"
+            >Job Type <span class="required-icon">*</span></label
+          >
+
+          <mat-form-field>
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="type"
+              formControlName="jobType"
+            />
+            <mat-autocomplete #type="matAutocomplete">
+              <mat-option
+                *ngFor="let jobType of jobTypeOption | async"
+                [value]="jobType.description | titlecase"
+              >
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ jobType?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery(
+                          $event,
+                          jobType?.id,
+                          jobType.description
+                        )
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          jobType?.id,
+                          'jobTitle',
+                          jobType.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </mat-option>
+
+              <input
+                placeholder="Type job title press enter"
+                class="addInput"
+                #newJobType
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobType.value, 'jobType')
+                    : addNewQueryData($event, newJobType.value, 'jobType')
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <div *ngIf="jobType?.invalid && isSubmitted">
+            <small *ngIf="jobType?.errors?.['required']">
+              Job type field is required
+            </small>
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="employementType"
+            >Employment Type <span class="required-icon">*</span></label
+          >
+
+          <mat-form-field>
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="employType"
+              formControlName="employmentType"
+            />
+            <mat-autocomplete #employType="matAutocomplete">
+              <mat-option
+                *ngFor="let employmentType of jobEmploymentOption | async"
+                [value]="employmentType.description | titlecase"
+              >
+                <div class="option-container">
+                  <div class="option-text">
+                    {{ employmentType?.description | titlecase }}
+                  </div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery(
+                          $event,
+                          employmentType?.id,
+                          employmentType?.description
+                        )
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(
+                          employmentType?.id,
+                          'employmentType',
+                          employmentType.description
+                        )
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </mat-option>
+
+              <input
+                placeholder="Type job title press enter"
+                class="addInput"
+                #newEmpType
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newEmpType.value, 'employmentType')
+                    : addNewQueryData(
+                        $event,
+                        newEmpType.value,
+                        'employmentType'
+                      )
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <div *ngIf="employmentType?.invalid && isSubmitted">
+            <small *ngIf="employmentType?.errors?.['required']">
+              Employment type field is required
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="jobSalary"
+            >Job Salary <span class="required-icon">*</span></label
+          >
+          <input type="text" formControlName="jobSalary" amountFormat />
+          <div *ngIf="jobSalary?.invalid && isSubmitted">
+            <small *ngIf="jobSalary?.errors?.['required']">
+              Job salary field is required
+            </small>
+
+            <small
+              *ngIf="!jobSalary?.errors?.['required'] && jobSalary?.errors?.['invalidAmount']"
+            >
+              Job salary field is invalid
+            </small>
+          </div>
+        </div>
+        <div class="col">
+          <label for="requiredSkills"
+            >Required Skill <span class="required-icon">*</span></label
+          >
+
+          <mat-form-field>
+            <mat-select
+              panelClass="custom-dropdown"
+              disableRipple
+              formControlName="requiredSkills"
+              multiple
+              readonly
+            >
+              <mat-option *ngFor="let skill of jobSkillData" [value]="skill.id">
+                <div class="option-container">
+                  <div class="option-text">{{ skill.description }}</div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery($event, skill.id, skill.description)
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(skill.id, 'jobSkill', skill.id)
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </mat-option>
+
+              <input
+                #newJobSkill
+                placeholder="Type skill and press enter"
+                class="addInput"
+                style="margin: 5px 20px"
+                (keydown.enter)="
+                  isEditOpen
+                    ? editQueryData($event, newJobSkill.value, 'jobSkill')
+                    : addNewQueryData($event, newJobSkill.value, 'jobSkill')
+                "
+                (keydown)="handleKeydown($event)"
+                [value]="selectedValue"
+              />
+            </mat-select>
+          </mat-form-field>
+
+          <span *ngIf="requiredSkills?.invalid && isSubmitted">
+            <small *ngIf="requiredSkills?.errors?.['required']">
+              Required skill field is required
+            </small>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="startDate"
+            >Start Date <span class="required-icon">*</span></label
+          >
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [matDatepicker]="startDate"
+              formControlName="startDate"
+              readonly
+              (dateChange)="onStartDateChange()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+          </mat-form-field>
+
+          <div *ngIf="jobStartDate?.invalid && isSubmitted">
+            <small *ngIf="jobStartDate?.errors?.['required']">
+              Start date field is required
+            </small>
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="endDate"
+            >End Date <span class="required-icon">*</span></label
+          >
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [matDatepicker]="endDate"
+              formControlName="endDate"
+              readonly
+              [disabled]="isEditDate"
+              [min]="minEndDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+          </mat-form-field>
+          <div *ngIf="jobEndDate?.invalid && isSubmitted">
+            <small *ngIf="jobEndDate?.errors?.['required']">
+              End date field is required
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="Questions"
+            >Questions <span class="required-icon">*</span></label
+          >
+          <mat-form-field>
+            <mat-select
+              panelClass="custom-dropdown"
+              disableRipple
+              formControlName="questionOptions"
+              multiple
+            >
+              <mat-option
+                *ngFor="let question of questionTypeDropdown"
+                [value]="question.id"
+              >
+                <span>
+                  {{
+                    question.description.charAt(0).toUpperCase() +
+                      question.description.slice(1)
+                  }}
+                </span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div *ngIf="questionOption?.invalid && isSubmitted">
+            <small *ngIf="questionOption?.errors?.['required']">
+              Question field is required
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="question-btn mb-3"
+        data-bs-toggle="modal"
+        data-bs-target="#questionModal"
+        type="button"
+      >
+        + Add Questions
+      </button>
+
+      <button
+        class="ai-btn"
+        type="button"
+        data-bs-target="#rewriteWithAiModal"
+        data-bs-toggle="modal"
+      >
+        Rewrite with Ai
+      </button>
+
+      <div class="row">
+        <label for="description" style="margin-bottom: 5px"
+          >Job Description <span class="required-icon">*</span></label
+        >
+        <div>
+          <quill-editor
+            formControlName="jobDescription"
+            #editor
+            formControlName="jobDescription"
+            (onEditorCreated)="onEditorCreated($event)"
+          ></quill-editor>
+        </div>
+
+        <div *ngIf="jobDescription?.invalid && isSubmitted">
+          <small *ngIf="jobDescription?.errors?.['required']">
+            Job description field is required
+          </small>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="submit-btn">
+    <button type="button" [disabled]="loading" (click)="onSubmit()">
+      <ng-container *ngIf="loading; else content">
+        <span class="mini-loader-spinner"></span>
+      </ng-container>
+      <ng-template #content>
+        <span>Continue</span>
+      </ng-template>
+    </button>
+  </div>
+</div>
+<ercruit-job-question-create (updateQuestion)="updateQuestion()" />

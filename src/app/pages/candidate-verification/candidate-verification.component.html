@@ -1,0 +1,43 @@
+<section class="candidate-verification">
+  <header>
+    <img src="../../../assets/image/logo-2.PNG" alt="logo" />
+  </header>
+
+  <div class="container">
+    <div class="verify-card">
+      <h3>Please verify your identity</h3>
+      <p>an OTP was sent to your email kindly provide the OTP to continue.</p>
+
+      <form action="" [formGroup]="form" (ngSubmit)="onVerify()">
+        <label for="otp">Enter OTP</label>
+        <input type="text" formControlName="otp" placeholder="OTP" />
+
+        <div>
+          <span
+            *ngIf="
+              form.controls['otp']?.invalid && form.controls['otp']?.touched
+            "
+          >
+            <small
+              class="text-danger mt-4"
+              *ngIf="form.controls['otp']?.errors?.['required']"
+              >Enter otp is required</small
+            >
+          </span>
+          <span class="resend-otp" (click)="requestOTP()"
+            >Dont get OTP? Resend OTP</span
+          >
+        </div>
+
+        <div class="verify-btn">
+          <button type="submit" [disabled]="isLoading$ | async">
+            <ng-container *ngIf="isLoading$ | async; else content">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #content>VERIFY OTP </ng-template>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

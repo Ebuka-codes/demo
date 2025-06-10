@@ -1,0 +1,56 @@
+<div
+  class="modal fade"
+  #candidateRejectModal
+  id="candidateRejectModal"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdrop"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          Confirmation Message
+        </h5>
+        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to reject?</p>
+        <div class="btn-action">
+          <button type="button" class="close-btn" data-bs-dismiss="modal">
+            <span>Cancel</span>
+          </button>
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="submit-btn"
+            (click)="onConfirmReject()"
+          >
+            <ng-container *ngIf="isLoading; else showLoading">
+              <span class="mini-loader-spinner"></span>
+            </ng-container>
+            <ng-template #showLoading>
+              <span>Reject</span>
+            </ng-template>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

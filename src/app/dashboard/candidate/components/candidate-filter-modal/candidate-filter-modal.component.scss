@@ -1,0 +1,130 @@
+.modal-header {
+  h5 {
+    font-size: 18px;
+  }
+  .close-icon {
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #28a745;
+    border-radius: 100%;
+    color: white;
+    cursor: pointer;
+    margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+    padding: 2px;
+  }
+}
+.modal-body {
+  form {
+    label {
+      font-size: 14px;
+      color: #484747;
+    }
+    input {
+      color: #6d6d6d;
+      font-size: 14px;
+    }
+    small {
+      color: rgba(216, 5, 5, 0.89);
+      font-size: 13px;
+    }
+
+    .mini-loader-spinner {
+      border: 3px solid white;
+      border-color: white transparent white white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px auto;
+      animation: spin 0.5s linear infinite;
+      cursor: not-allowed;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .btn-action {
+      display: flex;
+      float: left;
+      margin: 5px 0px;
+      button {
+        border-radius: 25px;
+        box-shadow: none;
+        cursor: pointer;
+        flex-shrink: 0;
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        min-width: 100px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+        border: none;
+        margin-right: 20px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+      .submit-btn {
+        background-color: #28a745;
+        color: #fff;
+        color: white;
+        &:hover,
+        :focus {
+          box-shadow: #0000004d 0 2px 6px;
+          background-color: #28a745;
+          color: white;
+          outline: none;
+        }
+      }
+      .close-btn {
+        background-color: #eeee;
+        color: #484747;
+
+        &:hover,
+        :focus {
+          box-shadow: #0000004d 0 2px 6px;
+          background-color: #f1f1f1;
+          color: black;
+          outline: none;
+        }
+      }
+
+      .btn-cancel {
+        background-color: #eeee;
+      }
+
+      .mini-loader-spinner {
+        border: 3px solid white;
+        border-color: white transparent white white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin: 0px auto;
+        animation: spin 0.5s linear infinite;
+        cursor: not-allowed;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
+
+    &:disabled {
+      cursor: pointer;
+    }
+  }
+}

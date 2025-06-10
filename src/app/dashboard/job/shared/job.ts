@@ -5,14 +5,15 @@ export interface job {
   employmentType: string;
   jobLocation: string;
   jobSalary: number;
-  jobStatus: string;
+  status: string;
   jobType: string;
   startDate: string;
   endDate: string;
   companyName: string;
   workMode: string;
   questionOptions: Array<optionType>;
-  requiredSkills: string[];
+  requiredSkills: Array<skillOption>;
+  createdAt: string;
 }
 export interface optionType {
   id: string;
@@ -26,8 +27,19 @@ export interface optionType {
     }
   ];
 }
-
+export interface skillOption {
+  id: string;
+  createdAt: string;
+  description: string;
+  type: string;
+}
 export interface KeyValuePair {
   key: string;
   value: any;
+}
+
+export interface jobFilterPayload {
+  jobType?: string;
+  workMode?: string;
+  status?: string;
 }

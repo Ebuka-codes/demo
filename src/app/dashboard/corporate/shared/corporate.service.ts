@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Corporate, file } from './corporate';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { enviroments } from 'src/environments/enviorments';
+import { Constants } from 'src/app/utils/constants';
+import { Observable } from 'rxjs';
+import { DataResponse } from 'src/app/shared/model/data-response';
 
 @Injectable({
   providedIn: 'root',
@@ -13,30 +16,31 @@ export class CorporateService {
   createCorporate(corporate: Corporate) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'corp-key': 'true',
     });
     return this.httpClient.post<Corporate>(
-      this.baseUrl + `corporates`,
+      Constants.CORPORATE_URL.CORPORATE,
       corporate,
       {
         headers,
       }
     );
   }
-
-  getCorporate() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-    return this.httpClient.get<any>(this.baseUrl + `corporates`, {
-      headers,
-    });
+  getAllCorporate() {
+    return this.httpClient.get<any>(Constants.CORPORATE_URL.CORPORATE);
   }
-  editCorporate(id: string, data: Corporate) {
+  getUserCorporate(): Observable<DataResponse> {
+    return this.httpClient.get<any>(
+      Constants.CORPORATE_URL.CORPORATE + '/get-user-corporate'
+    );
+  }
+  editCorporate(id: string, data: Corporate): Observable<DataResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'corp-key': 'true',
     });
-    return this.httpClient.put<Corporate>(
-      this.baseUrl + `corporates/${id}`,
+    return this.httpClient.put<any>(
+      Constants.CORPORATE_URL.CORPORATE + `/${id}`,
       data,
       {
         headers,
@@ -44,16 +48,34 @@ export class CorporateService {
     );
   }
 
-  convertFileToBase64(file: file) {
+  deleteCorporate(id: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'corp-key': 'true',
+    });
+    return this.httpClient.delete(
+      Constants.CORPORATE_URL.CORPORATE + `/${id}`,
+      {
+        headers,
+      }
+    );
+  }
+
+  convertFileToBase64(file: file): Observable<DataResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.httpClient.post<file>(
-      'http://localhost:8088/document/upload-base64',
+    return this.httpClient.post<any>(
+      this.baseUrl + '/api/document/upload-base64',
       file,
       {
         headers,
       }
+    );
+  }
+  generateEndcodeUrl(): Observable<DataResponse> {
+    return this.httpClient.get<any>(
+      Constants.CORPORATE_URL.CORPORATE + '/encode-url'
     );
   }
 }

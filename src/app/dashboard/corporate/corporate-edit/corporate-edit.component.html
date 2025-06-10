@@ -73,15 +73,6 @@
                 >Phone <span class="required-icon">*</span></label
               >
               <input type="text" formControlName="phone" />
-              <div *ngIf="phone?.invalid && isSubmitted">
-                <small *ngIf="phone?.errors?.['required']">
-                  Phone field is required
-                </small>
-                <small
-                  *ngIf="!phone?.errors?.['required'] && phone?.errors?.['invalidPhone']"
-                  >Invalid Phone Number</small
-                >
-              </div>
             </div>
 
             <div class="form-group">
@@ -99,11 +90,7 @@
             <div class="file-wrapper">
               <label>Logo </label>
               <div
-                [ngClass]="
-                  submitLoading
-                    ? 'file-wrapper_content loader-bg'
-                    : ' file-wrapper_content'
-                "
+                class="file-wrapper_content"
                 (click)="!file ? triggerInput() : null"
                 [style.cursor]="file ? 'not-allowed' : 'pointer'"
                 (dragover)="onDragOver($event)"

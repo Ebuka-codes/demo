@@ -1,0 +1,240 @@
+<ng-container *ngIf="!isLoading; else showLoader">
+  <div class="signup-container">
+    <div class="logo">
+      <img src="../../../assets/image/logo.svg" alt="" />
+    </div>
+    <div class="content">
+      <div class="image-wrapper">
+        <img src="../../../assets//image/Frame 1321315997.png" alt="" />
+      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+        <h2>Attract quality candidates without hassle</h2>
+        <div class="form-group mt-4">
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            required
+            placeholder="Company Name"
+            [class.error]="name?.invalid && name?.touched"
+          />
+          <div *ngIf="name?.invalid && name?.touched">
+            <small *ngIf="name?.errors?.['required']">
+              Company name is required
+            </small>
+            <small
+              *ngIf="!name?.errors?.['required'] && name?.errors?.['minlength']"
+            >
+              Company name should be atleast 3 character long
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Company Email"
+            [class.error]="email?.invalid && email?.touched"
+            name="signup_user_email_123"
+            autocomplete="off"
+          />
+          <div *ngIf="email?.invalid && email?.touched">
+            <small *ngIf="email?.errors?.['required']">
+              Email address is required
+            </small>
+
+            <small
+              *ngIf="!email?.errors?.['required'] && email?.errors?.['email']"
+            >
+              A valid email address is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="phone">
+            <button
+              [class.error]="phoneNumber?.invalid && phoneNumber?.touched"
+              class="btn"
+            >
+              +234
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-caret-down-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                />
+              </svg>
+            </button>
+            <input
+              type="tel"
+              formControlName="phoneNumber"
+              placeholder="Phone Number"
+              required
+              [class.error]="phoneNumber?.invalid && phoneNumber?.touched"
+            />
+          </div>
+
+          <div *ngIf="phoneNumber?.invalid && phoneNumber?.touched">
+            <small *ngIf="phoneNumber?.errors?.['required']">
+              Phone number is required
+            </small>
+
+            <small
+              style="line-height: 1"
+              *ngIf="!phoneNumber?.errors?.['required'] && phoneNumber?.errors?.['invalidLength']"
+            >
+              {{ phoneNumber?.errors?.['invalidLength']}}
+            </small>
+
+            <small
+              style="line-height: 1"
+              *ngIf="!phoneNumber?.errors?.['required'] && phoneNumber?.errors?.['invalidNumber']"
+            >
+              {{ phoneNumber?.errors?.['invalidNumber']}}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            [type]="isPassword ? 'text' : 'password'"
+            id="name"
+            name="password"
+            autocomplete="new-password"
+            placeholder="Password"
+            formControlName="password"
+            [class.error]="password?.invalid && password?.touched"
+          />
+
+          <span class="icon" (click)="togglePasswords('password')">
+            <ng-container *ngIf="isPassword; else showCloseIcon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+            </ng-container>
+            <ng-template #showCloseIcon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
+                />
+              </svg>
+            </ng-template>
+          </span>
+
+          <div *ngIf="password?.invalid && password?.touched">
+            <small *ngIf="password?.errors?.['required']"
+              >Password is required</small
+            >
+            <small
+              *ngIf="!password?.errors?.['required'] && password?.errors?.['pattern']"
+              >Password must be 8-20 chars & include a letter, number, and
+              special character
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            [type]="isConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            name="password"
+            required
+            placeholder="Confirm Password"
+            [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
+          />
+          <span class="icon" (click)="togglePasswords('confirmPassword')">
+            <ng-container *ngIf="isConfirmPassword; else showCloseIcon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+            </ng-container>
+            <ng-template #showCloseIcon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
+                />
+              </svg>
+            </ng-template>
+          </span>
+
+          <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched">
+            <small *ngIf="confirmPassword?.errors?.['required']">
+              Confirm password is required</small
+            >
+            <small
+              *ngIf="!confirmPassword?.errors?.['required'] && confirmPassword?.errors?.['invalidPassword'] || checkConfirmPassword"
+            >
+              Confirm password must match paswword</small
+            >
+          </div>
+        </div>
+        <div class="check-group">
+          <input type="checkbox" formControlName="agreeTerm" />
+          <span>I agree with the terms of the service and privacy policy</span>
+
+          <div *ngIf="agreeTerm?.invalid && agreeTerm?.touched">
+            <small> You need to agree to the terms and conditions. </small>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Sign Up</button>
+      </form>
+    </div>
+  </div>
+</ng-container>
+<ng-template #showLoader> <erecruit-full-page-loader-spinner /> </ng-template>

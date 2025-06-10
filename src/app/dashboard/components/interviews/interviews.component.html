@@ -1,0 +1,226 @@
+<section class="interview">
+  <h2>INTERVIEWS</h2>
+  <div class="content">
+    <div class="info">
+      You have {{ this.data.candidateInfo.interview || "no" }} interview
+      scheduled for this week
+    </div>
+    <div class="calendar-container">
+      <div id="calendar"></div>
+      <div class="event">
+        <div class="today">
+          <div class="today-title">
+            <svg
+              width="19"
+              height="19"
+              viewBox="0 0 19 19"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect
+                x="0.597656"
+                y="0.199219"
+                width="18"
+                height="18"
+                fill="url(#pattern0_720_215579)"
+              />
+              <defs>
+                <pattern
+                  id="pattern0_720_215579"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_720_215579"
+                    transform="scale(0.0138889)"
+                  />
+                </pattern>
+                <image
+                  id="image0_720_215579"
+                  width="72"
+                  height="72"
+                  preserveAspectRatio="none"
+                  xlink:href="data:image/png;base64,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"
+                />
+              </defs>
+            </svg>
+
+            <h3>Today</h3>
+          </div>
+          <div class="today-event">
+            <div class="item">
+              <div class="content">
+                <div class="job-name">
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 11 11"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                  >
+                    <rect
+                      x="0.597656"
+                      y="0.199219"
+                      width="10"
+                      height="10"
+                      fill="url(#pattern0_6112_9470)"
+                    />
+                    <defs>
+                      <pattern
+                        id="pattern0_6112_9470"
+                        patternContentUnits="objectBoundingBox"
+                        width="1"
+                        height="1"
+                      >
+                        <use
+                          xlink:href="#image0_6112_9470"
+                          transform="scale(0.0138889)"
+                        />
+                      </pattern>
+                      <image
+                        id="image0_6112_9470"
+                        width="72"
+                        height="72"
+                        preserveAspectRatio="none"
+                        xlink:href="data:image/png;base64,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"
+                      />
+                    </defs>
+                  </svg>
+                  <span>Product Designer</span>
+                </div>
+                <div class="rounds-count">First round interview</div>
+              </div>
+              <div class="content">
+                <div class="candidate-name">
+                  <h4>John Wick</h4>
+                </div>
+                <div class="time">12:00 PM</div>
+              </div>
+            </div>
+
+            <div class="activity-container">
+              <div class="activity">
+                <div class="title">
+                  <span></span>
+                  <h4>Candidate Review Meeting</h4>
+                </div>
+                <div class="time">2:00 PM</div>
+              </div>
+              <div class="activity">
+                <div class="title">
+                  <span></span>
+                  <h4>Team Progress Update</h4>
+                </div>
+                <div class="time">11:00 Am</div>
+              </div>
+              <div class="activity">
+                <div class="title">
+                  <span></span>
+                  <h4>Team Briefing</h4>
+                </div>
+                <div class="time">9:00 AM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tomorrow">
+          <div class="tomorrow-title">
+            <svg
+              width="19"
+              height="19"
+              viewBox="0 0 19 19"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect
+                x="0.597656"
+                y="0.199219"
+                width="18"
+                height="18"
+                fill="url(#pattern0_720_215579)"
+              />
+              <defs>
+                <pattern
+                  id="pattern0_720_215579"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_720_215579"
+                    transform="scale(0.0138889)"
+                  />
+                </pattern>
+                <image
+                  id="image0_720_215579"
+                  width="72"
+                  height="72"
+                  preserveAspectRatio="none"
+                  xlink:href="data:image/png;base64,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"
+                />
+              </defs>
+            </svg>
+
+            <h3>Tommorow</h3>
+          </div>
+          <div class="activity-container">
+            <div class="activity">
+              <div class="title">
+                <span></span>
+                <h4>DevOps Interview</h4>
+              </div>
+              <div class="time">10:00 AM</div>
+            </div>
+            <div class="activity">
+              <div class="title">
+                <span></span>
+                <h4>Candidate Review Interview</h4>
+              </div>
+              <div class="time">11:00 AM</div>
+            </div>
+            <div class="activity">
+              <div class="title">
+                <span></span>
+                <h4>Team Briefing</h4>
+              </div>
+              <div class="time">12:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="interviewer-feedback">
+  <h4>Interview Feedback</h4>
+  <div class="feedback">
+    <div class="content">
+      <span class="active"></span>
+      <span class="message">
+        3 interviewers have completed their interview feedback form for
+        <strong>John Wick (Product Design)</strong>
+        on <strong>April 3rd</strong> at 2:00 PM
+      </span>
+    </div>
+    <div class="view-btn">
+      <button>View</button>
+    </div>
+  </div>
+  <div class="feedback">
+    <div class="content">
+      <span class="active"></span>
+      <span class="message">
+        3 interviewers have completed their interview feedback form for
+        <strong>John Wick (Product Design)</strong>
+        on <strong>April 3rd</strong> at 2:00 PM
+      </span>
+    </div>
+    <div class="view-btn">
+      <button>View</button>
+    </div>
+  </div>
+</div>

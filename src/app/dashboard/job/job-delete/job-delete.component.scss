@@ -1,0 +1,87 @@
+.modal-header {
+  padding: 10px 20px;
+  h5 {
+    font-size: 18px;
+  }
+  .close-icon {
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #28a745;
+    border-radius: 100%;
+    color: white;
+    cursor: pointer;
+    margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+    padding: 2px;
+  }
+}
+
+.modal-body {
+  padding: 25px;
+  .btn-action {
+    display: flex;
+    float: left;
+    button {
+      border-radius: 25px;
+      box-shadow: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      border: none;
+      margin-right: 20px;
+      margin-top: 10px;
+    }
+
+    .submit-btn {
+      background-color: #dc3545;
+      color: #fff;
+      color: white;
+      &:hover,
+      :focus {
+        box-shadow: #0000004d 0 2px 6px;
+        background-color: #dc3545;
+        color: white;
+        outline: none;
+      }
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+    .close-btn {
+      background-color: #eeee;
+      color: #484747;
+
+      &:hover,
+      :focus {
+        box-shadow: #0000004d 0 2px 6px;
+        background-color: #f1f1f1;
+        color: black;
+        outline: none;
+      }
+    }
+    .mini-loader-spinner {
+      border: 3px solid white;
+      border-color: white transparent white white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px auto;
+      animation: spin 0.5s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}

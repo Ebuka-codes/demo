@@ -1,0 +1,132 @@
+<div
+  #myModal
+  class="modal fade"
+  id="createUserModal"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="createUserModal"
+  aria-hidden="true"
+  (hidden.bs.modal)="resetForm()"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Create User</h5>
+        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="firstName"
+              >First Name <span class="required-icon">*</span></label
+            >
+            <input id="firstName" formControlName="firstName" type="text" />
+            <div *ngIf="firstName?.invalid && firstName?.touched">
+              <small class="text-danger" *ngIf="firstName?.hasError('required')"
+                >First Name is required.</small
+              >
+              <small
+                class="text-danger"
+                *ngIf="firstName?.hasError('minlength')"
+                >First Name must be at least 3 characters long.</small
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName"
+              >Last Name <span class="required-icon">*</span></label
+            >
+            <input id="lastName" formControlName="lastName" type="text" />
+            <div *ngIf="lastName?.invalid && lastName?.touched">
+              <small class="text-danger" *ngIf="lastName?.hasError('required')"
+                >Last Name is required.</small
+              >
+              <small class="text-danger" *ngIf="lastName?.hasError('minlength')"
+                >Last Name must be at least 2 characters long.</small
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email"
+              >Email Address <span class="required-icon">*</span></label
+            >
+            <input id="email" formControlName="email" type="email" />
+            <div *ngIf="email?.invalid && email?.touched">
+              <small class="text-danger" *ngIf="email?.hasError('required')"
+                >Email is required.</small
+              >
+              <small class="text-danger" *ngIf="email?.hasError('email')"
+                >Enter a valid email.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber"
+              >Phone Number <span class="required-icon">*</span></label
+            >
+            <input id="phoneNumber" formControlName="phoneNumber" type="text" />
+            <div *ngIf="phoneNumber?.invalid && phoneNumber?.touched">
+              <small
+                class="text-danger"
+                *ngIf="phoneNumber?.hasError('required')"
+                >Phone Number is required.</small
+              >
+              <small
+                class="text-danger"
+                *ngIf="phoneNumber?.hasError('pattern')"
+                >Enter a valid phone number (11 digits).</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="role"
+              >Assign Role <span class="required-icon">*</span></label
+            >
+            <mat-form-field>
+              <mat-select id="role" formControlName="role">
+                <mat-option *ngFor="let item of userRoleData" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="role?.invalid && role?.touched">
+              <small class="text-danger" *ngIf="role?.hasError('required')"
+                >Role is required.</small
+              >
+            </div>
+          </div>
+
+          <div class="btn-action">
+            <button type="button" class="close-btn" data-bs-dismiss="modal">
+              <span>Cancel</span>
+            </button>
+            <button type="submit" class="submit-btn" [disabled]="submitLoading">
+              <ng-container *ngIf="submitLoading; else content">
+                <span class="mini-loader-spinner"></span>
+              </ng-container>
+              <ng-template #content> Submit </ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

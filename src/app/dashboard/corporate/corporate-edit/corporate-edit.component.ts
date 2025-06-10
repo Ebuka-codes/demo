@@ -3,7 +3,6 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -16,13 +15,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Modal } from 'bootstrap';
-import { Notyf } from 'notyf';
 import { CorporateService } from '../shared/corporate.service';
-import { DashboardService } from '../../dashboard.service';
 import * as bootstrap from 'bootstrap';
 import { Corporate } from '../shared/corporate';
 import { Observable } from 'rxjs';
-
+import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'app-corporate-edit',
   templateUrl: './corporate-edit.component.html',
@@ -32,14 +30,13 @@ export class CorporateEditComponent {
   @ViewChild('myEditModal') modalElement!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @Input() editedData!: Corporate;
-  @Output() onEditCorporate: EventEmitter<void> = new EventEmitter();
+  @Output() corporateEdited: EventEmitter<void> = new EventEmitter();
   modalInstance!: Modal;
 
   form!: FormGroup;
   submitLoading: boolean = false;
   isSubmitted: boolean = false;
   logoUrl: string = '';
-  notyf = new Notyf();
   data: any[] = [];
   searchText: string = '';
   isLoadingLogo: boolean = false;
@@ -48,12 +45,13 @@ export class CorporateEditComponent {
   constructor(
     private fb: FormBuilder,
     public corporateService: CorporateService,
-    private dashboardService: DashboardService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', [Validators.required, this.validatePhone()]],
+      phone: [''],
       email: ['', [Validators.required, this.validateEmail()]],
       hmCode: ['', Validators.required],
       logo: [''],
@@ -100,7 +98,7 @@ export class CorporateEditComponent {
   validatePhone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
-      const valid = /^\+?\d{0,10}$/.test(value);
+      const valid = /^\+?\d{0,11}$/.test(value);
       return valid ? null : { invalidPhone: { value: control.value } };
     };
   }
@@ -140,31 +138,26 @@ export class CorporateEditComponent {
     this.isLoadingLogo = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     reader.onload = () => {
       const data = {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.corporateService.convertFileToBase64(data).subscribe(
-        (response: any) => {
+      this.corporateService.convertFileToBase64(data).subscribe({
+        next: (response: any) => {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;
             this.isLoadingLogo = false;
-            this.dashboardService.setLoading(false);
+            this.loaderService.setLoading(false);
           }
         },
-        (err) => {
-          this.notyf.error({
-            message: err.error.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-
-          this.dashboardService.setLoading(false);
+        error: (error) => {
+          this.toastService.error(error.message);
+          this.loaderService.setLoading(false);
           this.isLoadingLogo = false;
-        }
-      );
+        },
+      });
     };
   }
 
@@ -175,33 +168,24 @@ export class CorporateEditComponent {
 
   editCorporate(id: string, data: Corporate) {
     this.submitLoading = true;
-    this.dashboardService.setLoading(true);
-    this.form.disable();
+    this.loaderService.setLoading(true);
+
     this.corporateService.editCorporate(id, data).subscribe({
       next: () => {
         this.submitLoading = false;
         this.modalInstance.hide();
-        this.form.enable();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
-        this.onEditCorporate.emit();
-        this.dashboardService.setLoading(false);
-        this.notyf.success({
-          message: 'Corporate updated successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
+        this.corporateEdited.emit();
+        this.toastService.success('Corporate updated successfully');
+        this.loaderService.setLoading(false);
       },
+
       error: (err) => {
         this.submitLoading = false;
-        this.notyf.error({
-          message: err.error.message,
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.dashboardService.setLoading(false);
+        this.toastService.error(err.message);
+        this.loaderService.setLoading(false);
         this.modalInstance.hide();
-        this.form.enable();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
       },
@@ -211,7 +195,6 @@ export class CorporateEditComponent {
   onSubmit() {
     this.isSubmitted = true;
     if (this.form.invalid) {
-      console.log('not valid');
       return;
     } else {
       this.editCorporate(this.editedData.id, {

@@ -4,11 +4,12 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
-import { MONTH_YEAR_FORMATS } from '../constants';
+
 import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MomentDateAdapter,
 } from '@angular/material-moment-adapter';
+import { MONTH_YEAR_FORMATS } from '../constants';
 
 @Directive({
   selector: '[monthYearFormat]',

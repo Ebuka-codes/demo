@@ -8,6 +8,7 @@ interface QuestionOption {
     id: string;
     createdAt: string;
     description: string;
+    answer: string;
   }[];
   jobDetail: string;
 }
@@ -58,7 +59,7 @@ interface JobDetail {
   employmentType: string;
   jobLocation: string;
   jobSalary: number;
-  jobStatus: string;
+  status: string;
   jobType: string;
   companyName: string;
   workMode: string;
@@ -90,4 +91,25 @@ export interface Candidate {
   coverLetter: string;
   yearsOfExperience: number;
   jobDetail: JobDetail;
+  status: string;
+  scheduledDate: string;
+}
+
+export interface QuestionData {
+  id: string;
+  createdAt: string;
+  code: string;
+  description: string;
+  questionType: 'DATE';
+  options: Option[];
+  jobDetail: string;
+  isQualifyQuestion: boolean;
+  operator: string;
+  qualifyValue: string;
+}
+
+interface Option {
+  id: string;
+  createdAt: string;
+  description: string;
 }

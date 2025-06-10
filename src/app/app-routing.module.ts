@@ -1,36 +1,82 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { JobDetailsComponent } from './pages/job-details/job-details.component';
-import { LoginComponent } from './pages/authentication/login/login.component';
-import { ApplyComponent } from './pages/apply/apply.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { HomeComponent } from './home/home.component';
+import { SignupComponent } from './authentication/signup/signup.component';
+import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
+import { JobListingComponent } from './pages/job-listing/job-listing.component';
+import { SessionComponent } from './dashboard/components/ui/session/session.component';
+import { AuthGuard } from './core/guard/auth-guard.service';
+import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
+import { RecruiterMessageComponent } from './pages/recruiter-message/recruiter-message.component';
+import { InterviewerValidationComponent } from './pages/interviewer-validation/interviewer-validation.component';
+import { InterviewerFeedbackComponent } from './pages/interviewer-feedback/interviewer-feedback.component';
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {
-    path: 'auth/login',
+    path: 'login',
     component: LoginComponent,
   },
   {
-    path: 'job-details/:id',
-    component: JobDetailsComponent,
+    path: 'signup',
+    component: SignupComponent,
   },
   {
-    path: 'job/apply/:id',
-    component: ApplyComponent,
+    path: 'verify-email',
+    component: VerifyEmailComponent,
+  },
+
+  {
+    path: 'job-listing/:corpUrl',
+    component: JobListingComponent,
   },
   {
-    path: 'apply/:id',
-    component: HomeComponent,
+    path: 'session',
+    component: SessionComponent,
+  },
+
+  {
+    path: 'candidate/action',
+    component: CandidateVerificationComponent,
+  },
+
+  {
+    path: 'recruiter-message/:token',
+    component: RecruiterMessageComponent,
+  },
+
+  {
+    path: 'interviewer/feedback/action',
+    component: InterviewerValidationComponent,
+  },
+  {
+    path: 'feedback-response/:token',
+    component: InterviewerFeedbackComponent,
+  },
+
+  {
+    path: 'apply',
+    loadChildren: () =>
+      import('./pages/job-details/job-details.module').then(
+        (m) => m.JobDetailsModule
+      ),
   },
 
   {
     path: '',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'top',
+      anchorScrolling: 'enabled',
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

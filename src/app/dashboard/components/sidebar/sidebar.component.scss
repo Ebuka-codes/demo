@@ -1,0 +1,236 @@
+.sideBar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  position: fixed;
+  width: 256px;
+  height: 100vh;
+  background-color: white;
+  // border-right: 1px solid #e5e3e3;
+
+  .header {
+    line-height: 1.4;
+    .logo {
+      img {
+        width: 90px;
+        margin: 0px auto;
+        margin-left: 30px !important;
+      }
+    }
+
+    .user {
+      display: flex;
+      gap: 10px;
+      padding: 0px 20px;
+      margin-top: 20px;
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        top: 7px;
+
+        .role {
+          font-size: 11px;
+          color: #24222066;
+          line-height: 1;
+          span {
+            font-size: 14px;
+            font-weight: 500;
+          }
+        }
+        span {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .skeleton-wrapper {
+      display: flex;
+      gap: 15px;
+      padding: 0px 20px;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
+
+    .skeleton-avatar,
+    .skeleton-name,
+    .skeleton-role {
+      background: #eee;
+      border-radius: 4px;
+      margin: 5px 0;
+    }
+
+    .skeleton-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+
+    .skeleton-name {
+      width: 100px;
+      height: 14px;
+    }
+
+    .skeleton-role {
+      width: 60px;
+      height: 12px;
+    }
+  }
+
+  .side_one {
+    height: 100vh;
+    padding: 0px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+    overflow-y: hidden;
+
+    &:hover {
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+  }
+
+  .divider {
+    border-bottom: 0.5px solid #e6e6e6;
+  }
+  ul {
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 24.2px;
+  }
+  hr {
+    margin: 1.5rem 0;
+  }
+  li {
+    width: inherit;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.3rem;
+    a {
+      text-decoration: none;
+    }
+  }
+  .side-link {
+    padding: 0.55rem 1.3rem;
+    display: flex;
+    gap: 0.3rem;
+    justify-content: space-between;
+    width: 97%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+
+    position: relative;
+    font-size: 13px;
+  }
+
+  .side-link.active {
+    background-color: #28a745;
+    color: #ffffff;
+    transition: all 0.5s ease-in-out;
+
+    a {
+      color: white !important;
+    }
+  }
+
+  .side-sink {
+    position: absolute;
+    width: auto;
+    height: 110px;
+    top: 38px;
+    left: 13px;
+    z-index: -1;
+  }
+  .active {
+    color: white !important;
+  }
+
+  a {
+    color: #6c757d !important;
+    font-size: 14px;
+  }
+
+  .sidebar-icon {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sidebar-icon svg {
+    font-size: 30px;
+    color: #899bb1;
+    width: 17.19px;
+    height: 17.19px;
+  }
+
+  .side-link:hover,
+  .side-link.active svg {
+    color: white;
+  }
+  .side-link svg {
+    color: #899bb1;
+  }
+  .settings {
+    margin-top: 40px;
+    h3 {
+      font-size: 11px;
+      color: #acacac;
+      margin-left: 25px;
+      line-height: 24px;
+      font-weight: 500;
+    }
+    .divider {
+      border-bottom: 1px solid #899bb13b;
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sideBar {
+      position: absolute;
+      background: #ffffff;
+      z-index: 10;
+      /* display: none; */
+    }
+
+    .showSidebar {
+      display: none;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-container img {
+      width: 104px;
+      height: 21px;
+    }
+
+    .logo-container button {
+      cursor: pointer;
+      display: block;
+      width: 30px;
+      height: 30px;
+      border: none;
+      background-color: transparent;
+    }
+  }
+}

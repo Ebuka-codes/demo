@@ -1,0 +1,185 @@
+<div
+  class="modal fade"
+  id="viewJobModal"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="viewJobModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Job Information</h5>
+        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="modal-body">
+        <ng-container *ngFor="let job of viewJobData">
+          <div class="job-info">
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Corporate Name</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.companyName }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Job Title</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.jobTitle }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>EmploymentType</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.employmentType | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Job Type</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.jobType | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Work Mode</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.workMode.replace("_", "-") | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Location</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.jobLocation }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Salary</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span> ₦ {{ job.jobSalary.toLocaleString() }}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Start Date</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.startDate }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>End Date</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.endDate }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Posted Date</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.createdAt }}</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-6 control-label form-control-static p-2">
+                <label><strong>Job Status</strong></label>
+              </div>
+              <div
+                class="col-sm-6 form-control-static p-2"
+                style="word-wrap: break-word"
+              >
+                <span>{{ job.status | titlecase }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="question" *ngIf="job.questionOptions.length">
+            <h1>Job Questions</h1>
+            <ul>
+              <li *ngFor="let item of job.questionOptions">
+                {{ item.description }}
+              </li>
+            </ul>
+          </div>
+          <div>
+            <div class="job-description" [innerHTML]="job.jobDescription"></div>
+          </div>
+        </ng-container>
+
+        <div class="btn-action">
+          <button type="button" class="close-btn" data-bs-dismiss="modal">
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

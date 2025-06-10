@@ -1,15 +1,7 @@
-export const YEAR_FORMATS = {
-  parse: { dateInput: 'DD/MM/YYYY' },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
-
 export const MONTH_YEAR_FORMATS = {
-  parse: { dateInput: 'MM/YYYY' },
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
   display: {
     dateInput: 'MM/YYYY',
     monthYearLabel: 'MMM YYYY',
@@ -17,31 +9,27 @@ export const MONTH_YEAR_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
 export const months: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
   'May',
   'June',
   'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 
 export const educationLevels: string[] = [
-  'High School',
-  'Associate Degree',
+  'Secondary Education',
   "Bachelor's Degree",
   "Master's Degree",
   'Doctorate (PhD)',
   'Diploma',
-  'Certificate',
-  'Postgraduate Diploma',
 ];
 
 export const nigeriaStates: string[] = [

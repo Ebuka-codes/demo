@@ -1,17 +1,140 @@
 .candidate-container {
-  h2 {
-    font-size: 24px;
-    font-weight: 600;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  .action {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    h2 {
+      font-weight: 600;
+      font-size: 23px;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    .nav-back {
+      background-color: white;
+      border-radius: 50px;
+      padding: 3px 5px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: #0000004d 0 2px 6px;
+    }
+    p {
+      font-size: 14px;
+    }
+  }
+  .job-search {
+    background-color: white;
+    border-radius: 25px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-left: 20px;
+    width: 500px;
+    flex-shrink: 0;
+    justify-content: space-between;
+    button {
+      padding: 9px;
+      width: 100px;
+      background-color: #28a745;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      flex-direction: column;
+      justify-content: center;
+      padding: 11px 40px;
+      align-items: center;
+      text-align: center;
+      display: flex;
+      border: none;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+    ::ng-deep .mat-mdc-form-field-flex {
+      height: 40px !important;
+    }
+    ::ng-deep .mat-mdc-form-field-infix {
+      width: 350px !important;
+    }
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      border: none !important;
+    }
+    ::ng-deep .mat-mdc-select-arrow {
+      display: none;
+    }
+    ::ng-deep .mat-mdc-select-placeholder {
+      font-size: 14px;
+    }
+  }
+
+  .tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin: 10px 0px;
+    background-color: white;
+    border-radius: 25px;
+    padding: 0px 0px;
+    max-width: 350px;
+
+    button {
+      border: none;
+      border-radius: 25px;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      padding: 12px 20px;
+      letter-spacing: 0.03em;
+      font-size: 12px;
+      background-color: transparent;
+      color: #000000;
+      transition: 0.2s all ease-in-out;
+    }
+    button.active {
+      background: #28a745 !important;
+      border: none;
+      color: white !important;
+    }
+  }
+  .advance-btn {
+    button {
+      border: 1px solid #6d6d6d80;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      outline: none;
+      font-size: 16px;
+      background-color: transparent;
+      padding: 5px 10px;
+      border-radius: 8px;
+
+      &.active {
+        background-color: #52c41a;
+        border: none;
+        color: white;
+        svg {
+          color: white;
+        }
+      }
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
   }
   .candidate-header {
     display: flex;
     justify-content: space-between;
     gap: 10px;
     width: 100%;
-    margin: 10px 0px;
     .candidate-search {
       position: relative;
-      width: 90%;
+      width: 80%;
       input {
         color: #6d6d6d;
         padding: 10px 40px;
@@ -20,7 +143,7 @@
         font-weight: 400;
         outline: none;
         border: 1px solid #dddd;
-        border-radius: 25px;
+        border-radius: 10px;
         ::placeholder {
           font-size: 16px;
         }
@@ -30,34 +153,84 @@
         top: 12px;
         color: #b2b2b3;
         left: 15px;
+        width: 20px;
+        height: 20px;
       }
     }
 
     button {
-      padding: 11px;
+      padding: 10px;
       width: 100px;
       background-color: transparent;
-      border-radius: 25px;
+      border-radius: 10px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 400;
       color: white;
-      border: 1px solid #28a745;
-      color: #28a745;
+      border: 1px solid #dddd;
+      color: #000000;
       transition: all 0.2s ease-in-out;
+    }
+  }
+  .candidate-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 70px;
 
-      &:hover {
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+
+      h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .divider {
+        border-bottom: 1px solid #ccc;
+        margin-top: 16px;
+      }
+      label {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      input {
+        padding: 10px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        height: 50px;
+        width: 100%;
+
+        ::placeholder {
+          font-size: 14px;
+        }
+      }
+      button {
+        padding: 9px;
+        width: 100px;
         background-color: #28a745;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
         color: white;
+        flex-direction: column;
+        justify-content: center;
+        padding: 11px 40px;
+        align-items: center;
+        text-align: center;
+        display: flex;
+        border: none;
+      }
+      button:hover {
+        background: #218838;
       }
     }
   }
-  .candidate-table {
-    margin-top: 20px;
-    background-color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 
+  .candidate-table {
     table {
       width: 100%;
       border-collapse: collapse;
@@ -88,13 +261,6 @@
       padding-left: 10px;
     }
 
-    tbody tr input:checked {
-      border: 1px solid blue;
-      ::after {
-        content: "";
-        opacity: 1;
-      }
-    }
     tbody {
       td {
         font-size: 14px;
@@ -102,32 +268,78 @@
         padding: 15px;
       }
       .status-btn {
-        .active {
-          background-color: #d4edda;
-          padding: 3px 20px;
+        .scheduled {
+          background-color: #e0ebff;
           border-radius: 5px;
-          color: #0dab6f;
+          text-align: center;
+          border: none;
+          font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
+          color: #2a5dcc;
           border: none;
           font-size: 13px;
         }
-        .closed {
-          background-color: #f8d7da;
-          padding: 3px 20px;
+
+        .hired {
+          background-color: #e7f7ef;
+          color: #0dab6f;
           border-radius: 5px;
-          color: #721c24;
+          text-align: center;
           border: none;
           font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
+        }
+        .rejected {
+          background-color: #ff000017;
+          color: #e50c20;
+          border-radius: 5px;
+          text-align: center;
+          border: none;
+          font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
         }
         .pending {
-          background-color: #fff3cd;
-          padding: 3px 20px;
-          border-radius: 5px;
+          background-color: #fff6d3;
           color: #e8be29;
+          border-radius: 5px;
+          text-align: center;
+          border: none;
+          font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
+        }
+        .shortlist {
+          background-color: #17a2b81f;
+          padding: 3px 10px;
+          border-radius: 5px;
+          color: #17a2b8;
           border: none;
           font-size: 13px;
         }
+        .open {
+          background-color: rgb(243 232 255);
+          color: rgb(168 85 247);
+          border-radius: 5px;
+          text-align: center;
+          border: none;
+          font-size: 13px;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
+        }
       }
-
       .action {
         cursor: pointer;
         display: flex;
@@ -146,6 +358,28 @@
         .humburger-icon[ngbDropdownToggle]::after {
           display: none !important;
         }
+
+        .action-icon {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          padding-right: 3px;
+          cursor: pointer;
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+          span:nth-child(1) {
+            color: #6d6d6d;
+          }
+          span:nth-child(2) {
+            color: #6d6d6d;
+          }
+          span:nth-child(3) {
+            color: #e50c20;
+          }
+        }
       }
     }
   }
@@ -161,17 +395,10 @@ input[type="checkbox"] {
   accent-color: #28a745;
 }
 
-.close-btn {
-  cursor: pointer;
-  font-size: 12px;
-  background-color: #28a745;
-  border-radius: 100%;
-  color: white;
-  cursor: pointer;
-  margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
-  padding: 2px;
-}
 .ngb-dropdown-menu {
   z-index: 1050 !important;
   position: absolute !important;
+}
+::ng-deep .mat-mdc-select-placeholder {
+  font-size: 14px;
 }

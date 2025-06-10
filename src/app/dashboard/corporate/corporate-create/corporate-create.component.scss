@@ -25,18 +25,9 @@
         }
       }
 
-      small {
-        color: rgba(216, 5, 5, 0.89);
-        font-size: 13px;
-      }
-      .required-icon {
-        position: relative;
-        top: 2px;
-      }
-      .errorInput {
-        border: 1px solid rgba(216, 5, 5, 0.89);
-      }
       .btn-action {
+        display: flex;
+        float: left;
         button {
           border-radius: 25px;
           box-shadow: none;
@@ -62,10 +53,30 @@
         .submit-btn {
           background-color: #28a745;
           color: #fff;
+          color: white;
+          &:hover,
+          :focus {
+            box-shadow: #0000004d 0 2px 6px;
+            background-color: #28a745;
+            color: white;
+            outline: none;
+          }
         }
         .close-btn {
           background-color: #eeee;
           color: #484747;
+
+          &:hover,
+          :focus {
+            box-shadow: #0000004d 0 2px 6px;
+            background-color: #f1f1f1;
+            color: black;
+            outline: none;
+          }
+        }
+
+        .btn-cancel {
+          background-color: #eeee;
         }
       }
 
@@ -81,7 +92,6 @@
         align-items: center;
         margin: 0px auto;
         animation: spin 0.5s linear infinite;
-        cursor: not-allowed;
       }
       @keyframes spin {
         to {

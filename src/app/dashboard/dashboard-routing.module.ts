@@ -1,31 +1,55 @@
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard.component';
 import { NgModule } from '@angular/core';
-import { CorporateComponent } from './corporate/corporate.component';
 import { CandidateComponent } from './candidate/candidate.component';
-import { JobComponent } from './job/job.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { InterviewerComponent } from './interviewer/interviewer.component';
+import { RoleComponent } from './role/role.component';
+import { UserCorporateComponent } from './user-corporate/user-corporate.component';
+import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: '',
+    component: DashboardLayoutComponent,
 
     children: [
+      { path: 'dashboard', component: AdminDashboardComponent },
+
       { path: 'candidate', component: CandidateComponent },
 
       {
-        path: 'job',
-        component: JobComponent,
+        path: 'interviewer',
+        component: InterviewerComponent,
+      },
+      {
+        path: 'user/corporate',
+        component: UserCorporateComponent,
+      },
+
+      {
+        path: 'user/role',
+        component: RoleComponent,
       },
       {
         path: 'corporate',
-
         loadChildren: () =>
           import('./corporate/corporate.module').then((m) => m.CorporateModule),
       },
       {
         path: 'job',
         loadChildren: () => import('./job/job.module').then((m) => m.JobModule),
+      },
+
+      {
+        path: 'profile',
+
+        loadChildren: () =>
+          import('./profile/profile.module').then((m) => m.ProfileModule),
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
       },
     ],
   },

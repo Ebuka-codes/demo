@@ -1,0 +1,124 @@
+<div
+  class="modal fade"
+  #scheduledModal
+  id="scheduleModal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="resetScheduleForm()"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Schedule Date</h5>
+        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="scheduledDateForm" (ngSubmit)="onSubmit()">
+          <div>
+            <label for="schedule-date"
+              >Select Date <span class="required-icon">*</span>
+            </label>
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="scheduleDatePicker"
+                formControlName="scheduledDate"
+                [readonly]="true"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="scheduleDatePicker">
+                <mat-datepicker #scheduleDatePicker></mat-datepicker>
+              </mat-datepicker-toggle>
+            </mat-form-field>
+            <div *ngIf="scheduledDate?.invalid && scheduledDate?.touched">
+              <small *ngIf="scheduledDate?.errors?.['required']"
+                >Schedule date is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="time"
+              >Select time <span class="required-icon">*</span></label
+            >
+            <input [ngxTimepicker]="picker" formControlName="scheduledTime" />
+            <ngx-material-timepicker #picker></ngx-material-timepicker>
+
+            <div *ngIf="scheduledTime?.invalid && scheduledTime?.touched">
+              <small *ngIf="scheduledTime?.errors?.['required']"
+                >Schedule time is required</small
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="interviewers"
+              >Interviewers <span class="required-icon">*</span></label
+            >
+            <mat-form-field>
+              <mat-select
+                formControlName="interviewers"
+                disableRipple
+                required
+                multiple
+              >
+                <mat-option *ngFor="let item of interviewer" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="interviewers?.invalid && interviewers?.touched">
+              <small *ngIf="interviewers?.errors?.['required']"
+                >Interviewers is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description"
+              >Description <span class="required-icon">*</span></label
+            >
+            <textarea
+              id="description"
+              formControlName="scheduledDescription"
+              rows="5"
+              required
+            ></textarea>
+            <div *ngIf="description?.invalid && description?.touched">
+              <small *ngIf="description?.errors?.['required']"
+                >Description is required</small
+              >
+            </div>
+          </div>
+          <div class="btn-action">
+            <button type="button" class="close-btn" data-bs-dismiss="modal">
+              <span>Cancel</span>
+            </button>
+
+            <button type="submit" class="submit-btn" [disabled]="submitted">
+              <ng-container *ngIf="submitted; else content">
+                <span class="mini-loader-spinner"></span>
+              </ng-container>
+              <ng-template #content>
+                <span>Submit</span>
+              </ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

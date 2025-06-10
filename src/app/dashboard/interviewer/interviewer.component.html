@@ -1,0 +1,309 @@
+<section class="interviewer">
+  <div class="interviewer-header">
+    <div class="action">
+      <span class="nav-back" (click)="onBack()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </span>
+      <h2>Interviewer</h2>
+    </div>
+    <button
+      type="button"
+      data-bs-target="#createInterviewer"
+      data-bs-toggle="modal"
+    >
+      Add New
+    </button>
+  </div>
+
+  <div class="interviewer-table">
+    <div class="interviewer-table-header">
+      <div class="interviewer-table-search">
+        <input type="text" placeholder="Search" [(ngModel)]="searchText" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </div>
+      <div>
+        <button type="button">Filter</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th
+            style="
+              display: flex;
+              gap: 20px;
+              padding-left: 10px;
+              align-items: center;
+            "
+          >
+            <input
+              type="checkbox"
+              style="
+                border: 1px solid #eee;
+                width: 15px;
+                height: 15px;
+                border-radius: 5px;
+                margin-left: 6px;
+              "
+            />
+            Corporate Name
+          </th>
+
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="(isLoading$ | async) && data.length === 0">
+          <td colspan="8">Loading data...</td>
+        </tr>
+        <tr *ngFor="let item of data">
+          <td style="display: flex; gap: 20px; align-items: center">
+            <input
+              type="checkbox"
+              style="
+                border: 1px solid #eee;
+                width: 15px;
+                height: 15px;
+                border-radius: 5px;
+              "
+            />
+
+            {{ item?.name || "N/A" }}
+          </td>
+          <td>{{ item?.email || "N/A" }}</td>
+          <td>{{ item?.phone || "N/A" }}</td>
+
+          <td>
+            <div class="action">
+              <div class="action-icon">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  data-bs-toggle="modal"
+                  data-bs-target="#editCorporateModal"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                  </svg>
+                </span>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M9 6V3h6v3"></path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!data?.length && !(isLoading$ | async)">
+          <td colspan="8">No record found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- interviewer-modal  -->
+  <div class="create-interviewer">
+    <div
+      #myModal
+      class="modal fade"
+      id="createInterviewer"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+      (hidden.bs.modal)="resetForm()"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Create Interviewer
+            </h5>
+            <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-6"
+                style="width: 20px"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <div class="modal-body">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="name"
+                  >Name <span class="required-icon">*</span></label
+                >
+                <input id="name" type="text" formControlName="name" />
+                <small
+                  *ngIf="
+                    form.controls['name'].invalid &&
+                    form.controls['name'].touched
+                  "
+                  class="text-danger"
+                >
+                  Name is required
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="email"
+                  >Email <span class="required-icon">*</span></label
+                >
+                <input id="email" type="email" formControlName="email" />
+
+                <div
+                  *ngIf="
+                    form.controls['email'].invalid &&
+                    form.controls['email'].touched
+                  "
+                ></div>
+                <small
+                  *ngIf="form.controls['email'].touched &&
+                    form.controls['email'].errors?.['required'] "
+                  class="text-danger"
+                >
+                  Email is required
+                </small>
+
+                <small
+                  *ngIf="
+                  form.controls['email'].errors?.['email'] "
+                  class="text-danger"
+                >
+                  Email is invaild
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="phone"
+                  >Phone <span class="required-icon">*</span></label
+                >
+                <input id="phone" type="tel" formControlName="phone" />
+                <div
+                  *ngIf="
+                    form.controls['phone'].invalid &&
+                    form.controls['phone'].touched
+                  "
+                ></div>
+                <small
+                  *ngIf="form.controls['phone'].touched  &&
+                    form.controls['phone']?.errors?.['required']"
+                  class="text-danger"
+                >
+                  Phone number is required.
+                </small>
+
+                <small
+                  *ngIf="!form.controls['phone']?.errors?.['required'] &&
+                  form.controls['phone']?.errors?.['invalidPhone']"
+                  class="text-danger"
+                >
+                  Phone number is invalid.
+                </small>
+              </div>
+
+              <div class="btn-action">
+                <button type="button" class="close-btn" data-bs-dismiss="modal">
+                  <span>Cancel</span>
+                </button>
+                <button
+                  type="submit"
+                  class="submit-btn"
+                  [disabled]="submitting"
+                >
+                  <ng-container *ngIf="submitting; else content">
+                    <span class="mini-loader-spinner"></span>
+                  </ng-container>
+                  <ng-template #content>
+                    <span>Submit</span>
+                  </ng-template>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

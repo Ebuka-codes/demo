@@ -1,0 +1,191 @@
+.stat-container {
+  background-color: white;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 15px;
+  border-radius: 29px;
+  padding-bottom: 40px;
+  .stat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    grid-auto-rows: auto;
+  }
+  .card-info {
+    border: 1px solid #c4c4c4;
+    box-shadow: 0px 26px 35.1px 0px #0000000d;
+    border-radius: 20px;
+    padding: 15px 15px;
+    min-width: 300px;
+    height: auto;
+    min-height: auto;
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-self: start;
+      .card-header {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        .card-title {
+          color: #67748e;
+          font-weight: 400;
+        }
+        .card-total {
+          font-weight: 600;
+          font-size: 18px;
+        }
+      }
+      .icon-bg {
+        background-color: #97c93c;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: columns;
+        justify-content: center;
+        align-items: center;
+        padding: 13px;
+        box-shadow: 0px 2.6px 5.2px -1.3px #00000012;
+        box-shadow: 0px 5.2px 7.8px -1.3px #0000001f;
+        svg {
+          color: white;
+          width: 25px;
+          height: 25px;
+        }
+      }
+      ul li {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.5;
+        padding: 5px;
+        list-style: circle;
+      }
+    }
+
+    .expand-month {
+      svg {
+        width: 14px;
+        height: 14px;
+        color: #299345;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        margin: 5px auto 2px auto;
+      }
+    }
+  }
+
+  .candidate {
+    margin: 20px 0px;
+    box-shadow: 0px 23.35px 31.52px 0px #0000000d;
+    border-radius: 18px;
+    padding: 10px 0px;
+
+    h4 {
+      font-size: 18px;
+      margin-left: 40px;
+      font-weight: 600;
+    }
+    .content {
+      display: flex;
+      position: relative;
+      bottom: 15px;
+      .pie-chart {
+        position: relative;
+        #barChart {
+          width: 200px !important;
+          height: 200px !important;
+        }
+        .total {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 14.52px;
+          text-align: left;
+          position: absolute;
+          top: 50%;
+          left: 100px;
+          transform: translate(-50%, -50%);
+          line-height: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .total {
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          .title {
+            font-size: 14px;
+            font-weight: 600;
+            width: 60px;
+          }
+          .number {
+            font-size: 20px;
+            font-weight: 600;
+          }
+        }
+      }
+      .candidate-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 60px;
+        .list {
+          border-right: 1px solid #d3d3d3;
+          padding-right: 13px;
+          .bullet0 {
+            width: 7.7px;
+            height: 7.7px;
+            background-color: #facc15;
+            border-radius: 50%;
+            margin-bottom: 4px;
+          }
+          .bullet1 {
+            background-color: #2e78ee;
+            width: 7.7px;
+            height: 7.7px;
+            margin-bottom: 4px;
+            border-radius: 50%;
+          }
+          .bullet2 {
+            background-color: #28a745;
+            width: 7.7px;
+            height: 7.7px;
+            border-radius: 50%;
+            margin-bottom: 4px;
+          }
+          .bullet3 {
+            background-color: #e50c20;
+            width: 7.7px;
+            height: 7.7px;
+            border-radius: 50%;
+            margin-bottom: 4px;
+          }
+
+          .item {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+
+            :nth-child(1) {
+              font-weight: 600;
+            }
+            :nth-child(2) {
+              font-weight: 400;
+              color: #899bb1;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+  ::ng-deep .dropdown-toggle {
+    border: 2px solid #299345;
+    color: #232323;
+    font-size: 13px;
+    padding: 5px 15px;
+  }
+}

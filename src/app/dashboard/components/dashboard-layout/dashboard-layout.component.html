@@ -1,0 +1,14 @@
+<div class="progress-container" *ngIf="isLoading">
+  <div class="progress-track">
+    <div class="progress-bar" [style.width.%]="progress"></div>
+  </div>
+</div>
+<div class="layout">
+  <erecruit-sidebar></erecruit-sidebar>
+  <div>
+    <erecruit-header></erecruit-header>
+    <main class="outlet">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

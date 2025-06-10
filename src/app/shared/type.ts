@@ -7,6 +7,8 @@ export interface job {
   jobSalary: number;
   jobStatus: string;
   jobType: string;
+  startDate: string;
+  endDate: string;
   companyName: string;
   workMode: string;
   questionOptions: Array<optionType>;
@@ -23,6 +25,7 @@ export interface optionType {
       description: string;
     }
   ];
+  isQualifyQuestion: boolean;
 }
 
 export interface DetailsType {

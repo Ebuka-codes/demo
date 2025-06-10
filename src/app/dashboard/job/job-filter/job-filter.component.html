@@ -1,0 +1,97 @@
+<div
+  class="modal fade"
+  #filterJobModal
+  id="filterJobModal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="resetFilterJobForm()"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Filter Job</h5>
+        <span
+          class="close-icon"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="resetFilterJobForm()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+          <div>
+            <label for="jobType">Job Type </label>
+            <mat-form-field>
+              <mat-select formControlName="jobType">
+                <mat-option
+                  *ngFor="let type of jobTypes"
+                  [value]="
+                    type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()
+                  "
+                  >{{
+                    type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()
+                  }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <label for="jobType">Work mode </label>
+            <mat-form-field>
+              <mat-select formControlName="workMode">
+                <mat-option *ngFor="let mode of workModes" [value]="mode.key">
+                  {{ mode.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <label for="jobType">Status </label>
+            <mat-form-field>
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let s of status" [value]="s.key"
+                  >{{ s.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="btn-action">
+            <button
+              type="button"
+              class="close-btn"
+              data-bs-dismiss="modal"
+              (click)="resetFilterJobForm()"
+              [disabled]="isLoading$ | async"
+            >
+              <span>Cancel</span>
+            </button>
+            <button type="submit" class="submit-btn" [disabled]="isLoading">
+              <ng-container *ngIf="isLoading; else showLoader">
+                <span class="mini-loader-spinner"></span>
+              </ng-container>
+              <ng-template #showLoader>
+                <span>Submit</span>
+              </ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

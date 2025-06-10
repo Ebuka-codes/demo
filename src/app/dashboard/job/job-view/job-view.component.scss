@@ -1,0 +1,133 @@
+.modal-header {
+  padding: 10px 30px;
+  .close-icon {
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #28a745;
+    border-radius: 100%;
+    color: white;
+    cursor: pointer;
+    margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+    padding: 2px;
+  }
+}
+.modal-body {
+  padding: 30px;
+
+  .form-group {
+    padding: 0px 10px;
+    font-size: 14px;
+    margin: 0px auto;
+    display: flex;
+    place-items: center;
+    width: 100%;
+    label {
+      font-weight: 500;
+      text-align: center;
+    }
+  }
+
+  .form-group div {
+    background: transparent;
+  }
+
+  .form-group div.form-control-static {
+    height: 100%;
+  }
+
+  .form-group div.control-label {
+    border-right: 2px solid #ffffff;
+  }
+  .form-group:nth-child(odd),
+  .form-group.odd {
+    background: #fafafa;
+  }
+
+  .form-group:nth-child(even),
+  .form-group.even {
+    background-color: #e0f6e6;
+  }
+
+  h1 {
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 10px 0px;
+  }
+
+  ul,
+  ol {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .question {
+    margin: 40px 0px;
+  }
+  ::ng-deep .job-description {
+    margin-top: 40px;
+    a {
+      color: blue;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: black;
+      font-size: 16px;
+      font-weight: 500;
+      margin: 10px 0px;
+    }
+    ul,
+    ol {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    p {
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    p:has(br) {
+      display: none;
+    }
+  }
+  .btn-action {
+    button {
+      border-radius: 25px;
+      box-shadow: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      border: none;
+      margin-right: 20px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+
+      &:hover,
+      :focus {
+        box-shadow: #0000004d 0 2px 6px;
+        background-color: #f1f1f1;
+      }
+    }
+    .close-btn {
+      background-color: #eeee;
+      color: #484747;
+    }
+  }
+}

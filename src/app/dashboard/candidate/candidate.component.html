@@ -1,189 +1,232 @@
 <div class="candidate-container">
-  <h2>Job Applicants</h2>
-  <div class="candidate-table">
-    <div class="candidate-header">
-      <div class="candidate-search">
-        <input
-          type="text"
-          placeholder="Search by job title.."
-          [(ngModel)]="searchText"
-          (ngModelChange)="handleSearch()"
-        />
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    "
+  >
+    <div class="action">
+      <span class="nav-back" (click)="onNavigateBack()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
+          fill="none"
           viewBox="0 0 24 24"
-          fill="#eeeeee"
+          stroke-width="1.5"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          className="lucide lucide-search"
+          class="size-6"
         >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
         </svg>
-      </div>
-      <div>
-        <button type="button">Filter</button>
-      </div>
-      <div>
-        <button type="button">Export</button>
+      </span>
+      <h2>Job Applicants</h2>
+    </div>
+    <div class="job-search">
+      <mat-form-field>
+        <mat-select
+          placeholder="Select job"
+          [(ngModel)]="selectedJob"
+          #matSelect
+        >
+          <mat-option *ngFor="let item of job" [value]="item">{{
+            item.jobTitle
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        type="button"
+        (click)="onSelectedJob()"
+        [disabled]="isLoading | async"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="filteredCandidate"
+    style="
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    "
+  >
+    <div class="tabs">
+      <button
+        *ngFor="let tab of tabs; let i = index"
+        (click)="onToggletabs(tab)"
+        [class.active]="activeTag === tab"
+      >
+        {{ tab }}
+      </button>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 20px">
+      <span
+        *ngIf="isSearchFilterActive"
+        style="
+          color: #ff4d4f;
+          text-decoration: underline;
+          text-decoration-color: #ff4d4f;
+          cursor: pointer;
+        "
+        (click)="clearSearchFilter()"
+      >
+        Clear Selection
+      </span>
+      <div
+        class="advance-btn"
+        (click)="isSearchFilterActive ? onSearchFilter() : open()"
+      >
+        <button
+          [class.active]="isSearchFilterActive"
+          [disabled]="isLoading | async"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-sliders"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"
+            /></svg
+          >Advanced Search
+        </button>
       </div>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th
-            style="
-              display: flex;
-              gap: 20px;
-              padding-left: 10px;
-              align-items: center;
-            "
-          >
-            <input
-              type="checkbox"
-              style="
-                border: 1px solid #eee;
-                width: 15px;
-                height: 15px;
-                border-radius: 5px;
-                margin-left: 6px;
-              "
-            />
-            Name
-          </th>
-          <th>Job Title</th>
-          <th>Job Type</th>
-          <th>Work Mode</th>
-          <th>Employment Type</th>
-          <th>Application Date</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of filteredData">
-          <td style="display: flex; gap: 20px; align-items: center">
-            <input
-              type="checkbox"
-              style="
-                border: 1px solid #eee;
-                width: 15px;
-                height: 15px;
-                border-radius: 5px;
-              "
-            />
-
-            {{ item?.name ? (item?.name | titlecase) : "N/A" }}
-          </td>
-
-          <td>
-            {{
-              item?.jobDetail?.jobTitle
-                ? (item?.jobDetail?.jobTitle | titlecase)
-                : "N/A"
-            }}
-          </td>
-          <td>
-            {{
-              item?.jobDetail?.jobType
-                ? (item?.jobDetail?.jobType | titlecase)
-                : "N/A"
-            }}
-          </td>
-          <td>
-            {{
-              item?.jobDetail?.workMode
-                ? (item?.jobDetail?.workMode | titlecase)
-                : "N/A"
-            }}
-          </td>
-          <td>
-            {{
-              item?.jobDetail?.employmentType
-                ? (item?.jobDetail?.employmentType | titlecase)
-                : "N/A"
-            }}
-          </td>
-
-          <td>{{ item?.createdAt }}</td>
-
-          <td></td>
-          <td class="status-btn">
-            <span
-              [ngClass]="{
-                pending: item.jobStatus === 'Pending' || 'PENDING',
-                active: item.jobStatus === 'Active' || 'ACTIVE',
-                closed: item.jobStatus === 'closed' || 'CLOSED'
-              }"
-              >{{ item?.jobStatus | titlecase }}</span
+  </div>
+  <ng-container *ngIf="filteredCandidate; else noData">
+    <div class="candidate-content">
+      <div class="candidate-table">
+        <div class="candidate-header">
+          <div class="candidate-search">
+            <input type="text" placeholder="Search" [(ngModel)]="searchText" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
             >
-          </td>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
+          </div>
+          <div>
+            <button type="button" (click)="openFilterModal()">Filter</button>
+          </div>
+          <div *ngIf="activeTag === 'Candidate'">
+            <button type="button" (click)="onShorListCandidate()">
+              Shortlist
+            </button>
+          </div>
 
-          <td>
-            <div class="action">
-              <div ngbDropdown class="d-inline-block" container="body">
-                <span
-                  class="humburger-icon"
-                  id="dropdownBasic1"
-                  ngbDropdownToggle
+          <div *ngIf="activeTag === 'Interview'">
+            <button type="button" (click)="onInterviewerFeedback()">
+              Feedback
+            </button>
+          </div>
+
+          <div>
+            <button type="button">Export</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  (change)="onToggleAllCheckbox()"
+                  [checked]="selectedAllChecked"
+                />
+              </th>
+              <th>Name</th>
+              <th>Job Title</th>
+              <th>Job Type</th>
+              <th>Work Mode</th>
+              <th>Application Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredCandidate">
+              <td>
+                <input
+                  type="checkbox"
+                  (change)="onToggleSelection(item.id)"
+                  [checked]="selectedCandidateIds.includes(item.id)"
+                />
+              </td>
+              <td>
+                {{ item?.name ? (item?.name | titlecase) : "N/A" }}
+              </td>
+
+              <td>
+                {{
+                  item.jobDetail.jobTitle
+                    ? (item?.jobDetail?.jobTitle | titlecase)
+                    : "N/A"
+                }}
+              </td>
+              <td>
+                {{
+                  item.jobDetail.jobType
+                    ? (item?.jobDetail?.jobType | titlecase)
+                    : "N/A"
+                }}
+              </td>
+              <td>
+                {{
+                  item?.jobDetail?.workMode
+                    ? (item?.jobDetail?.workMode?.replace("_", "-") | titlecase)
+                    : "N/A"
+                }}
+              </td>
+
+              <td>{{ item?.createdAt }}</td>
+
+              <td class="status-btn">
+                <div
+                  [ngClass]="{
+                    pending: item.status === 'PENDING',
+                    hired: item.status === 'HIRED',
+                    rejected: item.status === 'REJECTED',
+                    scheduled: item.status === 'INTERVIEW_SCHEDULED',
+                    shortlist: item.status === 'SHORTLIST',
+                    open: item.status === 'OPEN'
+                  }"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
-                    />
-                  </svg>
-                </span>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button
-                    style="font-size: 14px"
-                    data-bs-toggle="modal"
-                    data-bs-target="#viewCandidateModal"
-                    ngbDropdownItem
-                    (click)="handleViewCandidate(item.id)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
-                    View
-                  </button>
+                  {{ item?.status?.slice(0, 9) | titlecase }}
+                </div>
+              </td>
 
-                  <button
-                    style="font-size: 14px"
-                    ngbDropdownItem
-                    *ngIf="item?.resume"
-                  >
-                    <a
-                      [href]="item?.resume"
-                      target="_blank"
-                      rel="noopener noreferrer"
+              <td>
+                <div class="action">
+                  <div class="action-icon">
+                    <span
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewCandidateModal"
+                      (click)="onViewCandidate(item.id)"
+                      mat-raised-button
+                      matTooltip="View"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -196,86 +239,192 @@
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
-                        /></svg
-                      >Resume
-                    </a>
-                  </button>
-                  <button
-                    style="font-size: 14px"
-                    *ngIf="item.coverLetter"
-                    ngbDropdownItem
-                  >
-                    <a
-                      [href]="item?.coverLetter"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6"
-                      >
+                          d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                        />
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                         />
                       </svg>
-                      Cover letter
-                    </a>
-                  </button>
-                  <button style="font-size: 14px" ngbDropdownItem>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                    </span>
+                    <span
+                      *ngIf="activeTag !== 'interview'"
+                      data-bs-target="#scheduleModal"
+                      data-bs-toggle="modal"
+                      (click)="onScheduleDate(item.id)"
+                      mat-raised-button
+                      matTooltip="Schedule Interview"
                     >
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="4" y1="4" x2="20" y2="20"></line>
-                    </svg>
-
-                    Reject
-                  </button>
-                  <button style="font-size: 14px" ngbDropdownItem>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.125 12.7188C4.56692 12.7188 4.99891 12.5877 5.36635 12.3422C5.73379 12.0967 6.02018 11.7477 6.18929 11.3394C6.35841 10.9312 6.40266 10.4819 6.31644 10.0485C6.23023 9.61504 6.01742 9.21692 5.70494 8.90443C5.39246 8.59195 4.99433 8.37915 4.5609 8.29293C4.12748 8.20672 3.67822 8.25097 3.26994 8.42008C2.86166 8.5892 2.5127 8.87558 2.26719 9.24302C2.02167 9.61047 1.89063 10.0425 1.89062 10.4844C1.89131 11.0768 2.12694 11.6447 2.54581 12.0636C2.96469 12.4824 3.53262 12.7181 4.125 12.7188ZM4.125 8.9375C4.43094 8.9375 4.73002 9.02822 4.9844 9.1982C5.23878 9.36817 5.43705 9.60976 5.55413 9.89241C5.67121 10.1751 5.70184 10.4861 5.64215 10.7862C5.58247 11.0862 5.43514 11.3618 5.21881 11.5782C5.00247 11.7945 4.72684 11.9418 4.42678 12.0015C4.12672 12.0612 3.81569 12.0306 3.53304 11.9135C3.25038 11.7964 3.00879 11.5982 2.83882 11.3438C2.66885 11.0894 2.57812 10.7903 2.57812 10.4844C2.57857 10.0743 2.74169 9.68106 3.03169 9.39106C3.32169 9.10106 3.71488 8.93795 4.125 8.9375Z"
+                          fill="black"
+                        />
+                        <path
+                          d="M18.9062 13.4063H17.074C16.7342 13.4055 16.3995 13.4891 16.1 13.6497C15.8005 13.8102 15.5455 14.0425 15.358 14.3259L13.793 16.6719H12.5469C12.3443 16.6721 12.1451 16.7238 11.9681 16.8222C11.791 16.9206 11.6419 17.0624 11.5347 17.2343C11.4275 17.4062 11.3659 17.6025 11.3555 17.8048C11.3451 18.0071 11.3863 18.2087 11.4752 18.3907L10.5247 18.3906C10.6137 18.2087 10.6549 18.0071 10.6445 17.8048C10.6341 17.6025 10.5724 17.4062 10.4652 17.2343C10.358 17.0624 10.2089 16.9206 10.0319 16.8222C9.85482 16.7239 9.65566 16.6721 9.4531 16.6719L8.20703 16.6719L6.6427 14.3267C6.45512 14.0432 6.20007 13.8106 5.90043 13.65C5.6008 13.4893 5.26595 13.4056 4.92597 13.4063H3.09375C2.63807 13.4068 2.20121 13.588 1.879 13.9103C1.55679 14.2325 1.37553 14.6693 1.375 15.125V20.2813C1.375 20.3724 1.41122 20.4599 1.47568 20.5243C1.54015 20.5888 1.62758 20.625 1.71875 20.625H20.2812C20.3724 20.625 20.4599 20.5888 20.5243 20.5243C20.5888 20.4599 20.625 20.3724 20.625 20.2813V15.125C20.6245 14.6693 20.4432 14.2325 20.121 13.9103C19.7988 13.588 19.3619 13.4068 18.9062 13.4063ZM5.10407 16.3572L6.1875 17.9824V19.9375H2.0625V15.125C2.0628 14.8516 2.17154 14.5895 2.36488 14.3961C2.55821 14.2028 2.82034 14.0941 3.09375 14.0938H4.92597C5.15256 14.0932 5.37573 14.149 5.57542 14.2561C5.77511 14.3632 5.94506 14.5182 6.07001 14.7072L7.73706 17.2063C7.76844 17.2534 7.81097 17.292 7.86086 17.3187C7.91075 17.3454 7.96647 17.3594 8.02306 17.3594H9.45312C9.52253 17.3606 9.59098 17.3758 9.65439 17.404C9.7178 17.4323 9.77487 17.473 9.82218 17.5238C9.8695 17.5746 9.9061 17.6344 9.9298 17.6996C9.95349 17.7649 9.96379 17.8342 9.96009 17.9035C9.95639 17.9729 9.93876 18.0407 9.90825 18.1031C9.87774 18.1654 9.83498 18.221 9.78252 18.2664C9.73006 18.3119 9.66898 18.3463 9.60292 18.3677C9.53687 18.389 9.46719 18.3968 9.39805 18.3906L8.01971 18.3906C7.79225 18.391 7.56829 18.3345 7.3682 18.2263C7.16811 18.1181 6.99823 17.9617 6.874 17.7711L5.67607 15.9758C5.6247 15.9019 5.54636 15.851 5.4579 15.8342C5.36945 15.8174 5.27793 15.836 5.20301 15.8859C5.12809 15.9359 5.07576 16.0132 5.05726 16.1013C5.03876 16.1895 5.05557 16.2813 5.10407 16.3572ZM15.125 19.9375H6.875V19.0781H15.125V19.9375ZM19.9375 19.9375H15.8125V17.9809L16.896 16.3572C16.9444 16.2813 16.9612 16.1894 16.9426 16.1014C16.9241 16.0133 16.8718 15.936 16.7969 15.886C16.722 15.8361 16.6305 15.8175 16.5421 15.8343C16.4536 15.8511 16.3753 15.9019 16.3239 15.9758L15.1844 17.6852C15.0631 17.8987 14.8875 18.0763 14.6755 18.2002C14.4635 18.3241 14.2225 18.3898 13.9769 18.3906L12.6019 18.3906C12.5211 18.3903 12.4412 18.3736 12.3671 18.3415C12.2929 18.3093 12.2261 18.2625 12.1706 18.2038C12.1041 18.1314 12.0603 18.0412 12.0445 17.9442C12.0287 17.8473 12.0416 17.7478 12.0816 17.6581C12.1216 17.5683 12.1869 17.4923 12.2696 17.4392C12.3523 17.3861 12.4487 17.3584 12.5469 17.3594H13.9769C14.0335 17.3594 14.0892 17.3454 14.1391 17.3187C14.189 17.292 14.2315 17.2534 14.2629 17.2063L15.9307 14.7064C16.0556 14.5176 16.2255 14.3627 16.425 14.2558C16.6246 14.1489 16.8476 14.0932 17.074 14.0938H18.9062C19.1797 14.0941 19.4418 14.2028 19.6351 14.3961C19.8285 14.5895 19.9372 14.8516 19.9375 15.125V19.9375Z"
+                          fill="black"
+                        />
+                        <path
+                          d="M15.6404 10.4844C15.6404 10.9263 15.7714 11.3583 16.0169 11.7257C16.2625 12.0932 16.6114 12.3796 17.0197 12.5487C17.428 12.7178 17.8772 12.762 18.3107 12.6758C18.7441 12.5896 19.1422 12.3768 19.4547 12.0643C19.7672 11.7518 19.98 11.3537 20.0662 10.9203C20.1524 10.4869 20.1082 10.0376 19.939 9.62932C19.7699 9.22104 19.4835 8.87208 19.1161 8.62656C18.7487 8.38104 18.3167 8.25 17.8748 8.25C17.2824 8.25069 16.7144 8.48631 16.2956 8.90519C15.8767 9.32407 15.6411 9.89199 15.6404 10.4844ZM17.8748 8.9375C18.1807 8.9375 18.4798 9.02822 18.7342 9.1982C18.9885 9.36817 19.1868 9.60976 19.3039 9.89241C19.421 10.1751 19.4516 10.4861 19.3919 10.7862C19.3322 11.0862 19.1849 11.3618 18.9686 11.5782C18.7522 11.7945 18.4766 11.9418 18.1765 12.0015C17.8765 12.0612 17.5654 12.0306 17.2828 11.9135C17.0001 11.7964 16.7585 11.5982 16.5886 11.3438C16.4186 11.0894 16.3279 10.7903 16.3279 10.4844C16.3283 10.0743 16.4914 9.68106 16.7814 9.39106C17.0714 9.10106 17.4646 8.93795 17.8748 8.9375Z"
+                          fill="black"
+                        />
+                        <path
+                          d="M7.37614 10.0881C7.42481 10.1192 7.48052 10.1375 7.53813 10.1414C7.59575 10.1452 7.65341 10.1345 7.7058 10.1102L8.64238 9.67653H13.5482C13.7381 9.67633 13.9201 9.60084 14.0544 9.4666C14.1886 9.33237 14.2642 9.15036 14.2644 8.9605V7.0984H15.0736L16.0124 7.53094C16.0648 7.55439 16.1222 7.56442 16.1795 7.56015C16.2368 7.55587 16.2921 7.53742 16.3404 7.50645C16.3888 7.47548 16.4287 7.43297 16.4565 7.38275C16.4844 7.33252 16.4993 7.27616 16.5 7.21873V2.09003C16.4993 1.90001 16.4233 1.71802 16.2886 1.58397C16.1539 1.44992 15.9716 1.37477 15.7816 1.375H10.1681C9.97853 1.37521 9.79679 1.45061 9.66274 1.58466C9.52869 1.71871 9.45329 1.90046 9.45308 2.09003V3.95313H7.93356C7.7437 3.95337 7.56169 4.02891 7.42746 4.16317C7.29322 4.29744 7.21772 4.47947 7.21753 4.66933V9.79838C7.21751 9.85611 7.23203 9.91291 7.25975 9.96354C7.28747 10.0142 7.3275 10.057 7.37614 10.0881ZM10.1406 2.09003C10.1407 2.08278 10.1437 2.07588 10.1488 2.07075C10.154 2.06562 10.1609 2.06267 10.1681 2.0625C10.2021 2.09072 15.8118 2.01051 15.8124 2.08997L15.8125 6.68181L15.2928 6.44246C14.9513 6.40556 14.6075 6.395 14.2644 6.41089V4.66933C14.2642 4.47944 14.1887 4.29739 14.0544 4.16312C13.9201 4.02885 13.7381 3.95333 13.5482 3.95313H10.1406V2.09003ZM7.90503 4.66933C7.89653 4.58964 13.5209 4.6665 13.5483 4.64056C13.5559 4.64063 13.5631 4.64368 13.5685 4.64907C13.5739 4.65445 13.5769 4.66173 13.5769 4.66933V8.96049C13.5839 9.04698 8.59488 8.95806 8.56668 8.98909C8.3374 9.05661 8.11567 9.14754 7.90501 9.26044L7.90503 4.66933Z"
+                          fill="black"
+                        />
+                        <path
+                          d="M10.0327 6.55212C10.1239 6.55211 10.2113 6.51589 10.2758 6.45143C10.3402 6.38696 10.3765 6.29953 10.3765 6.20837C10.3765 6.14208 10.3947 6.07707 10.4289 6.02033C10.4632 5.96359 10.5123 5.91727 10.5709 5.88637C10.6296 5.85547 10.6955 5.84116 10.7617 5.84497C10.8279 5.84879 10.8918 5.87058 10.9465 5.90802C11.0012 5.94545 11.0446 5.9971 11.0721 6.0574C11.0997 6.1177 11.1102 6.18436 11.1026 6.25021C11.0951 6.31607 11.0697 6.3786 11.0292 6.43109C10.9887 6.48358 10.9347 6.52403 10.8729 6.54809C10.4296 6.66804 10.1374 7.5088 10.7411 7.57334C10.8322 7.57331 10.9196 7.53708 10.9841 7.47261C11.0486 7.40814 11.0848 7.32071 11.0848 7.22955C11.0848 7.21158 11.1043 7.19581 11.1237 7.18825C11.2652 7.1331 11.3931 7.04795 11.4986 6.93866C11.6041 6.82938 11.6846 6.69855 11.7347 6.55517C11.7848 6.41179 11.8033 6.25926 11.7888 6.10807C11.7744 5.95687 11.7274 5.8106 11.651 5.67931C11.5746 5.54802 11.4708 5.43482 11.3465 5.3475C11.2222 5.26018 11.0805 5.2008 10.9311 5.17345C10.7817 5.1461 10.6282 5.15142 10.481 5.18906C10.3339 5.22669 10.1966 5.29575 10.0787 5.39147C9.73896 5.62993 9.42148 6.48003 10.0327 6.55212Z"
+                          fill="black"
+                        />
+                        <path
+                          d="M10.7479 7.90625C10.6576 7.90759 10.5714 7.9444 10.5081 8.00872C10.4447 8.07304 10.4092 8.15971 10.4092 8.25001C10.4092 8.3403 10.4447 8.42697 10.5081 8.49129C10.5715 8.55561 10.6576 8.59241 10.7479 8.59375C10.8382 8.59241 10.9243 8.5556 10.9877 8.49128C11.051 8.42696 11.0866 8.34029 11.0866 8.24999C11.0866 8.1597 11.051 8.07303 10.9877 8.00871C10.9243 7.94439 10.8381 7.90759 10.7479 7.90625Z"
+                          fill="black"
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      (click)="onReject(item.id)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#candidateRejectModal"
+                      mat-raised-button
+                      matTooltip="Reject"
                     >
-                      <path
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                      />
-                    </svg>
-                    Interview
-                  </button>
+                      >
+                        <path
+                          d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                        ></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <line x1="18" y1="10" x2="22" y2="14"></line>
+                        <line x1="22" y1="10" x2="18" y2="14"></line>
+                      </svg>
+                    </span>
+                  </div>
+
+                  <div ngbDropdown class="d-inline-block" container="body">
+                    <span
+                      class="humburger-icon"
+                      id="dropdownBasic1"
+                      ngbDropdownToggle
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                        />
+                      </svg>
+                    </span>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button
+                        style="font-size: 14px"
+                        ngbDropdownItem
+                        *ngIf="item?.resume"
+                      >
+                        <a
+                          [href]="item?.resume"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-6"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                            /></svg
+                          >Resume
+                        </a>
+                      </button>
+                      <button
+                        style="font-size: 14px"
+                        *ngIf="item.coverLetter"
+                        ngbDropdownItem
+                      >
+                        <a
+                          [href]="item?.coverLetter"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-6"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M12 9.75v6.75m0 0-3-3m3 3 3-3m-8.25 6a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                            />
+                          </svg>
+                          Cover letter
+                        </a>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="isLoading | async">
-          <td>Loading...</td>
-        </tr>
-        <tr *ngIf="!(isLoading | async) && !filteredData?.length">
-          <td>No record found</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="!(isLoading | async) && filteredCandidate.length === 0">
+              <td>No candidate</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noData></ng-template>
 </div>
-<!-- <app-candidate-view [candidateViewData]="candidateViewData" /> -->
+<erecruit-candidate-view
+  (openScheduleModal)="openScheduleModal($event)"
+  (openMailCandidateModal)="openMailCandidateModal()"
+  [candidateViewData]="candidateViewData"
+  (candidateUpdate)="getCandidates()"
+/>
+<erecruit-candidate-reject
+  [candidateId]="candidateId"
+  (candidateUpdate)="getCandidates()"
+/>
+<erecruit-candidate-schedule-date
+  [candidateId]="candidateId"
+  (candidateUpdate)="getCandidates()"
+/>
+<erecruit-candidate-filter
+  (updateCandidateData)="updateCandidateData($event)"
+/>
+<erecruit-candidate-mail-modal
+  [candidateData]="candidateViewData"
+  (candidateUpdate)="getCandidates()"
+/>

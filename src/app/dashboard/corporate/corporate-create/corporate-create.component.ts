@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -6,28 +12,27 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { DashboardService } from '../../dashboard.service';
-import { Notyf } from 'notyf';
 import { Modal } from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { Corporate } from '../shared/corporate';
 import { CorporateService } from '../shared/corporate.service';
+import { LoaderService } from 'src/app/shared/service/loader.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'app-corporate-create',
+  selector: 'erecruit-corporate-create',
   templateUrl: './corporate-create.component.html',
   styleUrls: ['./corporate-create.component.scss'],
 })
 export class CorporateCreateComponent {
   @ViewChild('myModal') modalElement!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Output() corporateCreated: EventEmitter<void> = new EventEmitter();
   modalInstance!: Modal;
-
   form!: FormGroup;
   submitLoading: boolean = false;
   isSubmitted: boolean = false;
   logoUrl: string = '';
-  notyf = new Notyf();
   data: any[] = [];
   searchText: string = '';
   isLoading: boolean = false;
@@ -36,12 +41,13 @@ export class CorporateCreateComponent {
   constructor(
     private fb: FormBuilder,
     public corporateService: CorporateService,
-    private dashboardService: DashboardService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', [Validators.required, this.validatePhone()]],
+      phone: [''],
       email: ['', [Validators.required, this.validateEmail()]],
       logo: [''],
       hmCode: ['', Validators.required],
@@ -68,7 +74,7 @@ export class CorporateCreateComponent {
 
   ngOnInit(): void {}
   ngAfterViewInit() {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
 
   validateEmail(): ValidatorFn {
@@ -78,13 +84,6 @@ export class CorporateCreateComponent {
         value
       );
       return valid ? null : { invalidEmail: control.value };
-    };
-  }
-  validatePhone(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const value = control.value;
-      const valid = /^\+?\d{0,11}$/.test(value);
-      return valid ? null : { invalidPhone: { value: control.value } };
     };
   }
 
@@ -123,7 +122,7 @@ export class CorporateCreateComponent {
     this.isLoadingLogo = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    this.dashboardService.setLoading(true);
+    this.loaderService.setLoading(true);
     reader.onload = () => {
       const data = {
         base64String: reader.result as string,
@@ -134,17 +133,12 @@ export class CorporateCreateComponent {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;
             this.isLoadingLogo = false;
-            this.dashboardService.setLoading(false);
+            this.loaderService.setLoading(false);
           }
         },
-        (err) => {
-          this.notyf.error({
-            message: err.error.message,
-            duration: 4000,
-            position: { x: 'right', y: 'top' },
-          });
-
-          this.dashboardService.setLoading(false);
+        (error) => {
+          this.toastService.error(error.message);
+          this.loaderService.setLoading(false);
           this.isLoadingLogo = false;
         }
       );
@@ -155,56 +149,38 @@ export class CorporateCreateComponent {
     this.file = '';
     this.logoUrl = '';
   }
-
   createCorporate(corporate: Corporate) {
     this.submitLoading = true;
-    this.dashboardService.setLoading(true);
-    this.form.disable();
+    this.loaderService.setLoading(true);
     this.corporateService.createCorporate(corporate).subscribe({
-      next: () => {
+      next: (response: any) => {
         this.submitLoading = false;
-        this.notyf.success({
-          message: 'Corporate created successfully!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
         this.form.reset();
-        this.form.enable();
         this.isSubmitted = false;
-        this.dashboardService.setLoading(false);
-
+        this.loaderService.setLoading(false);
         this.modalInstance.hide();
         const backdrop = document.querySelector('.modal-backdrop');
         backdrop?.remove();
+        this.toastService.success('Corporate created successfully');
+        this.corporateCreated.emit();
       },
-
-      error: () => {
+      error: (error) => {
         this.submitLoading = false;
-        this.form.enable();
         this.form.reset();
-        this.notyf.error({
-          message: 'Error occur!',
-          duration: 4000,
-          position: { x: 'right', y: 'top' },
-        });
-        this.dashboardService.setLoading(false);
+        this.toastService.error(error.message);
+        this.loaderService.setLoading(false);
       },
     });
   }
   onSubmit() {
-    this.isSubmitted = false;
-    this.isSubmitted = true;
-    console.log(this.form.value);
-    if (this.form.invalid) {
-      return;
-    } else {
+    if (this.form.valid) {
       this.createCorporate({ ...this.form.value, logo: this.logoUrl });
-      this.isSubmitted = false;
+    } else {
+      this.form.markAllAsTouched();
     }
   }
   resetForm() {
     this.form.reset();
     this.file = '';
-    this.isSubmitted = false;
   }
 }

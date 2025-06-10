@@ -1,24 +1,69 @@
 .job-container {
-  h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-left: 20px;
+  margin-bottom: 140px;
+  padding: 2rem 1.5rem;
+  .action {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    h2 {
+      font-weight: 600;
+      font-size: 23px;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    .nav-back {
+      background-color: white;
+      border-radius: 50px;
+      padding: 3px 5px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: #0000004d 0 2px 6px;
+    }
+    p {
+      font-size: 14px;
+    }
   }
-  button {
-    padding: 11px;
-    width: 100px;
-    background-color: #28a745;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    border: none;
+  .job-action {
+    margin: 20px 0px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    .btn-add {
+      padding: 11px;
+      width: 100px;
+      background-color: #28a745;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      margin-left: 10px;
+      border: none;
+    }
+
+    .btn-list {
+      padding: 11px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      background-color: transparent;
+
+      svg {
+        color: #28a745;
+      }
+    }
+    a {
+      text-decoration: none;
+      color: rgb(40, 40, 41);
+    }
   }
   .job-table {
     background-color: white;
     border-radius: 10px;
     padding: 10px 20px;
-    margin-bottom: 50px;
     margin-top: 20px;
     h2 {
       font-size: 22px;
@@ -42,7 +87,7 @@
           font-weight: 400;
           outline: none;
           border: 1px solid #dddd;
-          border-radius: 20px;
+          border-radius: 10px;
           ::placeholder {
             font-size: 16px;
           }
@@ -52,24 +97,19 @@
           top: 12px;
           color: #b2b2b3;
           left: 15px;
+          width: 20px;
+          height: 20px;
         }
       }
 
       button {
-        padding: 11px;
+        padding: 10px;
         width: 100px;
         background-color: transparent;
-        border-radius: 25px;
+        border-radius: 10px;
         font-size: 14px;
-        font-weight: 600;
-        color: #28a745;
-        border: 1px solid #28a745;
-        transition: all 0.2s ease-in-out;
-
-        &:hover {
-          background-color: #23863a;
-          color: white;
-        }
+        font-weight: 400;
+        border: 1px solid #dddd;
       }
     }
 
@@ -112,8 +152,8 @@
     tbody {
       .status-btn {
         .active {
-          background-color: #d4edda;
-          padding: 3px 20px;
+          background-color: #e7f7ef;
+          padding: 5px 10px;
           border-radius: 5px;
           color: #0dab6f;
           border: none;
@@ -121,15 +161,15 @@
         }
         .closed {
           background-color: #f8d7da;
-          padding: 3px 20px;
+          padding: 5px 20px;
           border-radius: 5px;
           color: #721c24;
           border: none;
           font-size: 13px;
         }
         .pending {
-          background-color: #fff3cd;
-          padding: 3px 20px;
+          background-color: #fff6d3;
+          padding: 5px 20px;
           border-radius: 5px;
           color: #e8be29;
           border: none;
@@ -146,14 +186,35 @@
         width: 20px;
         height: 20px;
       }
-      .humburger-icon svg {
-        color: #dfdede;
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-      }
-      .humburger-icon[ngbDropdownToggle]::after {
-        display: none !important;
+
+      .action-icon {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+        span:nth-child(1) {
+          color: #6d6d6d;
+        }
+        span:nth-child(2) {
+          color: rgb(2, 2, 202);
+        }
+        span:nth-child(3) {
+          color: #e50c20;
+        }
+
+        .humburger-icon svg {
+          color: #d9d9d9;
+          width: 28px;
+          height: 28px;
+          cursor: pointer;
+        }
+        .humburger-icon[ngbDropdownToggle]::after {
+          display: none !important;
+        }
       }
     }
   }
@@ -162,5 +223,20 @@
   }
   tbody tr:nth-child(odd) {
     background-color: white !important;
+  }
+}
+.dropdown-menu {
+  box-shadow: 0px 33.8px 45.63px 0px #0000000d !important;
+  ::ng-deep .dropdown-item {
+    color: rgb(14 13 13);
+    &:focus,
+    &:hover {
+      background-color: transparent !important;
+      color: rgb(14 13 13) !important;
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+    }
   }
 }

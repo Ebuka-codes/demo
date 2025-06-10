@@ -1,0 +1,119 @@
+header {
+  background-color: white;
+  width: 100%;
+  padding: 25px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  img {
+    margin-left: 20px;
+  }
+  nav {
+    ul {
+      display: flex;
+      gap: 40px;
+      li {
+        list-style: none;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: 500;
+        color: #1c1c1c;
+      }
+    }
+  }
+  .nav-action {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    .login-btn {
+      border: 1px solid #232323;
+      padding: 8px 20px;
+      border-radius: 10px;
+      outline: none;
+      background-color: transparent;
+    }
+    .demo-btn {
+      background-color: #299345;
+      padding: 9px 15px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      color: white;
+    }
+  }
+}
+.hero-section {
+  background-color: #299345;
+  border-bottom-left-radius: 50% 100px;
+  border-bottom-right-radius: 50% 100px;
+  width: 100%;
+  z-index: 20000;
+  .content {
+    margin: 0px auto;
+    text-align: center;
+    padding-top: 40px;
+    .info {
+      width: 60%;
+      margin: 0px auto;
+      h1 {
+        color: white;
+        font-size: 56px;
+        font-weight: 500;
+        text-align: center;
+        list-style: 1.2;
+      }
+      p {
+        color: #fafafa;
+        font-size: 28px;
+        width: 90%;
+        margin: 10px auto;
+        line-height: 120%;
+      }
+      .get-started-btn {
+        background-color: #144721;
+        padding: 9px 20px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        color: white;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+    }
+    img {
+      position: relative;
+      bottom: 30px;
+    }
+  }
+}
+.intro {
+  background-color: #eee;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 100px 40px;
+  position: relative;
+  bottom: 90px;
+  display: none;
+
+  .content {
+    h3 {
+      font-size: 30px;
+    }
+    .get-started-btn {
+      background-color: #299345;
+      padding: 9px 20px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      color: white;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  }
+  img {
+    width: 500px;
+  }
+}

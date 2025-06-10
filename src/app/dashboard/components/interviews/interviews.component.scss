@@ -1,0 +1,236 @@
+.interview {
+  background-color: white;
+  padding: 20px 15px;
+  border-radius: 29.12px;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0px 36.4px 49.14px 0px #0000000d;
+
+  h2 {
+    color: #67748e;
+    font-size: 14px;
+  }
+  .content {
+    .info {
+      background-color: #c0edcc;
+      font-weight: 500;
+      padding: 10px 15px;
+      font-size: 14px;
+      margin: 10px 0px;
+    }
+    .calendar-container {
+      margin-top: 20px;
+      border: 1px solid #9d9e9f99;
+      border-radius: 5px;
+      .event {
+        margin: 0px 20px;
+        .today {
+          margin-top: 20px;
+          .today-title {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+
+            h3 {
+              font-size: 20px;
+            }
+          }
+          .today-event {
+            margin: 10px 0px;
+            .item {
+              background-color: #c0edcc;
+              border: 1px solid #8fdcb2;
+              border-radius: 6px;
+              .content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 5px;
+                padding: 5px;
+                .job-name {
+                  display: flex;
+                  gap: 5px;
+                  align-items: center;
+
+                  span {
+                    font-size: 12px;
+                    font-weight: 500;
+                  }
+                }
+                .rounds-count {
+                  color: #232323;
+                  font-size: 10px;
+                  font-weight: 500;
+                }
+                .candidate-name {
+                  h4 {
+                    font-size: 14px;
+                  }
+                  .time {
+                    font-size: 10px;
+                    font-weight: 500;
+                  }
+                }
+              }
+            }
+            .activity-container {
+              margin: 20px 0px;
+              .activity {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0px;
+                .title {
+                  display: flex;
+                  gap: 4px;
+                  align-items: center;
+                }
+                .time {
+                  font-size: 12px;
+                  font-weight: 500;
+                }
+              }
+              .activity:nth-child(1) .title span {
+                background-color: #ec4899;
+                width: 10px;
+                height: 10px;
+                border-radius: 50px;
+              }
+              .activity:nth-child(1) .title h4 {
+                color: #ec4899;
+                font-size: 12px;
+              }
+              .activity:nth-child(2) .title span {
+                background-color: #3b82f6;
+                width: 10px;
+                height: 10px;
+                border-radius: 50px;
+              }
+              .activity:nth-child(2) .title h4 {
+                color: #3b82f6;
+                font-size: 12px;
+              }
+              .activity:nth-child(3) .title span {
+                width: 10px;
+                height: 10px;
+                border-radius: 500px;
+                background-color: #1b602d;
+              }
+              .activity:nth-child(3) .title h4 {
+                color: #1b602d;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+        .tomorrow {
+          margin-top: 20px;
+          .tomorrow-title {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            h3 {
+              font-size: 20px;
+            }
+          }
+          .activity-container {
+            .activity {
+              display: flex;
+              justify-content: space-between;
+              margin: 10px 0px;
+              .title {
+                display: flex;
+                gap: 4px;
+                align-items: center;
+              }
+              .time {
+                font-size: 12px;
+                font-weight: 500;
+              }
+            }
+            .activity:nth-child(1) .title span {
+              background-color: #299345;
+              width: 10px;
+              height: 10px;
+              border-radius: 50px;
+            }
+            .activity:nth-child(1) .title h4 {
+              color: #299345;
+              font-size: 12px;
+            }
+            .activity:nth-child(2) .title span {
+              background-color: #6366f1;
+              width: 10px;
+              height: 10px;
+              border-radius: 50px;
+            }
+            .activity:nth-child(2) .title h4 {
+              color: #6366f1;
+              font-size: 12px;
+            }
+            .activity:nth-child(3) .title span {
+              width: 10px;
+              height: 10px;
+              border-radius: 500px;
+              background-color: #f59e0b;
+            }
+            .activity:nth-child(3) .title h4 {
+              color: #f59e0b;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.interviewer-feedback {
+  border: 1px solid #c4c4c4;
+  background-color: white;
+  box-shadow: 0px 23.59px 31.84px 0px #0000000d;
+  border-radius: 18.87px;
+  padding: 10px;
+  margin: 20px 0px;
+  h4 {
+    color: #67748e;
+    font-size: 18.2px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .feedback {
+    margin: 10px 0px;
+    .content {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      align-items: center;
+      gap: 10px;
+
+      .active {
+        width: 8px;
+        height: 8px;
+        background-color: #299345;
+        border-radius: 50px;
+      }
+      .message {
+        font-size: 12px;
+      }
+    }
+    .view-btn {
+      display: flex;
+      justify-content: flex-end;
+      button {
+        width: 84px;
+        border-radius: 7px;
+        padding-top: 5px;
+        padding-right: 20px;
+        padding-bottom: 5px;
+        padding-left: 20px;
+        border: none;
+        border-radius: 7px;
+        font-size: 10px;
+        font-weight: 700;
+        background: #090a0b;
+        color: white;
+        margin: 10px;
+      }
+    }
+  }
+}
