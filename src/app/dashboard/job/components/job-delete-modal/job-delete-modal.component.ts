@@ -7,18 +7,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Modal } from 'bootstrap';
-import { finalize, Observable } from 'rxjs';
-import { LoaderService } from 'src/app/shared/service/loader.service';
-import * as bootstrap from 'bootstrap';
-import { JobService } from '../shared/job.service';
+import { JobService } from '../../shared/job.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { finalize } from 'rxjs';
+import * as bootstrap from 'bootstrap';
 
 @Component({
-  selector: 'erecruit-job-delete',
-  templateUrl: './job-delete.component.html',
-  styleUrls: ['./job-delete.component.scss'],
+  selector: 'erecruit-job-delete-modal',
+  templateUrl: './job-delete-modal.component.html',
+  styleUrls: ['./job-delete-modal.component.scss'],
 })
-export class JobDeleteComponent {
+export class JobDeleteModalComponent {
   @ViewChild('deleteJobModal') modalElement!: ElementRef;
   @Input() jobId!: string;
   @Output() jobDeleted: EventEmitter<void> = new EventEmitter();
@@ -26,8 +25,7 @@ export class JobDeleteComponent {
   isLoading!: boolean;
   constructor(
     private jobService: JobService,
-    private toastServie: ToastService,
-    private loaderService: LoaderService
+    private toastServie: ToastService
   ) {}
 
   ngAfterViewInit() {

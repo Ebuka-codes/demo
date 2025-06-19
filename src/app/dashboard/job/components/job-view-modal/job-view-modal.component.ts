@@ -1,14 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { job } from '../shared/job';
+import { job } from '../../shared/job';
 import { months } from 'src/app/shared/constants';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 
 @Component({
-  selector: 'erecruit-job-view',
-  templateUrl: './job-view.component.html',
-  styleUrls: ['./job-view.component.scss'],
+  selector: 'erecruit-job-view-modal',
+  templateUrl: './job-view-modal.component.html',
+  styleUrls: ['./job-view-modal.component.scss'],
 })
-export class JobViewComponent {
+export class JobViewModalComponent {
   @Input() viewJobData!: Array<job>;
   constructor() {}
   ngOnInit(): void {}

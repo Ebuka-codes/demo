@@ -1,8 +1,8 @@
-.edit-job {
+.job-container {
   margin: 20px 0px;
   padding: 2rem 1.7rem;
   width: 80%;
-  .edit-job-header {
+  .job-header {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
@@ -27,7 +27,7 @@
       font-size: 14px;
     }
   }
-  .edit-job-content {
+  .content {
     background-color: white;
     padding: 5px 10px 10px 10px;
     border-radius: 20px;
@@ -187,7 +187,6 @@
     }
   }
 }
-
 input[type="checkbox"] {
   accent-color: #28a745;
 }
@@ -237,7 +236,6 @@ input[type="checkbox"] {
   position: absolute;
   right: 10px;
 }
-
 ::ng-deep .mat-mdc-option input {
   border: 1px solid #dddd;
   border-radius: 5px;
@@ -247,13 +245,17 @@ input[type="checkbox"] {
   margin: 5px 0px;
   width: 390px;
 }
-
 .addInput {
   border: 1px solid #dddd;
   border-radius: 5px;
   padding: 5px 10px;
   outline: none;
   font-size: 14px;
-  margin: 5px 20px;
+  margin: 5px 0px;
   width: 330px;
+}
+
+.skill-dropdown ::ng-deep .mat-mdc-option .mat-pseudo-checkbox-full {
+  margin-right: 0px !important;
+  display: none !important;
 }

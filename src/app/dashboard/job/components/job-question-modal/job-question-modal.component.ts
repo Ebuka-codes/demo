@@ -18,11 +18,11 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { finalize } from 'rxjs';
 @Component({
-  selector: 'ercruit-job-question-create',
-  templateUrl: './job-question-create.component.html',
-  styleUrls: ['./job-question-create.component.scss'],
+  selector: 'ercruit-job-question-modal',
+  templateUrl: './job-question-modal.component.html',
+  styleUrls: ['./job-question-modal.component.scss'],
 })
-export class JobQuestionCreateComponent {
+export class JobQuestionModalComponent {
   @ViewChild('myQuestionModal') modalElement!: ElementRef;
   @Output() updateQuestion: EventEmitter<void> = new EventEmitter();
   @Input() editId!: any;

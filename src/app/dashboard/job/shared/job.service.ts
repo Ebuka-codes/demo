@@ -87,8 +87,8 @@ export class JobService {
       data
     );
   }
-  searchjob(data: string) {
-    return this.httpClient.get(
+  searchjob(data: string): Observable<DataResponse> {
+    return this.httpClient.get<any>(
       Constants.JOB_URL.JOB + `/search?keyword=${data}`
     );
   }

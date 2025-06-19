@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { JobCreateComponent } from './job-create/job-create.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,23 +12,23 @@ import { NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { JobRoutingModule } from './job-routing.module';
 import { JobComponent } from './job.component';
-import { JobQuestionCreateComponent } from './components/job-question-create/job-question-create.component';
-import { JobViewComponent } from './job-view/job-view.component';
-import { JobEditComponent } from './job-edit/job-edit.component';
-import { JobDeleteComponent } from './job-delete/job-delete.component';
-import { JobFilterComponent } from './job-filter/job-filter.component';
+import { JobFilterModalComponent } from './components/job-filter-modal/job-filter-modal.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { JobFormComponent } from './components/job-form/job-form.component';
+import { JobQuestionModalComponent } from './components/job-question-modal/job-question-modal.component';
+import { JobViewModalComponent } from './components/job-view-modal/job-view-modal.component';
+import { JobDeleteModalComponent } from './components/job-delete-modal/job-delete-modal.component';
 
 @NgModule({
   declarations: [
-    JobCreateComponent,
     JobComponent,
-    JobQuestionCreateComponent,
-    JobViewComponent,
-    JobEditComponent,
-    JobDeleteComponent,
-    JobFilterComponent,
+    JobQuestionModalComponent,
+    JobViewModalComponent,
+    JobFilterModalComponent,
+    JobFormComponent,
+    JobViewModalComponent,
+    JobDeleteModalComponent,
   ],
   imports: [
     ReactiveFormsModule,

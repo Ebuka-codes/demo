@@ -1,12 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
@@ -62,7 +57,6 @@ export class JobComponent implements OnInit {
           );
           this.loaderService.setLoading(false);
           this.filteredData = this.jobData;
-
           this.cdr.detectChanges();
         }
       },
@@ -73,39 +67,38 @@ export class JobComponent implements OnInit {
       },
     });
   }
-  handleSearch() {
-    this.searchLoading = true;
-    if (this.searchText.value) {
-      this.searchText.valueChanges
-        .pipe(
-          debounceTime(300),
-          distinctUntilChanged(),
-          switchMap((value) => {
-            if (value && value.trim() !== '') {
-              return this.jobService.searchjob(value.trim());
-            } else {
-              return this.jobService.getAllJobs();
-            }
-          })
-        )
+  handleSearch(event: Event) {
+    const value = event as KeyboardEvent;
+    if (value.key === 'Enter' && this.searchText.value) {
+      this.loaderService.setLoading(true);
+      this.jobService
+        .searchjob(this.searchText.value.trim())
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             if (response.valid && response.data) {
               this.jobData = response.data;
-              this.searchLoading = false;
             } else {
               this.jobData = [];
+              this.toastService.error(response.message);
             }
           },
           error: (error) => {
-            console.log(error.message);
-            this.searchLoading = false;
+            this.toastService.error(error.message);
           },
         });
-    } else {
-      this.searchLoading = false;
     }
   }
+
+  onClearSearch() {
+    if (this.searchText.value === '') {
+      this.loadJobs();
+    } else {
+      this.searchText.reset();
+      this.loadJobs();
+    }
+  }
+
   openFilterModal() {
     const modal = Modal.getInstance(
       (document.querySelector('#filterJobModal') as HTMLDivElement) ||

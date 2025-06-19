@@ -6,19 +6,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { JobService } from '../shared/job.service';
-import { job, jobFilterPayload, KeyValuePair } from '../shared/job';
+import { JobService } from '../../shared/job.service';
+import { job, jobFilterPayload, KeyValuePair } from '../../shared/job';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { finalize, Observable } from 'rxjs';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
-  selector: 'erecruit-job-filter',
-  templateUrl: './job-filter.component.html',
-  styleUrls: ['./job-filter.component.scss'],
+  selector: 'erecruit-job-filter-modal',
+  templateUrl: './job-filter-modal.component.html',
+  styleUrls: ['./job-filter-modal.component.scss'],
 })
-export class JobFilterComponent {
+export class JobFilterModalComponent {
   @Output() updateJobData: EventEmitter<job[]> = new EventEmitter();
   @ViewChild('filterJobModal') modalElement!: ElementRef;
   modalInstance!: Modal;

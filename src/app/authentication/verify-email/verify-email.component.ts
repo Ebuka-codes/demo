@@ -67,7 +67,6 @@ export class VerifyEmailComponent implements OnInit {
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
     const pastedData = event.clipboardData?.getData('text')?.trim() || '';
-    console.log(pastedData.length);
     if (pastedData.length === 6) {
       pastedData.split('').forEach((char, index) => {
         this.otpForm.at(index)?.setValue(char);

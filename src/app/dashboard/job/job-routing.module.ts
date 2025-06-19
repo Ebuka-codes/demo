@@ -1,8 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { JobCreateComponent } from './job-create/job-create.component';
-import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobComponent } from './job.component';
+import { JobFormComponent } from './components/job-form/job-form.component';
 
 const routes: Routes = [
   {
@@ -11,11 +10,11 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: JobCreateComponent,
+    component: JobFormComponent,
   },
   {
     path: 'edit/:id',
-    component: JobEditComponent,
+    component: JobFormComponent,
   },
 ];
 @NgModule({
