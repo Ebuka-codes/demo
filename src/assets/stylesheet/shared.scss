@@ -417,5 +417,97 @@ input[type="checkbox"] {
   border-color: #e6e6e696 !important;
   color: black !important;
 }
-.dayContainer .today {
+
+.pagination {
+  margin: 40px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.ngx-pagination {
+  margin-left: 0;
+  margin-bottom: 1rem;
+}
+.ngx-pagination::before,
+.ngx-pagination::after {
+  content: " " !important;
+  display: table !important;
+}
+
+.ngx-pagination::after {
+  clear: both !important;
+}
+
+.ngx-pagination li {
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+.ngx-pagination li {
+  display: inline-block !important;
+  margin-right: 0.0625rem;
+}
+
+.ngx-pagination a,
+.ngx-pagination button {
+  color: #0a0a0a !important;
+  padding: 3px;
+  border-radius: 5px !important;
+}
+
+.ngx-pagination .current {
+  padding: 3px;
+  background: #97c93c !important;
+  color: #fefefe;
+  cursor: default;
+  border-radius: 5px !important;
+}
+.ngx-pagination a:hover {
+  background-color: #fefefe !important;
+}
+
+.ngx-pagination .disabled:hover {
+  background: transparent !important;
+}
+
+.ngx-pagination .disabled {
+  padding: 0.1875rem 0.625rem;
+  color: #cacaca;
+  cursor: default;
+}
+
+.ngx-pagination a,
+.ngx-pagination button {
+  cursor: pointer !important;
+}
+
+.ngx-pagination .pagination-previous a:hover {
+  background: transparent !important;
+}
+
+// .ngx-pagination .pagination-previous.disabled::before {
+//   font-family: FontAwesome !important;
+//   content: "\f053" !important;
+//   display: inline-block !important;
+//   margin-right: 0rem !important;
+// }
+
+// .ngx-pagination .pagination-previous.disabled::after {
+//   font-family: FontAwesome !important;
+//   content: "\f054" !important;
+//   display: inline-block !important;
+//   margin-left: 0rem !important;
+// }
+
+.ngx-pagination .show-for-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.ngx-pagination .small-screen {
+  display: none !important;
 }

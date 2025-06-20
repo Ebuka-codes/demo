@@ -2,22 +2,17 @@
   display: grid;
   grid-template-rows: 70px 1fr;
   grid-template-columns: 15.75rem 1fr;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
+  min-height: 100vh;
 }
 
 .outlet {
-  position: relative;
   background-color: #eef0f4;
-  overflow-x: hidden;
   max-width: 120rem;
   margin-bottom: 100px;
 }
 main {
   background-color: #eef0f4;
-  height: 100vh;
-  margin-bottom: 20px;
+  min-height: 100vh;
 }
 
 @media (max-width: 900px) {

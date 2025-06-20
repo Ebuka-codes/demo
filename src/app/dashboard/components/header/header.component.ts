@@ -18,7 +18,5 @@ export class HeaderComponent {
     this.timeService.time$.subscribe((val) => {
       this.time = val;
     });
-
-    console.log('Header init');
   }
 }

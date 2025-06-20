@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
 import { enviroments } from 'src/environments/enviorments';
 
 @Component({
-  selector: 'app-job',
+  selector: 'erecruit-job',
   templateUrl: './job.component.html',
   styleUrls: ['./job.component.scss'],
 })
