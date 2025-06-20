@@ -1,5 +1,5 @@
-import { enviroments } from 'src/environments/enviorments';
-const BASE_URL = enviroments.API_URL;
+import { environment } from 'src/environments/environment';
+const BASE_URL = environment.API_URL;
 export const Constants = {
   AUTH_URL: {
     LOGIN: `${BASE_URL}/auth/login`,

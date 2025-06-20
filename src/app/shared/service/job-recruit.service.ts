@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { job, JobApplication } from '../type';
 import { Constants } from 'src/app/utils/constants';
 import { DataResponse } from '../model/data-response';
@@ -10,7 +10,7 @@ import { DataResponse } from '../model/data-response';
   providedIn: 'root',
 })
 export class JobRecruitService {
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   private jobListSubject$ = new BehaviorSubject<job[] | null>(null);
   private jobCategorySubject$ = new BehaviorSubject<any | null>(null);
   private category$ = this.jobCategorySubject$.asObservable();
