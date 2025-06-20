@@ -9,13 +9,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { TokenService } from '../service/token.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private tokenService: TokenService, private router: Router) {}
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   private shouldIncludeCorpkey: string[] = [`${this.baseUrl}/user/find`];
 
   intercept(

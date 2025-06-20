@@ -4,7 +4,7 @@ import { finalize, Observable } from 'rxjs';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { job } from 'src/app/shared/type';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'erecruit-job-listing',
@@ -12,7 +12,7 @@ import { enviroments } from 'src/environments/enviorments';
   styleUrls: ['./job-listing.component.scss'],
 })
 export class JobListingComponent implements OnInit {
-  PORT_URL = enviroments.PORT_URL;
+  PORT_URL = environment.PORT_URL;
   jobList: Array<job> = [];
   jobSearchFilterData: any[] = [];
   jobType!: any[];

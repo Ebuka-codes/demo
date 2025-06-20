@@ -9,7 +9,7 @@ import { Modal } from 'bootstrap';
 import { Location } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ToastService } from 'src/app/core/service/toast.service';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'erecruit-job',
@@ -17,7 +17,7 @@ import { enviroments } from 'src/environments/enviorments';
   styleUrls: ['./job.component.scss'],
 })
 export class JobComponent implements OnInit {
-  PORT_URL = enviroments.PORT_URL;
+  PORT_URL = environment.PORT_URL;
   jobData: Array<job> = [];
   isLoading$!: Observable<any>;
   searchText = new FormControl();
@@ -27,7 +27,7 @@ export class JobComponent implements OnInit {
   searchLoading = false;
   filteredData!: Array<job>;
   loadingData!: boolean;
-  jobUrl: string = `${enviroments.PORT_URL}/apply`;
+  jobUrl: string = `${environment.PORT_URL}/apply`;
   jobListingUrl!: string;
   constructor(
     public jobService: JobService,

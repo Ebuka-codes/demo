@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { job } from './job';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
 import { DataResponse } from 'src/app/shared/model/data-response';
@@ -10,7 +10,7 @@ import { DataResponse } from 'src/app/shared/model/data-response';
   providedIn: 'root',
 })
 export class JobService {
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   lastpathSubject$ = new BehaviorSubject<string | null>('');
   lastPath = this.lastpathSubject$.asObservable();
   encodedValue!: string;

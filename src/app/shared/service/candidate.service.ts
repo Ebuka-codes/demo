@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { DataResponse } from '../model/data-response';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { DataResponse } from '../model/data-response';
 export class CandidateService {
   private candidateDataSubject$ = new BehaviorSubject<any>(null);
   candateData$ = this.candidateDataSubject$.asObservable();
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   corpUrl!: string;
   constructor(private httpClient: HttpClient) {
     const value = localStorage.getItem('corp-url');

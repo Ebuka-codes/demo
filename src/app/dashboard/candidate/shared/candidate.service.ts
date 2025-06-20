@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { Candidate } from './candidate';
 import { job } from '../../job/shared/job';
 import { Constants } from 'src/app/utils/constants';
@@ -12,7 +12,7 @@ import { DataResponse } from 'src/app/shared/model/data-response';
 })
 export class CandidateService {
   constructor(private httpClient: HttpClient) {}
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   getCandidate(): Observable<DataResponse> {
     return this.httpClient.get<any>(Constants.CANDIDATE_URL.CANDIDATES);
   }

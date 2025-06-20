@@ -13,7 +13,7 @@ import { Location } from '@angular/common';
 import { finalize } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { CORP_URL } from 'src/app/core/model/credential';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'erecruit-user-corporate',
   templateUrl: './user-corporate.component.html',
@@ -30,7 +30,7 @@ export class UserCorporateComponent implements OnInit {
   corporateId!: string;
   endcodeUrl!: string;
   jobListingUrl!: string;
-  PORT_URL = enviroments.PORT_URL;
+  PORT_URL = environment.PORT_URL;
 
   constructor(
     private fb: FormBuilder,

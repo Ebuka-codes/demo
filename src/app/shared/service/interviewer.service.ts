@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InterviewerService {
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   constructor(private httpClient: HttpClient) {}
   sendInterviewrOtp(token: any) {
     return this.httpClient.post(

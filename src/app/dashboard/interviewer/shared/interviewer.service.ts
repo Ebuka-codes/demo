@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { Interviewer } from './interviewer';
 import { Constants } from 'src/app/utils/constants';
 
@@ -8,7 +8,7 @@ import { Constants } from 'src/app/utils/constants';
   providedIn: 'root',
 })
 export class InterviewerService {
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   constructor(private httpClient: HttpClient) {}
 
   createInterviewer(data: Interviewer) {

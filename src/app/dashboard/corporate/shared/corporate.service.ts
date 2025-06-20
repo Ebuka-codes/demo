@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Corporate, file } from './corporate';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { enviroments } from 'src/environments/enviorments';
+import { environment } from 'src/environments/environment';
 import { Constants } from 'src/app/utils/constants';
 import { Observable } from 'rxjs';
 import { DataResponse } from 'src/app/shared/model/data-response';
@@ -10,7 +10,7 @@ import { DataResponse } from 'src/app/shared/model/data-response';
   providedIn: 'root',
 })
 export class CorporateService {
-  baseUrl = enviroments.API_URL;
+  baseUrl = environment.API_URL;
   constructor(private httpClient: HttpClient) {}
 
   createCorporate(corporate: Corporate) {
