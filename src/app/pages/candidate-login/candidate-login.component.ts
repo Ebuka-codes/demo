@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   OnInit,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -18,15 +18,15 @@ import { Observable, take } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { JOB_ID_KEY } from 'src/app/core/model/credential';
 @Component({
   selector: 'erecruit-candidate-login',
   templateUrl: './candidate-login.component.html',
   styleUrls: ['./candidate-login.component.scss'],
 })
-export class CandidateLoginComponent implements OnInit {
-  @ViewChild('myModal') modalElement!: ElementRef;
+export class CandidateLoginComponent implements OnInit, AfterViewInit {
+  @ViewChild('modalRoot') modalElementRef!: ElementRef;
   modalInstance!: Modal;
   form!: FormGroup;
   isLoading!: Observable<boolean>;
@@ -48,14 +48,30 @@ export class CandidateLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = localStorage.getItem('jobId');
+    const id = localStorage.getItem(JOB_ID_KEY);
     if (id) {
       this.jobId = id;
     }
   }
-  ngAfterViewInit(): void {
-    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
+
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
   }
+
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -91,19 +107,7 @@ export class CandidateLoginComponent implements OnInit {
         },
       });
   }
-  resetForm() {
-    this.form.reset();
-    this.isSignIn = false;
-  }
 
-  closeModal() {
-    this.loaderService.setLoading(false);
-    this.modalInstance.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    backdrop?.remove();
-    document.body.removeAttribute('style');
-    document.body.classList.add('force-scroll-reset');
-  }
   onLogin() {
     if (this.form.valid) {
       this.loaderService.setLoading(true);
@@ -119,13 +123,14 @@ export class CandidateLoginComponent implements OnInit {
                 .subscribe({
                   next: (response: any) => {
                     const candidateId = response?.data?.id;
+
                     this.router.navigate([
                       '/apply',
                       this.jobId,
                       'application',
                       candidateId,
                     ]);
-                    this.closeModal();
+                    this.close();
                   },
                 });
             } else {
@@ -133,17 +138,26 @@ export class CandidateLoginComponent implements OnInit {
               this.router.navigate(['/apply', this.jobId, 'application'], {
                 relativeTo: this.route,
               });
-              this.closeModal();
+              this.close();
             }
           },
           error: (err) => {
             this.loaderService.setLoading(false);
             this.toastService.error(err.message);
-            this.closeModal();
+            this.isSignIn = false;
           },
         });
     } else {
       this.form.markAllAsTouched();
     }
+  }
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
+    this.form.reset();
+    this.isSignIn = false;
   }
 }

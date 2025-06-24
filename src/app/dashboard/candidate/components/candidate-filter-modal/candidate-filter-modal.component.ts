@@ -12,6 +12,7 @@ import { CandidateService } from '../../shared/candidate.service';
 import { finalize } from 'rxjs';
 import { Candidate } from '../../shared/candidate';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { JobService } from 'src/app/dashboard/job/shared/job.service';
 
 @Component({
   selector: 'erecruit-candidate-filter',
@@ -19,9 +20,12 @@ import { ToastService } from 'src/app/core/service/toast.service';
   styleUrls: ['./candidate-filter-modal.component.scss'],
 })
 export class CandidateFilterModalComponent {
-  @ViewChild('filterCandidateModal') modalElement!: ElementRef;
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+
+  private modalInstance!: Modal;
+
   @Output() updateCandidateData: EventEmitter<Candidate[]> = new EventEmitter();
-  modalInstance!: Modal;
+
   filterForm!: FormGroup;
   status = new Array<KeyValuePair>(
     {
@@ -46,7 +50,8 @@ export class CandidateFilterModalComponent {
   constructor(
     private fb: FormBuilder,
     private candidateService: CandidateService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private jobService: JobService
   ) {
     this.filterForm = this.fb.group({
       jobTitle: [''],
@@ -56,12 +61,36 @@ export class CandidateFilterModalComponent {
   ngOnInit(): void {
     this.getJobTitle();
   }
-  ngAfterViewInit(): void {
-    this.modalInstance = new Modal(this.modalElement.nativeElement);
+
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
+  }
+
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
+    this.filterForm.reset();
   }
 
   getJobTitle() {
-    this.candidateService.getAllJobs().subscribe({
+    this.jobService.getAllJobs().subscribe({
       next: (reponse: any) => {
         if (reponse.valid && reponse.data) {
           this.jobTitle = new Set(reponse.data.map((job: job) => job.jobTitle));
@@ -73,16 +102,6 @@ export class CandidateFilterModalComponent {
     });
   }
 
-  closeModal() {
-    this.modalInstance.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      backdrop?.remove();
-    }
-  }
-  resetFilterCandidateForm() {
-    this.filterForm.reset();
-  }
   onSubmit() {
     const data = {
       jobTitle: this.filterForm.get('jobTitle')?.value,
@@ -93,24 +112,22 @@ export class CandidateFilterModalComponent {
       this.filterForm.get('status')?.value
     ) {
       this.isLoading = true;
-      this.candidateService
-        .filterCandidate(data)
-        .pipe(finalize(() => (this.isLoading = false)))
-        .subscribe({
-          next: (response) => {
-            if (response.valid && response.data) {
-              this.closeModal();
-              this.updateCandidateData.emit(response.data);
-              this.toastService.success(response.message);
-            } else {
-              this.toastService.error(response.message);
-            }
-          },
-          error: (error) => {
-            this.closeModal();
-            this.toastService.error(error.message);
-          },
-        });
+      this.candidateService.filterCandidate(data).subscribe({
+        next: (response) => {
+          if (response.valid && response.data) {
+            this.updateCandidateData.emit(response.data);
+            this.toastService.success(response.message);
+            this.close();
+          } else {
+            this.toastService.error(response.message);
+            this.isLoading = false;
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+          this.isLoading = false;
+        },
+      });
     }
   }
 }

@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UsersComponent } from './users.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,
+    SharedModule,
   ],
   providers: [],
 })

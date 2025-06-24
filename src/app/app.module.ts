@@ -22,6 +22,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from './shared/shared.module';
+import { ToastrModule } from 'ngx-toastr';
+import { ToastComponent } from './shared/components/toast/toast.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,13 +38,13 @@ import { SharedModule } from './shared/shared.module';
     InterviewerFeedbackComponent,
     InterviewerValidationComponent,
     CandidateVerificationComponent,
+    ToastComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     NgbModule,
     CoreModule,
@@ -49,6 +52,17 @@ import { SharedModule } from './shared/shared.module';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      toastComponent: ToastComponent,
+      positionClass: 'toast-top-right',
+      closeButton: true,
+      progressBar: true,
+      preventDuplicates: true,
+      progressAnimation: 'decreasing',
+      timeOut: 5000,
+      toastClass: 'custom-toast',
+    }),
     SharedModule,
   ],
 

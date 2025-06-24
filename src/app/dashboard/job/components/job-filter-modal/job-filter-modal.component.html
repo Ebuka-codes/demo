@@ -1,22 +1,16 @@
 <div
   class="modal fade"
-  #filterJobModal
+  #modalRoot
   id="filterJobModal"
   tabindex="-1"
-  aria-labelledby="modalLabel"
-  aria-hidden="true"
-  (hidden.bs.modal)="resetFilterJobForm()"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Filter Job</h5>
-        <span
-          class="close-icon"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          (click)="resetFilterJobForm()"
-        >
+        <span class="close-icon" data-bs-dismiss="modal" (click)="close()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -75,9 +69,9 @@
             <button
               type="button"
               class="close-btn"
-              data-bs-dismiss="modal"
-              (click)="resetFilterJobForm()"
               [disabled]="isLoading$ | async"
+              data-bs-dismiss="modal"
+              (click)="close()"
             >
               <span>Cancel</span>
             </button>

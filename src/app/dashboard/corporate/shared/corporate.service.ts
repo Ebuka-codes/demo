@@ -29,12 +29,15 @@ export class CorporateService {
   getAllCorporate() {
     return this.httpClient.get<any>(Constants.CORPORATE_URL.CORPORATE);
   }
-  getUserCorporate(): Observable<DataResponse> {
-    return this.httpClient.get<any>(
+  getUserCorporate(): Observable<DataResponse<Corporate>> {
+    return this.httpClient.get<DataResponse<Corporate>>(
       Constants.CORPORATE_URL.CORPORATE + '/get-user-corporate'
     );
   }
-  editCorporate(id: string, data: Corporate): Observable<DataResponse> {
+  editCorporate(
+    id: string,
+    data: Corporate
+  ): Observable<DataResponse<Corporate>> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'corp-key': 'true',
@@ -61,7 +64,7 @@ export class CorporateService {
     );
   }
 
-  convertFileToBase64(file: file): Observable<DataResponse> {
+  convertFileToBase64(file: file): Observable<DataResponse<any>> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -73,7 +76,7 @@ export class CorporateService {
       }
     );
   }
-  generateEndcodeUrl(): Observable<DataResponse> {
+  generateEndcodeUrl(): Observable<DataResponse<any>> {
     return this.httpClient.get<any>(
       Constants.CORPORATE_URL.CORPORATE + '/encode-url'
     );

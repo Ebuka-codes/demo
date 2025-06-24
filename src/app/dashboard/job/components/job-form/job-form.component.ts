@@ -16,11 +16,6 @@ import {
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Modal } from 'bootstrap';
 import { QuillEditorComponent } from 'ngx-quill';
-import {
-  DetailsType,
-  KeyValuePair,
-  QuestionTypeOptions,
-} from 'src/app/shared/type';
 import * as bootstrap from 'bootstrap';
 import { finalize, map, Observable, startWith } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
@@ -29,8 +24,14 @@ import { ToastService } from 'src/app/core/service/toast.service';
 import { MatSelect } from '@angular/material/select';
 import { UtilService } from 'src/app/core/service/util.service';
 import { JobService } from '../../shared/job.service';
-import { job } from '../../shared/job';
+import {
+  DetailsType,
+  job,
+  KeyValuePair,
+  QuestionTypeOptions,
+} from '../../shared/job';
 import Quill from 'quill';
+import { JobQuestionModalComponent } from '../job-question-modal/job-question-modal.component';
 
 @Component({
   selector: 'erecruit-job-form',
@@ -46,6 +47,10 @@ export class JobFormComponent implements OnInit, AfterViewInit {
   @ViewChild('myQuestionModal') modalElement!: ElementRef;
   @ViewChild('questionSelect') questionSelect!: MatSelect;
   @ViewChild('editor') editor!: QuillEditorComponent;
+
+  @ViewChild(JobQuestionModalComponent)
+  JobQuestionModalComponent!: JobQuestionModalComponent;
+
   private quill!: Quill;
   modalInstance!: Modal;
 
@@ -118,6 +123,7 @@ export class JobFormComponent implements OnInit, AfterViewInit {
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
       jobSalary: ['', [Validators.required, this.amountValidator()]],
+      jobSalaryTo: ['', [Validators.required, this.amountValidator()]],
       jobType: ['', Validators.required],
       companyName: [''],
       workMode: ['', Validators.required],
@@ -171,9 +177,7 @@ export class JobFormComponent implements OnInit, AfterViewInit {
             this.form.get('requiredSkills')?.setValue(selectedIds);
             let selectedQuestionIds = [];
             selectedQuestionIds = response.data.questionOptions;
-            console.log(response.data, 'me here');
             const id = selectedQuestionIds.map((q: any) => q.id);
-            this.form.get('questionOptions')?.setValue(id);
             setTimeout(() => {
               if (this.quill) {
                 this.quill.setContents(
@@ -183,6 +187,8 @@ export class JobFormComponent implements OnInit, AfterViewInit {
                 );
               }
             }, 1000);
+
+            this.form.get('questionOptions')?.setValue(id);
           }
         },
         error: (err) => {
@@ -244,6 +250,9 @@ export class JobFormComponent implements OnInit, AfterViewInit {
   }
   get jobSalary() {
     return this.form.get('jobSalary');
+  }
+  get jobSalaryTo() {
+    return this.form.get('jobSalaryTo');
   }
   get jobType() {
     return this.form.get('jobType');
@@ -358,6 +367,7 @@ export class JobFormComponent implements OnInit, AfterViewInit {
   }
   onAddQuestion() {
     this.editId = '';
+    this.JobQuestionModalComponent.open();
   }
   onDeleteQuestion(id: string) {
     this.loaderService.setLoading(true);
@@ -605,6 +615,7 @@ export class JobFormComponent implements OnInit, AfterViewInit {
     });
     this.questionSelect.close();
     this.isEditModal = true;
+    this.JobQuestionModalComponent.open();
   }
 
   onNavigateBack() {

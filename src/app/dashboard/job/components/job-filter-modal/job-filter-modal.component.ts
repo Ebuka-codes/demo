@@ -19,11 +19,16 @@ import { ToastService } from 'src/app/core/service/toast.service';
   styleUrls: ['./job-filter-modal.component.scss'],
 })
 export class JobFilterModalComponent {
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+
+  private modalInstance!: Modal;
+
   @Output() updateJobData: EventEmitter<job[]> = new EventEmitter();
-  @ViewChild('filterJobModal') modalElement!: ElementRef;
-  modalInstance!: Modal;
+
   jobTypes!: any;
+
   isLoading!: boolean;
+
   workModes = new Array<KeyValuePair>(
     {
       key: 'REMOTE',
@@ -66,12 +71,34 @@ export class JobFilterModalComponent {
       status: [''],
     });
   }
-  ngAfterViewInit(): void {
+
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
     this.getJobType();
-    this.modalInstance = new Modal(this.modalElement?.nativeElement);
   }
-  resetFilterJobForm() {
+
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
     this.filterForm.reset();
+    this.isLoading = false;
   }
 
   getJobType() {
@@ -87,37 +114,25 @@ export class JobFilterModalComponent {
     });
   }
 
-  closeModal() {
-    this.modalInstance.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      backdrop?.remove();
-    }
-  }
-
   onFilterJob(payload: jobFilterPayload) {
     this.isLoading = true;
-    this.jobService
-      .filterJob(payload)
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.updateJobData.emit(response.data);
-            this.closeModal();
-            this.resetFilterJobForm();
-            this.toastService.success(response.message);
-          } else {
-            this.isLoading$ = this.loaderService.isLoading$;
-            this.toastService.error(response.message);
-          }
-        },
-        error: (err) => {
-          this.toastService.error(err.message);
-          this.closeModal();
-          this.resetFilterJobForm();
-        },
-      });
+    this.jobService.filterJob(payload).subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.updateJobData.emit(response.data);
+          this.toastService.success(response.message);
+          this.close();
+        } else {
+          this.isLoading$ = this.loaderService.isLoading$;
+          this.toastService.error(response.message);
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        this.toastService.error(err.message);
+        this.isLoading = false;
+      },
+    });
   }
   getPayload(): jobFilterPayload {
     const rawValues = this.filterForm.value;
@@ -140,7 +155,7 @@ export class JobFilterModalComponent {
     ) {
       this.onFilterJob(payload);
     } else {
-      this.closeModal();
+      this.close();
     }
   }
 }

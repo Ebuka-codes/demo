@@ -1,17 +1,18 @@
 <div
   class="modal fade"
-  #scheduledModal
+  #modalRoot
   id="scheduleModal"
   tabindex="-1"
   aria-labelledby="modalLabel"
   aria-hidden="true"
-  (hidden.bs.modal)="resetScheduleForm()"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Schedule Date</h5>
-        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" data-bs-dismiss="modal" (click)="close()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -104,7 +105,12 @@
             </div>
           </div>
           <div class="btn-action">
-            <button type="button" class="close-btn" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="close-btn"
+              data-bs-dismiss="modal"
+              (click)="close()"
+            >
               <span>Cancel</span>
             </button>
 

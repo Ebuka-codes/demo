@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
 import { environment } from 'src/environments/environment';
 import { DataResponse } from '../model/data-response';
+import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
+import { CORP_URL_KEY } from 'src/app/core/model/credential';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +16,12 @@ export class CandidateService {
   baseUrl = environment.API_URL;
   corpUrl!: string;
   constructor(private httpClient: HttpClient) {
-    const value = localStorage.getItem('corp-url');
+    const value = localStorage.getItem(CORP_URL_KEY);
     if (value) {
       this.corpUrl = decodeURIComponent(value);
     }
   }
-  getCandidatesInfo(id: string | null): Observable<DataResponse> {
+  getCandidatesInfo(id: string | null): Observable<DataResponse<Candidate>> {
     const headers = new HttpHeaders().set('corp-url', this.corpUrl);
     return this.httpClient.get<any>(
       Constants.UNPROTECTED_URL.COMMON + `/candidate/${id}`,

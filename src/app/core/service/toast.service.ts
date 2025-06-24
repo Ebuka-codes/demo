@@ -1,26 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Notyf } from 'notyf';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  notfy = new Notyf();
-  constructor() {}
-
+  constructor(private toastr: ToastrService) {}
   success(message: string) {
-    return this.notfy.success({
-      message: message,
-      duration: 3000,
-      position: { x: 'right', y: 'top' },
-    });
+    this.toastr.success(message);
   }
 
   error(message: string) {
-    return this.notfy.error({
-      message: message,
-      duration: 3000,
-      position: { x: 'right', y: 'top' },
-    });
+    this.toastr.error(message, 'Error Message');
   }
 }

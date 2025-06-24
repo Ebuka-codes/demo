@@ -2,9 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from './shared/role.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-
 import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
 import { finalize, Observable } from 'rxjs';
@@ -15,12 +13,20 @@ import { finalize, Observable } from 'rxjs';
   styleUrls: ['./role.component.scss'],
 })
 export class RoleComponent implements OnInit {
-  @ViewChild('myModal') modalElement!: ElementRef;
-  modalInstance!: Modal;
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+
+  private modalInstance!: Modal;
+
   userRoleForm!: FormGroup;
+
   isLoading$!: Observable<boolean>;
+
   roleData!: any[];
+
+  public closeOnOutsideClick: boolean = false;
+
   submitLoading!: boolean;
+
   constructor(
     private fb: FormBuilder,
     private roleService: RoleService,
@@ -40,18 +46,51 @@ export class RoleComponent implements OnInit {
   get description() {
     return this.userRoleForm.get('description');
   }
-  ngAfterViewInit() {
-    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
-  }
-  closeModal() {
-    this.modalInstance.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    backdrop?.remove();
-  }
 
   ngOnInit(): void {
     this.loadUserRole();
   }
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
+  }
+
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
+    this.resetForm();
+    this.submitLoading = false;
+  }
+
+  closeModal(event: any) {
+    if (event) {
+      event.preventDefault();
+    }
+    if (event.type === 'click') {
+      if (this.closeOnOutsideClick) {
+        this.close();
+      } else {
+        return;
+      }
+    }
+  }
+
   loadUserRole() {
     this.roleData = [];
     this.loaderService.setLoading(true);
@@ -75,25 +114,22 @@ export class RoleComponent implements OnInit {
   onSubmit() {
     if (this.userRoleForm.valid) {
       this.submitLoading = true;
-      this.roleService
-        .createUserRole(this.userRoleForm.value)
-        .pipe(finalize(() => (this.submitLoading = false)))
-        .subscribe({
-          next: (response: any) => {
-            if (response.valid) {
-              this.toastService.success(response.message);
-              this.closeModal();
-              this.loadUserRole();
-            } else {
-              this.toastService.error(response.message);
-              this.closeModal();
-            }
-          },
-          error: (error) => {
-            this.toastService.error(error.message);
-            this.closeModal();
-          },
-        });
+      this.roleService.createUserRole(this.userRoleForm.value).subscribe({
+        next: (response: any) => {
+          if (response.valid) {
+            this.toastService.success(response.message);
+            this.loadUserRole();
+            this.close();
+          } else {
+            this.toastService.error(response.message);
+            this.submitLoading = false;
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+          this.submitLoading = false;
+        },
+      });
     } else {
       this.userRoleForm.markAllAsTouched();
     }

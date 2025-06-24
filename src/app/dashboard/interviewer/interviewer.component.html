@@ -19,13 +19,7 @@
       </span>
       <h2>Interviewer</h2>
     </div>
-    <button
-      type="button"
-      data-bs-target="#createInterviewer"
-      data-bs-toggle="modal"
-    >
-      Add New
-    </button>
+    <button type="button" (click)="open()">Add New</button>
   </div>
 
   <div class="interviewer-table">
@@ -177,21 +171,20 @@
   <!-- interviewer-modal  -->
   <div class="create-interviewer">
     <div
-      #myModal
+      #modalRoot
       class="modal fade"
       id="createInterviewer"
       tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-      (hidden.bs.modal)="resetForm()"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
               Create Interviewer
             </h5>
-            <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+            <span class="close-icon" (click)="close()" data-bs-dismiss="modal">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -284,7 +277,12 @@
               </div>
 
               <div class="btn-action">
-                <button type="button" class="close-btn" data-bs-dismiss="modal">
+                <button
+                  type="button"
+                  class="close-btn"
+                  (click)="close()"
+                  data-bs-dismiss="modal"
+                >
                   <span>Cancel</span>
                 </button>
                 <button

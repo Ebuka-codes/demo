@@ -10,24 +10,27 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JobService } from '../../shared/job.service';
 import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
-import { KeyValuePair } from '../../shared/job';
-import { QuestionTypeOptions } from 'src/app/shared/type';
+import { KeyValuePair, QuestionTypeOptions } from '../../shared/job';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { finalize } from 'rxjs';
+import { UtilService } from 'src/app/core/service/util.service';
 @Component({
   selector: 'ercruit-job-question-modal',
   templateUrl: './job-question-modal.component.html',
   styleUrls: ['./job-question-modal.component.scss'],
 })
 export class JobQuestionModalComponent {
-  @ViewChild('myQuestionModal') modalElement!: ElementRef;
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+  private modalInstance!: Modal;
+
   @Output() updateQuestion: EventEmitter<void> = new EventEmitter();
+
   @Input() editId!: any;
+
   @Input() isEditModal!: boolean;
-  modalInstance!: Modal;
+
   questionForm!: FormGroup;
   questionTypeOptions: Array<QuestionTypeOptions> = [];
   isSubmittedQuestion: boolean = false;
@@ -44,7 +47,8 @@ export class JobQuestionModalComponent {
     private fb: FormBuilder,
     private jobService: JobService,
     private toastService: ToastService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private utilService: UtilService
   ) {
     this.questionForm = this.fb.group({
       questionType: ['', Validators.required],
@@ -93,7 +97,25 @@ export class JobQuestionModalComponent {
   }
 
   ngAfterViewInit() {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
+  }
+
+  validateNumberInput(event: any, acceptDecimal: boolean = false) {
+    return this.utilService.isValidNumberInput(event, acceptDecimal);
   }
 
   addQuestionOption() {
@@ -110,55 +132,45 @@ export class JobQuestionModalComponent {
   }
   onCreateQuestion(questionData: any) {
     this.isLoadingQuestion = true;
-    this.jobService
-      .createQuestion(questionData)
-      .pipe(
-        finalize(() => {
-          this.isLoadingQuestion = false;
-        })
-      )
-      .subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.questionTypeOptions = [];
-            this.updateQuestion.emit();
-            this.toastService.success(response.message);
-            this.closeModal();
-          } else {
-            this.closeModal();
-            this.toastService.success(response.message);
-          }
-        },
-        error: (error: any) => {
+    this.jobService.createQuestion(questionData).subscribe({
+      next: (response) => {
+        if (response.valid && response.data) {
           this.questionTypeOptions = [];
-          this.toastService.error(error.message);
-          this.closeModal();
-        },
-      });
+          this.updateQuestion.emit();
+          this.toastService.success(response.message);
+          this.close();
+        } else {
+          this.toastService.error(response.message);
+          this.isLoadingQuestion = false;
+        }
+      },
+      error: (error: any) => {
+        this.questionTypeOptions = [];
+        this.toastService.error(error.message);
+        this.isLoadingQuestion = false;
+      },
+    });
   }
   onEditQuestion(id: string, questionData: any) {
     this.isLoadingQuestion = true;
-    this.jobService
-      .editQuestion(id, questionData)
-      .pipe(finalize(() => (this.isLoadingQuestion = false)))
-      .subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.questionTypeOptions = [];
-            this.updateQuestion.emit();
-            this.toastService.success(response.message);
-            this.closeModal();
-          } else {
-            this.toastService.error(response.message);
-            this.closeModal();
-          }
-        },
-        error: (error: any) => {
+    this.jobService.editQuestion(id, questionData).subscribe({
+      next: (response) => {
+        if (response.valid && response.data) {
           this.questionTypeOptions = [];
-          this.toastService.error(error.message);
-          this.closeModal();
-        },
-      });
+          this.updateQuestion.emit();
+          this.toastService.success(response.message);
+          this.close();
+        } else {
+          this.toastService.error(response.message);
+          this.isLoadingQuestion = false;
+        }
+      },
+      error: (error: any) => {
+        this.questionTypeOptions = [];
+        this.toastService.error(error.message);
+        this.isLoadingQuestion = false;
+      },
+    });
   }
   getQuestionOperator() {
     this.loaderService.setLoading(true);
@@ -169,6 +181,7 @@ export class JobQuestionModalComponent {
       },
       error: (error: any) => {
         this.loaderService.setLoading(false);
+        this.toastService.error(error.message);
       },
     });
   }
@@ -199,8 +212,6 @@ export class JobQuestionModalComponent {
       next: (response: any) => {
         if (response.valid && response.data) {
           this.questionForm.patchValue(response.data);
-          // this.questionTypeOptions = response.data.options;
-          console.log(response.data);
           this.questionForm.updateValueAndValidity();
           if (response.data.isQualifyQuestion === true) {
             this.isQualifyQuestion = true;
@@ -237,12 +248,16 @@ export class JobQuestionModalComponent {
     }
   }
 
-  closeModal() {
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
     this.modalInstance.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    backdrop?.remove();
+    this.resetQuestionForm();
     this.isLoadingQuestion = false;
   }
+
   resetQuestionForm() {
     this.questionForm.reset();
     this.questionTypeOptions = [];

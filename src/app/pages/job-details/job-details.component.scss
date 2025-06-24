@@ -90,7 +90,7 @@
 
   .loader-container {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
@@ -108,100 +108,3 @@
     }
   }
 }
-
-// .job-detail-container {
-//   margin-top: 60px;
-//   margin-left: auto;
-//   margin-right: auto;
-//   margin-bottom: 100px;
-//   max-width: 70%;
-//   width: 90%;
-//   .job-nav {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     span {
-//       cursor: pointer;
-//       svg {
-//         width: 16px;
-//         height: 16px;
-//         color: #28a745;
-//       }
-
-//       a {
-//         outline: none;
-//         text-decoration: none;
-//         color: #28a745;
-//         display: flex;
-//         align-items: center;
-//         font-size: 14px;
-//       }
-//     }
-//   }
-//   .job-details-header {
-//     font-weight: 400;
-//     display: flex;
-//     flex-direction: row;
-//     align-items: center;
-//     gap: 2rem;
-//     padding: 8px 0 32px;
-//     justify-content: space-between;
-//     margin-top: 10px;
-//     div {
-//       display: flex;
-//       flex-direction: column;
-//       gap: 10px;
-//       h2 {
-//         font-size: 1.5rem;
-//         line-height: 2.5rem;
-//         font-weight: 600;
-//       }
-//       span {
-//         display: flex;
-//         align-items: center;
-//         gap: 5px;
-//         font-size: 16px;
-
-//         svg {
-//           height: 18px;
-//         }
-//       }
-//     }
-//   }
-
-//   ::ng-deep .job-details-desc {
-//     margin-top: 10px;
-//     a {
-//       color: blue;
-//     }
-//     h1,
-//     h2,
-//     h3,
-//     h4 {
-//       color: black;
-//       font-size: 16px;
-//       font-weight: 500;
-//       margin: 10px 0px;
-//     }
-//     ul,
-//     ol {
-//       margin-top: 10px;
-//       margin-bottom: 30px;
-//       padding-left: 20px;
-//     }
-//     li {
-//       margin-bottom: 8px;
-//       font-size: 15px;
-//     }
-//     p {
-//       margin-bottom: 30px;
-//       font-size: 15px;
-//     }
-//   }
-//   .job-divider {
-//     border: 0;
-//     border-bottom: 1px solid #c9c8c8;
-//     margin-top: 40px;
-//   }
-//
-// }

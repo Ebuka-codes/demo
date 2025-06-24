@@ -11,8 +11,7 @@ import {
 import { CandidateService } from '../../shared/candidate.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'erecruit-candidate-mail-modal',
@@ -20,10 +19,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./candidate-mail-modal.component.scss'],
 })
 export class CandidateMailModalComponent {
-  @ViewChild('modal') modalElement!: ElementRef;
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+
+  private modalInstance!: Modal;
+
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
+
   @Input() candidateData!: any;
-  modalInstance!: Modal;
+
   message!: string;
   chat!: any[];
   senderChat!: any[];
@@ -35,10 +38,35 @@ export class CandidateMailModalComponent {
     private toastService: ToastService
   ) {}
 
-  ngAfterViewInit(): void {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+  ngOnInit(): void {
+    document.documentElement.style.overflowY = 'hidden';
+  }
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
   }
 
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
+    this.isSendingMsg = false;
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['candidateData']) {
       this.candidateService.getMessage(this.candidateData?.id).subscribe({
@@ -61,22 +89,7 @@ export class CandidateMailModalComponent {
       });
     }
   }
-  closeModal() {
-    const mailCandidateModal =
-      Modal.getInstance(
-        document.getElementById('mailCandidateModal') as HTMLDivElement
-      ) ||
-      new Modal(
-        document.getElementById('mailCandidateModal') as HTMLDivElement
-      );
-    mailCandidateModal.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      backdrop.remove();
-    }
 
-    this.isSendingMsg = false;
-  }
   clearMessage() {
     this.message = '';
   }
@@ -90,18 +103,18 @@ export class CandidateMailModalComponent {
           content: this.message,
         })
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             if (response) {
-              this.toastService.success('Message sent!');
-              this.closeModal();
+              this.toastService.success('Message sent successfully');
               this.candidateUpdate.emit();
+              this.close();
             } else {
-              this.closeModal();
+              this.toastService.error(response.message);
             }
           },
           error: (error) => {
             this.toastService.error(error.message);
-            this.closeModal();
+            this.isSendingMsg = false;
           },
         });
     }

@@ -46,6 +46,10 @@ export const CORP_KEY: string | null = 'corp-key';
 
 export const CORP_URL: string = 'corp-url';
 
+export const CORP_URL_KEY: string = 'c1r_pu9_x1';
+
 export const AUTHORIZATION_HEADER: string = 'Authorization';
 
 export const BEARER: string = 'Bearer';
+
+export const JOB_ID_KEY = 'j8x_k92_jd';

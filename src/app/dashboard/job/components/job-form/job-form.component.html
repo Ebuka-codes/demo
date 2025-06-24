@@ -458,7 +458,7 @@
       <div class="row">
         <div class="col">
           <label for="jobSalary"
-            >Job Salary <span class="required-icon">*</span></label
+            >Job Salary From <span class="required-icon">*</span></label
           >
           <input
             type="text"
@@ -478,85 +478,28 @@
             </small>
           </div>
         </div>
+
         <div class="col">
-          <label for="requiredSkills"
-            >Required Skill <span class="required-icon">*</span></label
+          <label for="jobSalary"
+            >Job Salary To <span class="required-icon">*</span></label
           >
-
-          <mat-form-field>
-            <mat-select
-              panelClass="custom-dropdown"
-              disableRipple
-              formControlName="requiredSkills"
-              multiple
-            >
-              <mat-option *ngFor="let skill of jobSkillData" [value]="skill.id">
-                <div class="option-container">
-                  <div class="option-text">{{ skill.description }}</div>
-                  <div class="icon-container">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-6"
-                      style="width: 20px; color: #919295dd"
-                      (click)="
-                        handleEditQuery($event, skill.id, skill.description)
-                      "
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                      />
-                    </svg>
-
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      class="size-6"
-                      (click)="
-                        handleDeleteQuery(skill.id, 'jobSkill', skill.id)
-                      "
-                      style="width: 20px; color: #919295dd"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </mat-option>
-              <div class="skill-dropdown">
-                <mat-option>
-                  <input
-                    #newJobSkill
-                    placeholder="Type skill and press enter"
-                    class="addInput"
-                    (click)="$event.stopPropagation()"
-                    (keydown.enter)="
-                      isEditOpen
-                        ? editQueryData($event, newJobSkill.value, 'jobSkill')
-                        : addNewQueryData($event, newJobSkill.value, 'jobSkill')
-                    "
-                    (keydown)="handleKeydown($event)"
-                    [value]="selectedValue"
-                  />
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-
-          <span *ngIf="requiredSkills?.invalid && isSubmitted">
-            <small *ngIf="requiredSkills?.errors?.['required']">
-              Required skill field is required
+          <input
+            type="text"
+            formControlName="jobSalaryTo"
+            amountFormat
+            (keypress)="validateNumberInput($event)"
+          />
+          <div *ngIf="jobSalaryTo?.invalid && isSubmitted">
+            <small *ngIf="jobSalaryTo?.errors?.['required']">
+              Job salary field is required
             </small>
-          </span>
+
+            <small
+              *ngIf="!jobSalaryTo?.errors?.['required'] && jobSalary?.errors?.['invalidAmount']"
+            >
+              Job salary field is invalid
+            </small>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -617,6 +560,90 @@
 
       <div class="row">
         <div class="col">
+          <label for="requiredSkills"
+            >Required Skill <span class="required-icon">*</span></label
+          >
+
+          <mat-form-field>
+            <mat-select
+              panelClass="custom-dropdown"
+              disableRipple
+              formControlName="requiredSkills"
+              multiple
+            >
+              <mat-option *ngFor="let skill of jobSkillData" [value]="skill.id">
+                <div class="option-container">
+                  <div class="option-text">{{ skill.description }}</div>
+                  <div class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                      style="width: 20px; color: #919295dd"
+                      (click)="
+                        handleEditQuery($event, skill.id, skill.description)
+                      "
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                      (click)="
+                        handleDeleteQuery(skill.id, 'jobSkill', skill.id)
+                      "
+                      style="width: 20px; color: #919295dd"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </mat-option>
+              <div class="skill-dropdown">
+                <mat-option>
+                  <input
+                    #newJobSkill
+                    placeholder="Type skill and press enter"
+                    class="addInput"
+                    style="width: 760px"
+                    (click)="$event.stopPropagation()"
+                    (keydown.enter)="
+                      isEditOpen
+                        ? editQueryData($event, newJobSkill.value, 'jobSkill')
+                        : addNewQueryData($event, newJobSkill.value, 'jobSkill')
+                    "
+                    (keydown)="handleKeydown($event)"
+                    [value]="selectedValue"
+                  />
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+          <span *ngIf="requiredSkills?.invalid && isSubmitted">
+            <small *ngIf="requiredSkills?.errors?.['required']">
+              Required skill field is required
+            </small>
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
           <label for="Questions"
             >Questions <span class="required-icon">*</span></label
           >
@@ -643,8 +670,6 @@
                       stroke="currentColor"
                       class="size-6"
                       style="width: 20px; color: #919295dd"
-                      data-bs-toggle="modal"
-                      data-bs-target="#questionModal"
                       (click)="onEditQuestion(question.id)"
                     >
                       <path
@@ -681,24 +706,11 @@
         </div>
       </div>
 
-      <button
-        class="question-btn mb-3"
-        data-bs-toggle="modal"
-        data-bs-target="#questionModal"
-        type="button"
-        (click)="onAddQuestion()"
-      >
+      <button class="question-btn mb-3" type="button" (click)="onAddQuestion()">
         + Add Questions
       </button>
 
-      <button
-        class="ai-btn"
-        type="button"
-        data-bs-target="#rewriteWithAiModal"
-        data-bs-toggle="modal"
-      >
-        Rewrite with Ai
-      </button>
+      <button class="ai-btn" type="button">Rewrite with Ai</button>
 
       <div class="row">
         <label for="description" style="margin-bottom: 5px"
@@ -724,7 +736,7 @@
   <div class="submit-btn">
     <button type="button" [disabled]="loading" (click)="onSubmit()">
       <ng-container *ngIf="loading; else content">
-        <span class="mini-loader-spinner"></span>
+        <img src="../../../../../assets/image/mini_loader.gif" alt="" />
       </ng-container>
       <ng-template #content>
         <span>Continue</span>

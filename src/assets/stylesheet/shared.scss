@@ -151,7 +151,8 @@ $demo-theme: mat.define-light-theme(
   .dropdown-item {
     color: rgb(71 85 105);
     &:focus,
-    &:hover {
+    &:hover,
+    .selected {
       background-color: #28a745 !important;
       color: white !important;
     }
@@ -486,20 +487,6 @@ input[type="checkbox"] {
   background: transparent !important;
 }
 
-// .ngx-pagination .pagination-previous.disabled::before {
-//   font-family: FontAwesome !important;
-//   content: "\f053" !important;
-//   display: inline-block !important;
-//   margin-right: 0rem !important;
-// }
-
-// .ngx-pagination .pagination-previous.disabled::after {
-//   font-family: FontAwesome !important;
-//   content: "\f054" !important;
-//   display: inline-block !important;
-//   margin-left: 0rem !important;
-// }
-
 .ngx-pagination .show-for-sr {
   position: absolute !important;
   width: 1px;
@@ -510,4 +497,13 @@ input[type="checkbox"] {
 
 .ngx-pagination .small-screen {
   display: none !important;
+}
+
+.toast-top-right {
+  top: 20px !important;
+  right: 20px !important;
+  bottom: auto !important;
+  left: auto !important;
+  position: fixed !important;
+  z-index: 100000 !important;
 }

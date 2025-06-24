@@ -63,7 +63,7 @@
       <!-- personal-information -->
       <mat-step [stepControl]="personalFormGroup">
         <form action="" [formGroup]="personalFormGroup">
-          <div class="apply-flow-block__header">
+          <!-- <div class="apply-flow-block__header">
             <h2 class="apply-flow-block__title">Import your profile</h2>
             <p>You can import your information</p>
             <div class="apply-flow-profile-import__awli-content">
@@ -110,7 +110,7 @@
                 <span>Upload Resume</span>
               </button>
             </div>
-          </div>
+          </div> -->
 
           <div class="contact-info">
             <div class="bio-data__header">
@@ -395,9 +395,8 @@
                   #modal1
                   id="workHistoryModal"
                   tabindex="-1"
-                  aria-labelledby="modalLabel"
-                  aria-hidden="true"
-                  (hidden.bs.modal)="closeModal(1)"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
                 >
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -415,7 +414,11 @@
                           </h5>
                         </span>
 
-                        <span class="close-btn" (click)="closeModal(1)">
+                        <span
+                          class="close-icon"
+                          data-bs-dismiss="modal"
+                          (click)="closeModal(1)"
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -560,6 +563,7 @@
                             type="text"
                             formControlName="jobDescription"
                             required
+                            [maxlength]="1000"
                             rows="10"
                             style="
                               border-radius: 5px;
@@ -569,13 +573,24 @@
                           ></textarea>
 
                           <div
-                            *ngIf="
-                              jobDescription?.invalid && jobDescription?.touched
-                            "
+                            class="d-flex justify-between align-items-center mt-1"
                           >
-                            <small *ngIf="jobDescription?.errors?.['required']"
-                              >Job description is required</small
+                            <span
+                              *ngIf="
+                                jobDescription?.invalid &&
+                                jobDescription?.touched
+                              "
                             >
+                              <small
+                                *ngIf="jobDescription?.errors?.['required']"
+                                >Job description is required</small
+                              >
+                            </span>
+
+                            <span class="ms-auto" style="font-size: 13px">
+                              {{ jobDescription?.value?.length || 0 }} / 1000
+                              characters
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -585,6 +600,7 @@
                           type="button"
                           class="btn-cancel"
                           (click)="closeModal(1)"
+                          data-bs-dismiss="modal"
                         >
                           Close
                         </button>
@@ -597,7 +613,7 @@
                           <ng-container
                             *ngIf="isEditModalOpen; else showBtnText"
                           >
-                            Update
+                            Save
                           </ng-container>
                           <ng-template #showBtnText>Add </ng-template>
                         </button>
@@ -639,9 +655,11 @@
                       (click)="handleEditEducation(2, i)"
                     >
                       <span>
-                        <strong>{{ "Bachelor degree" }}</strong> at
-                        {{ "University of lagos" }} {{ " From: 2020-10-10" }} -
-                        {{ "To: 2020-10-10" }}
+                        <strong>{{ education.degree }}</strong> at
+                        {{ education.institutionName }} ({{
+                          formatDate(education.startDate)
+                        }}
+                        - {{ formatDate(education.endDate) }})
                       </span>
                       <span
                         style="display: flex; gap: 10px; align-items: center"
@@ -693,7 +711,8 @@
                   #modal2
                   id="educationHistoryModal"
                   tabindex="-1"
-                  (hidden.bs.modal)="closeModal(2)"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
                 >
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -711,7 +730,11 @@
                           </h5>
                         </span>
 
-                        <span class="close-btn" (click)="closeModal(2)">
+                        <span
+                          class="close-icon"
+                          data-bs-dismiss="modal"
+                          (click)="closeModal(2)"
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -936,7 +959,7 @@
                           type="button"
                           class="btn-cancel"
                           data-bs-dismiss="modal"
-                          aria-label="Close"
+                          (click)="closeModal(2)"
                         >
                           Close
                         </button>
@@ -948,9 +971,9 @@
                           <ng-container
                             *ngIf="isEditModalOpen; else showBtnText"
                           >
-                            Update
+                            Save
                           </ng-container>
-                          <ng-template #showText> Add </ng-template>
+                          <ng-template #showBtnText> Add </ng-template>
                         </button>
                       </div>
                     </div>
@@ -1015,7 +1038,11 @@
                   </div>
 
                   <div>
-                    <button class="skills-btn" (click)="openModal(3)">
+                    <button
+                      class="skills-btn"
+                      data-bs-dismiss="modal"
+                      (click)="openModal(3)"
+                    >
                       + Add Skills
                     </button>
                   </div>
@@ -1025,9 +1052,8 @@
                     #modal3
                     id="skillModal"
                     tabindex="-1"
-                    aria-labelledby="modalLabel"
-                    aria-hidden="true"
-                    (hidden.bs.modal)="closeModal(3)"
+                    data-bs-backdrop="static"
+                    data-bs-keyboard="false"
                   >
                     <div class="modal-dialog modal-lg">
                       <div class="modal-content">
@@ -1046,9 +1072,10 @@
                           </span>
 
                           <span
-                            class="close-btn"
+                            class="close-icon"
                             aria-label="Close"
                             (click)="closeModal(3)"
+                            data-bs-dismiss="modal"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1111,12 +1138,11 @@
                             <mat-form-field>
                               <input
                                 matInput
-                                type="number"
+                                type="text"
                                 formControlName="noOfYears"
                                 required
-                                inputmode="numeric"
                                 min="1"
-                                (keydown)="preventInvalidKeys($event)"
+                                (keypress)="validateNumberInput($event)"
                               />
                             </mat-form-field>
                             <div
@@ -1133,8 +1159,8 @@
                           <button
                             type="button"
                             class="btn-cancel"
+                            (click)="closeModal(3)"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
                           >
                             Close
                           </button>
@@ -1146,7 +1172,7 @@
                             <ng-container
                               *ngIf="isEditModalOpen; else showSkillBtnText"
                             >
-                              Update
+                              Save
                             </ng-container>
                             <ng-template #showSkillBtnText> Add </ng-template>
                           </button>
@@ -1335,10 +1361,7 @@
                       <input
                         [formControlName]="item.id"
                         matInput
-                        type="number"
-                        inputmode="numeric"
-                        min="1"
-                        (keydown)="preventInvalidKey($event)"
+                        (keypress)="validateNumberInput($event)"
                       />
                     </mat-form-field>
 

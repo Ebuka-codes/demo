@@ -1,0 +1,110 @@
+.erecruit-base-btn {
+  font-size: 16px;
+  border: none;
+  color: #ffffff;
+  border-radius: 10px;
+  text-transform: capitalize;
+  font-weight: 600;
+  padding: 16px;
+  position: relative;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  outline: none;
+  .spinner img {
+    height: 20px;
+  }
+  .button-text {
+    margin: auto;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+.spinner {
+  margin-right: 8px;
+}
+
+.extraSmall-btn {
+  min-width: 120px;
+  height: 36px;
+  justify-content: unset;
+
+  .spinner img {
+    height: 18px;
+  }
+
+  .button-text {
+    font-size: 14px;
+  }
+}
+.small-btn {
+  min-width: 100px;
+  height: 40px;
+  justify-content: unset;
+  .spinner img {
+    height: 18px;
+  }
+  .button-text {
+    font-size: 14px;
+  }
+}
+
+.medium-btn {
+  min-width: 150px;
+  height: 48px;
+  justify-content: unset;
+  .button-text {
+    font-size: 14px;
+  }
+}
+
+.large-btn {
+  min-width: 366.4px;
+  height: 56px;
+}
+
+.primary-btn {
+  background-color: #28a745;
+  &:hover,
+  :focus {
+    box-shadow: #0000004d 0 2px 6px;
+    background-color: #28a745;
+    outline: none;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.secondary-btn {
+  background-color: #eeee;
+  color: #484747;
+  &:hover,
+  :focus {
+    box-shadow: #0000004d 0 2px 6px;
+    background-color: #f1f1f1;
+    color: black;
+    outline: none;
+  }
+}
+
+.outline-btn {
+  color: #28a745;
+  background: none;
+  text-transform: none;
+  font-size: 1.4rem;
+  font-weight: normal;
+  padding-right: 0;
+  padding-top: 0;
+  gap: 5px;
+
+  &:hover {
+    background: none;
+    text-transform: none;
+    box-shadow: none;
+  }
+}

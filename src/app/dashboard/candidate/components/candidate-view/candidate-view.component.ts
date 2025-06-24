@@ -9,10 +9,11 @@ import {
 import { Candidate } from '../../shared/candidate';
 import { CandidateService } from '../../shared/candidate.service';
 import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
 import { finalize } from 'rxjs';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { CandidateSearchModalComponent } from '../candidate-search-modal/candidate-search-modal.component';
+import { CandidateScheduleDateComponent } from '../candidate-schedule-date/candidate-schedule-date.component';
+import { CandidateMailModalComponent } from '../candidate-mail-modal/candidate-mail-modal.component';
 
 @Component({
   selector: 'erecruit-candidate-view',
@@ -20,65 +21,100 @@ import { ToastService } from 'src/app/core/service/toast.service';
   styleUrls: ['./candidate-view.component.scss'],
 })
 export class CandidateViewComponent {
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+
+  private modalInstance!: Modal;
+
+  @ViewChild(CandidateScheduleDateComponent)
+  CandidateScheduleDateComponent!: CandidateScheduleDateComponent;
+
+  @ViewChild(CandidateMailModalComponent)
+  CandidateMailModalComponent!: CandidateMailModalComponent;
+
+  @ViewChild(CandidateViewComponent)
+  CandidateViewComponent!: CandidateViewComponent;
+
   @Input() candidateViewData!: Candidate;
+
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
+
   @Output() openScheduleModal: EventEmitter<string> = new EventEmitter();
+
   @Output() openMailCandidateModal: EventEmitter<any> = new EventEmitter();
-  @ViewChild('myModal') modalElement!: ElementRef;
-  @ViewChild('scheduleModal') modalSchedule!: ElementRef;
-  modalInstance!: Modal;
-  modalScheduleInstance!: Modal;
+
   candidateId!: string;
+
   isRejecting!: boolean;
+
   isHiring!: boolean;
+
   constructor(
     private candidateService: CandidateService,
-    private loaderService: LoaderService,
     private toastService: ToastService
   ) {}
 
-  ngAfterViewInit(): void {
-    this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
   }
+
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
+    this.isRejecting = false;
+    this.isHiring = false;
+  }
+
   hireCandidate(id: string) {
     this.isHiring = true;
-    this.candidateService
-      .hireCandidateById(id, { status: 'HIRED' })
-      .pipe(finalize(() => (this.isHiring = false)))
-      .subscribe({
-        next: (response) => {
-          this.modalInstance.hide();
-          const backdrop = document.querySelector('.modal-backdrop');
-          backdrop?.remove();
-          this.candidateUpdate.emit();
-          this.toastService.success(response.message);
-        },
-        error: (error) => {
-          this.toastService.error(error.message);
-        },
-      });
+    this.candidateService.hireCandidateById(id, { status: 'HIRED' }).subscribe({
+      next: (response) => {
+        this.candidateUpdate.emit();
+        this.toastService.success(response.message);
+        this.close();
+      },
+      error: (error) => {
+        this.toastService.error(error.message);
+        this.isHiring = false;
+      },
+    });
   }
   rejectCandidate(id: string) {
     this.isRejecting = true;
     this.candidateService
       .rejectCandidateById(id, { status: 'REJECTED' })
-      .pipe(finalize(() => (this.isRejecting = false)))
       .subscribe({
         next: (response) => {
-          this.modalInstance.hide();
-          const backdrop = document.querySelector('.modal-backdrop');
-          backdrop?.remove();
           this.toastService.success(response.message);
           this.candidateUpdate.emit();
+          this.close();
         },
         error: (error) => {
           this.toastService.error(error.message);
+          this.isRejecting = false;
         },
       });
   }
 
   onScheduleDate(id: string) {
     this.openScheduleModal.emit(id);
+    this.CandidateScheduleDateComponent.open();
   }
 
   updateCandidateTable() {

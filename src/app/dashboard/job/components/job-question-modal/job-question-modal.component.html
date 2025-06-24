@@ -1,11 +1,10 @@
 <div
   class="modal fade"
-  #myQuestionModal
+  #modalRoot
   id="questionModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
   tabindex="-1"
-  aria-labelledby="modalLabel"
-  aria-hidden="true"
-  (hidden.bs.modal)="resetQuestionForm()"
 >
   <div class="modal-dialog">
     <div class="modal-content">
@@ -13,7 +12,7 @@
         <h5 class="modal-title" id="staticBackdropLabel">
           {{ isEditModal ? "Edit Question" : "Add Question" }}
         </h5>
-        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" (click)="close()" data-bs-dismiss="modal">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -115,10 +114,8 @@
                   <input
                     matInput
                     formControlName="qualifyValue"
-                    type="number"
-                    inputmode="numeric"
-                    min="1"
-                    (keydown)="preventInvalidKey($event)"
+                    amountFormat
+                    (keypress)="validateNumberInput($event)"
                   />
                 </mat-form-field>
                 <div *ngIf="qualifyValue?.invalid && questionTypes?.touched">
@@ -169,7 +166,12 @@
           </div>
 
           <div class="btn-action">
-            <button type="button" class="close-btn" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="close-btn"
+              (click)="close()"
+              data-bs-dismiss="modal"
+            >
               <span>Cancel</span>
             </button>
             <button

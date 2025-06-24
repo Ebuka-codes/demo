@@ -32,7 +32,7 @@
       background-size: cover;
       background-repeat: no-repeat;
       width: 100%;
-      max-height: 300px;
+      max-height: 150px;
       position: relative;
 
       img {
@@ -49,7 +49,7 @@
           margin-top: 40px;
           max-width: 500px;
           h1 {
-            font-size: 40px;
+            font-size: 26px;
             line-height: 1;
             font-weight: 600;
           }
@@ -60,7 +60,7 @@
         }
         img {
           width: auto;
-          height: 400px;
+          height: 280px;
         }
       }
     }
@@ -68,7 +68,7 @@
     .search {
       width: 95%;
       display: flex;
-      margin-top: 60px;
+      margin-top: 70px;
       position: relative;
       svg {
         position: absolute;
@@ -170,7 +170,7 @@
             z-index: 10000;
           }
           .selected {
-            color: #28a745 !important;
+            color: #28a745;
           }
           .search-filter__pill-counter {
             background: #299345;

@@ -19,13 +19,8 @@
       </span>
       <h2>Manage Role</h2>
     </div>
-    <button
-      type="button"
-      data-bs-toggle="modal"
-      data-bs-target="#createUserRoleModal"
-    >
-      Add Role
-    </button>
+
+    <button type="button" (click)="open()">Add Role</button>
   </header>
 
   <div class="role-table">
@@ -181,21 +176,17 @@
 
   <!-- create-role-modal -->
   <div
-    #myModal
+    #modalRoot
     class="modal fade"
-    id="createUserRoleModal"
-    data-backdrop="static"
-    data-keyboard="false"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
     tabindex="-1"
-    aria-labelledby="createUserRoleModal"
-    aria-hidden="true"
-    (hidden.bs.modal)="resetForm()"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Add Role</h5>
-          <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <span class="close-icon" (click)="close()" data-bs-dismiss="modal">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -247,7 +238,12 @@
               </div>
             </div>
             <div class="btn-action">
-              <button type="button" class="close-btn" data-bs-dismiss="modal">
+              <button
+                type="button"
+                class="close-btn"
+                (click)="close()"
+                data-bs-dismiss="modal"
+              >
                 <span>Cancel</span>
               </button>
               <button type="submit" class="submit-btn">

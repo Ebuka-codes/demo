@@ -17,12 +17,20 @@ import { finalize } from 'rxjs';
   styleUrls: ['./user-create-modal.component.scss'],
 })
 export class UserCreateModalComponent {
-  @ViewChild('myModal') modalElement!: ElementRef;
+  @ViewChild('modalRoot', { static: true }) modalElementRef!: ElementRef;
+
+  private modalInstance!: Modal;
+
   @Output() userUpdate: EventEmitter<any> = new EventEmitter();
-  modalInstance!: Modal;
+
+  public closeOnOutsideClick: boolean = false;
+
   submitLoading!: boolean;
+
   userForm!: FormGroup;
+
   userRoleData!: any[];
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -69,33 +77,67 @@ export class UserCreateModalComponent {
   get role() {
     return this.userForm.get('role');
   }
-  closeModal() {
-    this.modalInstance.hide();
-    const backdrop = document.querySelector('.modal-backdrop');
-    backdrop?.remove();
+
+  ngAfterViewInit() {
+    this.modalInstance = Modal.getOrCreateInstance(
+      this.modalElementRef.nativeElement
+    );
+    this.modalElementRef.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        // Ensure the cleanup happens after hide()
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      }
+    );
   }
+
+  open() {
+    this.modalInstance.show();
+  }
+
+  close() {
+    this.modalInstance.hide();
+    this.resetForm();
+    this.submitLoading = false;
+  }
+
+  closeModal(event: any) {
+    if (event) {
+      event.preventDefault();
+    }
+    if (event.type === 'click') {
+      if (this.closeOnOutsideClick) {
+        this.close();
+      } else {
+        return;
+      }
+    }
+  }
+
   onSubmit() {
     if (this.userForm.valid) {
       this.submitLoading = true;
-      this.userService
-        .createUser(this.userForm.value)
-        .pipe(finalize(() => (this.submitLoading = false)))
-        .subscribe({
-          next: (response: any) => {
-            if (response.valid && response.data) {
-              this.toasterService.success('User created successfully');
-              this.closeModal();
-              this.userUpdate.emit();
-            } else {
-              this.closeModal();
-              this.toasterService.error(response.message);
-            }
-          },
-          error: (error) => {
-            this.toasterService.error(error.message);
-            this.closeModal();
-          },
-        });
+      this.userService.createUser(this.userForm.value).subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.toasterService.success('User created successfully');
+            this.userUpdate.emit();
+            this.close();
+          } else {
+            this.toasterService.error(response.message);
+            this.submitLoading = false;
+          }
+        },
+        error: (error) => {
+          this.toasterService.error(error.message);
+          this.submitLoading = false;
+        },
+      });
     } else {
       this.userForm.markAllAsTouched();
     }

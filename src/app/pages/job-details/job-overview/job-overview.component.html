@@ -58,12 +58,7 @@
           <span class="info-location">{{ jobData.jobLocation }}</span>
         </div>
       </div>
-      <button
-        type="button"
-        class="apply-btn"
-        data-bs-toggle="modal"
-        data-bs-target="#loginModal"
-      >
+      <button type="button" class="apply-btn" (click)="openModal()">
         Apply
       </button>
     </div>

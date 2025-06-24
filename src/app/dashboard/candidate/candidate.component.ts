@@ -18,6 +18,13 @@ import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchModalComponent } from './components/candidate-search-modal/candidate-search-modal.component';
+import { JobService } from '../job/shared/job.service';
+import { InterviewerService } from '../interviewer/shared/interviewer.service';
+import { CandidateViewComponent } from './components/candidate-view/candidate-view.component';
+import { CandidateScheduleDateComponent } from './components/candidate-schedule-date/candidate-schedule-date.component';
+import { CandidateMailModalComponent } from './components/candidate-mail-modal/candidate-mail-modal.component';
+import { CandidateRejectComponent } from './components/candidate-reject-modal/candidate-reject.component';
+import { CandidateFilterModalComponent } from './components/candidate-filter-modal/candidate-filter-modal.component';
 
 @Component({
   selector: 'erecruit-candidate',
@@ -25,8 +32,21 @@ import { CandidateSearchModalComponent } from './components/candidate-search-mod
   styleUrls: ['./candidate.component.scss'],
 })
 export class CandidateComponent implements OnInit {
-  @ViewChild('viewCandidateModal') firstModal!: ElementRef;
-  @ViewChild('scheduleDateModal') secondModal!: ElementRef;
+  @ViewChild(CandidateViewComponent)
+  CandidateViewComponent!: CandidateViewComponent;
+
+  @ViewChild(CandidateScheduleDateComponent)
+  CandidateScheduleDateComponent!: CandidateScheduleDateComponent;
+
+  @ViewChild(CandidateMailModalComponent)
+  CandidateMailModalComponent!: CandidateMailModalComponent;
+
+  @ViewChild(CandidateRejectComponent)
+  CandidateRejectComponent!: CandidateRejectComponent;
+
+  @ViewChild(CandidateFilterModalComponent)
+  CandidateFilterModalComponent!: CandidateFilterModalComponent;
+
   @ViewChild('matSelect') matSelect!: MatSelect;
 
   candidateData!: Array<Candidate>;
@@ -54,6 +74,8 @@ export class CandidateComponent implements OnInit {
     private toastService: ToastService,
     private loaderService: LoaderService,
     private candidateService: CandidateService,
+    private jobService: JobService,
+    private interviewerService: InterviewerService,
     private location: Location
   ) {
     this.isLoading = this.loaderService.isLoading$;
@@ -101,7 +123,7 @@ export class CandidateComponent implements OnInit {
   }
   loadAllJob() {
     this.loaderService.setLoading(true);
-    this.candidateService
+    this.jobService
       .getAllJobs()
       .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
@@ -154,7 +176,9 @@ export class CandidateComponent implements OnInit {
           },
         });
     } else {
-      this.toastService.error('Select candidate');
+      this.toastService.error(
+        'Please select at least one candidate before shortlisting'
+      );
     }
   }
   onInterviewerFeedback() {
@@ -164,8 +188,8 @@ export class CandidateComponent implements OnInit {
     };
     if (data.candidateIds.length > 0) {
       this.loaderService.setLoading(true);
-      this.candidateService
-        .interviewerFeedback(data)
+      this.interviewerService
+        .feedback(data)
         .pipe(finalize(() => this.loaderService.setLoading(false)))
         .subscribe({
           next: (response) => {
@@ -173,7 +197,7 @@ export class CandidateComponent implements OnInit {
               this.toastService.success(response.message);
               this.selectedCandidateIds = [];
             } else {
-              this.toastService.success(response.message);
+              this.toastService.error(response.message);
               this.selectedCandidateIds = [];
             }
           },
@@ -190,48 +214,19 @@ export class CandidateComponent implements OnInit {
     this.loadCandidateByJobId(this.selectedJobId);
   }
   openScheduleModal(id: string) {
-    this.closModal('viewCandidateModal');
-    const scheduleModal = new Modal(
-      document.getElementById('scheduleModal') as HTMLDivElement
-    );
+    this.CandidateViewComponent.close();
+    this.CandidateScheduleDateComponent.open();
     this.candidateId = id;
-    scheduleModal.show();
   }
   openMailCandidateModal() {
-    this.closModal('viewCandidateModal');
-    const mailCandidateModal = new Modal(
-      document.getElementById('mailCandidateModal') as HTMLDivElement
-    );
-    mailCandidateModal.show();
+    this.CandidateViewComponent.close();
+    this.CandidateMailModalComponent.open();
   }
   openFilterModal() {
-    const modal = Modal.getInstance(
-      (document.querySelector('#filterCandidateModal') as HTMLDivElement) ||
-        new Modal(
-          document.querySelector('#filterCandidateModal') as HTMLDivElement
-        )
-    );
-    modal?.show();
+    this.CandidateFilterModalComponent.open();
   }
   updateCandidateData(data: Candidate[]) {
     this.candidateData = data;
-  }
-
-  closModal(modalId: string) {
-    const viewCandidateModal =
-      Modal.getInstance(document.getElementById(modalId) as HTMLDivElement) ||
-      new Modal(document.getElementById(modalId) as HTMLDivElement);
-    viewCandidateModal.hide();
-
-    setTimeout(() => {
-      if (document.querySelector('.modal.show') === null) {
-        document.body.classList.remove('modal-open');
-        const backdrop = document.querySelector('.modal-backdrop');
-        if (backdrop) {
-          backdrop.remove();
-        }
-      }
-    }, 300);
   }
 
   onViewCandidate(id: string) {
@@ -239,30 +234,18 @@ export class CandidateComponent implements OnInit {
       this.candidateViewData = this.filteredCandidate.find(
         (candidate: any) => candidate.id === id
       );
-      const viewCandidateModal =
-        Modal.getInstance(
-          document.getElementById('viewCandidateModal') as HTMLDivElement
-        ) ||
-        new Modal(
-          document.getElementById('viewCandidateModal') as HTMLDivElement
-        );
-
-      viewCandidateModal.show();
+      this.CandidateViewComponent.open();
     }
   }
   onScheduleDate(id: string) {
     this.scheduleModalOpen = true;
     this.candidateId = id;
-    const modal =
-      Modal.getInstance(
-        document.getElementById('scheduleModal') as HTMLDivElement
-      ) ||
-      new Modal(document.getElementById('scheduleModal') as HTMLDivElement);
-    modal.show();
+    this.CandidateScheduleDateComponent.open();
   }
 
   onReject(id: string) {
     this.candidateId = id;
+    this.CandidateRejectComponent.open();
   }
 
   onNavigateBack() {

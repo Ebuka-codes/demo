@@ -1,6 +1,8 @@
 .job-container {
-  padding: 2rem 1.7rem;
   width: 80%;
+  padding-top: 30px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   .job-header {
     display: flex;
     gap: 15px;
@@ -165,23 +167,9 @@
       &:disabled {
         cursor: not-allowed;
       }
-    }
-    .mini-loader-spinner {
-      border: 3px solid white;
-      border-color: white transparent white white;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      margin: 0px auto;
-      animation: spin 0.5s linear infinite;
-    }
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+
+      img {
+        width: 18px;
       }
     }
   }
