@@ -7,6 +7,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
 import { RouterModule } from '@angular/router';
 import { monthYearFormatDirective } from './directives/month-date-format.directive';
+import { ButtonModule } from './components/button/button.module';
 
 const COMPONENTS: any[] = [
   FullPageLoaderSpinnerComponent,
@@ -16,10 +17,11 @@ const COMPONENTS: any[] = [
 ];
 const DIRECTIVES: any[] = [AmountFormatDirective, monthYearFormatDirective];
 
-const MODULES: any[] = [CommonModule, RouterModule];
+const MODULES: any[] = [CommonModule, RouterModule, ButtonModule];
+
 @NgModule({
   declarations: [...DIRECTIVES, ...COMPONENTS],
   imports: [...MODULES],
-  exports: [...DIRECTIVES, ...COMPONENTS],
+  exports: [...DIRECTIVES, ...COMPONENTS, ...MODULES],
 })
 export class SharedModule {}

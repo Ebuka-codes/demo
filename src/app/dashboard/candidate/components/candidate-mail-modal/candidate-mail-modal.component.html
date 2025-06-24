@@ -1,10 +1,10 @@
 <div class="mail-candidate">
   <div
-    #modal
+    #modalRoot
     class="modal fade"
     id="mailCandidateModal"
-    data-backdrop="static"
-    data-keyboard="false"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
     tabindex="-1"
     aria-labelledby="staticBackdrop"
     aria-hidden="true"
@@ -14,7 +14,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Mail Candidate</h5>
-          <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+          <span class="close-icon" data-bs-dismiss="modal" (click)="close()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

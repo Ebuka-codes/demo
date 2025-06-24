@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { job } from './job';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { job, Question } from './job';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Constants } from 'src/app/utils/constants';
@@ -27,13 +27,33 @@ export class JobService {
   deleteJob(id: string) {
     return this.httpClient.delete(Constants.JOB_URL.JOB + `/${id}`);
   }
-  getJobById(id: string | null): Observable<DataResponse> {
-    return this.httpClient.get<any>(Constants.JOB_URL.JOB + `/${id}`);
+  getJobById(id: string | null): Observable<DataResponse<job>> {
+    return this.httpClient.get<DataResponse<job>>(
+      Constants.JOB_URL.JOB + `/${id}`
+    );
   }
-  getAllJobs(): Observable<job[]> {
-    return this.httpClient.get<job[]>(Constants.JOB_URL.JOB);
+  getAllJobs(): Observable<DataResponse<job>> {
+    return this.httpClient.get<DataResponse<job>>(Constants.JOB_URL.JOB);
   }
 
+  getActiveJobs(): Observable<DataResponse<job>> {
+    return this.httpClient.get<DataResponse<job>>(
+      Constants.JOB_URL.JOB + '/get-all-active-job'
+    );
+  }
+
+  getPublishJobs(): Observable<DataResponse<job>> {
+    return this.httpClient.get<DataResponse<job>>(
+      Constants.JOB_URL.JOB + '/get-published-jobs'
+    );
+  }
+
+  publishJobs(data: any): Observable<DataResponse<job>> {
+    return this.httpClient.post<DataResponse<job>>(
+      Constants.JOB_URL.JOB + '/publish-job-mass',
+      data
+    );
+  }
   editQueryDetails(id: string, value: any) {
     return this.httpClient.put(
       Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`,
@@ -45,8 +65,8 @@ export class JobService {
       Constants.QUERY_DETAILS_URL.QUERY_DETAILS + `/${id}`
     );
   }
-  createQuestion(question: any) {
-    return this.httpClient.post(
+  createQuestion(question: any): Observable<DataResponse<Question>> {
+    return this.httpClient.post<DataResponse<Question>>(
       Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS,
       question
     );
@@ -60,8 +80,8 @@ export class JobService {
   getAllQuestions() {
     return this.httpClient.get(Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS);
   }
-  editQuestion(id: string, data: any) {
-    return this.httpClient.put(
+  editQuestion(id: string, data: any): Observable<DataResponse<Question>> {
+    return this.httpClient.put<DataResponse<Question>>(
       Constants.QUESTION_OPTION_URL.QUESTION_OPTIONS + `/${id}`,
       data
     );
@@ -87,8 +107,8 @@ export class JobService {
       data
     );
   }
-  searchjob(data: string) {
-    return this.httpClient.get(
+  searchjob(data: string): Observable<DataResponse<job[]>> {
+    return this.httpClient.get<DataResponse<job[]>>(
       Constants.JOB_URL.JOB + `/search?keyword=${data}`
     );
   }

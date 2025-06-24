@@ -1,6 +1,7 @@
 .user-container {
-  margin-top: 20px;
-  padding: 2rem 1.5rem;
+  padding-top: 30px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   header {
     display: flex;
     align-items: center;
@@ -35,7 +36,7 @@
       padding: 11px;
       width: 100px;
       background-color: #28a745;
-      border-radius: 25px;
+      border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
       color: white;

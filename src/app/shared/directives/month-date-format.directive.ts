@@ -9,7 +9,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MomentDateAdapter,
 } from '@angular/material-moment-adapter';
-import { MONTH_YEAR_FORMATS } from '../constants';
+import { MONTH_YEAR_FORMATS } from '../model/constants';
 
 @Directive({
   selector: '[monthYearFormat]',

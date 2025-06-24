@@ -1,12 +1,12 @@
 <div
   class="modal fade"
-  #candidateRejectModal
+  #modalRoot
   id="candidateRejectModal"
-  data-backdrop="static"
-  data-keyboard="false"
   tabindex="-1"
   aria-labelledby="staticBackdrop"
   aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
   <div class="modal-dialog">
     <div class="modal-content">
@@ -14,7 +14,7 @@
         <h5 class="modal-title" id="staticBackdropLabel">
           Confirmation Message
         </h5>
-        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" data-bs-dismiss="modal" (click)="close()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -33,7 +33,12 @@
       <div class="modal-body">
         <p>Are you sure you want to reject?</p>
         <div class="btn-action">
-          <button type="button" class="close-btn" data-bs-dismiss="modal">
+          <button
+            type="button"
+            class="close-btn"
+            data-bs-dismiss="modal"
+            (click)="close()"
+          >
             <span>Cancel</span>
           </button>
           <button

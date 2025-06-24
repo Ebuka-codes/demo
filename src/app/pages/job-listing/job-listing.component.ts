@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { finalize, Observable } from 'rxjs';
+import { CORP_URL_KEY } from 'src/app/core/model/credential';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { job } from 'src/app/dashboard/job/shared/job';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
-import { job } from 'src/app/shared/type';
+
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -40,7 +42,7 @@ export class JobListingComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.encodeUrl = params['corpUrl'];
       if (this.encodeUrl) {
-        this.jobService.setCorpUrl(this.encodeUrl);
+        localStorage.setItem(CORP_URL_KEY, this.encodeUrl);
         this.loadJobListing();
       }
     });

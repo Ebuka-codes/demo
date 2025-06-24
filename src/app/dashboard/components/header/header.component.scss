@@ -3,10 +3,10 @@
   justify-content: space-between;
   background-color: white;
   align-items: center;
-  z-index: 100000;
+  z-index: 999;
   padding: 1.2rem 3rem;
   border: none;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.06);
+  position: sticky;
   .header_content {
     display: flex;
     align-items: center;

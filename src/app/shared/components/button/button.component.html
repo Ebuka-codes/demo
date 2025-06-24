@@ -1,0 +1,21 @@
+<button
+  class="erecruit-base-btn"
+  [ngClass]="buttonConfig.customClass"
+  [type]="buttonConfig.type || 'button'"
+  [disabled]="buttonConfig.isDisabled || buttonConfig.isLoading"
+>
+  <span
+    *ngIf="buttonConfig.icon && !buttonConfig.isLoading"
+    [ngClass]="buttonConfig.icon"
+  ></span>
+  <span *ngIf="buttonConfig.isLoading" class="spinner">
+    <img src="../../../../assets/image/mini_loader.gif" />
+  </span>
+  <span
+    class="button-text"
+    [style.pointer-events]="
+      (buttonConfig.isDisabled || buttonConfig.isLoading) && 'none'
+    "
+    >{{ buttonConfig.text }}</span
+  >
+</button>

@@ -1,6 +1,6 @@
-export interface DataResponse {
+export interface DataResponse<M> {
   valid: boolean;
-  data: any;
+  data: M;
   message: string;
   status?: string;
 }

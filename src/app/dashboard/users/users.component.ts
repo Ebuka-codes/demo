@@ -1,12 +1,12 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
 import { finalize, Observable } from 'rxjs';
 import { UserService } from './shared/user.service';
+import { UserCreateModalComponent } from './components/user-create-modal/user-create-modal.component';
 
 @Component({
   selector: 'erecruit-user',
@@ -14,7 +14,8 @@ import { UserService } from './shared/user.service';
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent {
-  @ViewChild('myModal') modalElement!: ElementRef;
+  @ViewChild(UserCreateModalComponent)
+  UserCreateModalComponent!: UserCreateModalComponent;
   isLoading$!: Observable<boolean>;
   modalInstance!: Modal;
   submitLoading!: boolean;
@@ -46,6 +47,10 @@ export class UsersComponent {
 
     this.loadUsers();
   }
+
+  openModal() {
+    this.UserCreateModalComponent.open();
+  }
   loadUsers(): void {
     this.userData = [];
     this.loaderService.setLoading(true);
@@ -64,10 +69,6 @@ export class UsersComponent {
           this.toasterService.error(error.message);
         },
       });
-  }
-
-  ngAfterViewInit() {
-    this.modalInstance = new bootstrap.Modal(this.modalElement?.nativeElement);
   }
 
   onNavigateBack() {

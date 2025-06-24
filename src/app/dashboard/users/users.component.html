@@ -19,13 +19,16 @@
       </span>
       <h2>Manage User</h2>
     </div>
-    <button
-      type="button"
-      data-bs-toggle="modal"
-      data-bs-target="#createUserModal"
+    <erecruit-button
+      (click)="openModal()"
+      [buttonConfig]="{
+        text: 'Add User',
+        customClass: 'primary-btn small-btn',
+        type: 'button',
+        icon: 'bi bi-plus-circle'
+      }"
     >
-      Add User
-    </button>
+    </erecruit-button>
   </header>
 
   <div class="user-table">
@@ -101,7 +104,7 @@
           <td>{{ (item.lastName | titlecase) || "N/A" }}</td>
           <td>{{ item.email || "N/A" }}</td>
           <td>{{ item.phoneNumber || "N/A" }}</td>
-          <td>{{ item.role.name || "N/A" }}</td>
+          <td>{{ item.role?.name || "N/A" }}</td>
           <td>
             <div class="action">
               <div class="action-icon">

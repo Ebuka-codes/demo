@@ -20,22 +20,27 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, Observable } from 'rxjs';
-import { job } from 'src/app/shared/type';
 import { Moment } from 'moment';
 import { DateFormatService } from 'src/app/shared/service/date-format.service';
 import { MatDatepicker } from '@angular/material/datepicker';
-import {
-  educationLevels,
-  months,
-  nigeriaStates,
-} from 'src/app/shared/constants';
-
 import { Modal } from 'bootstrap';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { UtilService } from 'src/app/core/service/util.service';
+import { CORP_URL_KEY, JOB_ID_KEY } from 'src/app/core/model/credential';
+import {
+  educationLevels,
+  months,
+  nigeriaStates,
+} from 'src/app/shared/model/constants';
+import { job, Question } from 'src/app/dashboard/job/shared/job';
+import {
+  EducationHistory,
+  Skill,
+  WorkHistory,
+} from 'src/app/shared/model/job-model';
 @Component({
   selector: 'erecruit-job-application',
   templateUrl: './job-application.component.html',
@@ -71,9 +76,9 @@ export class JobApplicationComponent implements OnInit {
   data!: job;
   editId!: number;
   candidateEmail: string | null = '';
-  workHistories: any[] = [];
-  educationHistories: any[] = [];
-  skillHisories: any[] = [];
+  workHistories: Array<WorkHistory> = [];
+  educationHistories: Array<EducationHistory> = [];
+  skillHisories: Array<Skill> = [];
   selectedYear: number | null = null;
   formControls: any = {};
   resumeValue: any;
@@ -84,7 +89,7 @@ export class JobApplicationComponent implements OnInit {
   workErrorMessage = '';
   educationErrorMessage = '';
   submitted: boolean = false;
-  questionData!: job;
+  questionData!: Question;
   jobId: string | null = localStorage.getItem('JobId');
   candidateData!: Candidate;
   isResumeData!: boolean;
@@ -92,6 +97,8 @@ export class JobApplicationComponent implements OnInit {
   isUploadingResume: boolean = false;
   isUploadingCoverLetter: boolean = false;
   encodeUrl!: string | null;
+  description: string = '';
+  maxLength: number = 1000;
 
   constructor(
     private fb: FormBuilder,
@@ -161,69 +168,51 @@ export class JobApplicationComponent implements OnInit {
       this.jobData = job;
       this.getQuestionsByJobDetail(job.id);
     });
-    const endcode = localStorage.getItem('corp-url');
+    const endcode = localStorage.getItem(CORP_URL_KEY);
     if (endcode) {
       this.encodeUrl = encodeURIComponent(endcode);
     }
   }
 
   ngAfterViewInit() {
-    this.modals[1] = new Modal(this.modal1Element?.nativeElement);
-    this.modals[2] = new Modal(this.modal2Element?.nativeElement);
-    this.modals[3] = new Modal(this.modal3Element?.nativeElement);
-  }
+    this.modals[1] = Modal.getOrCreateInstance(
+      this.modal1Element.nativeElement
+    );
+    this.modal1Element.nativeElement.addEventListener('hidden.bs.modal', () => {
+      // Ensure the cleanup happens after hide()
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
 
-  getCandidateInfo() {
-    if (this.route.snapshot.paramMap.get('candidateId')) {
-      this.candidateService
-        .getCandidatesInfo(this.route.snapshot.paramMap.get('candidateId'))
-        .pipe(finalize(() => this.jobService.setLoading(false)))
-        .subscribe({
-          next: (response) => {
-            if (response.valid && response.data) {
-              this.prefillCandidateForm(response.data);
-              console.log(response.data);
-              this.candidateService.setCandidateData(response?.data);
-
-              this.cdr.detectChanges();
-            } else {
-            }
-          },
-        });
-    } else {
-      const existingData = this.candidateService.getCandidateData();
-      if (existingData) {
-        this.prefillCandidateForm(existingData);
-      }
-    }
-  }
-
-  prefillCandidateForm(data: Candidate) {
-    const {
-      name,
-      email,
-      phone,
-      countryName,
-      state,
-      address,
-      city,
-      resume,
-      coverLetter,
-    } = data;
-    //prettier-ignore
-    this.personalFormGroup.patchValue({firstName: name?.split(' ')[0] || '',lastName: name?.split(' ')[1] || '',email, phone,countryName, state,address,city,});
-    this.workHistories = data.workHistories;
-    this.educationHistories = data.educationHistories;
-    this.skillHisories = data.skills;
-    this.personalFormGroup.updateValueAndValidity();
-    this.workEducationAndSkill.get('stepCheck')?.updateValueAndValidity();
-    this.supportingFormGroup.patchValue({
-      resume: resume,
-      coverLetter: coverLetter,
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) backdrop.remove();
     });
-    this.supportingFormGroup.updateValueAndValidity();
-    this.isResumeData = true;
-    this.isCoverLetterData = true;
+
+    this.modals[2] = Modal.getOrCreateInstance(
+      this.modal2Element.nativeElement
+    );
+    this.modal2Element.nativeElement.addEventListener('hidden.bs.modal', () => {
+      // Ensure the cleanup happens after hide()
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) backdrop.remove();
+    });
+
+    this.modals[3] = Modal.getOrCreateInstance(
+      this.modal3Element.nativeElement
+    );
+    this.modal3Element.nativeElement.addEventListener('hidden.bs.modal', () => {
+      // Ensure the cleanup happens after hide()
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) backdrop.remove();
+    });
   }
 
   get firstName() {
@@ -334,6 +323,50 @@ export class JobApplicationComponent implements OnInit {
     return this.supportingFormGroup.get('coverLetter');
   }
 
+  getCandidateInfo() {
+    if (this.route.snapshot.paramMap.get('candidateId')) {
+      this.candidateService
+        .getCandidatesInfo(this.route.snapshot.paramMap.get('candidateId'))
+        .pipe(finalize(() => this.jobService.setLoading(false)))
+        .subscribe({
+          next: (response) => {
+            if (response.valid && response.data) {
+              this.prefillCandidateForm(response.data);
+              console.log(response.data);
+              this.candidateService.setCandidateData(response?.data);
+
+              this.cdr.detectChanges();
+            } else {
+            }
+          },
+        });
+    } else {
+      const existingData = this.candidateService.getCandidateData();
+      if (existingData) {
+        this.prefillCandidateForm(existingData);
+      }
+    }
+  }
+
+  prefillCandidateForm(data: Candidate) {
+    //prettier-ignore
+    const {name, email,phone,countryName,state,address,city,resume,coverLetter} = data;
+    //prettier-ignore
+    this.personalFormGroup.patchValue({firstName: name?.split(' ')[0] || '',lastName: name?.split(' ')[1] || '',email, phone,countryName, state,address,city,});
+    this.workHistories = data.workHistories;
+    this.educationHistories = data.educationHistories;
+    this.skillHisories = data.skills;
+    this.personalFormGroup.updateValueAndValidity();
+    this.workEducationAndSkill.get('stepCheck')?.updateValueAndValidity();
+    this.supportingFormGroup.patchValue({
+      resume: resume,
+      coverLetter: coverLetter,
+    });
+    this.supportingFormGroup.updateValueAndValidity();
+    this.isResumeData = true;
+    this.isCoverLetterData = true;
+  }
+
   goToNextStep() {
     if (this.personalFormGroup.valid) {
       this.stepper.next();
@@ -406,11 +439,9 @@ export class JobApplicationComponent implements OnInit {
 
   openModal(modalNumber: number) {
     this.modals[modalNumber].show();
-    document.body.classList.remove('force-scroll-reset');
   }
   closeModal(modalNumber: number) {
     this.modals[modalNumber].hide();
-    this.removeBackdrop();
     this.workFormGroup.reset();
     this.educationFormGroup.reset();
     this.skillFormGroup.reset();
@@ -418,14 +449,8 @@ export class JobApplicationComponent implements OnInit {
     this.workFormGroup.markAsUntouched();
     this.educationFormGroup.markAsUntouched();
     this.skillFormGroup.markAsUntouched();
-    document.body.classList.add('force-scroll-reset');
   }
-  removeBackdrop() {
-    setTimeout(() => {
-      document.querySelectorAll('.modal-backdrop').forEach((el) => el.remove());
-      document.body.classList.remove('.modal-open');
-    }, 300);
-  }
+
   addWorkHistory(id: number) {
     const startDateValue = this.workFormGroup.get('startDate')?.value;
     const endDateValue = this.workFormGroup.get('endDate')?.value;
@@ -580,19 +605,6 @@ export class JobApplicationComponent implements OnInit {
     this.skillHisories.splice(index, 1);
   }
 
-  preventInvalidKeys(event: KeyboardEvent) {
-    if (
-      event.key === '0' ||
-      event.key === 'e' ||
-      event.key === 'E' ||
-      event.key === '+' ||
-      event.key === '-'
-    ) {
-      event.preventDefault();
-      event.preventDefault();
-    }
-  }
-
   formatDate(value: string) {
     const date = new Date(value);
     return `${months[date.getMonth()]} ${date.getFullYear()}`;
@@ -712,18 +724,11 @@ export class JobApplicationComponent implements OnInit {
       }
     });
   }
-  preventInvalidKey(event: KeyboardEvent) {
-    if (
-      event.key === '0' ||
-      event.key === 'e' ||
-      event.key === 'E' ||
-      event.key === '+' ||
-      event.key === '-'
-    ) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
+
+  validateNumberInput(event: any, acceptDecimal: boolean = false) {
+    return this.utilService.isValidNumberInput(event, acceptDecimal);
   }
+
   //Post Job-Application
   submitJobApplication(payload: any) {
     this.isSubmitting = true;
@@ -777,7 +782,7 @@ export class JobApplicationComponent implements OnInit {
       questionOptionAnswersDTO: questionOption ? questionOption : [],
       resume: this.supportingFormGroup.get('resume')?.value,
       coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
-      jobDetailId: localStorage.getItem('jobId'),
+      jobDetailId: localStorage.getItem(JOB_ID_KEY),
     };
     if (
       this.personalFormGroup.valid &&

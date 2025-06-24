@@ -1,19 +1,15 @@
 <div
-  #myModal
+  #modalRoot
   class="modal fade"
-  id="createUserModal"
-  data-backdrop="static"
-  data-keyboard="false"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
   tabindex="-1"
-  aria-labelledby="createUserModal"
-  aria-hidden="true"
-  (hidden.bs.modal)="resetForm()"
 >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Create User</h5>
-        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" (click)="close()" data-bs-dismiss="modal">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -115,7 +111,12 @@
           </div>
 
           <div class="btn-action">
-            <button type="button" class="close-btn" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="close-btn"
+              (click)="close()"
+              data-dismiss="modal"
+            >
               <span>Cancel</span>
             </button>
             <button type="submit" class="submit-btn" [disabled]="submitLoading">

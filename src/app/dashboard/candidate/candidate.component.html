@@ -221,13 +221,7 @@
               <td>
                 <div class="action">
                   <div class="action-icon">
-                    <span
-                      data-bs-toggle="modal"
-                      data-bs-target="#viewCandidateModal"
-                      (click)="onViewCandidate(item.id)"
-                      mat-raised-button
-                      matTooltip="View"
-                    >
+                    <span (click)="onViewCandidate(item.id)">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -250,11 +244,7 @@
                     </span>
                     <span
                       *ngIf="activeTag !== 'interview'"
-                      data-bs-target="#scheduleModal"
-                      data-bs-toggle="modal"
                       (click)="onScheduleDate(item.id)"
-                      mat-raised-button
-                      matTooltip="Schedule Interview"
                     >
                       <svg
                         width="22"
@@ -289,13 +279,7 @@
                         />
                       </svg>
                     </span>
-                    <span
-                      (click)="onReject(item.id)"
-                      data-bs-toggle="modal"
-                      data-bs-target="#candidateRejectModal"
-                      mat-raised-button
-                      matTooltip="Reject"
-                    >
+                    <span (click)="onReject(item.id)">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"

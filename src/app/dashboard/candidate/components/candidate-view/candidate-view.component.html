@@ -1,16 +1,18 @@
 <div
   class="modal fade"
-  #myModal
+  #modalRoot
   id="viewCandidateModal"
   tabindex="-1"
   aria-labelledby="modalLabel"
   aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">View Candidate</h5>
-        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" data-bs-dismiss="modal" (click)="close()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -361,10 +363,10 @@
             (click)="rejectCandidate(candidateViewData.id)"
             [disabled]="isRejecting"
           >
-            <ng-container *ngIf="isRejecting; else content">
+            <ng-container *ngIf="isRejecting; else rejectContent">
               <span class="mini-loader-spinner"></span>
             </ng-container>
-            <ng-template #content>
+            <ng-template #rejectContent>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -386,8 +388,6 @@
         </div>
         <div
           class="schedule-date"
-          data-bs-dismiss="modal"
-          data-target="#scheduleDateModal"
           (click)="onScheduleDate(candidateViewData.id)"
         >
           <button>
@@ -410,12 +410,7 @@
           </button>
         </div>
 
-        <div
-          class="mail-btn"
-          data-bs-dismiss="modal"
-          data-target="#mailCandidateModal"
-          (click)="onMailCandidate()"
-        >
+        <div class="mail-btn" (click)="onMailCandidate()">
           <button>
             <svg
               width="18"

@@ -1,30 +1,36 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { job } from './shared/job';
 import { JobService } from './shared/job.service';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { finalize } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { Modal } from 'bootstrap';
 import { Location } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { environment } from 'src/environments/environment';
+import { JobDeleteModalComponent } from './components/job-delete-modal/job-delete-modal.component';
+import { JobFilterModalComponent } from './components/job-filter-modal/job-filter-modal.component';
+import { JobViewModalComponent } from './components/job-view-modal/job-view-modal.component';
 
 @Component({
-  selector: 'app-job',
+  selector: 'erecruit-job',
   templateUrl: './job.component.html',
   styleUrls: ['./job.component.scss'],
 })
 export class JobComponent implements OnInit {
+  @ViewChild(JobDeleteModalComponent)
+  JobDeleteModalComponent!: JobDeleteModalComponent;
+
+  @ViewChild(JobFilterModalComponent)
+  JobFilterModalComponent!: JobFilterModalComponent;
+
+  @ViewChild(JobViewModalComponent)
+  JobViewModalComponent!: JobViewModalComponent;
+
   PORT_URL = environment.PORT_URL;
   jobData: Array<job> = [];
-  isLoading$!: Observable<any>;
+  isLoading!: boolean;
   searchText = new FormControl();
   viewJobData!: Array<job>;
   jobId!: string;
@@ -34,6 +40,10 @@ export class JobComponent implements OnInit {
   loadingData!: boolean;
   jobUrl: string = `${environment.PORT_URL}/apply`;
   jobListingUrl!: string;
+  tabs: string[] = ['All Jobs', 'Active Job', 'Published Job'];
+  activeTag = 'All Jobs';
+  selectedAllChecked: boolean = false;
+  selectedJobId: string[] = [];
   constructor(
     public jobService: JobService,
     private loaderService: LoaderService,
@@ -46,85 +56,214 @@ export class JobComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
-    const encodeUrl = localStorage.getItem('corp-url');
+
+    const encodeUrl = encodeURIComponent(
+      localStorage.getItem('corp-url') || ''
+    );
     if (encodeUrl) {
       this.jobListingUrl = `${this.PORT_URL}/job-listing/${encodeUrl}`;
     }
   }
+  onToggletabs(tab: string) {
+    this.activeTag = tab;
+    switch (this.activeTag) {
+      case 'All Jobs':
+        this.loadJobs();
+        break;
+
+      case 'Active Job':
+        this.loadActiveJobs();
+        break;
+
+      case 'Published Job':
+        this.loadPublishedJobs();
+        break;
+    }
+  }
+  onToggleAllCheckbox() {
+    this.selectedAllChecked = !this.selectedAllChecked;
+    if (this.selectedAllChecked) {
+      this.selectedJobId = this.filteredData.map((item) => item.id);
+    } else {
+      this.selectedJobId = [];
+    }
+  }
+
+  onToggleSelection(id: string) {
+    if (this.selectedJobId.includes(id)) {
+      this.selectedJobId = this.selectedJobId.filter((itemId) => itemId !== id);
+    } else {
+      this.selectedJobId.push(id);
+    }
+    this.selectedAllChecked =
+      this.selectedJobId.length === this.filteredData.length;
+  }
   loadJobs() {
     this.loaderService.setLoading(true);
-    this.isLoading$ = this.loaderService.isLoading$;
-    this.jobService.getAllJobs().subscribe({
-      next: (reponse: any) => {
-        if (reponse.valid && reponse.data) {
-          this.jobData = reponse.data.sort((a: any, b: any) =>
-            a.jobTitle.localeCompare(b.jobTitle)
-          );
+    this.isLoading = true;
+    this.jobService
+      .getAllJobs()
+      .pipe(
+        finalize(() => {
           this.loaderService.setLoading(false);
-          this.filteredData = this.jobData;
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (reponse: any) => {
+          if (reponse.valid && reponse.data) {
+            this.jobData = reponse.data.sort((a: any, b: any) =>
+              a.jobTitle.localeCompare(b.jobTitle)
+            );
 
-          this.cdr.detectChanges();
-        }
-      },
-      error: (error) => {
-        this.loaderService.setLoading(false);
-        this.jobData = [];
-        this.toastService.error(error.message);
-      },
-    });
+            this.filteredData = this.jobData;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error) => {
+          this.jobData = [];
+          this.toastService.error(error.message);
+        },
+      });
   }
-  handleSearch() {
-    this.searchLoading = true;
-    if (this.searchText.value) {
-      this.searchText.valueChanges
-        .pipe(
-          debounceTime(300),
-          distinctUntilChanged(),
-          switchMap((value) => {
-            if (value && value.trim() !== '') {
-              return this.jobService.searchjob(value.trim());
-            } else {
-              return this.jobService.getAllJobs();
-            }
-          })
-        )
+
+  loadActiveJobs() {
+    this.loaderService.setLoading(true);
+    this.isLoading = true;
+    this.jobData = [];
+    this.jobService
+      .getActiveJobs()
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.loaderService.setLoading(false);
+        })
+      )
+      .subscribe({
+        next: (reponse: any) => {
+          if (reponse.valid && reponse.data) {
+            this.jobData = reponse.data.sort((a: any, b: any) =>
+              a.jobTitle.localeCompare(b.jobTitle)
+            );
+            this.filteredData = this.jobData;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error) => {
+          this.jobData = [];
+          this.toastService.error(error.message);
+        },
+      });
+  }
+
+  loadPublishedJobs() {
+    this.loaderService.setLoading(true);
+    this.isLoading = true;
+    this.jobData = [];
+    this.jobService
+      .getPublishJobs()
+      .pipe(
+        finalize(() => {
+          this.loaderService.setLoading(false);
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (reponse: any) => {
+          if (reponse.valid && reponse.data) {
+            this.jobData = reponse.data.sort((a: any, b: any) =>
+              a.jobTitle.localeCompare(b.jobTitle)
+            );
+
+            this.filteredData = this.jobData;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error) => {
+          this.jobData = [];
+          this.toastService.error(error.message);
+        },
+      });
+  }
+
+  onPublishJobs() {
+    if (this.selectedJobId.length) {
+      const payload = {
+        ids: this.selectedJobId,
+      };
+      this.loaderService.setLoading(true);
+      this.jobService
+        .publishJobs(payload)
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
         .subscribe({
           next: (response: any) => {
             if (response.valid && response.data) {
-              this.jobData = response.data;
-              this.searchLoading = false;
-            } else {
-              this.jobData = [];
+              this.toastService.success(response.message);
+              this.cdr.detectChanges();
+              this.selectedJobId = [];
             }
           },
           error: (error) => {
-            console.log(error.message);
-            this.searchLoading = false;
+            this.toastService.error(error.message);
           },
         });
     } else {
-      this.searchLoading = false;
+      this.toastService.error(
+        'Please select at least one job before publishing'
+      );
     }
   }
+
+  handleSearch(event: Event) {
+    const value = event as KeyboardEvent;
+    if (value.key === 'Enter' && this.searchText.value) {
+      this.loaderService.setLoading(true);
+      this.jobService
+        .searchjob(this.searchText.value.trim())
+        .pipe(finalize(() => this.loaderService.setLoading(false)))
+        .subscribe({
+          next: (response) => {
+            if (response.valid && response.data) {
+              this.jobData = response.data;
+            } else {
+              this.jobData = [];
+              this.toastService.error(response.message);
+            }
+          },
+          error: (error) => {
+            this.toastService.error(error.message);
+          },
+        });
+    }
+  }
+
+  onClearSearch() {
+    if (this.searchText.value === '') {
+      this.loadJobs();
+    } else {
+      this.searchText.reset();
+      this.loadJobs();
+    }
+  }
+
   openFilterModal() {
-    const modal = Modal.getInstance(
-      (document.querySelector('#filterJobModal') as HTMLDivElement) ||
-        new Modal(document.querySelector('#filterJobModal') as HTMLDivElement)
-    );
-    modal?.show();
+    this.JobFilterModalComponent.open();
   }
   updateJobData(data: job[]) {
     this.jobData = data;
   }
   handleViewJoDetail(id: string) {
     this.viewJobData = this.jobData.filter((job) => job.id === id);
+    this.JobViewModalComponent.open();
   }
   handleEditJob(id: string) {
     this.route.navigateByUrl(`/job/edit/${id}`, { replaceUrl: true });
   }
   handleDeleteJob(id: string) {
     this.jobId = id;
+    this.JobDeleteModalComponent.open();
   }
+
   onBack() {
     this.location.back();
   }
@@ -132,7 +271,6 @@ export class JobComponent implements OnInit {
     const encodeUrl = encodeURIComponent(
       localStorage.getItem('corp-url') || ''
     );
-    console.log(encodeUrl);
     this.clipboard.copy(`${this.PORT_URL}/apply/${id}/overview/${encodeUrl}`);
   }
 }

@@ -30,6 +30,7 @@ import { UserCorporateComponent } from './user-corporate/user-corporate.componen
 import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
 import { UsersModule } from './users/users.module';
 import { ProfileModule } from './profile/profile.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -66,6 +67,7 @@ import { ProfileModule } from './profile/profile.module';
     CorporateModule,
     UsersModule,
     ProfileModule,
+    NgxPaginationModule,
   ],
 })
 export class DashboardModule {}

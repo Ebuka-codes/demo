@@ -1,8 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { job } from 'src/app/dashboard/job/shared/job';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
-import { job } from 'src/app/shared/type';
+import { CandidateLoginComponent } from '../../candidate-login/candidate-login.component';
+import { CORP_URL_KEY } from 'src/app/core/model/credential';
 
 @Component({
   selector: 'erecruit-job-overview',
@@ -10,6 +12,8 @@ import { job } from 'src/app/shared/type';
   styleUrls: ['./job-overview.component.scss'],
 })
 export class JobOverviewComponent implements OnInit {
+  @ViewChild(CandidateLoginComponent)
+  CandidateLoginComponent!: CandidateLoginComponent;
   jobData!: job;
   isLoading!: boolean;
   tabs: string[] = ['Overview', 'Application'];
@@ -24,7 +28,7 @@ export class JobOverviewComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const encodeUrl = params['corpUrl'];
       if (encodeUrl) {
-        localStorage.setItem('corp-url', encodeUrl);
+        localStorage.setItem(CORP_URL_KEY, encodeUrl);
       }
     });
     this.jobService.jobDetailData$.subscribe((data) => {
@@ -37,6 +41,10 @@ export class JobOverviewComponent implements OnInit {
     } else {
       this.activeTag = 'Application';
     }
+  }
+
+  openModal() {
+    this.CandidateLoginComponent.open();
   }
   handleBack() {
     this.location.back();

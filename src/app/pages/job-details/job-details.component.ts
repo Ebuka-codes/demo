@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, Observable } from 'rxjs';
 import { Location } from '@angular/common';
-import { job } from 'src/app/shared/type';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import {
   AbstractControl,
@@ -11,6 +10,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { job } from 'src/app/dashboard/job/shared/job';
+import { CORP_URL_KEY, JOB_ID_KEY } from 'src/app/core/model/credential';
 @Component({
   selector: 'erecruit-job-details',
   templateUrl: './job-details.component.html',
@@ -26,6 +27,7 @@ export class JobDetailsComponent implements OnInit {
   jobData!: job;
   form!: FormGroup;
   encodeUrl!: string | null;
+
   constructor(
     private jobService: JobRecruitService,
     private navigateRoute: Router,
@@ -44,13 +46,13 @@ export class JobDetailsComponent implements OnInit {
       const id = params['id'];
       this.getJobDetailsById(id);
       if (id) {
-        localStorage.setItem('jobId', id);
+        localStorage.setItem(JOB_ID_KEY, id);
       }
     });
     this.jobService.jobDetailData$.subscribe((data) => {
       this.jobData = data;
     });
-    this.encodeUrl = localStorage.getItem('corp-url');
+    this.encodeUrl = localStorage.getItem(CORP_URL_KEY);
   }
 
   getJobDetailsById(id: string) {
@@ -86,7 +88,7 @@ export class JobDetailsComponent implements OnInit {
     return this.form.get('term');
   }
   handleApplyJob() {
-    localStorage.setItem('JobId', this.jobData?.id);
+    localStorage.setItem(JOB_ID_KEY, this.jobData?.id);
     this.navigateRoute.navigateByUrl('candidate/login', { replaceUrl: true });
   }
 

@@ -1,17 +1,16 @@
 <div
-  #myModal
+  #modalRoot
   class="modal fade"
   id="loginModal"
   tabindex="-1"
-  aria-labelledby="loginModalLabel"
-  aria-hidden="true"
-  (hidden.bs.modal)="resetForm()"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
   <div class="modal-dialog modal-dialog-centered modal-xs">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="loginModalLabel">Sign In</h4>
-        <span class="close-icon" data-bs-dismiss="modal" aria-label="Close">
+        <span class="close-icon" data-bs-dismiss="modal" (click)="close()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
