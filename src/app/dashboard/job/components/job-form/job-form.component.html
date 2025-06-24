@@ -458,7 +458,7 @@
       <div class="row">
         <div class="col">
           <label for="jobSalary"
-            >Job Salary From <span class="required-icon">*</span></label
+            >Salary From <span class="required-icon">*</span></label
           >
           <input
             type="text"
@@ -468,20 +468,20 @@
           />
           <div *ngIf="jobSalary?.invalid && isSubmitted">
             <small *ngIf="jobSalary?.errors?.['required']">
-              Job salary field is required
+              Salary from field is required
             </small>
 
             <small
               *ngIf="!jobSalary?.errors?.['required'] && jobSalary?.errors?.['invalidAmount']"
             >
-              Job salary field is invalid
+              Salary from field is invalid
             </small>
           </div>
         </div>
 
         <div class="col">
           <label for="jobSalary"
-            >Job Salary To <span class="required-icon">*</span></label
+            >Salary To <span class="required-icon">*</span></label
           >
           <input
             type="text"
@@ -491,13 +491,13 @@
           />
           <div *ngIf="jobSalaryTo?.invalid && isSubmitted">
             <small *ngIf="jobSalaryTo?.errors?.['required']">
-              Job salary field is required
+              Salary to field is required
             </small>
 
             <small
               *ngIf="!jobSalaryTo?.errors?.['required'] && jobSalary?.errors?.['invalidAmount']"
             >
-              Job salary field is invalid
+              Salary to field is invalid
             </small>
           </div>
         </div>
