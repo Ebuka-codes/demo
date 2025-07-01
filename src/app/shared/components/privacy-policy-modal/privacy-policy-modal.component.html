@@ -1,0 +1,57 @@
+<div
+  #privacy
+  class="modal fade"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xs">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" style="font-size: 1.3rem">
+          Terms and Conditions
+        </h2>
+        <span
+          class="close-icon"
+          data-bs-dismiss="modal"
+          (click)="closePrivacyModal()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+            style="width: 20px"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 14px">
+          By using our services, you consent to our collection and processing of
+          personal data such as your name, contact details, education, work
+          history, skills, and job preferences. This data is used solely to
+          match you with job opportunities, communicate with you, and support
+          recruitment activities. Your data will be stored for up to six (6)
+          months from your last interaction, after which it will be deleted or
+          anonymized. You may request deletion at any time by contacting us.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <erecruit-button
+          [buttonConfig]="{
+            text: 'Agree',
+            customClass: 'primary-btn small-btn',
+            type: 'submit'
+          }"
+          (click)="agreedTerms()"
+        >
+        </erecruit-button>
+      </div>
+    </div>
+  </div>
+</div>

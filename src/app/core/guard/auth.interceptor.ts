@@ -63,7 +63,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.tokenService.removeToken();
-          this.router.navigate(['/session']);
+          this.router.navigate(['/session-expired']);
           return throwError(() => 'Session expired');
         }
         return throwError(() => error);

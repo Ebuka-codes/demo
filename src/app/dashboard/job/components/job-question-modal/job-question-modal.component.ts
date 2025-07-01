@@ -16,6 +16,7 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { finalize } from 'rxjs';
 import { UtilService } from 'src/app/core/service/util.service';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'ercruit-job-question-modal',
   templateUrl: './job-question-modal.component.html',
@@ -119,14 +120,29 @@ export class JobQuestionModalComponent {
   }
 
   addQuestionOption() {
-    if (this.questionForm.get('optionsDescription')?.value) {
+    if (
+      this.questionForm.get('optionsDescription')?.value &&
+      !this.isDuplicateDescription(
+        this.questionForm.get('optionsDescription')?.value
+      )
+    ) {
       this.questionTypeOptions.push({
         id: '',
         description: this.questionForm.get('optionsDescription')?.value,
       });
+
+      this.questionForm.get('optionsDescription')?.setValue('');
+    } else {
+      this.toastService.warn('The record already exits');
     }
-    this.questionForm.get('optionsDescription')?.setValue('');
   }
+  isDuplicateDescription(description: string) {
+    return this.questionTypeOptions.some(
+      (option) =>
+        option.description.toLowerCase() === description.toLowerCase().trim()
+    );
+  }
+
   removeQuestionOption(index: number) {
     this.questionTypeOptions.splice(index, 1);
   }
@@ -185,25 +201,22 @@ export class JobQuestionModalComponent {
       },
     });
   }
-  onToggle(event: MatButtonToggleChange) {
-    if (event.value === 'Yes') {
+
+  onQuestionTypeChange(event: MatSelectChange) {
+    if (this.isQualifyQuestion && event.value !== 'TEXT') {
+      this.questionForm.get('operator')?.reset();
+      this.questionForm.get('qualifyValue')?.reset();
+      this.isQualifyQuestion = false;
+    }
+  }
+  onQualifyQuestionChange(event: Event) {
+    const element = event.target as HTMLInputElement;
+    if (element.checked === true) {
       this.isQualifyQuestion = true;
     } else {
       this.isQualifyQuestion = false;
       this.questionForm.get('operator')?.reset();
       this.questionForm.get('qualifyValue')?.reset();
-    }
-  }
-  preventInvalidKey(event: KeyboardEvent) {
-    if (
-      event.key === '0' ||
-      event.key === 'e' ||
-      event.key === 'E' ||
-      event.key === '+' ||
-      event.key === '-'
-    ) {
-      event.stopPropagation();
-      event.preventDefault();
     }
   }
   loadQuestionById(id: string) {
@@ -218,11 +231,12 @@ export class JobQuestionModalComponent {
           }
           this.loaderService.setLoading(false);
         } else {
-          this.loaderService.setLoading(true);
+          this.loaderService.setLoading(false);
         }
       },
       error: (err) => {
         this.loaderService.setLoading(false);
+        this.toastService.error(err.message);
       },
     });
   }

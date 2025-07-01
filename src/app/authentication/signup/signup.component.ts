@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,8 +9,10 @@ import {
 } from '@angular/forms';
 
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/service/auth.service';
 import { SignupDataService } from '../shared/signup-data.service';
+import { PrivacyPolicyModalComponent } from 'src/app/shared/components/privacy-policy-modal/privacy-policy-modal.component';
+import { UtilService } from 'src/app/core/service/util.service';
+import { ToastService } from 'src/app/core/service/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,20 +20,27 @@ import { SignupDataService } from '../shared/signup-data.service';
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
+  @ViewChild(PrivacyPolicyModalComponent)
+  PrivacyPolicyModalComponent!: PrivacyPolicyModalComponent;
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   form!: FormGroup;
   isLoading: boolean = false;
   isPassword: boolean = false;
   isConfirmPassword: boolean = false;
   checkConfirmPassword: boolean = false;
-  checkTerm: boolean = false;
+  agreed: boolean = false;
+  file!: string;
+
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
     private signupDataService: SignupDataService,
-    private route: Router
+    private route: Router,
+    private utilService: UtilService,
+    private toastService: ToastService
   ) {
     this.form = this.fb.group({
-      // userType: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required, this.phoneNumberValidator()]],
@@ -46,6 +55,7 @@ export class SignupComponent implements OnInit {
         ],
       ],
       confirmPassword: ['', [Validators.required, this.checkPassword()]],
+      logo: [''],
     });
   }
 
@@ -116,6 +126,46 @@ export class SignupComponent implements OnInit {
     };
   }
 
+  triggerInput() {
+    this.fileInput.nativeElement.click();
+  }
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.file = file.name;
+      this.convertLogoToBase64(file, file.name);
+    }
+  }
+
+  convertLogoToBase64(file: File, name: string): void {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const data = {
+        base64String: reader.result as string,
+        fileName: name,
+      };
+      this.utilService.unprotectedFileBase64(data).subscribe(
+        (response) => {
+          if (response.valid && response.data) {
+            this.form.get('logo')?.setValue(response.data.path);
+            console.log(response.data.path);
+          } else {
+            this.toastService.error(response.message);
+          }
+        },
+        (error) => {
+          this.toastService.error(error.message);
+          this.removeFile();
+        }
+      );
+    };
+  }
+  removeFile() {
+    this.file = '';
+    this.form.get('logo')?.setValue('');
+  }
   checkPassword(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       if (!control.parent) {
@@ -125,6 +175,15 @@ export class SignupComponent implements OnInit {
         ? null
         : { invalidPassword: true };
     };
+  }
+
+  openPrivacyModal() {
+    this.PrivacyPolicyModalComponent.open();
+  }
+
+  checkTerm() {
+    this.agreed = true;
+    this.agreeTerm?.setValue(true);
   }
   onSubmit() {
     if (
@@ -139,8 +198,12 @@ export class SignupComponent implements OnInit {
           ?.value.toString()
           .padStart(11, '0'),
       };
-      this.signupDataService.setRegisterDta(userData);
-      this.route.navigateByUrl('/verify-email');
+      this.isLoading = true;
+      setTimeout(() => {
+        this.signupDataService.setRegisterDta(userData);
+        this.route.navigateByUrl('/verify-email');
+        this.isLoading = false;
+      }, 1000);
     } else if (
       this.form.valid &&
       this.form.get('password')?.value !==

@@ -5,6 +5,7 @@
   [disabled]="buttonConfig.isDisabled || buttonConfig.isLoading"
 >
   <span
+    class="icon"
     *ngIf="buttonConfig.icon && !buttonConfig.isLoading"
     [ngClass]="buttonConfig.icon"
   ></span>

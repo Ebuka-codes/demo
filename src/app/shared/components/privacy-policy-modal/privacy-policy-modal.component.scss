@@ -1,0 +1,22 @@
+.modal-header {
+  .close-icon {
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #144721;
+    border-radius: 100%;
+    color: white;
+    cursor: pointer;
+    margin: calc(-0.5 * 1rem) calc(-0.5 * 1rem) calc(-0.5 * 1rem) auto;
+    padding: 2px;
+  }
+}
+
+.btn-primary {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+.btn:hover {
+  background-color: #28a745 !important;
+  color: white !important;
+}

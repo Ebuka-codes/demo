@@ -20,7 +20,16 @@
       <h2>Manage Role</h2>
     </div>
 
-    <button type="button" (click)="open()">Add Role</button>
+    <erecruit-button
+      (click)="open()"
+      [buttonConfig]="{
+        text: 'Add Role',
+        customClass: 'primary-btn small-btn',
+        type: 'button',
+        icon: 'bi bi-plus-circle'
+      }"
+    >
+    </erecruit-button>
   </header>
 
   <div class="role-table">
@@ -75,7 +84,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="(isLoading$ | async) && roleData.length === 0">
+        <tr *ngIf="isLoading && roleData.length === 0">
           <td colspan="8">Loading data...</td>
         </tr>
         <tr *ngFor="let role of roleData">
@@ -167,7 +176,7 @@
           </td>
         </tr>
 
-        <tr *ngIf="!roleData?.length && !(isLoading$ | async)">
+        <tr *ngIf="!roleData?.length && !isLoading">
           <td>No record found</td>
         </tr>
       </tbody>
@@ -237,21 +246,29 @@
                 >
               </div>
             </div>
-            <div class="btn-action">
-              <button
-                type="button"
-                class="close-btn"
+            <div class="d-flex gap-3" style="margin-top: 25px">
+              <erecruit-button
                 (click)="close()"
                 data-bs-dismiss="modal"
+                [buttonConfig]="{
+                text: 'Cancel',
+                customClass: 'secondary-btn small-btn',
+                type: 'button',
+                
+              }"
               >
-                <span>Cancel</span>
-              </button>
-              <button type="submit" class="submit-btn">
-                <ng-container *ngIf="submitLoading; else content">
-                  <span class="mini-loader-spinner"></span>
-                </ng-container>
-                <ng-template #content> Submit </ng-template>
-              </button>
+              </erecruit-button>
+
+              <erecruit-button
+                (click)="onSubmit()"
+                [buttonConfig]="{
+                  text: 'Submit',
+                  customClass: 'primary-btn small-btn',
+                  type: 'submit',
+                  isLoading: isLoading
+                }"
+              >
+              </erecruit-button>
             </div>
           </form>
         </div>

@@ -19,7 +19,16 @@
       </span>
       <h2>Interviewer</h2>
     </div>
-    <button type="button" (click)="open()">Add New</button>
+    <erecruit-button
+      (click)="open()"
+      [buttonConfig]="{
+        text: 'Add Interviewer',
+        customClass: 'primary-btn small-btn',
+        type: 'button',
+        icon: 'bi bi-plus-circle'
+      }"
+    >
+    </erecruit-button>
   </div>
 
   <div class="interviewer-table">
@@ -75,7 +84,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="(isLoading$ | async) && data.length === 0">
+        <tr *ngIf="isLoading && data.length === 0">
           <td colspan="8">Loading data...</td>
         </tr>
         <tr *ngFor="let item of data">
@@ -161,7 +170,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="!data?.length && !(isLoading$ | async)">
+        <tr *ngIf="!data?.length && !isLoading">
           <td colspan="8">No record found</td>
         </tr>
       </tbody>
@@ -276,27 +285,29 @@
                 </small>
               </div>
 
-              <div class="btn-action">
-                <button
-                  type="button"
-                  class="close-btn"
+              <div class="d-flex gap-3" style="margin-top: 25px">
+                <erecruit-button
                   (click)="close()"
                   data-bs-dismiss="modal"
+                  [buttonConfig]="{
+                    text: 'Cancel',
+                    customClass: 'secondary-btn small-btn',
+                   type: 'button',
+                
+              }"
                 >
-                  <span>Cancel</span>
-                </button>
-                <button
-                  type="submit"
-                  class="submit-btn"
-                  [disabled]="submitting"
+                </erecruit-button>
+
+                <erecruit-button
+                  (click)="onSubmit()"
+                  [buttonConfig]="{
+                    text: 'Submit',
+                    customClass: 'primary-btn small-btn',
+                    type: 'submit',
+                    isLoading: isLoading
+                  }"
                 >
-                  <ng-container *ngIf="submitting; else content">
-                    <span class="mini-loader-spinner"></span>
-                  </ng-container>
-                  <ng-template #content>
-                    <span>Submit</span>
-                  </ng-template>
-                </button>
+                </erecruit-button>
               </div>
             </form>
           </div>

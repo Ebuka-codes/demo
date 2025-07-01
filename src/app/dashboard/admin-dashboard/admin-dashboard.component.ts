@@ -5,6 +5,7 @@ import { DashboardService } from '../dashboard.service';
 import { DashboardStats } from './shared/dashboardStats';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { SvgTemplate } from 'src/app/shared/components/svg/svg-template';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,6 +16,7 @@ export class AdminDashboardComponent {
   profile$ = this.authService.profile$;
   isLoading!: boolean;
   data!: DashboardStats;
+  svgTemplate = SvgTemplate;
 
   constructor(
     private loaderService: LoaderService,
@@ -28,13 +30,11 @@ export class AdminDashboardComponent {
   }
   loadDashboard() {
     this.isLoading = true;
-    this.loaderService.setLoading(true);
     this.dashboardService
       .getDashboardData()
       .pipe(
         finalize(() => {
           this.isLoading = false;
-          this.loaderService.setLoading(false);
           this.cdr.detectChanges();
         })
       )

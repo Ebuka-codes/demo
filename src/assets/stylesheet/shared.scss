@@ -151,9 +151,8 @@ $demo-theme: mat.define-light-theme(
   .dropdown-item {
     color: rgb(71 85 105);
     &:focus,
-    &:hover,
-    .selected {
-      background-color: #28a745 !important;
+    &:hover {
+      background-color: #28a745;
       color: white !important;
     }
     a:hover,
@@ -419,24 +418,9 @@ input[type="checkbox"] {
   color: black !important;
 }
 
-.pagination {
-  margin: 40px 0px;
-  display: flex;
-  justify-content: center;
-}
-
 .ngx-pagination {
-  margin-left: 0;
+  margin-top: 40px;
   margin-bottom: 1rem;
-}
-.ngx-pagination::before,
-.ngx-pagination::after {
-  content: " " !important;
-  display: table !important;
-}
-
-.ngx-pagination::after {
-  clear: both !important;
 }
 
 .ngx-pagination li {
@@ -447,25 +431,30 @@ input[type="checkbox"] {
 
 .ngx-pagination li {
   display: inline-block !important;
-  margin-right: 0.0625rem;
+  margin-right: 10px !important;
 }
 
 .ngx-pagination a,
 .ngx-pagination button {
   color: #0a0a0a !important;
-  padding: 3px;
   border-radius: 5px !important;
+  padding: 4px 12px !important;
 }
 
 .ngx-pagination .current {
-  padding: 3px;
   background: #97c93c !important;
   color: #fefefe;
   cursor: default;
   border-radius: 5px !important;
+  padding: 4px 12px !important;
 }
 .ngx-pagination a:hover {
   background-color: #fefefe !important;
+}
+
+.ngx-pagination .pagination-previous a:hover,
+.pagination-next a:hover {
+  background-color: transparent !important;
 }
 
 .ngx-pagination .disabled:hover {
@@ -481,6 +470,7 @@ input[type="checkbox"] {
 .ngx-pagination a,
 .ngx-pagination button {
   cursor: pointer !important;
+  text-decoration: none;
 }
 
 .ngx-pagination .pagination-previous a:hover {
@@ -506,4 +496,15 @@ input[type="checkbox"] {
   left: auto !important;
   position: fixed !important;
   z-index: 100000 !important;
+}
+.ngx-loader-bar {
+  z-index: 10000 !important;
+  position: fixed !important;
+  top: 0;
+}
+
+@media (min-width: 576px) {
+  .modal-sm {
+    --bs-modal-width: 420px !important;
+  }
 }

@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { job } from 'src/app/dashboard/job/shared/job';
 import { CORP_URL_KEY, JOB_ID_KEY } from 'src/app/core/model/credential';
+import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'erecruit-job-details',
   templateUrl: './job-details.component.html',
@@ -33,7 +34,8 @@ export class JobDetailsComponent implements OnInit {
     private navigateRoute: Router,
     private location: Location,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, this.validateEmail()]],
@@ -65,10 +67,11 @@ export class JobDetailsComponent implements OnInit {
           if (response.valid && response.data) {
             this.jobService.setJobDetailData(response.data);
           } else {
+            this.toastService.error(response.message);
           }
         },
         error: (error) => {
-          this.errorMessage = error.message;
+          this.toastService.error(error.message);
         },
       });
   }

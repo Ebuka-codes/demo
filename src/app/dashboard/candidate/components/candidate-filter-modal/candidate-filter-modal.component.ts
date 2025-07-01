@@ -9,7 +9,6 @@ import { job, KeyValuePair } from '../../../job/shared/job';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Modal } from 'bootstrap';
 import { CandidateService } from '../../shared/candidate.service';
-import { finalize } from 'rxjs';
 import { Candidate } from '../../shared/candidate';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { JobService } from 'src/app/dashboard/job/shared/job.service';

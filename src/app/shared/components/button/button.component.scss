@@ -79,24 +79,34 @@
     cursor: not-allowed;
   }
 }
-
-.secondary-btn {
-  background-color: #eeee;
-  color: #484747;
+.icon {
+  padding-right: 8px;
+}
+.delete-btn {
+  background-color: #dc3545;
   &:hover,
   :focus {
     box-shadow: #0000004d 0 2px 6px;
-    background-color: #f1f1f1;
-    color: black;
+    background-color: #dc3545;
     outline: none;
   }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.custom-add-btn {
+  border: 1px solid #97c93c;
+  border-radius: 25px;
+  background: #97c93c;
+  margin-left: 10px;
 }
 
 .outline-btn {
   color: #28a745;
   background: none;
   text-transform: none;
-  font-size: 1.4rem;
+  font-size: 14px;
   font-weight: normal;
   padding-right: 0;
   padding-top: 0;
@@ -106,5 +116,18 @@
     background: none;
     text-transform: none;
     box-shadow: none;
+  }
+}
+
+.secondary-btn {
+  background-color: #eeee;
+  gap: 10px;
+  color: #484747;
+  &:hover,
+  :focus {
+    box-shadow: #0000004d 0 2px 6px;
+    background-color: #f1f1f1;
+    color: black;
+    outline: none;
   }
 }

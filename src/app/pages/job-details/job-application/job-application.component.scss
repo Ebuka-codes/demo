@@ -198,7 +198,7 @@
       margin: 40px 0px;
       .work-info__header {
         padding-top: 10px;
-        margin-left: 55px;
+        margin-left: 40px;
         margin-top: 10px;
         .work-info-header__title {
           font-style: normal;
@@ -245,6 +245,7 @@
           }
         }
       }
+
       .work-history-btn {
         cursor: pointer;
         margin: 20px 0px;
@@ -482,59 +483,6 @@
       margin-top: 10px;
     }
 
-    .supporting-page-btn {
-      display: inline-flex;
-      gap: 20px;
-      align-items: center;
-      margin-left: 50px;
-      .prev {
-        border: none;
-        outline: none;
-        padding: 0.8rem 2rem;
-        border-radius: 25px;
-        line-height: 1.5rem;
-        width: 150px;
-        text-decoration: none;
-        font-size: 1rem;
-        text-align: center;
-        font-weight: 600;
-        cursor: pointer;
-        background-color: #eeeeee;
-        color: #333333;
-        &:hover,
-        :focus {
-          box-shadow: #0000004d 0 2px 6px;
-          background-color: #dddddd;
-        }
-        &:disabled {
-          cursor: not-allowed;
-        }
-      }
-      .submit-btn {
-        background-color: #28a745 !important;
-        border: none;
-        outline: none;
-        padding: 0.8rem 2rem;
-        border-radius: 25px;
-        text-decoration: none;
-        line-height: 1.5rem;
-        width: 230px;
-        font-size: 1rem;
-        text-align: center;
-        border: none;
-        font-weight: 600;
-        cursor: pointer;
-        color: #ffffff;
-        &:disabled {
-          cursor: not-allowed;
-        }
-        &:hover,
-        :focus {
-          box-shadow: #0000004d 0 2px 6px;
-          background-color: #28a745;
-        }
-      }
-    }
     .page-btn {
       display: inline-flex;
       gap: 20px;
@@ -579,6 +527,31 @@
           box-shadow: #0000004d 0 2px 6px;
         }
       }
+
+      .submit-btn {
+        background-color: #28a745 !important;
+        border: none;
+        outline: none;
+        padding: 0.8rem 2rem;
+        border-radius: 25px;
+        text-decoration: none;
+        line-height: 1.5rem;
+        width: 230px;
+        font-size: 1rem;
+        text-align: center;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        color: #ffffff;
+        &:disabled {
+          cursor: not-allowed;
+        }
+        &:hover,
+        :focus {
+          box-shadow: #0000004d 0 2px 6px;
+          background-color: #28a745;
+        }
+      }
     }
 
     .file-upload__wrapper {
@@ -619,44 +592,6 @@
         }
       }
     }
-
-    .btn-cancel {
-      background-color: #eeee;
-      padding: 10px 2.5rem;
-      border-radius: 50px;
-      font-size: 1rem;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 500;
-      cursor: pointer;
-      color: black;
-      border: none;
-      &:hover,
-      :focus {
-        box-shadow: #0000004d 0 2px 6px;
-        background-color: #eeee;
-        color: black;
-        outline: none;
-      }
-    }
-    .btn-submit {
-      background-color: #28a745;
-      padding: 10px 2.5rem;
-      border-radius: 50px;
-      font-size: 1rem;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 500;
-      color: white;
-      border: none;
-      &:hover,
-      :focus {
-        box-shadow: #0000004d 0 2px 6px;
-        background-color: #28a745;
-        color: white;
-        outline: none;
-      }
-    }
     .job-question {
       display: flex;
       flex-direction: column;
@@ -695,9 +630,7 @@
       margin: 5px 0px;
     }
   }
-  .modal-footer {
-    justify-content: flex-start !important;
-  }
+
   .modal-header {
     justify-content: flex-start !important;
     .btn-close {

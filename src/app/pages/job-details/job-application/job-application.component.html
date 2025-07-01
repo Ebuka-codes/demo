@@ -59,8 +59,7 @@
   </div>
 
   <form (ngSubmit)="onSubmit()">
-    <mat-horizontal-stepper #stepper [linear]="true">
-      <!-- personal-information -->
+    <mat-stepper #stepper [linear]="true">
       <mat-step [stepControl]="personalFormGroup">
         <form action="" [formGroup]="personalFormGroup">
           <!-- <div class="apply-flow-block__header">
@@ -111,8 +110,7 @@
               </button>
             </div>
           </div> -->
-
-          <div class="contact-info">
+          <div class="bio-data">
             <div class="bio-data__header">
               <h2 class="bio-data-header__title">Bio-Data</h2>
               <p>Please enter your personal information.</p>
@@ -594,29 +592,31 @@
                           </div>
                         </div>
                       </div>
-
-                      <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn-cancel"
+                      <div
+                        class="d-flex gap-3 my-3 mx-4"
+                        style="margin-bottom: 2.4rem !important"
+                      >
+                        <erecruit-button
                           (click)="closeModal(1)"
                           data-bs-dismiss="modal"
+                          [buttonConfig]="{
+                              text: 'Cancel',
+                           customClass: 'secondary-btn small-btn',
+                              type: 'button',
+                           }"
                         >
-                          Close
-                        </button>
-                        <button
-                          type="submit"
-                          class="btn-submit"
-                          aria-label="Close"
+                        </erecruit-button>
+
+                        <erecruit-button
                           (click)="addWorkHistory(1)"
+                          [buttonConfig]="{
+                            text: isEditModalOpen ? 'Save':'Add',
+                            customClass: 'primary-btn small-btn',
+                            type: 'submit',
+                           
+                          }"
                         >
-                          <ng-container
-                            *ngIf="isEditModalOpen; else showBtnText"
-                          >
-                            Save
-                          </ng-container>
-                          <ng-template #showBtnText>Add </ng-template>
-                        </button>
+                        </erecruit-button>
                       </div>
                     </div>
                   </div>
@@ -954,27 +954,31 @@
                         </div>
                       </div>
 
-                      <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn-cancel"
-                          data-bs-dismiss="modal"
+                      <div
+                        class="d-flex gap-3 my-3 mx-4"
+                        style="margin-bottom: 2.4rem !important"
+                      >
+                        <erecruit-button
                           (click)="closeModal(2)"
+                          data-bs-dismiss="modal"
+                          [buttonConfig]="{
+                              text: 'Cancel',
+                           customClass: 'secondary-btn small-btn',
+                              type: 'button',
+                           }"
                         >
-                          Close
-                        </button>
-                        <button
-                          type="submit"
-                          class="btn-submit"
+                        </erecruit-button>
+
+                        <erecruit-button
                           (click)="addEducationHistory(2)"
+                          [buttonConfig]="{
+                            text: isEditModalOpen ? 'Save':'Add',
+                            customClass: 'primary-btn small-btn',
+                            type: 'submit',
+                           
+                          }"
                         >
-                          <ng-container
-                            *ngIf="isEditModalOpen; else showBtnText"
-                          >
-                            Save
-                          </ng-container>
-                          <ng-template #showBtnText> Add </ng-template>
-                        </button>
+                        </erecruit-button>
                       </div>
                     </div>
                   </div>
@@ -1155,27 +1159,31 @@
                           </div>
                         </div>
 
-                        <div class="modal-footer">
-                          <button
-                            type="button"
-                            class="btn-cancel"
+                        <div
+                          class="d-flex gap-3 my-3 mx-4"
+                          style="margin-bottom: 2.4rem !important"
+                        >
+                          <erecruit-button
                             (click)="closeModal(3)"
                             data-bs-dismiss="modal"
+                            [buttonConfig]="{
+                              text: 'Cancel',
+                           customClass: 'secondary-btn small-btn',
+                              type: 'button',
+                           }"
                           >
-                            Close
-                          </button>
-                          <button
-                            type="submit"
-                            class="btn-submit"
+                          </erecruit-button>
+
+                          <erecruit-button
                             (click)="addSkillHistory(3)"
+                            [buttonConfig]="{
+                            text: isEditModalOpen ? 'Save':'Add',
+                            customClass: 'primary-btn small-btn',
+                            type: 'submit',
+                           
+                          }"
                           >
-                            <ng-container
-                              *ngIf="isEditModalOpen; else showSkillBtnText"
-                            >
-                              Save
-                            </ng-container>
-                            <ng-template #showSkillBtnText> Add </ng-template>
-                          </button>
+                          </erecruit-button>
                         </div>
                       </div>
                     </div>
@@ -1201,7 +1209,7 @@
         </div>
       </mat-step>
 
-      <mat-step>
+      <mat-step editable>
         <form action="" [formGroup]="supportingFormGroup">
           <div class="supporting-doc">
             <div class="supporting-doc__header">
@@ -1431,16 +1439,8 @@
             </div>
           </div>
         </ng-container>
-        <div class="supporting-page-btn">
-          <button
-            class="prev"
-            mat-button
-            matStepperPrevious
-            type="button"
-            [disabled]="isSubmitting"
-          >
-            Back
-          </button>
+        <div class="page-btn">
+          <button class="prev" mat-button matStepperPrevious>Back</button>
           <button type="submit" [disabled]="isSubmitting" class="submit-btn">
             <ng-container *ngIf="isSubmitting; else content">
               <span class="mini-loader-spinner"></span>
@@ -1451,6 +1451,6 @@
           </button>
         </div>
       </mat-step>
-    </mat-horizontal-stepper>
+    </mat-stepper>
   </form>
 </div>

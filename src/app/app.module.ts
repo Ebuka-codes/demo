@@ -24,6 +24,12 @@ import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from './shared/shared.module';
 import { ToastrModule } from 'ngx-toastr';
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { SessionExpirationComponent } from './pages/session-expiration/session-expiration.component';
+import { LoaderBarModule } from './shared/components/loading-bar/loader-bar.module';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
 @NgModule({
   declarations: [
@@ -39,6 +45,7 @@ import { ToastComponent } from './shared/components/toast/toast.component';
     InterviewerValidationComponent,
     CandidateVerificationComponent,
     ToastComponent,
+    SessionExpirationComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +60,11 @@ import { ToastComponent } from './shared/components/toast/toast.component';
     MatSelectModule,
     MatInputModule,
     BrowserAnimationsModule,
+    SharedModule,
+    NgxPaginationModule,
+    LoaderBarModule,
+    MatIconModule,
+    LoadingBarHttpClientModule,
     ToastrModule.forRoot({
       toastComponent: ToastComponent,
       positionClass: 'toast-top-right',
@@ -63,7 +75,6 @@ import { ToastComponent } from './shared/components/toast/toast.component';
       timeOut: 5000,
       toastClass: 'custom-toast',
     }),
-    SharedModule,
   ],
 
   bootstrap: [AppComponent],

@@ -7,6 +7,8 @@ import { Constants } from 'src/app/utils/constants';
 import { DataResponse } from '../model/data-response';
 import { job } from 'src/app/dashboard/job/shared/job';
 import { CORP_URL_KEY } from 'src/app/core/model/credential';
+import { PaginationConfig } from '../model/pagination-model';
+import { FilterOption, PostedDateOption } from '../model/model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,6 @@ export class JobRecruitService {
   baseUrl = environment.API_URL;
   private jobListSubject$ = new BehaviorSubject<job[] | null>(null);
   private jobCategorySubject$ = new BehaviorSubject<any | null>(null);
-  private category$ = this.jobCategorySubject$.asObservable();
   job$ = this.jobListSubject$.asObservable();
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
@@ -28,68 +29,85 @@ export class JobRecruitService {
   constructor(private httpClient: HttpClient) {
     const value = localStorage.getItem(CORP_URL_KEY);
     if (value) {
-      this.corpUrl = decodeURIComponent(value);
+      this.corpUrl = value;
     }
   }
 
-  getJobList(): Observable<DataResponse<job[]>> {
+  getJobList(
+    page: number,
+    size: number
+  ): Observable<DataResponse<PaginationConfig<job>>> {
     const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
+      'corp-url': this.corpUrl,
     });
-    return this.httpClient.get<any>(
+    return this.httpClient.get<DataResponse<PaginationConfig<job>>>(
       Constants.UNPROTECTED_URL.COMMON + '/job/get-all',
-      { headers }
+      { headers, params: { page, size } }
     );
   }
-  getJobDetailsById(id: any): Observable<any> {
+  getJobDetailsById(id: any): Observable<DataResponse<job>> {
     const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
+      'corp-url': this.corpUrl,
     });
-    return this.httpClient.get(
+    return this.httpClient.get<DataResponse<job>>(
       Constants.UNPROTECTED_URL.COMMON + `/job/${id}`,
       { headers }
     );
   }
-  searchJobs(params: string): Observable<DataResponse<job[]>> {
+  searchJobs(
+    params: string,
+    page: number,
+    size: number
+  ): Observable<DataResponse<PaginationConfig<job>>> {
     const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
+      'corp-url': this.corpUrl,
     });
-    return this.httpClient.get<DataResponse<job[]>>(
+    return this.httpClient.get<DataResponse<PaginationConfig<job>>>(
       Constants.UNPROTECTED_URL.COMMON + `/job/search?keyword=${params}`,
-      { headers }
+      { headers, params: { page, size } }
     );
   }
-  filterJobs(params: string[]): Observable<DataResponse<job[]>> {
+  filterJobs(
+    data: FilterOption,
+    page: number,
+    size: number
+  ): Observable<DataResponse<PaginationConfig<job>>> {
     const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
+      'corp-url': this.corpUrl,
     });
-    return this.httpClient.get<DataResponse<job[]>>(
-      Constants.UNPROTECTED_URL.COMMON +
-        `/job/search-job-type?types=${params.join(',')}`,
-      { headers }
+    return this.httpClient.post<DataResponse<PaginationConfig<job>>>(
+      Constants.UNPROTECTED_URL.COMMON + '/jobs/filter',
+      data,
+      { headers, params: { page, size } }
     );
   }
-  getJobType() {
+  getPostedDate() {
     const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
+      'corp-url': this.corpUrl,
     });
-    this.httpClient
-      .get<any>(Constants.UNPROTECTED_URL.COMMON + '/job/jobtype', { headers })
-      .pipe(
-        tap((response) => {
-          if (response.valid && response.data) {
-            this.jobCategorySubject$.next(response.data);
-          }
-        })
-      )
-      .subscribe();
-    return this.category$;
+    return this.httpClient.get<PostedDateOption[]>(
+      Constants.UNPROTECTED_URL.COMMON + '/posted-date-filters',
+      {
+        headers,
+      }
+    );
+  }
+  getQuery() {
+    const headers = new HttpHeaders({
+      'corp-url': this.corpUrl,
+    });
+    return this.httpClient.get<any[]>(
+      Constants.UNPROTECTED_URL.COMMON + '/query/all',
+      {
+        headers,
+      }
+    );
   }
   submitJobApplication(
     application: JobApplication
   ): Observable<DataResponse<JobApplication>> {
     const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
+      'corp-url': this.corpUrl,
     });
     return this.httpClient.post<DataResponse<JobApplication>>(
       Constants.UNPROTECTED_URL.COMMON + '/candidate/create',
@@ -98,16 +116,6 @@ export class JobRecruitService {
     );
   }
 
-  convertFileToBase64(file: any) {
-    const headers = new HttpHeaders({
-      'corp-url': this.corpUrl || '',
-    });
-    return this.httpClient.post<any>(
-      Constants.UNPROTECTED_URL.COMMON + '/upload-base64',
-      file,
-      { headers }
-    );
-  }
   setJobDetailId(id: string) {
     this.jobDetailsId = id;
   }

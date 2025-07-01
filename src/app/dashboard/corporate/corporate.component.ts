@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
+import { UtilService } from 'src/app/core/service/util.service';
 
 @Component({
   selector: 'erecruit-corporate',
@@ -42,7 +43,8 @@ export class CorporateComponent {
     public corporateService: CorporateService,
     private toastService: ToastService,
     public loaderService: LoaderService,
-    private location: Location
+    private location: Location,
+    private utilService: UtilService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -144,7 +146,7 @@ export class CorporateComponent {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.corporateService.convertFileToBase64(data).subscribe({
+      this.utilService.convertFileTobase64(data).subscribe({
         next: (response: any) => {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;

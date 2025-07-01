@@ -123,7 +123,7 @@
 
           <button type="submit" class="signIn-btn" [disabled]="isLoading">
             <ng-container *ngIf="isLoading; else showText">
-              <div class="mini-loader-spinner"></div>
+              <erecruit-loader-spinner />
             </ng-container>
             <ng-template #showText>Sign in</ng-template>
           </button>

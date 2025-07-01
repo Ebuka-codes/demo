@@ -9,11 +9,9 @@ import {
 } from '@angular/forms';
 import { InterviewerService } from './shared/interviewer.service';
 import { Interviewer } from './shared/interviewer';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
-import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'erecruit-interviewer',
@@ -29,9 +27,7 @@ export class InterviewerComponent implements OnInit {
 
   form!: FormGroup;
 
-  isLoading$!: Observable<boolean>;
-
-  submitting!: boolean;
+  isLoading!: boolean;
 
   time = '';
 
@@ -43,7 +39,6 @@ export class InterviewerComponent implements OnInit {
     private fb: FormBuilder,
     private interviewerService: InterviewerService,
     private toastService: ToastService,
-    private loaderService: LoaderService,
     private location: Location
   ) {
     this.form = this.fb.group({
@@ -51,7 +46,6 @@ export class InterviewerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, this.validatePhone()]],
     });
-    this.isLoading$ = this.loaderService.isLoading$;
   }
 
   ngOnInit(): void {
@@ -88,24 +82,22 @@ export class InterviewerComponent implements OnInit {
   }
 
   loadInterviewers() {
+    this.isLoading = true;
     this.data = [];
-    this.loaderService.setLoading(true);
-    this.interviewerService
-      .getAllInterviewers()
-      .pipe(finalize(() => this.loaderService.setLoading(false)))
-      .subscribe({
-        next: (response: any) => {
-          if (response.valid && response.data) {
-            this.data = response.data;
-          } else {
-            this.toastService.error(response.message);
-          }
-        },
-        error: (error) => {
-          this.loaderService.setLoading(false);
-          this.toastService.error(error.message);
-        },
-      });
+    this.interviewerService.getAllInterviewers().subscribe({
+      next: (response: any) => {
+        if (response.valid && response.data) {
+          this.data = response.data;
+        } else {
+          this.toastService.error(response.message);
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        this.toastService.error(error.message);
+        this.isLoading = false;
+      },
+    });
   }
   open() {
     this.modalInstance.show();
@@ -114,11 +106,11 @@ export class InterviewerComponent implements OnInit {
   close() {
     this.modalInstance.hide();
     this.resetForm();
-    this.submitting = false;
+    this.isLoading = false;
   }
 
   createInterviewer(data: Interviewer) {
-    this.submitting = true;
+    this.isLoading = true;
     this.interviewerService.createInterviewer(data).subscribe({
       next: (response: any) => {
         if (response.valid && response.data) {
@@ -128,12 +120,12 @@ export class InterviewerComponent implements OnInit {
           this.close();
         } else {
           this.toastService.error(response.message);
-          this.submitting = false;
+          this.isLoading = false;
         }
       },
       error: (error) => {
         this.toastService.error(error.message);
-        this.submitting = false;
+        this.isLoading = false;
       },
     });
   }

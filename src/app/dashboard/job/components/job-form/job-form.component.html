@@ -706,11 +706,24 @@
         </div>
       </div>
 
-      <button class="question-btn mb-3" type="button" (click)="onAddQuestion()">
-        + Add Questions
-      </button>
+      <div class="d-flex flex-column gap-3">
+        <erecruit-button
+          [buttonConfig]="{
+            text: 'Add Questions',
+            customClass: 'custom-add-btn small-btn',
+          icon: 'bi bi-plus-circle',
+          }"
+          (click)="onAddQuestion()"
+        />
 
-      <button class="ai-btn" type="button">Rewrite with Ai</button>
+        <erecruit-button
+          [buttonConfig]="{
+            text: 'Rewrite with Ai',
+            customClass: 'primary-btn outline-btn',
+            type: 'button'
+          }"
+        />
+      </div>
 
       <div class="row">
         <label for="description" style="margin-bottom: 5px"
@@ -732,16 +745,17 @@
       </div>
     </form>
   </div>
-
-  <div class="submit-btn">
-    <button type="button" [disabled]="loading" (click)="onSubmit()">
-      <ng-container *ngIf="loading; else content">
-        <img src="../../../../../assets/image/mini_loader.gif" alt="" />
-      </ng-container>
-      <ng-template #content>
-        <span>Continue</span>
-      </ng-template>
-    </button>
+  <div class="d-flex justify-content-end my-4">
+    <erecruit-button
+      (click)="onSubmit()"
+      [buttonConfig]="{
+        text: 'Continue',
+        customClass: 'primary-btn small-btn',
+        type: 'submit',
+        isLoading: loading
+      }"
+    >
+    </erecruit-button>
   </div>
 </div>
 <ercruit-job-question-modal

@@ -45,6 +45,7 @@ export class JobOverviewComponent implements OnInit {
 
   openModal() {
     this.CandidateLoginComponent.open();
+    console.log('working');
   }
   handleBack() {
     this.location.back();

@@ -44,17 +44,20 @@
               >
             </div>
           </div>
-          <div>
-            <input type="checkbox" value="" formControlName="term" />
-            <span style="padding-left: 5px; font-size: 15px" class="mt-2">
-              I agree with the
-              <span style="font-weight: 600">TERM AND CONDITIONS</span></span
+
+          <div class="checkbox">
+            <input type="checkbox" formControlName="terms" [checked]="agreed" />
+            <span style="padding-left: 5px; font-size: 14px">
+              I agree with
+              <a class="term" (click)="openPrivacyModal()"
+                >Terms and Conditions
+              </a>
+            </span>
+          </div>
+          <div *ngIf="term?.invalid && term?.touched">
+            <small class="text-danger" *ngIf="term?.errors?.['required']"
+              >Terms field is required</small
             >
-            <div *ngIf="term?.invalid && term?.touched">
-              <small class="text-danger" *ngIf="term?.errors?.['required']"
-                >Terms field is required</small
-              >
-            </div>
           </div>
 
           <button type="submit" class="btn-submit" [disabled]="isSignIn">
@@ -70,3 +73,4 @@
     </div>
   </div>
 </div>
+<erecruit-privacy-policy-modal (checkTerms)="checkTerms()" />

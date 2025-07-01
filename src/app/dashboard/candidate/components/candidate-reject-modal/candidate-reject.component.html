@@ -8,7 +8,7 @@
   data-bs-backdrop="static"
   data-bs-keyboard="false"
 >
-  <div class="modal-dialog">
+  <div class="modal-dialog  modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">
@@ -31,29 +31,33 @@
         </span>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to reject?</p>
-        <div class="btn-action">
-          <button
-            type="button"
-            class="close-btn"
-            data-bs-dismiss="modal"
+        <p>Are you sure you want to reject this candidate?</p>
+      </div>
+
+      <div class="modal-footer">
+        <div class="d-flex gap-3">
+          <erecruit-button
             (click)="close()"
+            data-bs-dismiss="modal"
+            [buttonConfig]="{
+                text: 'Cancel',
+                customClass: 'secondary-btn small-btn',
+                type: 'button',
+                
+              }"
           >
-            <span>Cancel</span>
-          </button>
-          <button
-            type="submit"
-            [disabled]="isLoading"
-            class="submit-btn"
+          </erecruit-button>
+
+          <erecruit-button
+            [buttonConfig]="{
+              text: 'Submit',
+              customClass: 'delete-btn small-btn',
+              type: 'submit',
+              isLoading: isLoading
+            }"
             (click)="onConfirmReject()"
           >
-            <ng-container *ngIf="isLoading; else showLoading">
-              <span class="mini-loader-spinner"></span>
-            </ng-container>
-            <ng-template #showLoading>
-              <span>Reject</span>
-            </ng-template>
-          </button>
+          </erecruit-button>
         </div>
       </div>
     </div>

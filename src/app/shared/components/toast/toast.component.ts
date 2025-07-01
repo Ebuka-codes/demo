@@ -12,6 +12,8 @@ export class ToastComponent extends Toast {
     public override toastPackage: ToastPackage
   ) {
     super(toastrService, toastPackage);
+
+    console.log(toastPackage.title);
   }
 
   dismiss(): void {

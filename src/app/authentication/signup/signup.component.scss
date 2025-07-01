@@ -1,6 +1,6 @@
 .signup-container {
   background-image: url("../../../assets/image/Desktop-bg.png");
-  background-color: #299345;
+  background-color: #91e5a8;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -30,18 +30,7 @@
         font-size: 35px;
         line-height: 1.2;
       }
-      .check-group {
-        margin-bottom: 10px;
-        span {
-          font-size: 14px;
-          color: #fbfbfb;
-        }
-        small {
-          color: rgba(220, 53, 69);
-          margin-top: 5px;
-          font-weight: 500;
-        }
-      }
+
       .form-group {
         margin-top: 16px;
         margin-bottom: 15px;
@@ -66,7 +55,7 @@
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
           }
-          button {
+          .btn {
             background-color: white;
             padding: 10px;
             text-align: center;
@@ -78,15 +67,15 @@
             font-size: 14px;
             display: flex;
             align-items: center;
+            cursor: default !important;
             gap: 5px;
-            &:hover {
-              background-color: white !important;
-              transition: none !important;
-            }
             svg {
               width: 10px;
               margin: 0px 5px;
             }
+          }
+          :hover {
+            background-color: white !important;
           }
         }
         .icon {
@@ -104,28 +93,92 @@
           }
         }
         .error {
-          border: 1px solid rgba(220, 53, 69) !important;
+          border: 1px solid rgb(251 9 32) !important;
         }
         small {
-          color: rgba(220, 53, 69);
+          color: rgb(251 9 32);
           margin-top: 5px;
           font-weight: 500;
         }
       }
-
-      input[type="checkbox"] {
-        width: 12px;
-        height: 12px;
-        border: 1px solid #f9f9f9;
-        border-radius: 2px;
-        display: inline-block;
-        position: relative;
-        cursor: pointer;
-        margin: 0px 10px;
+      .file-upload {
+        input {
+          display: none;
+        }
+        label {
+          background-color: white;
+          border-radius: 5px;
+          padding: 13px 15px;
+          color: #474747;
+          width: 100%;
+          border: none;
+          font-size: 14px;
+        }
+      }
+      .file-wrapper__doc {
+        display: flex;
+        width: 100% !important;
+        width: fit-content;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 5px;
+        padding: 13px 15px;
+        height: 45px;
+        font-size: 14px;
+        gap: 10px;
+        flex-shrink: 0;
+        background-color: white;
+        color: #333333d7;
+        margin: 10px 0px;
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+        span {
+          font-weight: 500;
+        }
+        .file {
+          color: #28a745;
+        }
+        .cancel {
+          color: red;
+          cursor: pointer;
+        }
       }
 
-      input[type="checkbox"]:checked {
-        accent-color: white;
+      .check-group {
+        margin-bottom: 10px;
+        span {
+          font-size: 14px;
+          color: #fbfbfb;
+        }
+        small {
+          color: rgb(251 9 32);
+          margin-top: 5px;
+          font-weight: 500;
+        }
+        input[type="checkbox"] {
+          width: 14px;
+          height: 14px;
+          border: 1px solid #f9f9f9;
+          border-radius: 2px;
+          display: inline-block;
+          position: relative;
+          cursor: pointer;
+          margin: 0px 10px;
+        }
+
+        input[type="checkbox"]:checked {
+          accent-color: white;
+        }
+        .term {
+          text-transform: uppercase;
+          font-size: 14px;
+          text-decoration: none;
+          color: #333333e1;
+          font-weight: 500;
+          cursor: pointer;
+        }
       }
 
       .submit-btn {
@@ -142,6 +195,9 @@
         &:hover,
         &:focus {
           box-shadow: #0000004d 0 2px 6px;
+        }
+        &:disabled {
+          cursor: not-allowed;
         }
       }
     }

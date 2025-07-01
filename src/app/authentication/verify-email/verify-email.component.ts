@@ -1,23 +1,26 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CorporateDto } from 'src/app/core/model/auth';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { SignupDataService } from '../shared/signup-data.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
   styleUrls: ['./verify-email.component.scss'],
 })
-export class VerifyEmailComponent implements OnInit {
+export class VerifyEmailComponent {
   @ViewChildren('otpInputs') otpInputs!: QueryList<any>;
   otpForm: FormArray<FormControl<string | null>>;
   isVerifyEnabled: boolean = false;
   isLoading: boolean = false;
   userData: any;
   otp!: string;
+  customLoaderBg = true;
+  isVerifying!: boolean;
   constructor(
     private fb: FormBuilder,
     private route: Router,
@@ -30,26 +33,32 @@ export class VerifyEmailComponent implements OnInit {
     );
   }
   ngOnInit(): void {
+    this.sendOtp();
+  }
+
+  sendOtp() {
     this.signupDataService.getRegisterData().subscribe((data) => {
       if (data) {
-        this.userData = data;
         this.isLoading = true;
+        this.userData = data;
         this.authService
           .generateOtp({
-            email: this.userData?.email,
-            phoneNumber: this.userData?.phoneNumber,
+            email: this.userData.email,
+            phoneNumber: this.userData.phoneNumber,
           })
+          .pipe(
+            finalize(() => {
+              this.isLoading = false;
+            })
+          )
           .subscribe({
             next: (response: any) => {
               if (response.valid && response.data) {
-                setTimeout(() => {
-                  this.isLoading = false;
-                }, 500);
                 console.log(`otp code - ${response.data}`);
+                this.toastService.success('OTP has been sent to your mail');
               }
             },
             error: (err) => {
-              this.isLoading = false;
               this.toastService.error(err.message);
             },
           });
@@ -96,18 +105,17 @@ export class VerifyEmailComponent implements OnInit {
           phoneNumber: this.userData?.phoneNumber,
         },
       };
-      this.isLoading = true;
+      this.isVerifying = true;
       this.authService.signUp(corporate).subscribe({
         next: (response: any) => {
           if (response.valid) {
-            this.isLoading = false;
             this.otpForm.reset();
             setTimeout(() => {
-              this.isLoading = false;
-              this.route.navigateByUrl('/login');
+              this.isVerifying = false;
+              this.route.navigateByUrl('/login', { replaceUrl: true });
             }, 300);
           } else {
-            this.isLoading = false;
+            this.isVerifying = false;
             this.toastService.error(response.message);
             this.otpForm.reset();
             this.checkComplete();
@@ -115,9 +123,13 @@ export class VerifyEmailComponent implements OnInit {
         },
         error: (error) => {
           this.toastService.error(error.error.message);
-          this.isLoading = false;
+          this.isVerifying = false;
         },
       });
     }
+  }
+
+  resendOtp() {
+    this.sendOtp();
   }
 }

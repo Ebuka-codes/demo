@@ -11,6 +11,9 @@ export class ToastService {
   }
 
   error(message: string) {
-    this.toastr.error(message, 'Error Message');
+    this.toastr.error(message);
+  }
+  warn(message: string) {
+    this.toastr.warning(message);
   }
 }

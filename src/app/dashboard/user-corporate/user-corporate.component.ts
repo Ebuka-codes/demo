@@ -14,6 +14,7 @@ import { finalize } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { CORP_URL } from 'src/app/core/model/credential';
 import { environment } from 'src/environments/environment';
+import { UtilService } from 'src/app/core/service/util.service';
 @Component({
   selector: 'erecruit-user-corporate',
   templateUrl: './user-corporate.component.html',
@@ -35,10 +36,10 @@ export class UserCorporateComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private corporateService: CorporateService,
-    private loaderService: LoaderService,
     private toastService: ToastService,
     private location: Location,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private utilService: UtilService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -81,24 +82,20 @@ export class UserCorporateComponent implements OnInit {
     }
   }
   getCorporateData() {
-    this.loaderService.setLoading(true);
-    this.corporateService
-      .getUserCorporate()
-      .pipe(finalize(() => this.loaderService.setLoading(false)))
-      .subscribe({
-        next: (response: any) => {
-          if (response) {
-            this.form.patchValue(response);
-            this.form.updateValueAndValidity();
-            this.corporateId = response.id;
-          } else {
-            this.toastService.error(response.message);
-          }
-        },
-        error: (error: any) => {
-          this.toastService.error(error.message);
-        },
-      });
+    this.corporateService.getUserCorporate().subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.form.patchValue(response);
+          this.form.updateValueAndValidity();
+          this.corporateId = response.id;
+        } else {
+          this.toastService.error(response.message);
+        }
+      },
+      error: (error: any) => {
+        this.toastService.error(error.message);
+      },
+    });
   }
   validateEmail(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -146,18 +143,16 @@ export class UserCorporateComponent implements OnInit {
     this.isLoadingLogo = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    this.loaderService.setLoading(true);
     reader.onload = () => {
       const data = {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.corporateService
-        .convertFileToBase64(data)
+      this.utilService
+        .convertFileTobase64(data)
         .pipe(
           finalize(() => {
             this.isLoadingLogo = false;
-            this.loaderService.setLoading(false);
           })
         )
         .subscribe({
@@ -179,7 +174,7 @@ export class UserCorporateComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.submitLoading = true;
-      this.loaderService.setLoading(true);
+
       this.corporateService
         .editCorporate(this.corporateId, {
           ...this.form.value,
@@ -187,7 +182,7 @@ export class UserCorporateComponent implements OnInit {
         })
         .pipe(
           finalize(() => {
-            this.loaderService.setLoading(false), (this.submitLoading = false);
+            this.submitLoading = false;
           })
         )
         .subscribe({
