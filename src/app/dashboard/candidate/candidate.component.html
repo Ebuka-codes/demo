@@ -39,11 +39,7 @@
         </mat-select>
       </mat-form-field>
 
-      <button
-        type="button"
-        (click)="onSelectedJob()"
-        [disabled]="isLoading | async"
-      >
+      <button type="button" (click)="onSelectedJob()" [disabled]="isLoading">
         Submit
       </button>
     </div>
@@ -86,10 +82,7 @@
         class="advance-btn"
         (click)="isSearchFilterActive ? onSearchFilter() : open()"
       >
-        <button
-          [class.active]="isSearchFilterActive"
-          [disabled]="isLoading | async"
-        >
+        <button [class.active]="isSearchFilterActive">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -381,7 +374,11 @@
               </td>
             </tr>
 
-            <tr *ngIf="!(isLoading | async) && filteredCandidate.length === 0">
+            <tr *ngIf="isLoading && filteredCandidate.length === 0">
+              <td colspan="8">Loading...</td>
+            </tr>
+
+            <tr *ngIf="!isLoading && filteredCandidate.length === 0">
               <td>No candidate</td>
             </tr>
           </tbody>

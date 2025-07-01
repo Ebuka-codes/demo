@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Corporate, file } from './corporate';
+import { Corporate } from './corporate';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Constants } from 'src/app/utils/constants';
@@ -50,7 +50,6 @@ export class CorporateService {
       }
     );
   }
-
   deleteCorporate(id: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -61,24 +60,6 @@ export class CorporateService {
       {
         headers,
       }
-    );
-  }
-
-  convertFileToBase64(file: file): Observable<DataResponse<any>> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-    return this.httpClient.post<any>(
-      this.baseUrl + '/api/document/upload-base64',
-      file,
-      {
-        headers,
-      }
-    );
-  }
-  generateEndcodeUrl(): Observable<DataResponse<any>> {
-    return this.httpClient.get<any>(
-      Constants.CORPORATE_URL.CORPORATE + '/encode-url'
     );
   }
 }

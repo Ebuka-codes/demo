@@ -85,7 +85,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="(isLoading$ | async) && userData?.length === 0">
+        <tr *ngIf="isLoading && userData?.length === 0">
           <td colspan="8">Loading users...</td>
         </tr>
         <tr *ngFor="let item of userData">
@@ -172,7 +172,7 @@
           </td>
         </tr>
 
-        <tr *ngIf="!userData?.length && !(isLoading$ | async)">
+        <tr *ngIf="!userData?.length && !isLoading">
           <td>No record found</td>
         </tr>
       </tbody>

@@ -14,6 +14,7 @@ import { Modal } from 'bootstrap';
 import { finalize, Observable } from 'rxjs';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { InterviewerService } from 'src/app/dashboard/interviewer/shared/interviewer.service';
+import { UtilService } from 'src/app/core/service/util.service';
 
 @Component({
   selector: 'erecruit-candidate-schedule-date',
@@ -32,8 +33,7 @@ export class CandidateScheduleDateComponent implements OnInit {
   @Output() candidateUpdate: EventEmitter<void> = new EventEmitter();
 
   scheduledDateForm!: FormGroup;
-  submitted: boolean = false;
-  isLoading$!: Observable<boolean>;
+  isLoading: boolean = false;
   interviewer!: any[];
 
   constructor(
@@ -41,7 +41,7 @@ export class CandidateScheduleDateComponent implements OnInit {
     private candidateService: CandidateService,
     private interviewerService: InterviewerService,
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private utilService: UtilService
   ) {
     this.scheduledDateForm = this.fb.group({
       scheduledDate: ['', Validators.required],
@@ -95,7 +95,7 @@ export class CandidateScheduleDateComponent implements OnInit {
   close() {
     this.modalInstance.hide();
     this.scheduledDateForm.reset();
-    this.submitted = false;
+    this.isLoading = false;
   }
 
   getInterviewers() {
@@ -111,7 +111,7 @@ export class CandidateScheduleDateComponent implements OnInit {
     });
   }
   createScheduleDate(data: any) {
-    this.submitted = true;
+    this.isLoading = true;
     this.candidateService.scheduleCandidateById(data).subscribe({
       next: (response) => {
         this.scheduledDateForm.reset();
@@ -122,23 +122,18 @@ export class CandidateScheduleDateComponent implements OnInit {
       error: (error) => {
         this.toastService.error(error.message);
         this.candidateUpdate.emit();
-        this.submitted = false;
+        this.isLoading = false;
       },
     });
   }
   onSubmit() {
-    const data = new Date(this.scheduledDateForm.get('scheduledDate')?.value);
-    const year = data.getFullYear();
-    const month = data.getMonth() + 1;
-    const day = data.getDate();
-    const dataFormate = `${year}-${month.toString().padStart(2, '0')}-${day
-      .toString()
-      .padStart(2, '0')}`;
-
+    const date = this.utilService.formatDate(
+      new Date(this.scheduledDateForm.get('scheduledDate')?.value)
+    );
     if (this.scheduledDateForm.valid) {
       this.createScheduleDate({
         ...this.scheduledDateForm.value,
-        scheduledDate: dataFormate,
+        scheduledDate: date,
         candidateId: this.candidateId,
       });
     } else {

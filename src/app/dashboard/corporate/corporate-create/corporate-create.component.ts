@@ -18,6 +18,7 @@ import { Corporate } from '../shared/corporate';
 import { CorporateService } from '../shared/corporate.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { UtilService } from 'src/app/core/service/util.service';
 
 @Component({
   selector: 'erecruit-corporate-create',
@@ -42,7 +43,8 @@ export class CorporateCreateComponent {
     private fb: FormBuilder,
     public corporateService: CorporateService,
     private loaderService: LoaderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private utilService: UtilService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -128,7 +130,7 @@ export class CorporateCreateComponent {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.corporateService.convertFileToBase64(data).subscribe(
+      this.utilService.convertFileTobase64(data).subscribe(
         (response: any) => {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;

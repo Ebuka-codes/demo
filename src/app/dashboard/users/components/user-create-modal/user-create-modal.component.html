@@ -26,7 +26,7 @@
         </span>
       </div>
       <div class="modal-body">
-        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="userForm">
           <div class="form-group">
             <label for="firstName"
               >First Name <span class="required-icon">*</span></label
@@ -110,21 +110,29 @@
             </div>
           </div>
 
-          <div class="btn-action">
-            <button
-              type="button"
-              class="close-btn"
+          <div class="d-flex gap-3" style="margin-top: 25px">
+            <erecruit-button
               (click)="close()"
-              data-dismiss="modal"
+              data-bs-dismiss="modal"
+              [buttonConfig]="{
+                text: 'Cancel',
+                customClass: 'secondary-btn small-btn',
+                type: 'button',
+                
+              }"
             >
-              <span>Cancel</span>
-            </button>
-            <button type="submit" class="submit-btn" [disabled]="submitLoading">
-              <ng-container *ngIf="submitLoading; else content">
-                <span class="mini-loader-spinner"></span>
-              </ng-container>
-              <ng-template #content> Submit </ng-template>
-            </button>
+            </erecruit-button>
+
+            <erecruit-button
+              (click)="onSubmit()"
+              [buttonConfig]="{
+                text: 'Submit',
+                customClass: 'primary-btn small-btn',
+                type: 'submit',
+                isLoading: submitLoading
+              }"
+            >
+            </erecruit-button>
           </div>
         </form>
       </div>

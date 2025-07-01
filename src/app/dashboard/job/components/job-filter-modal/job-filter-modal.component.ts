@@ -8,8 +8,6 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { JobService } from '../../shared/job.service';
 import { job, jobFilterPayload, KeyValuePair } from '../../shared/job';
-import { LoaderService } from 'src/app/shared/service/loader.service';
-import { finalize, Observable } from 'rxjs';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 
@@ -58,11 +56,9 @@ export class JobFilterModalComponent {
     }
   );
   filterForm!: FormGroup;
-  isLoading$!: Observable<boolean>;
   constructor(
     private fb: FormBuilder,
     private jobService: JobService,
-    private loaderService: LoaderService,
     private toastService: ToastService
   ) {
     this.filterForm = this.fb.group({
@@ -123,7 +119,6 @@ export class JobFilterModalComponent {
           this.toastService.success(response.message);
           this.close();
         } else {
-          this.isLoading$ = this.loaderService.isLoading$;
           this.toastService.error(response.message);
           this.isLoading = false;
         }

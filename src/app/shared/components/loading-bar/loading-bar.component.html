@@ -1,0 +1,9 @@
+<div class="progress-container" *ngIf="loading">
+  <div class="progress-track">
+    <div
+      class="progress-bar"
+      [style.width.%]="progress"
+      [ngClass]="customBg ? 'secondary-bg' : 'primary-bg'"
+    ></div>
+  </div>
+</div>

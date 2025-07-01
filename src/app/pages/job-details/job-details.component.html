@@ -29,16 +29,16 @@
           </div>
           <div class="tabs">
             <button
+              [routerLink]="['overview', encodeUrl]"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [routerLink]="['overview' + '/', encodeUrl]"
             >
               Overview
             </button>
             <button
+              [routerLink]="['application']"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: false }"
-              [routerLink]="['application']"
             >
               Application
             </button>

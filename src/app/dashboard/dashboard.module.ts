@@ -23,14 +23,17 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { StatsComponent } from './components/stats/stats.component';
 import { JobListingComponent } from './components/job-listing/job-listing.component';
 import { InterviewsComponent } from './components/interviews/interviews.component';
-import { InterviewerComponent } from './interviewer/interviewer.component';
-import { RoleComponent } from './role/role.component';
-import { SessionComponent } from './components/ui/session/session.component';
 import { UserCorporateComponent } from './user-corporate/user-corporate.component';
 import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
 import { UsersModule } from './users/users.module';
 import { ProfileModule } from './profile/profile.module';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { SvgModule } from '../shared/components/svg/svg.module';
+import { LoaderBarModule } from '../shared/components/loading-bar/loader-bar.module';
+import { InterviewerModule } from './interviewer/interviewer.module';
+import { RoleModule } from './role/role.module';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -41,9 +44,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
     StatsComponent,
     JobListingComponent,
     InterviewsComponent,
-    InterviewerComponent,
-    RoleComponent,
-    SessionComponent,
     UserCorporateComponent,
     DashboardLayoutComponent,
   ],
@@ -67,7 +67,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CorporateModule,
     UsersModule,
     ProfileModule,
+    InterviewerModule,
+    RoleModule,
     NgxPaginationModule,
+    SvgModule,
+    LoaderBarModule,
+    LoadingBarHttpClientModule,
   ],
 })
 export class DashboardModule {}

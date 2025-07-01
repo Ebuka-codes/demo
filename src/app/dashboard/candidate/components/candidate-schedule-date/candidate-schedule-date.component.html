@@ -104,24 +104,30 @@
               >
             </div>
           </div>
-          <div class="btn-action">
-            <button
-              type="button"
-              class="close-btn"
-              data-bs-dismiss="modal"
-              (click)="close()"
-            >
-              <span>Cancel</span>
-            </button>
 
-            <button type="submit" class="submit-btn" [disabled]="submitted">
-              <ng-container *ngIf="submitted; else content">
-                <span class="mini-loader-spinner"></span>
-              </ng-container>
-              <ng-template #content>
-                <span>Submit</span>
-              </ng-template>
-            </button>
+          <div class="d-flex gap-3" style="margin-top: 25px">
+            <erecruit-button
+              (click)="close()"
+              data-bs-dismiss="modal"
+              [buttonConfig]="{
+                text: 'Cancel',
+                customClass: 'secondary-btn small-btn',
+                type: 'button',
+                
+              }"
+            >
+            </erecruit-button>
+
+            <erecruit-button
+              (click)="onSubmit()"
+              [buttonConfig]="{
+                text: 'Submit',
+                customClass: 'primary-btn small-btn',
+                type: 'submit',
+                isLoading: isLoading
+              }"
+            >
+            </erecruit-button>
           </div>
         </form>
       </div>

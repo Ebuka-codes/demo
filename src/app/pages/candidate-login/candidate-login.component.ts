@@ -20,18 +20,24 @@ import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { JOB_ID_KEY } from 'src/app/core/model/credential';
+import { PrivacyPolicyModalComponent } from 'src/app/shared/components/privacy-policy-modal/privacy-policy-modal.component';
 @Component({
   selector: 'erecruit-candidate-login',
   templateUrl: './candidate-login.component.html',
   styleUrls: ['./candidate-login.component.scss'],
 })
 export class CandidateLoginComponent implements OnInit, AfterViewInit {
-  @ViewChild('modalRoot') modalElementRef!: ElementRef;
+  @ViewChild('modalRoot') modalElementRef!: ElementRef<HTMLDivElement>;
+  @ViewChild(PrivacyPolicyModalComponent)
+  PrivacyPolicyModalComponent!: PrivacyPolicyModalComponent;
   modalInstance!: Modal;
+  modalPrivacyInstance!: Modal;
   form!: FormGroup;
   isLoading!: Observable<boolean>;
   isSignIn: boolean = false;
   jobId!: string | null;
+  agreed!: boolean;
+  emailText!: string;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -43,7 +49,7 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, this.validateEmail()]],
-      term: ['', Validators.required],
+      terms: [false, Validators.requiredTrue],
     });
   }
 
@@ -86,7 +92,7 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
     return this.form.get('email');
   }
   get term() {
-    return this.form.get('term');
+    return this.form.get('terms');
   }
   handleBack() {
     this.location.back();
@@ -123,7 +129,7 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
                 .subscribe({
                   next: (response: any) => {
                     const candidateId = response?.data?.id;
-
+                    this.toastService.success(response.message);
                     this.router.navigate([
                       '/apply',
                       this.jobId,
@@ -139,6 +145,7 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
                 relativeTo: this.route,
               });
               this.close();
+              this.toastService.error(response.message);
             }
           },
           error: (err) => {
@@ -151,13 +158,26 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
       this.form.markAllAsTouched();
     }
   }
+
   open() {
     this.modalInstance.show();
   }
-
   close() {
     this.modalInstance.hide();
-    this.form.reset();
     this.isSignIn = false;
+  }
+
+  openPrivacyModal() {
+    this.emailText = this.email?.value;
+    this.close();
+    this.PrivacyPolicyModalComponent.open();
+    this.form.reset();
+  }
+
+  checkTerms() {
+    this.agreed = true;
+    this.term?.setValue(true);
+    this.email?.setValue(this.emailText);
+    this.open();
   }
 }

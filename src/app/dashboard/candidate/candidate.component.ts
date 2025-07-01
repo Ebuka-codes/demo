@@ -1,6 +1,5 @@
 import {
   Component,
-  ElementRef,
   inject,
   OnInit,
   signal,
@@ -11,7 +10,6 @@ import {
 import { finalize, Observable } from 'rxjs';
 import { Candidate, QuestionData } from './shared/candidate';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { Modal } from 'bootstrap';
 import { MatSelect } from '@angular/material/select';
 import { CandidateService } from './shared/candidate.service';
 import { ToastService } from 'src/app/core/service/toast.service';
@@ -51,7 +49,7 @@ export class CandidateComponent implements OnInit {
 
   candidateData!: Array<Candidate>;
   filteredCandidate!: Array<Candidate>;
-  isLoading!: Observable<boolean>;
+  isLoading!: boolean;
   candidateViewData: any;
   searchText!: string;
   candidateId!: string;
@@ -72,14 +70,11 @@ export class CandidateComponent implements OnInit {
 
   constructor(
     private toastService: ToastService,
-    private loaderService: LoaderService,
     private candidateService: CandidateService,
     private jobService: JobService,
     private interviewerService: InterviewerService,
     private location: Location
-  ) {
-    this.isLoading = this.loaderService.isLoading$;
-  }
+  ) {}
   ngOnInit() {
     this.loadAllJob();
   }
@@ -122,26 +117,22 @@ export class CandidateComponent implements OnInit {
       this.selectedCandidateIds.length === this.filteredCandidate.length;
   }
   loadAllJob() {
-    this.loaderService.setLoading(true);
-    this.jobService
-      .getAllJobs()
-      .pipe(finalize(() => this.loaderService.setLoading(false)))
-      .subscribe({
-        next: (response) => {
-          if (response.valid && response.data) {
-            this.job = response.data;
-          }
-        },
-        error: (error) => {
-          this.toastService.error(error.error.message);
-        },
-      });
+    this.jobService.getAllJobs().subscribe({
+      next: (response) => {
+        if (response.valid && response.data) {
+          this.job = response.data;
+        }
+      },
+      error: (error) => {
+        this.toastService.error(error.error.message);
+      },
+    });
   }
   loadCandidateByJobId(jobId: string) {
-    this.loaderService.setLoading(true);
+    this.isLoading = true;
     this.candidateService
       .getCandidateByJobId(jobId)
-      .pipe(finalize(() => this.loaderService.setLoading(false)))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (response) => {
           if (response.valid && response.data) {
@@ -160,21 +151,17 @@ export class CandidateComponent implements OnInit {
       ids: this.selectedCandidateIds,
     };
     if (data.ids.length > 0) {
-      this.loaderService.setLoading(true);
-      this.candidateService
-        .shorListCandidate(data)
-        .pipe(finalize(() => this.loaderService.setLoading(false)))
-        .subscribe({
-          next: (response) => {
-            this.shortListedData = response.data;
-            this.toastService.success('Shortlisted successfully');
-            this.selectedCandidateIds = [];
-            this.loadCandidateByJobId(this.selectedJobId);
-          },
-          error: (err) => {
-            this.toastService.error(err.message);
-          },
-        });
+      this.candidateService.shorListCandidate(data).subscribe({
+        next: (response) => {
+          this.shortListedData = response.data;
+          this.toastService.success('Shortlisted successfully');
+          this.selectedCandidateIds = [];
+          this.loadCandidateByJobId(this.selectedJobId);
+        },
+        error: (err) => {
+          this.toastService.error(err.message);
+        },
+      });
     } else {
       this.toastService.error(
         'Please select at least one candidate before shortlisting'
@@ -187,25 +174,21 @@ export class CandidateComponent implements OnInit {
       jobId: this.selectedJobId,
     };
     if (data.candidateIds.length > 0) {
-      this.loaderService.setLoading(true);
-      this.interviewerService
-        .feedback(data)
-        .pipe(finalize(() => this.loaderService.setLoading(false)))
-        .subscribe({
-          next: (response) => {
-            if (response.valid && response.data) {
-              this.toastService.success(response.message);
-              this.selectedCandidateIds = [];
-            } else {
-              this.toastService.error(response.message);
-              this.selectedCandidateIds = [];
-            }
-          },
-          error: (error) => {
-            this.toastService.error(error.message);
+      this.interviewerService.feedback(data).subscribe({
+        next: (response) => {
+          if (response.valid && response.data) {
+            this.toastService.success(response.message);
             this.selectedCandidateIds = [];
-          },
-        });
+          } else {
+            this.toastService.error(response.message);
+            this.selectedCandidateIds = [];
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+          this.selectedCandidateIds = [];
+        },
+      });
     } else {
       this.toastService.error('Select candidate');
     }
@@ -270,10 +253,8 @@ export class CandidateComponent implements OnInit {
     return this.searchFilterData() !== null;
   }
   onSearchFilter() {
-    this.loaderService.setLoading(true);
     this.candidateService
       .searchFilter({ ...this.searchFilterData(), jobid: this.selectedJobId })
-      .pipe(finalize(() => this.loaderService.setLoading(false)))
       .subscribe({
         next: (response) => {
           if (response.valid && response.data) {

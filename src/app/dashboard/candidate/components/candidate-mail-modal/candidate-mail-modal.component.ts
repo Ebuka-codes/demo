@@ -11,7 +11,7 @@ import {
 import { CandidateService } from '../../shared/candidate.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Modal } from 'bootstrap';
-import { finalize, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'erecruit-candidate-mail-modal',

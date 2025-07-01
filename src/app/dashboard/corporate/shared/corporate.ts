@@ -8,8 +8,3 @@ export interface Corporate {
   hmCode: string;
   logo: string;
 }
-
-export interface file {
-  base64String: string;
-  fileName: string;
-}

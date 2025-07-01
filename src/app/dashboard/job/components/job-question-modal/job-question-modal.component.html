@@ -29,27 +29,16 @@
         </span>
       </div>
       <div class="modal-body">
-        <form [formGroup]="questionForm" (ngSubmit)="onSubmitQuestion()">
-          <div class="form-group">
-            <label for="desc"
-              >Description <span class="required-icon">*</span></label
-            >
-            <textarea
-              formControlName="description"
-              style="height: 100px"
-            ></textarea>
-            <div *ngIf="description?.invalid && questionTypes?.touched">
-              <small *ngIf="description?.errors?.['required']">
-                Description field is required
-              </small>
-            </div>
-          </div>
+        <form [formGroup]="questionForm">
           <div class="form-group">
             <label for="questionType"
               >Question Type <span class="required-icon">*</span></label
             >
             <mat-form-field>
-              <mat-select formControlName="questionType">
+              <mat-select
+                formControlName="questionType"
+                (selectionChange)="onQuestionTypeChange($event)"
+              >
                 <mat-option *ngFor="let type of questionType" [value]="type.key"
                   >{{ type.value }}
                 </mat-option>
@@ -71,7 +60,8 @@
               *ngFor="let item of questionTypeOptions; let i = index"
             >
               <div class="question-dropdown-options">
-                <span>{{ item.description }}</span>
+                <span style="flex: 2">{{ item.description }}</span>
+
                 <span
                   class="bi bi-dash-circle"
                   style="color: red; cursor: pointer; font-size: 14px"
@@ -82,7 +72,6 @@
               </div>
             </ng-container>
           </div>
-
           <div>
             <div *ngIf="questionTypes?.value === 'DROPDOWN'">
               <div>
@@ -102,7 +91,7 @@
                       *ngFor="let operator of operatorData"
                       [value]="operator"
                     >
-                      {{ operator }}
+                      {{ operator | titlecase }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -114,7 +103,6 @@
                   <input
                     matInput
                     formControlName="qualifyValue"
-                    amountFormat
                     (keypress)="validateNumberInput($event)"
                   />
                 </mat-form-field>
@@ -126,66 +114,110 @@
               </div>
             </div>
 
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-              "
-              *ngIf="questionForm.get('questionType')?.value === 'TEXT'"
-            >
-              <span>Is it a qualified question?</span>
-
-              <mat-button-toggle-group
-                name="fontStyle"
-                aria-label="Font Style"
-                (change)="onToggle($event)"
-              >
-                <mat-button-toggle value="Yes">Yes</mat-button-toggle>
-                <mat-button-toggle value="No">No</mat-button-toggle>
-              </mat-button-toggle-group>
+            <div *ngIf="questionTypes?.value === 'DATE'">
+              <label for="option">Select Date</label>
+              <mat-form-field appearance="fill">
+                <input
+                  matInput
+                  [matDatepicker]="date"
+                  formControlName="optionsDescription"
+                  required
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="date"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #date></mat-datepicker>
+              </mat-form-field>
             </div>
 
-            <button
-              *ngIf="questionForm.get('questionType')?.value === 'DROPDOWN'"
-              type="button"
-              style="
-                border: none;
-                background-color: transparent;
-                float: right;
-                color: #28a745;
-                margin-bottom: 10px;
-                cursor: pointer;
-                font-weight: 400;
-                font-size: 14px;
-              "
-              (click)="addQuestionOption()"
+            <div
+              class="d-flex justify-content-between align-center my-3"
+              *ngIf="questionForm.get('questionType')?.value === 'TEXT'"
             >
-              + Add More Option
-            </button>
+              <span style="font-size: 14px">Qualified question?</span>
+              <div>
+                <span class="toggle-container">
+                  <input
+                    type="checkbox"
+                    class="toggle"
+                    id="isQualifyQuestion"
+                    (change)="onQualifyQuestionChange($event)"
+                  />
+                  <label for="isQualifyQuestion">
+                    <span class="on">Yes</span>
+                    <span class="off">No</span>
+                  </label>
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="my-3"
+              style="text-align: right"
+              *ngIf="questionForm.get('questionType')?.value === 'DROPDOWN'"
+            >
+              <erecruit-button
+                [buttonConfig]="{
+                  text: 'Add more options',
+                  customClass: 'primary-btn outline-btn',
+                  type: 'button',
+                  icon: 'bi bi-plus-circle'
+                }"
+                (click)="addQuestionOption()"
+              >
+              </erecruit-button>
+            </div>
           </div>
 
-          <div class="btn-action">
-            <button
-              type="button"
-              class="close-btn"
+          <div class="form-group">
+            <label for="desc"
+              >Description <span class="required-icon">*</span></label
+            >
+            <textarea
+              formControlName="description"
+              style="height: 100px"
+              [maxlength]="250"
+              rows="5"
+            ></textarea>
+
+            <div class="d-flex justify-between align-items-center mt-1">
+              <span *ngIf="description?.invalid && description?.touched">
+                <small *ngIf="description?.errors?.['required']">
+                  Description field is required</small
+                >
+              </span>
+
+              <span class="ms-auto" style="font-size: 13px">
+                {{ description?.value?.length || 0 }} / 250 characters
+              </span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3" style="margin-top: 25px">
+            <erecruit-button
               (click)="close()"
               data-bs-dismiss="modal"
+              [buttonConfig]="{
+                text: 'Cancel',
+                customClass: 'secondary-btn small-btn',
+                type: 'button',
+                
+              }"
             >
-              <span>Cancel</span>
-            </button>
-            <button
-              type="submit"
-              [disabled]="isLoadingQuestion"
-              class="submit-btn"
+            </erecruit-button>
+
+            <erecruit-button
+              (click)="onSubmitQuestion()"
+              [buttonConfig]="{
+                text: 'Submit',
+                customClass: 'primary-btn small-btn',
+                type: 'submit',
+                isLoading: isLoadingQuestion
+              }"
             >
-              <ng-container *ngIf="isLoadingQuestion; else content">
-                <span class="mini-loader-spinner"></span>
-              </ng-container>
-              <ng-template #content>
-                <span>Submit</span>
-              </ng-template>
-            </button>
+            </erecruit-button>
           </div>
         </form>
       </div>

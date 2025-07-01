@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { VerifyEmailComponent } from './authentication/verify-email/verify-email.component';
 import { JobListingComponent } from './pages/job-listing/job-listing.component';
-import { SessionComponent } from './dashboard/components/ui/session/session.component';
+import { SessionExpirationComponent } from './pages/session-expiration/session-expiration.component';
 import { AuthGuard } from './core/guard/auth-guard.service';
 import { CandidateVerificationComponent } from './pages/candidate-verification/candidate-verification.component';
 import { RecruiterMessageComponent } from './pages/recruiter-message/recruiter-message.component';
@@ -32,8 +32,8 @@ const routes: Routes = [
     component: JobListingComponent,
   },
   {
-    path: 'session',
-    component: SessionComponent,
+    path: 'session-expired',
+    component: SessionExpirationComponent,
   },
 
   {

@@ -44,9 +44,9 @@ export class JobComponent implements OnInit {
   activeTag = 'All Jobs';
   selectedAllChecked: boolean = false;
   selectedJobId: string[] = [];
+  encodeUrl!: string;
   constructor(
     public jobService: JobService,
-    private loaderService: LoaderService,
     private route: Router,
     private location: Location,
     private clipboard: Clipboard,
@@ -56,12 +56,10 @@ export class JobComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
+    this.encodeUrl = localStorage.getItem('corp-url') || '';
 
-    const encodeUrl = encodeURIComponent(
-      localStorage.getItem('corp-url') || ''
-    );
-    if (encodeUrl) {
-      this.jobListingUrl = `${this.PORT_URL}/job-listing/${encodeUrl}`;
+    if (this.encodeUrl) {
+      this.jobListingUrl = `${this.PORT_URL}/job-listing/${this.encodeUrl}`;
     }
   }
   onToggletabs(tab: string) {
@@ -99,13 +97,11 @@ export class JobComponent implements OnInit {
       this.selectedJobId.length === this.filteredData.length;
   }
   loadJobs() {
-    this.loaderService.setLoading(true);
     this.isLoading = true;
     this.jobService
       .getAllJobs()
       .pipe(
         finalize(() => {
-          this.loaderService.setLoading(false);
           this.isLoading = false;
         })
       )
@@ -128,7 +124,6 @@ export class JobComponent implements OnInit {
   }
 
   loadActiveJobs() {
-    this.loaderService.setLoading(true);
     this.isLoading = true;
     this.jobData = [];
     this.jobService
@@ -136,7 +131,6 @@ export class JobComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.isLoading = false;
-          this.loaderService.setLoading(false);
         })
       )
       .subscribe({
@@ -157,14 +151,12 @@ export class JobComponent implements OnInit {
   }
 
   loadPublishedJobs() {
-    this.loaderService.setLoading(true);
     this.isLoading = true;
     this.jobData = [];
     this.jobService
       .getPublishJobs()
       .pipe(
         finalize(() => {
-          this.loaderService.setLoading(false);
           this.isLoading = false;
         })
       )
@@ -191,22 +183,19 @@ export class JobComponent implements OnInit {
       const payload = {
         ids: this.selectedJobId,
       };
-      this.loaderService.setLoading(true);
-      this.jobService
-        .publishJobs(payload)
-        .pipe(finalize(() => this.loaderService.setLoading(false)))
-        .subscribe({
-          next: (response: any) => {
-            if (response.valid && response.data) {
-              this.toastService.success(response.message);
-              this.cdr.detectChanges();
-              this.selectedJobId = [];
-            }
-          },
-          error: (error) => {
-            this.toastService.error(error.message);
-          },
-        });
+
+      this.jobService.publishJobs(payload).subscribe({
+        next: (response: any) => {
+          if (response.valid && response.data) {
+            this.toastService.success(response.message);
+            this.cdr.detectChanges();
+            this.selectedJobId = [];
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+        },
+      });
     } else {
       this.toastService.error(
         'Please select at least one job before publishing'
@@ -217,23 +206,19 @@ export class JobComponent implements OnInit {
   handleSearch(event: Event) {
     const value = event as KeyboardEvent;
     if (value.key === 'Enter' && this.searchText.value) {
-      this.loaderService.setLoading(true);
-      this.jobService
-        .searchjob(this.searchText.value.trim())
-        .pipe(finalize(() => this.loaderService.setLoading(false)))
-        .subscribe({
-          next: (response) => {
-            if (response.valid && response.data) {
-              this.jobData = response.data;
-            } else {
-              this.jobData = [];
-              this.toastService.error(response.message);
-            }
-          },
-          error: (error) => {
-            this.toastService.error(error.message);
-          },
-        });
+      this.jobService.searchjob(this.searchText.value.trim()).subscribe({
+        next: (response) => {
+          if (response.valid && response.data) {
+            this.jobData = response.data;
+          } else {
+            this.jobData = [];
+            this.toastService.error(response.message);
+          }
+        },
+        error: (error) => {
+          this.toastService.error(error.message);
+        },
+      });
     }
   }
 
@@ -268,9 +253,8 @@ export class JobComponent implements OnInit {
     this.location.back();
   }
   onCopyUrl(id: string) {
-    const encodeUrl = encodeURIComponent(
-      localStorage.getItem('corp-url') || ''
+    this.clipboard.copy(
+      `${this.PORT_URL}/apply/${id}/overview/${this.encodeUrl}`
     );
-    this.clipboard.copy(`${this.PORT_URL}/apply/${id}/overview/${encodeUrl}`);
   }
 }

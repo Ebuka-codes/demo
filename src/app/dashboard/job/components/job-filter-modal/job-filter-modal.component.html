@@ -27,7 +27,7 @@
         </span>
       </div>
       <div class="modal-body">
-        <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="filterForm">
           <div>
             <label for="jobType">Job Type </label>
             <mat-form-field>
@@ -65,24 +65,30 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="btn-action">
-            <button
-              type="button"
-              class="close-btn"
-              [disabled]="isLoading$ | async"
-              data-bs-dismiss="modal"
+
+          <div class="d-flex gap-3 my-3" style="margin-top: 25px">
+            <erecruit-button
               (click)="close()"
+              data-bs-dismiss="modal"
+              [buttonConfig]="{
+                text: 'Cancel',
+                customClass: 'secondary-btn small-btn',
+                type: 'button',
+                
+              }"
             >
-              <span>Cancel</span>
-            </button>
-            <button type="submit" class="submit-btn" [disabled]="isLoading">
-              <ng-container *ngIf="isLoading; else showLoader">
-                <span class="mini-loader-spinner"></span>
-              </ng-container>
-              <ng-template #showLoader>
-                <span>Submit</span>
-              </ng-template>
-            </button>
+            </erecruit-button>
+
+            <erecruit-button
+              (click)="onSubmit()"
+              [buttonConfig]="{
+                text: 'Submit',
+                customClass: 'primary-btn small-btn',
+                type: 'submit',
+                isLoading: isLoading
+              }"
+            >
+            </erecruit-button>
           </div>
         </form>
       </div>

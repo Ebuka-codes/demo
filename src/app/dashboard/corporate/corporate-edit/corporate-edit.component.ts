@@ -21,6 +21,7 @@ import { Corporate } from '../shared/corporate';
 import { Observable } from 'rxjs';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { UtilService } from 'src/app/core/service/util.service';
 @Component({
   selector: 'app-corporate-edit',
   templateUrl: './corporate-edit.component.html',
@@ -46,7 +47,8 @@ export class CorporateEditComponent {
     private fb: FormBuilder,
     public corporateService: CorporateService,
     private loaderService: LoaderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private utilService: UtilService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -144,7 +146,7 @@ export class CorporateEditComponent {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.corporateService.convertFileToBase64(data).subscribe({
+      this.utilService.convertFileTobase64(data).subscribe({
         next: (response: any) => {
           if (response.valid && response.data) {
             this.logoUrl = response.data.path;

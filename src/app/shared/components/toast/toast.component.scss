@@ -19,6 +19,10 @@
   &.toast-error {
     border-left-color: #dc3545;
   }
+
+  &.toast-warning {
+    border-left-color: rgb(255, 217, 0);
+  }
 }
 
 .custom-toast-content {

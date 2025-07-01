@@ -643,8 +643,8 @@ export class JobApplicationComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.jobService
-        .convertFileToBase64(data)
+      this.utilService
+        .unprotectedFileBase64(data)
         .pipe(
           finalize(() => {
             this.isUploadingResume = false;
@@ -678,8 +678,8 @@ export class JobApplicationComponent implements OnInit {
         base64String: reader.result as string,
         fileName: name,
       };
-      this.jobService
-        .convertFileToBase64(data)
+      this.utilService
+        .unprotectedFileBase64(data)
         .pipe(
           finalize(() => {
             this.isUploadingCoverLetter = false;

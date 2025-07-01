@@ -66,68 +66,40 @@
     }
 
     .search {
-      width: 95%;
+      width: 100%;
       display: flex;
       margin-top: 70px;
       position: relative;
-      svg {
-        position: absolute;
-        top: 22px;
-        left: 30px;
-        font-size: 12px;
-        width: 18px;
-        height: 18px;
-        color: #acacac;
-        padding-right: 5px;
-      }
+      max-width: 56.25rem;
+      min-width: 735px;
+      margin-right: auto;
+      margin-left: auto;
+      box-shadow: 0px 4px 4px 0px #0000001a;
+      border-radius: 15px;
+      background-color: white;
+
       input {
         color: #232323;
-        width: 100%;
-        padding: 20px 50px;
+        width: 80%;
+        padding: 20px 40px;
         text-overflow: ellipsis;
         font-size: 14px;
         font-weight: 500;
-        outline: none;
-        border-radius: 15px;
         border: none;
-        box-shadow: 0px 4px 4px 0px #0000001a;
+        outline: none;
+        margin-left: 20px;
         ::placeholder {
           font-size: 20px;
           margin-right: 5px;
           color: #acacac;
         }
       }
-
-      button {
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        outline: none;
-        padding: 10px 25px;
-        font-size: 13px;
-        background-color: #299345;
-        color: white;
-        position: absolute;
-        top: 11px;
-        right: 30px;
-
-        &:hover {
-          box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-          transition: all 0.5s ease;
-          background-color: #28a745;
-          color: white;
-        }
-      }
     }
     .category {
       display: flex;
-      align-items: center;
       margin-top: 30px;
-      margin-left: auto;
-      margin-right: auto;
       gap: 12px;
-      width: 60%;
+      padding: 0px 240px;
 
       .icon {
         background-color: #cac9c9;
@@ -147,52 +119,47 @@
 
       .category-btn {
         margin-left: 2px;
+        display: flex !important;
+        flex-wrap: wrap;
+        row-gap: 10px;
+        flex: 1;
 
         .dropdown {
           margin-left: 10px;
           .btn {
-            border-radius: 10px;
+            border-radius: 25px;
             padding: 4px 15px;
             color: #4d4d4d;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 500;
           }
           .btn-outline-primary {
-            border-color: #000000 !important;
-            text-transform: uppercase;
+            border-color: #00000036 !important;
+            text-transform: capitalize;
+
+            &:hover {
+              background-color: #dddd !important;
+              transition: all 0.5s ease;
+            }
           }
-          &:hover,
-          &:focus {
-            color: #4d4d4d;
-          }
+
           .dropdown-menu {
             overflow-y: auto;
             z-index: 10000;
           }
-          .selected {
-            color: #28a745;
+          .active {
+            background-color: rgb(187 186 186 / 29%) !important;
           }
-          .search-filter__pill-counter {
-            background: #299345;
-            border-radius: 50%;
-            color: #ffff;
-            height: 1rem;
-            line-height: 1rem;
-            margin-left: 0.4rem;
-            min-width: 1rem;
-            text-align: center;
-            width: auto;
-            padding: 0px 5px;
-          }
-        }
-        ::ng-deep .dropdown-item:focus {
-          background-color: #299345 !important;
-          color: rgb(45, 45, 45);
         }
 
-        ::ng-deep .dropdown-item:hover {
-          background-color: #299345 !important;
-          color: rgb(45, 45, 45);
+        ::ng-deep .dropdown-item {
+          color: rgb(71 85 105);
+          font-size: 14px;
+          &:focus,
+          &:hover {
+            background-color: #2993451f;
+            color: rgb(71 85 105) !important;
+          }
         }
       }
     }
@@ -217,6 +184,7 @@
       margin: 50px auto;
       margin-bottom: 100px;
       min-height: 50vh;
+      animation: 0.8s job-list-slid-up;
       h3 {
         font-size: 32px;
       }
@@ -234,6 +202,7 @@
           background: #ffffff;
           border-radius: 8px;
           margin-top: 20px;
+          box-shadow: 0px 1px 2px rgb(0 0 0 / 15%);
 
           .info {
             flex: 1;
@@ -252,9 +221,16 @@
               font-size: 16px;
               .location,
               .date {
-                font-size: 13px;
+                font-size: 14px !important;
                 color: #515b6f;
                 font-size: 16px;
+              }
+              svg {
+                width: 4px;
+                height: 4px;
+                border-radius: 50%;
+                border: 1px solid #515b6f;
+                background-color: #515b6f;
               }
             }
             .tags {
@@ -289,81 +265,33 @@
                 border-radius: 25px;
               }
             }
-            .divider {
-              border-radius: 0px !important;
-              border-right: 1px solid #d6ddeb;
-            }
-          }
-          .action {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-shrink: 0;
-            svg {
-              width: 20px;
-            }
-            a {
-              background-color: #299345;
-              color: white;
-              border-radius: 10px;
-              padding: 7px 15px;
-              border: none;
-              outline: none;
-              cursor: pointer;
-              text-decoration: none;
-            }
           }
         }
       }
     }
 
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 30px 0px;
-      span {
-        font-size: 14px;
+    @keyframes job-list-slid-up {
+      0% {
+        transform: translate(0, 40px);
+        opacity: 0;
       }
-      .item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        svg {
-          width: 20px;
-          height: 20px;
-          color: #899bb1;
-          cursor: pointer;
-        }
-        .page-btn {
-          button {
-            border: 1px solid #d3d3d3;
-            border-radius: 5px;
-            padding: 3px 10px;
-            margin: 0px 10px;
-            background-color: #fafafa;
-            cursor: pointer;
-          }
-          .active {
-            background-color: #97c93c;
-            border: #d3d3d3 !important;
-          }
-        }
+      100% {
+        transform: translate(0, 0);
+        opacity: 1;
       }
     }
 
     .loader {
       border: 3px solid #28a745;
       border-color: #28a745 transparent #28a745 #28a745;
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       flex-direction: column;
       align-items: center;
-      margin-top: 100px;
+      margin-top: 60px;
       margin-left: auto;
       margin-right: auto;
       animation: spin 0.5s linear infinite;
@@ -376,12 +304,40 @@
     .empty-data {
       text-align: center;
       margin-top: 100px;
-      h2 {
-        font-size: 24px;
-      }
+
       p {
-        font-size: 18px;
+        font-size: size 1.5em;
         color: #717171;
+        margin-bottom: 3em;
+      }
+    }
+
+    .divider {
+      background-color: hsl(203, 14%, 43%);
+      height: 2px;
+      opacity: 0.3;
+      width: 70%;
+      margin: 50px auto;
+    }
+    .pagination-container {
+      .pagination {
+        display: flex !important;
+        justify-content: center !important;
+      }
+      .ngx-pagination {
+        margin-top: 40px;
+        margin-bottom: 1rem;
+      }
+      .pagination-loader {
+        border: 3px solid #28a745;
+        border-color: #28a745 transparent #28a745 #28a745;
+        width: 30px;
+        height: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 40px;
+        border-radius: 50%;
+        animation: spin 0.5s linear infinite;
       }
     }
   }
