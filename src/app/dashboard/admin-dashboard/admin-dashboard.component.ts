@@ -6,6 +6,8 @@ import { DashboardStats } from './shared/dashboardStats';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { SvgTemplate } from 'src/app/shared/components/svg/svg-template';
+import { ApplicationContext } from 'src/app/core/context/application-context';
+import { UserProfile } from 'src/app/shared/model/credential';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,20 +15,22 @@ import { SvgTemplate } from 'src/app/shared/components/svg/svg-template';
   styleUrls: ['./admin-dashboard.component.scss'],
 })
 export class AdminDashboardComponent {
-  profile$ = this.authService.profile$;
   isLoading!: boolean;
   data!: DashboardStats;
   svgTemplate = SvgTemplate;
+  userProfile: UserProfile;
 
   constructor(
-    private loaderService: LoaderService,
     private dashboardService: DashboardService,
-    private authService: AuthService,
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private applicationContext: ApplicationContext
   ) {}
   ngOnInit(): void {
     this.loadDashboard();
+    this.applicationContext.onUserProfile((userProfile: any) => {
+      this.userProfile = userProfile.data;
+    });
   }
   loadDashboard() {
     this.isLoading = true;

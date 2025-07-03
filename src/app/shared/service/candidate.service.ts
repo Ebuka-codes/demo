@@ -5,7 +5,7 @@ import { Constants } from 'src/app/utils/constants';
 import { environment } from 'src/environments/environment';
 import { DataResponse } from '../model/data-response';
 import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
-import { CORP_URL_KEY } from 'src/app/core/model/credential';
+import { CORP_URL_KEY } from 'src/app/shared/model/credential';
 
 @Injectable({
   providedIn: 'root',

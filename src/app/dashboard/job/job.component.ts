@@ -4,7 +4,6 @@ import { JobService } from './shared/job.service';
 import { finalize } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { Location } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ToastService } from 'src/app/core/service/toast.service';
@@ -12,6 +11,8 @@ import { environment } from 'src/environments/environment';
 import { JobDeleteModalComponent } from './components/job-delete-modal/job-delete-modal.component';
 import { JobFilterModalComponent } from './components/job-filter-modal/job-filter-modal.component';
 import { JobViewModalComponent } from './components/job-view-modal/job-view-modal.component';
+import { CORP_URL_KEY } from 'src/app/shared/model/credential';
+import { SvgTemplate } from 'src/app/shared/components/svg/svg-template';
 
 @Component({
   selector: 'erecruit-job',
@@ -45,6 +46,8 @@ export class JobComponent implements OnInit {
   selectedAllChecked: boolean = false;
   selectedJobId: string[] = [];
   encodeUrl!: string;
+  svgTemplate = SvgTemplate;
+
   constructor(
     public jobService: JobService,
     private route: Router,
@@ -56,7 +59,7 @@ export class JobComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
-    this.encodeUrl = localStorage.getItem('corp-url') || '';
+    this.encodeUrl = localStorage.getItem(CORP_URL_KEY) || '';
 
     if (this.encodeUrl) {
       this.jobListingUrl = `${this.PORT_URL}/job-listing/${this.encodeUrl}`;
@@ -163,7 +166,7 @@ export class JobComponent implements OnInit {
       .subscribe({
         next: (reponse: any) => {
           if (reponse.valid && reponse.data) {
-            this.jobData = reponse.data.sort((a: any, b: any) =>
+            this.jobData = reponse.data.content.sort((a: any, b: any) =>
               a.jobTitle.localeCompare(b.jobTitle)
             );
 
@@ -190,6 +193,7 @@ export class JobComponent implements OnInit {
             this.toastService.success(response.message);
             this.cdr.detectChanges();
             this.selectedJobId = [];
+            this.loadJobs();
           }
         },
         error: (error) => {

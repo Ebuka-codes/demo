@@ -1,3 +1,11 @@
+export interface LoginRequest {
+  username: string;
+
+  password: string;
+
+  rememberMe?: boolean;
+}
+
 export interface UserToken {
   use2FA?: boolean;
 
@@ -17,6 +25,34 @@ export interface UserToken {
 
   expiration?: number;
 }
+
+export class IUserToken implements UserToken {
+  use2FA?: boolean;
+  refresh_expires_in?: number;
+  token_type?: string;
+  status?: string;
+  expiration?: number;
+  accessToken?: string;
+
+  refreshToken?: string;
+
+  expiresIn?: number;
+
+  scope?: string;
+
+  set access_token(value: string) {
+    this.accessToken = value;
+  }
+
+  set refresh_token(value: string) {
+    this.refreshToken = value;
+  }
+
+  set expires_in(value: number) {
+    this.expiresIn = value;
+  }
+}
+
 export interface UserProfile {
   personalDetail: PersonalDetail;
   roles: any | null;
@@ -42,9 +78,7 @@ interface CompanyDetail {
 
 export const USER_TOKEN_KEY: string = '$x35w-cPBfH';
 
-export const CORP_KEY: string | null = 'corp-key';
-
-export const CORP_URL: string = 'corp-url';
+export const CURRENT_CORPORATE_KEY: string = 'corp-key';
 
 export const CORP_URL_KEY: string = 'c1r_pu9_x1';
 
@@ -53,3 +87,5 @@ export const AUTHORIZATION_HEADER: string = 'Authorization';
 export const BEARER: string = 'Bearer';
 
 export const JOB_ID_KEY = 'j8x_k92_jd';
+
+export const CANDIATE_EMAIL = 'erecruit_candidate_email';

@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { TokenService } from '../service/token.service';
+import { CoreService } from '../service/core.service';
+import { ApplicationContext } from '../context/application-context';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private tokenService: TokenService, private router: Router) {}
+  constructor(
+    private coreService: CoreService,
+    private applicationContext: ApplicationContext,
+    private router: Router
+  ) {}
 
   canActivate(): boolean {
-    const token = this.tokenService.getToken();
-    const isTokenExpired = this.tokenService.isTokenExpired();
-    console.log(isTokenExpired);
-    if (!token || isTokenExpired) {
-      this.tokenService.removeToken();
+    const token = this.applicationContext.getUserToken();
+    if (!token) {
+      this.coreService.removeSessionKey();
       this.router.navigate(['/login']);
       return false;
     }

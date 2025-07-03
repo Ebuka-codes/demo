@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, Observable } from 'rxjs';
-import { CORP_URL_KEY } from 'src/app/core/model/credential';
+import { CORP_URL_KEY } from 'src/app/shared/model/credential';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { UtilService } from 'src/app/core/service/util.service';
 import { job } from 'src/app/dashboard/job/shared/job';

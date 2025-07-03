@@ -3,10 +3,10 @@ export enum SvgTemplate {
   JOB_ICON,
   DELETE_ICON,
   EDIT_ICON,
+  VIEW_ICON,
   SEARCH_ICON,
   FILL_JOB_ICON,
   NOTIFICATION,
-  VIEW_ICON,
   FILTER_ICON,
   RATING_ICON,
   FILL_USER_ICON,
@@ -40,7 +40,7 @@ export enum SvgTemplate {
   LOCATION_ICON,
   ARROW_FORWARD_ICON,
   SESSION_ICON,
-  
+  HUMBUGER_ICON,
 }
 export function SvgTemplateAware(constructor: Function) {
   constructor.prototype.SvgTemplate = SvgTemplate;

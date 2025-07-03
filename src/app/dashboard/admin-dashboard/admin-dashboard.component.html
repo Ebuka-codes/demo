@@ -3,13 +3,14 @@
 </div>
 <section class="dashboard-container">
   <div *ngIf="!isLoading && data">
-    <span style="display: flex; gap: 13px" *ngIf="profile$ | async as profile">
-      <h1>Hello, {{ profile.personalDetail.firstName }}</h1>
+    <span style="display: flex; gap: 13px">
+      <h1>Hello, {{ userProfile?.personalDetail.firstName }}</h1>
       <erecruit-svg
         style="width: 35px !important"
         [template]="svgTemplate.WELOCOME_ICON"
       ></erecruit-svg>
     </span>
+
     <div class="content">
       <div style="width: 100%">
         <erecruit-stats [data]="data" />

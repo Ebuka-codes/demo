@@ -6,32 +6,38 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { TokenService } from '../service/token.service';
+import { UtilService } from '../service/util.service';
+import {
+  CURRENT_CORPORATE_KEY,
+  UserToken,
+} from 'src/app/shared/model/credential';
+import { ApplicationContext } from '../context/application-context';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private tokenService: TokenService, private router: Router) {}
   baseUrl = environment.API_URL;
   private shouldIncludeCorpkey: string[] = [`${this.baseUrl}/user/find`];
+  private userToken: UserToken;
+
+  public openApiUrls = ['/login', '/logout', '/signup', '/verify-email'];
+
+  constructor(
+    private utilService: UtilService,
+    private applicationContext: ApplicationContext
+  ) {
+    this.init();
+  }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let token = this.tokenService.getToken();
-    let access_token = '';
-    const corpKey = localStorage.getItem('corp-key') || '';
-    const header: { [header: string]: string } = {};
-    try {
-      const parsedToken = token ? JSON.parse(token) : null;
-      access_token = parsedToken?.access_token || '';
-    } catch (error) {
-      console.error('Error parsing token:', error);
-    }
+    const hasAuth = req.headers.has('Authorization');
+
+    const corpKey = localStorage.getItem(CURRENT_CORPORATE_KEY) || '';
 
     //unprotected route
     if (
@@ -44,30 +50,85 @@ export class AuthInterceptor implements HttpInterceptor {
     ) {
       return next.handle(req);
     }
-    let modifiedReq = req;
-    if (access_token) {
-      header['Authorization'] = `Bearer ${access_token}`;
+
+    if (localStorage.getItem(CURRENT_CORPORATE_KEY)) {
+      req = req.clone({
+        setHeaders: {
+          'corp-key': localStorage.getItem(CURRENT_CORPORATE_KEY),
+        },
+      });
     }
+
+    if (!hasAuth && this.userToken && this.applicationContext.getUserToken()) {
+      if (
+        this.applicationContext.getUserToken().expiration &&
+        this.userToken.expires_in &&
+        this.userToken.expires_in <= Date.now()
+      ) {
+        return this.handleError(req, next, { status: 401 });
+      }
+
+      req = this.authRequest(req);
+    }
+
     const shouldAddCorpkey = !this.shouldIncludeCorpkey.some((url) => {
       req.url.includes(url);
     });
 
     if (corpKey && shouldAddCorpkey) {
-      header['corp-key'] = btoa(corpKey);
+      req = req.clone({
+        setHeaders: {
+          'corp-key': btoa(corpKey),
+        },
+      });
     }
-    modifiedReq = req.clone({
-      setHeaders: header,
-    });
 
-    return next.handle(modifiedReq).pipe(
+    return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.tokenService.removeToken();
-          this.router.navigate(['/session-expired']);
-          return throwError(() => 'Session expired');
+        const invalidSessionError = error;
+
+        if (
+          !req.headers.has('Authorization') &&
+          !(this.openApiUrls.findIndex((obj) => obj == req.url) > -1)
+        ) {
+          return this.handleError(req, next, error);
+        }
+
+        if (invalidSessionError && invalidSessionError.status === 401) {
+          return this.handleError(req, next, error);
         }
         return throwError(() => error);
       })
     );
+  }
+
+  private init(): void {
+    this.applicationContext.onUserToken((userToken) => {
+      this.userToken = userToken;
+    });
+  }
+
+  private authRequest(req: HttpRequest<any>): HttpRequest<any> {
+    return req.clone({
+      setHeaders: { Authorization: `Bearer ${this.userToken.access_token}` },
+    });
+  }
+  private handleError(
+    request: HttpRequest<any>,
+    next: HttpHandler,
+    error: any
+  ): Observable<any> {
+    try {
+      if (error.status === 401) {
+        this.logout('INVALID_SESSION');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return throwError(error);
+  }
+  private logout(value: string) {
+    this.utilService.tokenExpireSubject.next({ error: true, errorCode: value });
+    return;
   }
 }

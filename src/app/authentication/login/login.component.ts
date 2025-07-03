@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/service/auth.service';
-import { LoginType } from 'src/app/core/model/auth';
-import { TokenService } from 'src/app/core/service/token.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { CoreService } from 'src/app/core/service/core.service';
+import { LoginRequest } from 'src/app/shared/model/credential';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +16,9 @@ export class LoginComponent {
   isLoading: boolean = false;
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
     private toastService: ToastService,
-    private route: Router,
-    private tokenService: TokenService
+    private router: Router,
+    private coreService: CoreService
   ) {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
@@ -41,14 +39,30 @@ export class LoginComponent {
   get password() {
     return this.form.get('password');
   }
-  onLogin(data: LoginType) {
+  onLogin(data: LoginRequest) {
     this.isLoading = true;
-    this.authService.login(data).subscribe({
+    this.coreService.login(data).subscribe({
       next: (response: any) => {
         if (response.valid) {
           this.isLoading = false;
-          this.tokenService.setToken(response.data);
-          this.route.navigateByUrl('/dashboard');
+          let sub = this.coreService.loginEvent(response.data).subscribe(
+            (data) => {
+              this.isLoading = false;
+              this.router.navigateByUrl('/dashboard');
+            },
+            (error) => {
+              this.toastService.error(error.message);
+
+              if (sub) {
+                sub.unsubscribe();
+              }
+            },
+            () => {
+              if (sub) {
+                sub.unsubscribe();
+              }
+            }
+          );
         } else {
           this.isLoading = false;
           this.toastService.error(response.message);
@@ -63,7 +77,6 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.value);
       this.onLogin(this.form.value);
     } else {
       this.form.markAllAsTouched();

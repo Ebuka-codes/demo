@@ -17,13 +17,20 @@
       <span>Lagos state</span>
     </div>
   </div>
-  <div class="job-detail">
-    <h5>Job Details</h5>
-    <div class="info" *ngIf="profile$ | async as profile">
+  <div class="personal-detail">
+    <h5>Personal Details</h5>
+    <div class="info">
       <!-- <div class="label">Employee Id</div>
       <div>12940440</div> -->
+
+      <div class="label">Email Address</div>
+      <div>{{ userProfile?.personalDetail?.email }}</div>
+
+      <div class="label">Phone Number</div>
+      <div>{{ userProfile?.personalDetail?.phoneNumber }}</div>
+
       <div class="label">Organization</div>
-      <div style="color: #299345">{{ profile.companyDetail.name }}</div>
+      <div style="color: #299345">{{ userProfile?.companyDetail?.name }}</div>
       <!-- <div class="label">Position</div>
       <div>Software Engineer</div>
       <div class="label">Employee Type</div>

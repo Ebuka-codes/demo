@@ -6,6 +6,8 @@ import { AuthService } from 'src/app/core/service/auth.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { SignupDataService } from '../shared/signup-data.service';
 import { finalize } from 'rxjs';
+import { UtilService } from 'src/app/core/service/util.service';
+import { CoreService } from 'src/app/core/service/core.service';
 
 @Component({
   selector: 'app-verify-email',
@@ -26,7 +28,9 @@ export class VerifyEmailComponent {
     private route: Router,
     private authService: AuthService,
     private toastService: ToastService,
-    private signupDataService: SignupDataService
+    private signupDataService: SignupDataService,
+    private utilService: UtilService,
+    private coreService: CoreService
   ) {
     this.otpForm = this.fb.array(
       new Array(6).fill('').map(() => new FormControl(''))
@@ -41,7 +45,7 @@ export class VerifyEmailComponent {
       if (data) {
         this.isLoading = true;
         this.userData = data;
-        this.authService
+        this.utilService
           .generateOtp({
             email: this.userData.email,
             phoneNumber: this.userData.phoneNumber,
@@ -106,7 +110,7 @@ export class VerifyEmailComponent {
         },
       };
       this.isVerifying = true;
-      this.authService.signUp(corporate).subscribe({
+      this.coreService.signUp(corporate).subscribe({
         next: (response: any) => {
           if (response.valid) {
             this.otpForm.reset();

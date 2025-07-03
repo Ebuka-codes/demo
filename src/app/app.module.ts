@@ -26,10 +26,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { ToastComponent } from './shared/components/toast/toast.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SessionExpirationComponent } from './pages/session-expiration/session-expiration.component';
-import { LoaderBarModule } from './shared/components/loading-bar/loader-bar.module';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -62,9 +61,10 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
     BrowserAnimationsModule,
     SharedModule,
     NgxPaginationModule,
-    LoaderBarModule,
     MatIconModule,
     LoadingBarHttpClientModule,
+    DashboardModule,
+
     ToastrModule.forRoot({
       toastComponent: ToastComponent,
       positionClass: 'toast-top-right',

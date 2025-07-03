@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, Observable } from 'rxjs';
+import { finalize, Observable, startWith, map } from 'rxjs';
 import { Moment } from 'moment';
 import { DateFormatService } from 'src/app/shared/service/date-format.service';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -29,8 +29,13 @@ import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Candidate } from 'src/app/dashboard/candidate/shared/candidate';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { UtilService } from 'src/app/core/service/util.service';
-import { CORP_URL_KEY, JOB_ID_KEY } from 'src/app/core/model/credential';
 import {
+  CANDIATE_EMAIL,
+  CORP_URL_KEY,
+  JOB_ID_KEY,
+} from 'src/app/shared/model/credential';
+import {
+  Countries,
   educationLevels,
   months,
   nigeriaStates,
@@ -41,6 +46,8 @@ import {
   Skill,
   WorkHistory,
 } from 'src/app/shared/model/job-model';
+import { CountryISO } from 'ngx-intl-tel-input';
+import { SvgTemplate } from 'src/app/shared/components/svg/svg-template';
 @Component({
   selector: 'erecruit-job-application',
   templateUrl: './job-application.component.html',
@@ -83,8 +90,6 @@ export class JobApplicationComponent implements OnInit {
   formControls: any = {};
   resumeValue: any;
   coverLetterValue: any;
-  nigeriaStates = nigeriaStates;
-  educationLevels = educationLevels;
   isEditModalOpen = false;
   workErrorMessage = '';
   educationErrorMessage = '';
@@ -99,6 +104,12 @@ export class JobApplicationComponent implements OnInit {
   encodeUrl!: string | null;
   description: string = '';
   maxLength: number = 1000;
+  CountryISO = CountryISO;
+  countries: string[] = Countries;
+  filteredOptions: Observable<string[]>;
+  filterEducationOption: Observable<string[]>;
+  educationLevels = educationLevels;
+  svgTemplate = SvgTemplate;
 
   constructor(
     private fb: FormBuilder,
@@ -115,7 +126,7 @@ export class JobApplicationComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, this.ValidateEmail()]],
-      phone: ['', [Validators.required, this.validatePhone()]],
+      phone: ['', Validators.required],
       countryName: ['', [Validators.required]],
       state: ['', [Validators.required]],
       address: ['', [Validators.required, Validators.minLength(3)]],
@@ -142,7 +153,7 @@ export class JobApplicationComponent implements OnInit {
     });
     this.educationFormGroup = this.fb.group({
       degree: ['', Validators.required],
-      major: ['', Validators.required],
+      major: [''],
       institutionName: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -150,7 +161,7 @@ export class JobApplicationComponent implements OnInit {
       educationLevel: ['', Validators.required],
     });
     this.skillFormGroup = this.fb.group({
-      skillName: [''],
+      skillName: ['', Validators.required],
       proficiencyLevel: [''],
       noOfYears: [''],
     });
@@ -164,14 +175,25 @@ export class JobApplicationComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCandidateInfo();
+
     this.jobService.jobDetailData$.subscribe((job) => {
       this.jobData = job;
       this.getQuestionsByJobDetail(job.id);
     });
     const endcode = localStorage.getItem(CORP_URL_KEY);
     if (endcode) {
-      this.encodeUrl = encodeURIComponent(endcode);
+      this.encodeUrl = endcode;
     }
+
+    this.filteredOptions = this.countryName.valueChanges.pipe(
+      startWith(''),
+      map((value) => this.filterCountries(value || ''))
+    );
+
+    this.filterEducationOption = this.educationLevel.valueChanges.pipe(
+      startWith(''),
+      map((value) => this.filterEducationLevl(value || ''))
+    );
   }
 
   ngAfterViewInit() {
@@ -332,27 +354,28 @@ export class JobApplicationComponent implements OnInit {
           next: (response) => {
             if (response.valid && response.data) {
               this.prefillCandidateForm(response.data);
-              console.log(response.data);
               this.candidateService.setCandidateData(response?.data);
-
               this.cdr.detectChanges();
             } else {
+              this.toastService.error(response.message);
             }
+          },
+          error: (err) => {
+            this.toastService.error(err.message);
           },
         });
     } else {
-      const existingData = this.candidateService.getCandidateData();
-      if (existingData) {
-        this.prefillCandidateForm(existingData);
-      }
+      const email = localStorage.getItem(CANDIATE_EMAIL);
+      this.personalFormGroup.patchValue({ email });
+      this.personalFormGroup.updateValueAndValidity();
     }
   }
 
   prefillCandidateForm(data: Candidate) {
     //prettier-ignore
-    const {name, email,phone,countryName,state,address,city,resume,coverLetter} = data;
+    const {name, email, phone,countryName,state,address,city,resume,coverLetter} = data;
     //prettier-ignore
-    this.personalFormGroup.patchValue({firstName: name?.split(' ')[0] || '',lastName: name?.split(' ')[1] || '',email, phone,countryName, state,address,city,});
+    this.personalFormGroup.patchValue({firstName: name?.split(' ')[0] || '',lastName: name?.split(' ')[1] || '', email, phone,countryName, state,address,city,});
     this.workHistories = data.workHistories;
     this.educationHistories = data.educationHistories;
     this.skillHisories = data.skills;
@@ -367,6 +390,20 @@ export class JobApplicationComponent implements OnInit {
     this.isCoverLetterData = true;
   }
 
+  private filterCountries(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.countries?.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private filterEducationLevl(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.educationLevels?.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
   goToNextStep() {
     if (this.personalFormGroup.valid) {
       this.stepper.next();
@@ -378,9 +415,6 @@ export class JobApplicationComponent implements OnInit {
   goToNextStep2() {
     if (this.workEducationAndSkill.valid) {
       this.stepper.next();
-    } else {
-      this.educationErrorMessage = 'Please add education history';
-      this.workErrorMessage = 'Please add work history';
     }
   }
 
@@ -563,11 +597,7 @@ export class JobApplicationComponent implements OnInit {
   }
 
   addSkillHistory(id: number) {
-    if (
-      this.skillName?.value &&
-      this.proficiencyLevel?.value &&
-      this.noOfYears?.value
-    ) {
+    if (this.skillName?.value) {
       const data = {
         skillName: this.skillFormGroup.get('skillName')?.value,
         proficiencyLevel: this.skillFormGroup.get('proficiencyLevel')?.value,
@@ -731,6 +761,7 @@ export class JobApplicationComponent implements OnInit {
 
   //Post Job-Application
   submitJobApplication(payload: any) {
+    console.log(payload);
     this.isSubmitting = true;
     this.jobService
       .submitJobApplication(payload)
@@ -744,6 +775,7 @@ export class JobApplicationComponent implements OnInit {
         next: (response: any) => {
           if (response.valid) {
             this.toastService.success(response.message);
+            localStorage.removeItem(CANDIATE_EMAIL);
             setTimeout(() => {
               this.router.navigate([`/job-listing/${this.encodeUrl}`]);
             }, 3500);
@@ -771,7 +803,6 @@ export class JobApplicationComponent implements OnInit {
         this.personalFormGroup.get('lastName')?.value
       )}`,
       address: this.personalFormGroup.get('address')?.value,
-      phone: this.personalFormGroup.get('phone')?.value,
       email: this.personalFormGroup.get('email')?.value,
       countryName: this.personalFormGroup.get('countryName')?.value,
       city: this.personalFormGroup.get('city')?.value,
@@ -783,6 +814,7 @@ export class JobApplicationComponent implements OnInit {
       resume: this.supportingFormGroup.get('resume')?.value,
       coverLetter: this.supportingFormGroup.get('coverLetter')?.value,
       jobDetailId: localStorage.getItem(JOB_ID_KEY),
+      phone: this.personalFormGroup.get('phone')?.value.number,
     };
     if (
       this.personalFormGroup.valid &&

@@ -11,7 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { job } from 'src/app/dashboard/job/shared/job';
-import { CORP_URL_KEY, JOB_ID_KEY } from 'src/app/core/model/credential';
+import { CORP_URL_KEY, JOB_ID_KEY } from 'src/app/shared/model/credential';
 import { ToastService } from 'src/app/core/service/toast.service';
 @Component({
   selector: 'erecruit-job-details',

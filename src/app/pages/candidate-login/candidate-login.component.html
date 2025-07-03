@@ -60,12 +60,12 @@
             >
           </div>
 
-          <button type="submit" class="btn-submit" [disabled]="isSignIn">
-            <ng-container *ngIf="isSignIn; else showLoader">
-              <span class="mini-loader-spinner"></span>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">
+            <ng-container *ngIf="isLoading; else showLoader">
+              <erecruit-loader-spinner />
             </ng-container>
             <ng-template #showLoader>
-              <span>SIGN IN</span>
+              <span>APPLY</span>
             </ng-template>
           </button>
         </form>

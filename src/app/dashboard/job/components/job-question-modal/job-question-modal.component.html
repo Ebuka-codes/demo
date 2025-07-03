@@ -31,8 +31,33 @@
       <div class="modal-body">
         <form [formGroup]="questionForm">
           <div class="form-group">
+            <label for="desc"
+              >What question do you want to ask the candidate?
+              <span class="required-icon">*</span></label
+            >
+            <textarea
+              formControlName="description"
+              style="height: 100px"
+              [maxlength]="250"
+              rows="5"
+            ></textarea>
+
+            <div class="d-flex justify-between align-items-center mt-1">
+              <span *ngIf="description?.invalid && description?.touched">
+                <small *ngIf="description?.errors?.['required']">
+                  Question field is required</small
+                >
+              </span>
+
+              <span class="ms-auto" style="font-size: 13px">
+                {{ description?.value?.length || 0 }} / 250 characters
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
             <label for="questionType"
-              >Question Type <span class="required-icon">*</span></label
+              >Answer Type <span class="required-icon">*</span></label
             >
             <mat-form-field>
               <mat-select
@@ -46,7 +71,7 @@
             </mat-form-field>
             <div *ngIf="questionTypes?.invalid && questionTypes?.touched">
               <small *ngIf="questionTypes?.errors?.['required']">
-                Question type is required
+                Answer type is required
               </small>
             </div>
           </div>
@@ -123,6 +148,7 @@
                   formControlName="optionsDescription"
                   required
                   readonly
+                  [min]="minDate"
                 />
                 <mat-datepicker-toggle
                   matSuffix
@@ -168,30 +194,6 @@
                 (click)="addQuestionOption()"
               >
               </erecruit-button>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="desc"
-              >Description <span class="required-icon">*</span></label
-            >
-            <textarea
-              formControlName="description"
-              style="height: 100px"
-              [maxlength]="250"
-              rows="5"
-            ></textarea>
-
-            <div class="d-flex justify-between align-items-center mt-1">
-              <span *ngIf="description?.invalid && description?.touched">
-                <small *ngIf="description?.errors?.['required']">
-                  Description field is required</small
-                >
-              </span>
-
-              <span class="ms-auto" style="font-size: 13px">
-                {{ description?.value?.length || 0 }} / 250 characters
-              </span>
             </div>
           </div>
 

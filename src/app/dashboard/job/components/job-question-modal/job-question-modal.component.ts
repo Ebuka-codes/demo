@@ -12,11 +12,9 @@ import { JobService } from '../../shared/job.service';
 import { Modal } from 'bootstrap';
 import { KeyValuePair, QuestionTypeOptions } from '../../shared/job';
 import { LoaderService } from 'src/app/shared/service/loader.service';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ToastService } from 'src/app/core/service/toast.service';
-import { finalize } from 'rxjs';
 import { UtilService } from 'src/app/core/service/util.service';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'ercruit-job-question-modal',
   templateUrl: './job-question-modal.component.html',
@@ -38,6 +36,7 @@ export class JobQuestionModalComponent {
   isLoadingQuestion: boolean = false;
   operatorData: any;
   isQualifyQuestion!: boolean;
+  minDate: Date;
   questionType = new Array<KeyValuePair>(
     { key: 'TEXT', value: 'Text' },
     { key: 'DROPDOWN', value: 'Dropdown' },
@@ -59,6 +58,8 @@ export class JobQuestionModalComponent {
       operator: [''],
       qualifyValue: [''],
     });
+
+    this.minDate = new Date();
   }
   ngOnInit() {
     this.getQuestionOperator();

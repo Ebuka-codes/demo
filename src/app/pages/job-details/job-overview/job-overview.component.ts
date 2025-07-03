@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { job } from 'src/app/dashboard/job/shared/job';
 import { JobRecruitService } from 'src/app/shared/service/job-recruit.service';
 import { CandidateLoginComponent } from '../../candidate-login/candidate-login.component';
-import { CORP_URL_KEY } from 'src/app/core/model/credential';
+import { CORP_URL_KEY } from 'src/app/shared/model/credential';
 
 @Component({
   selector: 'erecruit-job-overview',

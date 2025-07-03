@@ -1,11 +1,12 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
-import { CORP_URL, UserToken } from 'src/app/core/model/credential';
 import { AuthService } from 'src/app/core/service/auth.service';
-import { TokenService } from 'src/app/core/service/token.service';
 import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
+import { ApplicationContext } from 'src/app/core/context/application-context';
+import { CoreService } from 'src/app/core/service/core.service';
+import { UserProfile } from 'src/app/shared/model/credential';
 
 @Component({
   selector: 'erecruit-sidebar',
@@ -15,7 +16,7 @@ import { ToastService } from 'src/app/core/service/toast.service';
 export class SidebarComponent {
   isJobActive: boolean = false;
   isProfileActive: boolean = false;
-  profile$ = this.authService.profile$;
+  userProfile: UserProfile;
   loading$ = this.authService.loading$;
 
   isLoading = true;
@@ -23,9 +24,10 @@ export class SidebarComponent {
     private route: Router,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
-    private tokenService: TokenService,
+    private coreService: CoreService,
     private loaderService: LoaderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private applicationContext: ApplicationContext
   ) {
     this.route.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -36,20 +38,23 @@ export class SidebarComponent {
       });
   }
 
-  onLogout() {
-    const token: UserToken = JSON.parse(this.tokenService.getToken() || '{}');
-    const refreshToken = token.refresh_token?.toString();
-    this.loaderService.setLoading(true);
-    this.authService.logout(refreshToken).subscribe((response: any) => {
-      if (response.valid) {
-        this.tokenService.removeToken();
-        this.loaderService.setLoading(false);
-        this.route.navigate(['/login']);
-        localStorage.removeItem(CORP_URL);
-      } else {
-        this.loaderService.setLoading(false);
-        this.toastService.error(response.message);
-      }
+  ngOnInit(): void {
+    this.applicationContext.onUserProfile((userProfile: any) => {
+      this.userProfile = userProfile.data;
     });
+  }
+
+  onLogout() {
+    this.loaderService.setLoading(true);
+    this.coreService
+      .logoutSession(this.applicationContext.getUserToken().refresh_token)
+      .subscribe((response: any) => {
+        if (response.valid) {
+          this.coreService.removeSessionKey();
+          this.route.navigate(['/login']);
+        } else {
+          this.toastService.error(response.message);
+        }
+      });
   }
 }

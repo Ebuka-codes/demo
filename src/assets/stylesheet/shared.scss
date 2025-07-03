@@ -246,7 +246,13 @@ input[type="checkbox"] {
 .mat-mdc-option .mdc-list-item input {
   border: 1px solid red;
 }
+.mat-mdc-icon-button:hover .mat-mdc-button-persistent-ripple::before {
+  background-color: transparent !important;
+}
 
+.mat-mdc-icon-button:hover .mat-mdc-button-persistent-ripple:focus {
+  background-color: transparent !important;
+}
 .modal {
   background-color: rgba(45, 45, 45, 0.5) !important;
   z-index: 20000 !important;
@@ -501,6 +507,21 @@ input[type="checkbox"] {
   z-index: 10000 !important;
   position: fixed !important;
   top: 0;
+}
+
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  border-radius: 0px !important;
+  border: 1px solid #dddd !important;
+  background-color: black !important;
+  font-size: 14px !important;
+  color: #edeaeafc !important;
+  margin-left: 5px;
+}
+.iti {
+  width: 100%;
+}
+.iti__tel-input {
+  padding: 0px 50px !important;
 }
 
 @media (min-width: 576px) {

@@ -3,26 +3,16 @@
     <div class="logo">
       <img src="../../../../../assets/image/logo-2.PNG" alt="" />
     </div>
-
-    <div *ngIf="loading$ | async; else loadedProfile" class="skeleton-wrapper">
-      <div class="skeleton-avatar"></div>
-      <div>
-        <div class="skeleton-role"></div>
-        <div class="skeleton-name"></div>
+    <div class="user">
+      <img
+        src="../../../../../assets/image/uifaces-popular-image.jpg"
+        alt="user-image"
+      />
+      <div class="user-info">
+        <span class="role">RECRUITER</span>
+        <span>{{ userProfile?.personalDetail?.firstName }}</span>
       </div>
     </div>
-    <ng-template #loadedProfile>
-      <div *ngIf="profile$ | async as profile" class="user">
-        <img
-          src="../../../../../assets/image/uifaces-popular-image.jpg"
-          alt="user-image"
-        />
-        <div class="user-info">
-          <span class="role">RECRUITER</span>
-          <span>{{ profile.personalDetail.firstName }}</span>
-        </div>
-      </div>
-    </ng-template>
   </span>
 
   <div class="divider"></div>

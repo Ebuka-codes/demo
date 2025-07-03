@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,10 +29,13 @@ import { UsersModule } from './users/users.module';
 import { ProfileModule } from './profile/profile.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SvgModule } from '../shared/components/svg/svg.module';
-import { LoaderBarModule } from '../shared/components/loading-bar/loader-bar.module';
 import { InterviewerModule } from './interviewer/interviewer.module';
 import { RoleModule } from './role/role.module';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import {
+  ApplicationContextFactory,
+  CoreService,
+} from '../core/service/core.service';
 
 @NgModule({
   declarations: [
@@ -71,8 +74,16 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
     RoleModule,
     NgxPaginationModule,
     SvgModule,
-    LoaderBarModule,
     LoadingBarHttpClientModule,
+  ],
+  providers: [
+    CoreService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: ApplicationContextFactory,
+      deps: [CoreService],
+      multi: true,
+    },
   ],
 })
 export class DashboardModule {}

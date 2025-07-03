@@ -19,7 +19,7 @@ import { LoaderService } from 'src/app/shared/service/loader.service';
 import { CandidateService } from 'src/app/shared/service/candidate.service';
 import { Modal } from 'bootstrap';
 import { ToastService } from 'src/app/core/service/toast.service';
-import { JOB_ID_KEY } from 'src/app/core/model/credential';
+import { CANDIATE_EMAIL, JOB_ID_KEY } from 'src/app/shared/model/credential';
 import { PrivacyPolicyModalComponent } from 'src/app/shared/components/privacy-policy-modal/privacy-policy-modal.component';
 @Component({
   selector: 'erecruit-candidate-login',
@@ -33,7 +33,7 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
   modalInstance!: Modal;
   modalPrivacyInstance!: Modal;
   form!: FormGroup;
-  isLoading!: Observable<boolean>;
+  isLoading!: boolean;
   isSignIn: boolean = false;
   jobId!: string | null;
   agreed!: boolean;
@@ -43,7 +43,6 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
     private router: Router,
     private candidateService: CandidateService,
     private location: Location,
-    private loaderService: LoaderService,
     private toastService: ToastService,
     private route: ActivatedRoute
   ) {
@@ -116,8 +115,7 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
 
   onLogin() {
     if (this.form.valid) {
-      this.loaderService.setLoading(true);
-      this.isSignIn = true;
+      this.isLoading = true;
       this.candidateService
         .candidateLogin(this.form.get('email')?.value)
         .subscribe({
@@ -140,20 +138,18 @@ export class CandidateLoginComponent implements OnInit, AfterViewInit {
                   },
                 });
             } else {
-              this.loaderService.setLoading(false);
               this.router.navigate(['/apply', this.jobId, 'application'], {
                 relativeTo: this.route,
               });
               this.close();
-              this.toastService.error(response.message);
             }
           },
           error: (err) => {
-            this.loaderService.setLoading(false);
             this.toastService.error(err.message);
-            this.isSignIn = false;
+            this.isLoading = false;
           },
         });
+      localStorage.setItem(CANDIATE_EMAIL, this.email.value);
     } else {
       this.form.markAllAsTouched();
     }
