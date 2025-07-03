@@ -55,7 +55,6 @@ export class SignupComponent implements OnInit {
         ],
       ],
       confirmPassword: ['', [Validators.required, this.checkPassword()]],
-      logo: [''],
     });
   }
 
@@ -80,17 +79,7 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-  checkIdentification(): ValidationErrors | null {
-    return (control: AbstractControl) => {
-      if (!control.parent) {
-        return;
-      }
-      return this.form.get('corporate')?.value === true ||
-        this.form.get('freelancerAgency')?.value === true
-        ? null
-        : { required: true };
-    };
-  }
+
   togglePasswords(value: string) {
     if (value === 'password') {
       this.isPassword = !this.isPassword;

@@ -2,14 +2,14 @@
 <ng-template #content>
   <section class="profile-container">
     <div class="side-one">
-      <div class="user-info" *ngIf="profile$ | async as profile">
+      <div class="user-info">
         <div class="image">
           <img
             src="../../../assets/image/uifaces-popular-image.jpg"
             alt="user-image"
           />
         </div>
-        <span class="name">{{ profile.personalDetail.firstName }}</span>
+        <span class="name">{{ userProfile?.personalDetail?.firstName }}</span>
         <span class="role">Recruiter</span>
       </div>
       <div class="connect-icon">

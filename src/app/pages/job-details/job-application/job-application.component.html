@@ -59,7 +59,7 @@
   </div>
 
   <form (ngSubmit)="onSubmit()">
-    <mat-stepper #stepper [linear]="true">
+    <mat-stepper #stepper [linear]="false">
       <mat-step [stepControl]="personalFormGroup">
         <form action="" [formGroup]="personalFormGroup">
           <!-- <div class="apply-flow-block__header">
@@ -119,15 +119,7 @@
               <label for="firstName"
                 >First Name <span class="required-icon">*</span></label
               >
-              <mat-form-field>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="firstName"
-                  required
-                />
-              </mat-form-field>
-
+              <input type="text" formControlName="firstName" required />
               <div *ngIf="firstName?.invalid && firstName?.touched">
                 <small *ngIf="firstName?.errors?.['required']"
                   >First name is required</small
@@ -143,14 +135,7 @@
               <label for="lastName"
                 >Last Name <span class="required-icon">*</span></label
               >
-              <mat-form-field>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="lastName"
-                  required
-                />
-              </mat-form-field>
+              <input type="text" formControlName="lastName" required />
 
               <div *ngIf="lastName?.invalid && lastName?.touched">
                 <small *ngIf="lastName?.errors?.['required']"
@@ -167,9 +152,7 @@
               <label for="email"
                 >Email Address <span class="required-icon">*</span></label
               >
-              <mat-form-field>
-                <input matInput type="email" formControlName="email" required />
-              </mat-form-field>
+              <input type="email" formControlName="email" required />
 
               <div *ngIf="email?.invalid && email?.touched">
                 <small *ngIf="email?.errors?.['required']"
@@ -186,9 +169,21 @@
               <label for="phone"
                 >Phone Number <span class="required-icon">*</span></label
               >
-              <mat-form-field>
-                <input matInput type="text" formControlName="phone" required />
-              </mat-form-field>
+              <ngx-intl-tel-input
+                [cssClass]="'form-input'"
+                [enableAutoCountrySelect]="true"
+                [enablePlaceholder]="true"
+                [searchCountryFlag]="true"
+                [selectedCountryISO]="CountryISO.Nigeria"
+                [selectFirstCountry]="false"
+                [phoneValidation]="true"
+                [preferredCountries]="[]"
+                [onlyCountries]="[]"
+                name="phone"
+                formControlName="phone"
+              >
+              </ngx-intl-tel-input>
+
               <div *ngIf="phone?.invalid && phone?.touched">
                 <small *ngIf="phone?.errors?.['required']"
                   >Phone number is required</small
@@ -210,15 +205,23 @@
               <label for="countryName"
                 >Country Name <span class="required-icon">*</span></label
               >
-              <mat-form-field appearance="fill">
-                <mat-select
+
+              <mat-form-field>
+                <input
+                  type="text"
+                  aria-label="Number"
+                  matInput
                   formControlName="countryName"
-                  panelClass="custom-dropdown"
-                  disableRipple
-                  required
-                >
-                  <mat-option value="Nigeria"> Nigeria </mat-option>
-                </mat-select>
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let option of filteredOptions | async"
+                    [value]="option"
+                  >
+                    {{ option }}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
 
               <div *ngIf="countryName?.invalid && countryName?.touched">
@@ -231,22 +234,7 @@
               <label for="state"
                 >State <span class="required-icon">*</span></label
               >
-              <mat-form-field appearance="fill">
-                <mat-select
-                  formControlName="state"
-                  panelClass="custom-dropdown"
-                  disableRipple
-                  required
-                >
-                  <mat-option
-                    *ngFor="let state of nigeriaStates"
-                    [value]="state"
-                  >
-                    {{ state }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
+              <input formControlName="state" required />
               <div *ngIf="state?.invalid && state?.touched">
                 <small *ngIf="state?.errors?.['required']"
                   >State is required</small
@@ -257,9 +245,7 @@
               <label for="city"
                 >City <span class="required-icon">*</span></label
               >
-              <mat-form-field>
-                <input matInput type="text" formControlName="city" />
-              </mat-form-field>
+              <input type="text" formControlName="city" />
 
               <div *ngIf="city?.invalid && city?.touched">
                 <small *ngIf="city?.errors?.['required']"
@@ -276,9 +262,7 @@
               <label for="address"
                 >Home Address <span class="required-icon">*</span></label
               >
-              <mat-form-field>
-                <input matInput type="text" formControlName="address" />
-              </mat-form-field>
+              <input type="text" formControlName="address" />
 
               <div *ngIf="address?.invalid && address?.touched">
                 <small *ngIf="address?.errors?.['required']"
@@ -319,16 +303,6 @@
               <div class="work-history">
                 <h4 class="fs-5">Work Experience</h4>
                 <div class="job-divider"></div>
-                <div
-                  style="
-                    color: rgba(216, 5, 5, 0.89);
-                    font-size: 14px;
-                    margin: 5px 0px;
-                  "
-                  *ngIf="workErrorMessage"
-                >
-                  {{ workErrorMessage }}
-                </div>
 
                 <div class="work-history-list" *ngIf="workHistories.length">
                   <ul class="mb-4 mt-4">
@@ -351,34 +325,42 @@
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          fill="none"
                           stroke="currentColor"
-                          class="size-6"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
                         >
+                          <path d="M12 20h9"></path>
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
+                            d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"
+                          ></path>
                         </svg>
 
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          fill="none"
                           stroke="currentColor"
-                          class="size-6"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
                           (click)="removeWorkHistory(i)"
                           #deleteIcon
+                          style="color: #a3a3a3; float: right; cursor: pointer"
                         >
+                          <polyline points="3 6 5 6 21 6"></polyline>
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"
+                          ></path>
+                          <path d="M10 11v6"></path>
+                          <path d="M14 11v6"></path>
+                          <path d="M9 6V3h6v3"></path>
                         </svg>
                       </span>
                     </li>
@@ -628,16 +610,6 @@
               <div class="education-history">
                 <h4 class="fs-5">Education Details</h4>
                 <div class="job-divider"></div>
-                <div
-                  style="
-                    color: rgba(216, 5, 5, 0.89);
-                    font-size: 14px;
-                    margin: 5px 0px;
-                  "
-                  *ngIf="educationErrorMessage"
-                >
-                  {{ educationErrorMessage }}
-                </div>
 
                 <div
                   class="education-history-list"
@@ -666,34 +638,42 @@
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          fill="none"
                           stroke="currentColor"
-                          class="size-6"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
                         >
+                          <path d="M12 20h9"></path>
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
+                            d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"
+                          ></path>
                         </svg>
 
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          fill="none"
                           stroke="currentColor"
-                          class="size-6"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
                           (click)="removeEducationHistory(i)"
                           #deleteIcon
+                          style="color: #a3a3a3; float: right; cursor: pointer"
                         >
+                          <polyline points="3 6 5 6 21 6"></polyline>
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"
+                          ></path>
+                          <path d="M10 11v6"></path>
+                          <path d="M14 11v6"></path>
+                          <path d="M9 6V3h6v3"></path>
                         </svg>
                       </span>
                     </li>
@@ -756,6 +736,7 @@
                           <label for="degree"
                             >Degree <span class="required-icon">*</span></label
                           >
+
                           <mat-form-field appearance="fill">
                             <input
                               matInput
@@ -768,24 +749,6 @@
                           <div *ngIf="degree?.invalid && degree?.touched">
                             <small *ngIf="degree?.errors?.['required']"
                               >Degree is required</small
-                            >
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="major"
-                            >Major <span class="required-icon">*</span></label
-                          >
-                          <mat-form-field>
-                            <input
-                              matInput
-                              type="text"
-                              formControlName="major"
-                              required
-                            />
-                          </mat-form-field>
-                          <div *ngIf="major?.invalid && major?.touched">
-                            <small *ngIf="major?.errors?.['required']"
-                              >Major is required</small
                             >
                           </div>
                         </div>
@@ -928,18 +891,26 @@
                             >Education Level
                             <span class="required-icon">*</span>
                           </label>
-                          <mat-form-field appearance="fill">
-                            <mat-select
+
+                          <mat-form-field>
+                            <input
+                              type="text"
+                              matInput
                               formControlName="educationLevel"
-                              required
+                              [matAutocomplete]="educationLevels"
+                            />
+                            <mat-autocomplete
+                              #educationLevels="matAutocomplete"
                             >
                               <mat-option
-                                *ngFor="let level of educationLevels"
+                                *ngFor="
+                                  let level of filterEducationOption | async
+                                "
                                 [value]="level"
                               >
                                 {{ level }}
                               </mat-option>
-                            </mat-select>
+                            </mat-autocomplete>
                           </mat-form-field>
 
                           <div
@@ -1022,19 +993,29 @@
 
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
+                            width="18"
+                            height="18"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
+                            fill="none"
                             stroke="currentColor"
-                            class="size-6"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
                             (click)="removeSkills(i)"
                             #deleteIcon
+                            style="
+                              color: #a3a3a3;
+                              float: right;
+                              cursor: pointer;
+                            "
                           >
+                            <polyline points="3 6 5 6 21 6"></polyline>
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 18 18 6M6 6l12 12"
-                            />
+                              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"
+                            ></path>
+                            <path d="M10 11v6"></path>
+                            <path d="M14 11v6"></path>
+                            <path d="M9 6V3h6v3"></path>
                           </svg>
                         </span>
                       </li>
@@ -1098,7 +1079,9 @@
                         </div>
                         <div class="modal-body">
                           <div class="form-group">
-                            <label for="JobTitle">Skill Name </label>
+                            <label for="JobTitle"
+                              >Skill Name <span class="required-icon">*</span>
+                            </label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -1125,17 +1108,6 @@
                                 required
                               />
                             </mat-form-field>
-                            <div
-                              *ngIf="
-                                proficiencyLevel?.invalid &&
-                                proficiencyLevel?.touched
-                              "
-                            >
-                              <small
-                                *ngIf="proficiencyLevel?.errors?.['required']"
-                                >Proficiency level required</small
-                              >
-                            </div>
                           </div>
                           <div class="form-group">
                             <label for="noOfYears">Years of experience</label>
@@ -1149,13 +1121,6 @@
                                 (keypress)="validateNumberInput($event)"
                               />
                             </mat-form-field>
-                            <div
-                              *ngIf="noOfYears?.invalid && noOfYears?.touched"
-                            >
-                              <small *ngIf="noOfYears?.errors?.['required']"
-                                >Years of experience is required</small
-                              >
-                            </div>
                           </div>
                         </div>
 

@@ -7,14 +7,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { CorporateService } from '../corporate/shared/corporate.service';
-import { LoaderService } from 'src/app/shared/service/loader.service';
 import { ToastService } from 'src/app/core/service/toast.service';
 import { Location } from '@angular/common';
 import { finalize } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { CORP_URL } from 'src/app/core/model/credential';
 import { environment } from 'src/environments/environment';
 import { UtilService } from 'src/app/core/service/util.service';
+import {
+  CORP_URL_KEY,
+  CURRENT_CORPORATE_KEY,
+} from 'src/app/shared/model/credential';
 @Component({
   selector: 'erecruit-user-corporate',
   templateUrl: './user-corporate.component.html',
@@ -47,7 +49,7 @@ export class UserCorporateComponent implements OnInit {
       phone: [''],
       email: ['', [Validators.required, this.validateEmail()]],
       logo: [''],
-      hmCode: ['', Validators.required],
+      hmCode: [''],
     });
   }
 
@@ -76,7 +78,7 @@ export class UserCorporateComponent implements OnInit {
   }
 
   getEncodUrl() {
-    const encodeUrl = localStorage.getItem(CORP_URL);
+    const encodeUrl = localStorage.getItem(CORP_URL_KEY);
     if (encodeUrl) {
       this.jobListingUrl = `${this.PORT_URL}/job-listing/${encodeUrl}`;
     }

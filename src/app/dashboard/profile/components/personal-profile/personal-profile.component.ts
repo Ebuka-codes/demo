@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/core/service/auth.service';
+import { ApplicationContext } from 'src/app/core/context/application-context';
+import { UserProfile } from 'src/app/shared/model/credential';
 
 @Component({
   selector: 'erecruit-personal-profile',
@@ -7,6 +8,10 @@ import { AuthService } from 'src/app/core/service/auth.service';
   styleUrls: ['./personal-profile.component.scss'],
 })
 export class PersonalProfileComponent {
-  profile$ = this.authService.profile$;
-  constructor(private authService: AuthService) {}
+  userProfile: UserProfile;
+  constructor(private applicationContext: ApplicationContext) {
+    this.applicationContext.onUserProfile((UserProfile: any) => {
+      this.userProfile = UserProfile.data;
+    });
+  }
 }

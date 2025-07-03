@@ -31,6 +31,7 @@ import {
 } from '../../shared/job';
 import Quill from 'quill';
 import { JobQuestionModalComponent } from '../job-question-modal/job-question-modal.component';
+import { SvgTemplate } from 'src/app/shared/components/svg/svg-template';
 
 @Component({
   selector: 'erecruit-job-form',
@@ -105,6 +106,8 @@ export class JobFormComponent implements OnInit {
   mode!: string;
   isEditFormMode!: boolean;
   jobid!: string | null;
+  minDate: Date;
+  svgTemplate = SvgTemplate;
 
   constructor(
     private fb: FormBuilder,
@@ -120,17 +123,18 @@ export class JobFormComponent implements OnInit {
       jobId: ['', Validators.required],
       jobLocation: ['', Validators.required],
       employmentType: ['', Validators.required],
-      jobSalary: ['', [Validators.required, this.amountValidator()]],
-      jobSalaryTo: ['', [Validators.required, this.amountValidator()]],
+      jobSalary: ['', this.amountValidator()],
+      jobSalaryTo: ['', this.amountValidator()],
       jobType: ['', Validators.required],
       companyName: [''],
       workMode: ['', Validators.required],
-      requiredSkills: ['', Validators.required],
+      requiredSkills: [''],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      questionOptions: ['', Validators.required],
+      questionOptions: [''],
       jobDescription: ['', Validators.required],
     });
+    this.minDate = new Date();
   }
   onEditorCreated(quillInstance: Quill) {
     this.quill = quillInstance;

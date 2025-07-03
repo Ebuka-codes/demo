@@ -10,6 +10,7 @@ import { ButtonModule } from './components/button/button.module';
 import { SvgModule } from './components/svg/svg.module';
 import { PrivacyPolicyModalComponent } from './components/privacy-policy-modal/privacy-policy-modal.component';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
+import { LoadingBarComponent } from './components/loading-bar/loading-bar.component';
 
 const COMPONENTS: any[] = [
   FullPageLoaderSpinnerComponent,
@@ -17,6 +18,7 @@ const COMPONENTS: any[] = [
   HeaderComponent,
   PrivacyPolicyModalComponent,
   LoaderSpinnerComponent,
+  LoadingBarComponent,
 ];
 const DIRECTIVES: any[] = [AmountFormatDirective, monthYearFormatDirective];
 

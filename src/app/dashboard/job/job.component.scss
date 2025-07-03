@@ -217,26 +217,6 @@
       gap: 15px;
       align-items: center;
 
-      svg {
-        width: 18px;
-        height: 18px;
-      }
-      span:nth-child(1) {
-        color: #6d6d6d;
-      }
-      span:nth-child(2) {
-        color: rgb(2, 2, 202);
-      }
-      span:nth-child(3) {
-        color: #e50c20;
-      }
-
-      .humburger-icon svg {
-        color: #d9d9d9;
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-      }
       .humburger-icon[ngbDropdownToggle]::after {
         display: none !important;
       }

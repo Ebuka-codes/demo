@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { JobDetailsRoutingModule } from './job-details-routing.module';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     JobDetailsRoutingModule,
     SharedModule,
+    NgxIntlTelInputModule,
   ],
 })
 export class JobDetailsModule {}

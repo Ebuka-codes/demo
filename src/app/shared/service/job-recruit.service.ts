@@ -6,7 +6,7 @@ import { JobApplication } from '../model/job-model';
 import { Constants } from 'src/app/utils/constants';
 import { DataResponse } from '../model/data-response';
 import { job } from 'src/app/dashboard/job/shared/job';
-import { CORP_URL_KEY } from 'src/app/core/model/credential';
+import { CORP_URL_KEY } from 'src/app/shared/model/credential';
 import { PaginationConfig } from '../model/pagination-model';
 import { FilterOption, PostedDateOption } from '../model/model';
 
@@ -15,9 +15,6 @@ import { FilterOption, PostedDateOption } from '../model/model';
 })
 export class JobRecruitService {
   baseUrl = environment.API_URL;
-  private jobListSubject$ = new BehaviorSubject<job[] | null>(null);
-  private jobCategorySubject$ = new BehaviorSubject<any | null>(null);
-  job$ = this.jobListSubject$.asObservable();
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
   private jobDetailsId: string | null = null;

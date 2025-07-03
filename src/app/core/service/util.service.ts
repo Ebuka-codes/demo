@@ -1,24 +1,50 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DataResponse } from 'src/app/shared/model/data-response';
 import { file } from 'src/app/shared/model/file';
 import { Constants } from 'src/app/utils/constants';
-import { CORP_URL_KEY } from '../model/credential';
+import { CORP_URL_KEY } from '../../shared/model/credential';
 import { environment } from 'src/environments/environment';
 
+export class AuthError {
+  error!: boolean;
+  errorCode!: string;
+}
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
   corpUrl!: string;
+
   baseUrl = environment.API_URL;
+
+  public tokenExpireSubject: Subject<AuthError> = new Subject();
+
   constructor(private httpClient: HttpClient) {
     const value = localStorage.getItem(CORP_URL_KEY);
     if (value) {
-      this.corpUrl = decodeURIComponent(value);
+      this.corpUrl = value;
     }
   }
+
+  getTokenExpireSession() {
+    return this.tokenExpireSubject.asObservable();
+  }
+
+  public static sendMessageToWorker(message: any) {
+    if (navigator.serviceWorker) {
+      if (navigator.serviceWorker.controller) {
+        if (message == null) message = 'null';
+
+        if (typeof message !== 'string') {
+          message = JSON.stringify(message);
+        }
+        navigator.serviceWorker.controller.postMessage('iroko-sw' + message);
+      }
+    }
+  }
+
   capitalizeFirstLetter(value: string): string {
     if (!value) return value;
     return value.charAt(0).toUpperCase() + value.slice(1);
@@ -80,5 +106,8 @@ export class UtilService {
     return this.httpClient.get<any>(
       Constants.CORPORATE_URL.CORPORATE + '/encode-url'
     );
+  }
+  generateOtp(data: any) {
+    return this.httpClient.post(Constants.AUTH_URL.VERIFICATION_OTP, data);
   }
 }

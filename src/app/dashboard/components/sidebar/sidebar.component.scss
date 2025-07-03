@@ -49,38 +49,6 @@
         }
       }
     }
-
-    .skeleton-wrapper {
-      display: flex;
-      gap: 15px;
-      padding: 0px 20px;
-      margin-top: 20px;
-      margin-left: 10px;
-    }
-
-    .skeleton-avatar,
-    .skeleton-name,
-    .skeleton-role {
-      background: #eee;
-      border-radius: 4px;
-      margin: 5px 0;
-    }
-
-    .skeleton-avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-    }
-
-    .skeleton-name {
-      width: 100px;
-      height: 14px;
-    }
-
-    .skeleton-role {
-      width: 60px;
-      height: 12px;
-    }
   }
 
   .side_one {
